@@ -1,0 +1,7 @@
+# 서브모듈 변경사항을 먼저 푸시한 후 메인 프로젝트를 푸시해야 합니다.
+# 서브모듈은 다같이 있을때 한꺼번에 푸쉬하도록하고 불가피하게 해야할 경우에는 양쪽 팀장 입회하에 진행합니다.
+# 서브모듈 변경 후 반드시 메인 앱 빌드 테스트를 수행합니다.
+
+[submodule "Assets/Imports"]
+	path = Assets/Imports
+	url = https://github.com/HugeChamChi/NetworkProject.Team5-Imports.git
