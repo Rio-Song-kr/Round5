@@ -1,0 +1,76 @@
+using UnityEngine;
+
+// 레이저 무기 클래스
+public class RazorWeapon : MonoBehaviour, IWeapon
+{
+    [SerializeField] private LineRenderer laserRenderer;  // 레이저를 그릴 LineRenderer
+    [SerializeField] private float laserDuration = 2f;   // 레이저 지속 시간
+    [SerializeField] private float laserLength = 20f;    // 레이저 거리
+    [SerializeField] private WeaponType weaponType = WeaponType.Laser; // 무기 타입
+    
+    private bool isFiring = false;
+    private bool isReloading = false;
+    
+    public void Attack(Transform firingPoint)
+    {
+        if (isFiring || isReloading) return;
+
+        StartCoroutine(FireLaserRoutine(firingPoint));
+    }
+
+    private System.Collections.IEnumerator FireLaserRoutine(Transform firingPoint)
+    {
+        isFiring = true;
+        laserRenderer.enabled = true;
+
+        float elapsed = 0f;
+        while (elapsed < laserDuration)
+        {
+            // 레이저 시작 위치와 방향 설정
+            Vector3 startPoint = firingPoint.position;
+            Vector3 direction = firingPoint.up;
+
+            // Raycast로 충돌 지점 계산
+            RaycastHit2D hit = Physics2D.Raycast(startPoint, direction, laserLength);
+
+            // 레이저 끝 지점 설정
+            Vector3 endPoint = hit.collider != null ? hit.point : startPoint + direction * laserLength;
+
+            // LineRenderer로 레이저 그리기
+            laserRenderer.SetPosition(0, startPoint);
+            laserRenderer.SetPosition(1, endPoint);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 레이저 활성화
+        // laserRenderer.enabled = true;
+
+        // 2초간 유지
+        // yield return new WaitForSeconds(laserDuration);
+
+        // 비활성화 및 재장전 시작
+        laserRenderer.enabled = false;
+        isFiring = false;
+
+        isReloading = true;
+        yield return new WaitForSeconds(2f); // 재장전 시간
+        isReloading = false;
+    }
+
+    private void DisableLaser()
+    
+    {
+        laserRenderer.enabled = false;
+    }
+    
+    public WeaponType GetWeaponType()
+    {
+        return weaponType;
+    }
+
+    public void Initialize()
+    {
+    }
+}
