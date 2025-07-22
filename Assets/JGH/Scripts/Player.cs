@@ -30,7 +30,7 @@ namespace JGH_Player
                 currentWeapon.Attack(firingPoint);
             }
 
-            // 숫자 키로 무기 변경
+            // TODO: 테스트(숫자 키로 무기 변경)
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 EquipWeapon(bulletWeaponObject);
 
