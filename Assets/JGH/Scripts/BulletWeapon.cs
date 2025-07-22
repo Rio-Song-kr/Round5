@@ -24,30 +24,23 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     
     public void Attack(Transform firingPoint)
     {
-        Debug.Log($"현재 남은 탄약: {currentAmmo}/{maxAmmo}");
-        
         // 재장전
         if (isReloading)
         {
-            Debug.Log("재장전 중입니다. 발사 불가.");
             return;
         }
         
        if (currentAmmo <= 0)
         {
-            Debug.Log("탄약이 없습니다. 재장전 시작.");
             StartCoroutine(Reload());
             return;
         }
 
-        Debug.Log($"총알 발사! 남은 탄약: {currentAmmo - 1}/{maxAmmo}");
+        Quaternion bulletRotation = firingPoint.rotation * Quaternion.Euler(0, 0, 90f);
+        GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, bulletRotation);
 
-        // 총알 생성
-        GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
-
-        // 총알 발사
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.velocity = firingPoint.up * bulletSpeed;
+        rb.velocity = firingPoint.right * bulletSpeed;
 
         --currentAmmo;
     }

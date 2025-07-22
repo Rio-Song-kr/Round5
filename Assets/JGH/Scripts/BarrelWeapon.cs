@@ -22,6 +22,7 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         currentAmmo = maxAmmo;
         isReloading = false;
     }
+    
 
 
     public void Attack(Transform firingPoint)
@@ -51,9 +52,13 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
             Debug.Log($"탄환 {i + 1}의 각도: {angle}");
 
             Quaternion rotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle);
-            GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, rotation);
+    
+            // **총알을 살짝 앞으로 생성**
+            Vector3 spawnPos = firingPoint.position + firingPoint.right * 0.2f;
+
+            GameObject bullet = Instantiate(bulletPrefab, spawnPos, rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.velocity = bullet.transform.up * bulletSpeed;
+            rb.velocity = bullet.transform.right * bulletSpeed;
         }
 
         currentAmmo--;

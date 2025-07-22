@@ -28,7 +28,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         {
             // 레이저 시작 위치와 방향 설정
             Vector3 startPoint = firingPoint.position;
-            Vector3 direction = firingPoint.up;
+            Vector3 direction = firingPoint.right;
 
             // Raycast로 충돌 지점 계산
             RaycastHit2D hit = Physics2D.Raycast(startPoint, direction, laserLength);
@@ -44,12 +44,6 @@ public class RazorWeapon : MonoBehaviour, IWeapon
             yield return null;
         }
 
-        // 레이저 활성화
-        // laserRenderer.enabled = true;
-
-        // 2초간 유지
-        // yield return new WaitForSeconds(laserDuration);
-
         // 비활성화 및 재장전 시작
         laserRenderer.enabled = false;
         isFiring = false;
@@ -57,12 +51,6 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         isReloading = true;
         yield return new WaitForSeconds(2f); // 재장전 시간
         isReloading = false;
-    }
-
-    private void DisableLaser()
-    
-    {
-        laserRenderer.enabled = false;
     }
     
     public WeaponType GetWeaponType()
