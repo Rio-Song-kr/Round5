@@ -6,13 +6,15 @@ using UnityEngine;
 public class BarrelWeapon : MonoBehaviour, IWeapon
 {
     [SerializeField] private GameObject bulletPrefab; // 발사할 총알 프리팹
-    [SerializeField] private int pelletCount = 5; // 발사할 총알 개수
+    [SerializeField] private int pelletCount = 6; // 발사할 총알 개수
     [SerializeField] private float spreadAngle = 30f; // 총알 퍼짐 각도
     [SerializeField] private float bulletSpeed = 10f; // 총알 속도
     [SerializeField] private WeaponType weaponType = WeaponType.Shotgun; // 무기 타입
     
-    [SerializeField] private int maxAmmo = 2;             // 샷건 장탄 수 (한 번에 2발 정도로 제한)
-    [SerializeField] private float reloadTime = 2f;       // 재장전 시간
+    [SerializeField] private int maxAmmo = 8;             // 샷건 최대 장탄 수 
+    [SerializeField] private float reloadTime = 2.25f;       // 재장전 시간
+    [SerializeField] private int ammoPerShot= 4;       // 소비 탄수
+    
 
     private int currentAmmo;
     private bool isReloading;
@@ -29,39 +31,41 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
     {
         if (isReloading)
         {
-            Debug.Log("재장전 중입니다. 발사할 수 없습니다.");
             return;
         }
 
-        if (currentAmmo <= 0)
+        if (currentAmmo < ammoPerShot)
         {
-            Debug.Log("탄약 없음! 재장전 시작.");
             StartCoroutine(Reload());
             return;
         }
 
-        Debug.Log($"샷건 발사! 남은 탄약: {currentAmmo - 1}/{maxAmmo}");
-        Debug.Log($"탄환 총 수: {pelletCount}");
-
+        // 각도 계산
         float angleStep = (spreadAngle / (pelletCount - 1));
         float startAngle = -spreadAngle / 2f;
+        
+        // 데미지 계산
+        float baseDamage = 100f;
+        float pistolDamage = baseDamage * 0.7f;        // 권총 데미지: 70
+        float shotgunPelletDamage = pistolDamage * 0.3f; // 샷건 1발 데미지: 21
+
 
         for (int i = 0; i < pelletCount; i++)
         {
             float angle = startAngle + angleStep * i;
-            Debug.Log($"탄환 {i + 1}의 각도: {angle}");
 
             Quaternion rotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle);
-    
-            // **총알을 살짝 앞으로 생성**
             Vector3 spawnPos = firingPoint.position + firingPoint.right * 0.2f;
 
             GameObject bullet = Instantiate(bulletPrefab, spawnPos, rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.velocity = bullet.transform.right * bulletSpeed;
+            
+            // 탄환 데미지 
+            bullet.GetComponent<ResetBullet>().damage = shotgunPelletDamage;
         }
 
-        currentAmmo--;
+        currentAmmo -= ammoPerShot;
     }
 
 

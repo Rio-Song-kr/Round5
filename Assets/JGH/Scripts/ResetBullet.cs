@@ -4,6 +4,8 @@ public class ResetBullet : MonoBehaviour
 {
     [SerializeField] private float lifeTime = 4f;
     private Rigidbody2D rb;
+    
+    public float damage;
 
     private void Start()
     {
@@ -27,6 +29,13 @@ public class ResetBullet : MonoBehaviour
         // 충돌 즉시 제거
         if (!other.CompareTag("Bullet"))  // Bullet끼리 충돌 무시
         {
+            // IDamageable이 있다면 데미지 적용
+            IDamageable target = other.GetComponent<IDamageable>();
+            if (target != null)
+            {
+                target.TakeDamage(damage);
+            }
+
             Destroy(gameObject);
         }
     }

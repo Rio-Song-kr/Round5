@@ -41,7 +41,13 @@ public class BulletWeapon : MonoBehaviour, IWeapon
 
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = firingPoint.right * bulletSpeed;
-
+        
+        // 데미지 설정 :: S
+        // 데미지 70% 적용
+        float baseDamage = 100f;
+        bullet.GetComponent<ResetBullet>().damage = baseDamage * 0.7f;
+        // 데미지 설정 :: E
+        
         --currentAmmo;
     }
        private IEnumerator Reload()

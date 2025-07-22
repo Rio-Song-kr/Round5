@@ -24,6 +24,14 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         laserRenderer.enabled = true;
 
         float elapsed = 0f;
+        
+        
+        float damageTick = 0.1f;
+        float damageTimer = 0f;
+        float baseDamage = 100f;
+        float shotgunDamage = baseDamage * 0.7f * 0.3f; // 21
+        
+        
         while (elapsed < laserDuration)
         {
             // 레이저 시작 위치와 방향 설정
@@ -39,7 +47,23 @@ public class RazorWeapon : MonoBehaviour, IWeapon
             // LineRenderer로 레이저 그리기
             laserRenderer.SetPosition(0, startPoint);
             laserRenderer.SetPosition(1, endPoint);
-
+            
+            
+            // 틱 데미지 처리
+            damageTimer += Time.deltaTime;
+            if (damageTimer >= damageTick)
+            {
+                damageTimer = 0f;
+                if (hit.collider != null)
+                {
+                    IDamageable damageTarget = hit.collider.GetComponent<IDamageable>();
+                    if (damageTarget != null)
+                    {
+                        damageTarget.TakeDamage(shotgunDamage);
+                    }
+                }
+            }
+            
             elapsed += Time.deltaTime;
             yield return null;
         }
