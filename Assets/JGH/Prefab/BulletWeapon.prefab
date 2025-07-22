@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5886468128929232924
 Transform:
   m_ObjectHideFlags: 0
@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 9126787767474855383, guid: 6137c4df5c028416ab16ac1daf924ca9, type: 3}
+  bulletSpeed: 10
   weaponType: 0
