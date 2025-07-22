@@ -61,4 +61,12 @@ public class RazorWeapon : MonoBehaviour, IWeapon
     public void Initialize()
     {
     }
+    
+    private void OnDisable()
+    {
+        StopAllCoroutines();          // 레이저 발사 코루틴 중지
+        laserRenderer.enabled = false; // 라인 렌더러 끄기
+        isFiring = false;            // 상태 초기화
+        isReloading = false;
+    }
 }
