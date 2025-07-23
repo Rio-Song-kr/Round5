@@ -43,6 +43,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5480640626172018958}
     m_Modifications:
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 1.0080001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 3736061554562201637}
     - target: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -83,10 +95,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4577000991530585876, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 7564658610632244564}
     - target: {fileID: 8979260108434461392, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_Name
       value: BackGroundBox (1)
@@ -96,14 +104,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
---- !u!54 &124929440196511181 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 105583207694067298, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
-  m_PrefabInstance: {fileID: 57647359416279983}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4319934838411772793 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+  m_PrefabInstance: {fileID: 57647359416279983}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &6528511320451383484 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: -2714224154409688301, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
   m_PrefabInstance: {fileID: 57647359416279983}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &561122106387921048
@@ -114,6 +122,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5480640626172018958}
     m_Modifications:
+    - target: {fileID: 7031791273520029357, guid: fe5c596846455d04da712de7fee23894, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -5.619
+      objectReference: {fileID: 0}
+    - target: {fileID: 7031791273520029357, guid: fe5c596846455d04da712de7fee23894, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: -1.7
+      objectReference: {fileID: 0}
     - target: {fileID: 8526956112297253335, guid: fe5c596846455d04da712de7fee23894, type: 3}
       propertyPath: m_Name
       value: Box
@@ -163,9 +179,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe5c596846455d04da712de7fee23894, type: 3}
---- !u!54 &8005358399137991223 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 7552886880997585583, guid: fe5c596846455d04da712de7fee23894, type: 3}
+--- !u!50 &5832437088858054487 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: -2938181817357015089, guid: fe5c596846455d04da712de7fee23894, type: 3}
   m_PrefabInstance: {fileID: 561122106387921048}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8917043268375355803 stripped
@@ -181,6 +197,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5480640626172018958}
     m_Modifications:
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.9979999
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 6528511320451383484}
     - target: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -221,10 +249,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4577000991530585876, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 124929440196511181}
     - target: {fileID: 8979260108434461392, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_Name
       value: BackGroundBox (2)
@@ -247,6 +271,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5480640626172018958}
     m_Modifications:
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 1.0079999
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 5832437088858054487}
     - target: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -287,10 +323,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4577000991530585876, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 8005358399137991223}
     - target: {fileID: 8979260108434461392, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_Name
       value: BackGroundBox
@@ -300,13 +332,13 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+--- !u!50 &3736061554562201637 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: -2714224154409688301, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+  m_PrefabInstance: {fileID: 7605466735777176374}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5959313012063812576 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
-  m_PrefabInstance: {fileID: 7605466735777176374}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &7564658610632244564 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 105583207694067298, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
   m_PrefabInstance: {fileID: 7605466735777176374}
   m_PrefabAsset: {fileID: 0}

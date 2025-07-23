@@ -3,29 +3,33 @@ using UnityEngine;
 
 public class BoxController : MonoBehaviour
 {
-    FixedJoint fixedJoint;
+    FixedJoint2D fixedJoint;
 
-    private Rigidbody rigid;
+    private Rigidbody2D rigid;
 
     private void Awake()
     {
-        rigid = GetComponent<Rigidbody>();
-        fixedJoint = GetComponent<FixedJoint>();
+        rigid = GetComponent<Rigidbody2D>();
+        fixedJoint = GetComponent<FixedJoint2D>();
     }
 
     private void Update()
     {
         if (fixedJoint.IsDestroyed())
         {
-            rigid.isKinematic = false;
-        }
+            rigid.bodyType = RigidbodyType2D.Dynamic;
+            rigid.mass = 0.2f;
+            rigid.gravityScale = 0.1f;
+        }        
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Bullet"))
         {
-            rigid.isKinematic = false;
+            rigid.bodyType = RigidbodyType2D.Dynamic;
+            rigid.mass = 0.2f;
+            rigid.gravityScale = 0.1f;
         }
     }
 }
