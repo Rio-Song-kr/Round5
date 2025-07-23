@@ -44,6 +44,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1280973459026723651}
     m_Modifications:
+    - target: {fileID: -2644550272382183268, guid: a3ac18bf699322a40b5d79d56eb523c4, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 1.4799995
+      objectReference: {fileID: 0}
+    - target: {fileID: -2644550272382183268, guid: a3ac18bf699322a40b5d79d56eb523c4, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.7140002
+      objectReference: {fileID: 0}
+    - target: {fileID: -2644550272382183268, guid: a3ac18bf699322a40b5d79d56eb523c4, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 87933839896074445}
     - target: {fileID: 324697610817193016, guid: a3ac18bf699322a40b5d79d56eb523c4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -88,10 +100,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: DynamicBoxPlatform
       objectReference: {fileID: 0}
-    - target: {fileID: 8463835679574088220, guid: a3ac18bf699322a40b5d79d56eb523c4, type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 6492606823244504508}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -110,6 +118,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1280973459026723651}
     m_Modifications:
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 1.0059998
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 843050607685669018}
     - target: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.74
@@ -150,10 +170,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4577000991530585876, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 5805464081023489515}
     - target: {fileID: 8979260108434461392, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_Name
       value: BackGroundBox (3)
@@ -176,6 +192,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1280973459026723651}
     m_Modifications:
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -4.0600004
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 1.59
+      objectReference: {fileID: 0}
     - target: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.74
@@ -225,9 +249,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
---- !u!54 &5805464081023489515 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 105583207694067298, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+--- !u!50 &843050607685669018 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: -2714224154409688301, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
   m_PrefabInstance: {fileID: 5901472035458528137}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7699340772155937631 stripped
@@ -243,6 +267,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1280973459026723651}
     m_Modifications:
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 1.0059998
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 438745396828526052}
     - target: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.74
@@ -283,10 +319,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4577000991530585876, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
-      propertyPath: m_ConnectedBody
-      value: 
-      objectReference: {fileID: 6716138354925408405}
     - target: {fileID: 8979260108434461392, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_Name
       value: BackGroundBox (1)
@@ -296,9 +328,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
---- !u!54 &6492606823244504508 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 105583207694067298, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+--- !u!50 &87933839896074445 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: -2714224154409688301, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
   m_PrefabInstance: {fileID: 6587997556915960798}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6940879290137090824 stripped
@@ -314,6 +346,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1280973459026723651}
     m_Modifications:
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -5.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 3294630567538618672, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 1.59
+      objectReference: {fileID: 0}
     - target: {fileID: 4269324688559268054, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.74
@@ -363,9 +403,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
---- !u!54 &6716138354925408405 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 105583207694067298, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
+--- !u!50 &438745396828526052 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: -2714224154409688301, guid: 1905ed5c0e2f4c14b8aee8f68e14c457, type: 3}
   m_PrefabInstance: {fileID: 6648332427190957815}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7456886970703943201 stripped
