@@ -15,13 +15,19 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     private int currentAmmo;     // 현재 남은 탄 수
     private bool isReloading;    // 재장전 중인지 여부
 
-    // 무기가 활성화될 때 호출됨 (무기 교체 포함)
+    /// <summary>
+    /// 무기가 활성화될 때 호출됨 (무기 교체 포함)
+    /// </summary>
     private void OnEnable()
     {
         currentAmmo = maxAmmo;   // 탄약을 가득 채움
         isReloading = false;     // 재장전 상태 초기화
     }
     
+    /// <summary>
+    /// 격발 함수
+    /// </summary>
+    /// <param name="firingPoint"></param>
     public void Attack(Transform firingPoint)
     {
         // 재장전
@@ -50,7 +56,12 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         
         --currentAmmo;
     }
-       private IEnumerator Reload()
+    
+    /// <summary>
+    /// 재장전
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Reload()
     {
         isReloading = true;
         Debug.Log("재장전 중...");
@@ -61,12 +72,20 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         isReloading = false;
         Debug.Log("재장전 완료!");
     } 
+       
+    /// <summary>
+    /// 무기 초기화 함수
+    /// </summary>
     public void Initialize()
     {
         currentAmmo = maxAmmo;
         isReloading = false;
     }
 
+    /// <summary>
+    /// 무기 타입 반환
+    /// </summary>
+    /// <returns></returns>
     public WeaponType GetWeaponType()
     {
         return weaponType;

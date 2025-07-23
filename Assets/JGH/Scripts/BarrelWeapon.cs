@@ -14,11 +14,15 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
     [SerializeField] private int maxAmmo = 8;             // 샷건 최대 장탄 수 
     [SerializeField] private float reloadTime = 2.25f;       // 재장전 시간
     [SerializeField] private int ammoPerShot= 4;       // 소비 탄수
-    
 
+    // 현재 남은 탄 수
     private int currentAmmo;
+    // 재장전 중인지 여부
     private bool isReloading;
 
+    /// <summary>
+    /// 무기가 활성화될 때 호출됨 (무기 교체 포함)
+    /// </summary>
     private void OnEnable()
     {
         currentAmmo = maxAmmo;
@@ -27,13 +31,20 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
     
 
 
+    /// <summary>
+    /// 격발 함수
+    /// </summary>
+    /// <param name="firingPoint"></param>
     public void Attack(Transform firingPoint)
     {
+        // 재장전 중일때 
         if (isReloading)
         {
             return;
         }
 
+        // 탄약이 격발 갯수보다 작을경우
+        // TODO: 
         if (currentAmmo < ammoPerShot)
         {
             StartCoroutine(Reload());
@@ -81,12 +92,19 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         Debug.Log("재장전 완료!");
     }
 
+    /// <summary>
+    /// 무기 초기화 함수
+    /// </summary>
     public void Initialize()
     {
         currentAmmo = maxAmmo;
         isReloading = false;
     }
     
+    /// <summary>
+    /// 무기 타입 반환
+    /// </summary>
+    /// <returns></returns>
     public WeaponType GetWeaponType()
     {
         return weaponType;

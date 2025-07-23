@@ -12,6 +12,9 @@ public class GunControll : MonoBehaviour
     // 현재 무기
     private IWeapon currentWeapon;
 
+    /// <summary>
+    /// 처음 시작 시 기본 무기 적용
+    /// </summary>
     private void Start()
     {
         EquipWeapon(bulletWeaponObject);
@@ -19,8 +22,10 @@ public class GunControll : MonoBehaviour
 
     private void Update()
     {
+        // 마우스 위치에 따라 총구 회전
         RotateMuzzleToMouse();
         
+        // 마우스 왼쪽 버튼 클릭 시 공격
         if (Input.GetMouseButtonDown(0))
         {
             currentWeapon.Attack(muzzle);
@@ -37,6 +42,9 @@ public class GunControll : MonoBehaviour
             EquipWeapon(barrelWeaponObject);
     }
 
+    /// <summary>
+    /// 마우스 따라 회전
+    /// </summary>
     private void RotateMuzzleToMouse()
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -49,6 +57,10 @@ public class GunControll : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 무기 교체 함수
+    /// </summary>
+    /// <param name="weaponObject"></param>
     public void EquipWeapon(GameObject weaponObject)
     {
         // 모든 무기 GameObject 끄기

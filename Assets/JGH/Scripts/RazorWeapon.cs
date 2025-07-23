@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 // 레이저 무기 클래스
@@ -8,9 +9,15 @@ public class RazorWeapon : MonoBehaviour, IWeapon
     [SerializeField] private float laserLength = 20f;    // 레이저 거리
     [SerializeField] private WeaponType weaponType = WeaponType.Laser; // 무기 타입
     
+    // 레이저 발사 중인지 여부
     private bool isFiring = false;
+    // 재장전 중인지 여부
     private bool isReloading = false;
     
+    /// <summary>
+    /// 레이저 격발
+    /// </summary>
+    /// <param name="firingPoint"></param>
     public void Attack(Transform firingPoint)
     {
         if (isFiring || isReloading) return;
@@ -18,7 +25,12 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         StartCoroutine(FireLaserRoutine(firingPoint));
     }
 
-    private System.Collections.IEnumerator FireLaserRoutine(Transform firingPoint)
+    /// <summary>
+    /// 레이저 발사 코루틴
+    /// </summary>
+    /// <param name="firingPoint"></param>
+    /// <returns></returns>
+    private IEnumerator FireLaserRoutine(Transform firingPoint)
     {
         isFiring = true;
         laserRenderer.enabled = true;
@@ -77,15 +89,26 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         isReloading = false;
     }
     
+    /// <summary>
+    ///  무기 타입 반환
+    /// </summary>
+    /// <returns></returns>
     public WeaponType GetWeaponType()
     {
         return weaponType;
     }
 
+    /// <summary>
+    /// 무기 초기화 함수
+    /// </summary>
     public void Initialize()
     {
+        
     }
     
+    /// <summary>
+    /// 무기 교체 시 호출
+    /// </summary>
     private void OnDisable()
     {
         StopAllCoroutines();          // 레이저 발사 코루틴 중지
