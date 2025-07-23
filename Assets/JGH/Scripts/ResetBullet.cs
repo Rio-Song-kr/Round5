@@ -8,7 +8,7 @@ public class ResetBullet : MonoBehaviour
     private Rigidbody2D rb;
     
     // 총알이 충돌 시 적용할 데미지
-    public float damage;
+    public float damage = 100f;
 
     private void Start()
     {
