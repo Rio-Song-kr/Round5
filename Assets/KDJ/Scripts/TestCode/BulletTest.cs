@@ -11,6 +11,7 @@ public class BulletTest : MonoBehaviour
 
     void Update()
     {
+        LookAtMouse();
         ShotCycle();
     }
 
@@ -27,5 +28,13 @@ public class BulletTest : MonoBehaviour
     private void Shot()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+    }
+
+    private void LookAtMouse()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0; // Ensure the z-coordinate is zero for 2D
+        Vector3 direction = (mousePosition - transform.position).normalized;
+        transform.up = direction; // Set the bullet's rotation to face the mouse
     }
 }

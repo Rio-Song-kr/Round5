@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour, IBullet
+public class Bullet : MonoBehaviour
 {
     [SerializeField] public float Speed;
     [SerializeField] public float Damage;
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private GameObject _bigBullet;
+    [SerializeField] private GameObject _explosiveBullet;
     [SerializeField] private GameObject _hitEffect;
     [SerializeField] private bool _isBigBullet;
+    [SerializeField] private bool _isExplosiveBullet;
 
     private void Awake()
     {
@@ -26,28 +28,48 @@ public class Bullet : MonoBehaviour, IBullet
 
     void Start()
     {
-        BulletMove();
+        BulletMove(Speed);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GameObject effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
-        effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
-        _bigBullet.transform.SetParent(null);
-        _bigBullet.GetComponent<ParticleSystem>().Stop();
-        Destroy(_bigBullet, 1f);
+        if (_isBigBullet)
+            BigBulletShot(collision);
+
+        if (_isExplosiveBullet)
+        {
+            ExplosiveBulletShot(collision);
+        }
+        else
+        {
+            GameObject effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
+            effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
+        }
+
         Destroy(gameObject);
     }
 
-    public void BulletMove()
+    public void BulletMove(float speed)
     {
-        _rb.AddForce(transform.up * Speed, ForceMode2D.Impulse);
+        _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
         Destroy(gameObject, 4f);
     }
 
     public void Attack()
     {
         // Player 스크립트 생기면 해당 플레이어를 받아와서 TakeDamage 메소드 호출
+    }
+
+    public void BigBulletShot(Collision2D collision)
+    {
+        _bigBullet.transform.SetParent(null);
+        _bigBullet.GetComponent<ParticleSystem>().Stop();
+        Destroy(_bigBullet, 1f);
+    }
+
+    public void ExplosiveBulletShot(Collision2D collision)
+    {
+        Instantiate(_explosiveBullet, transform.position, Quaternion.identity);
     }
 
 }
