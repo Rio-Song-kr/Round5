@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3008097210175024082}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 4718549699714053276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.63, y: -2.18, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -110,8 +110,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2a0c1c3ea8f0c0f4a913a1fcbd9099f7, type: 2}
-  - {fileID: 2100000, guid: 2a0c1c3ea8f0c0f4a913a1fcbd9099f7, type: 2}
+  - {fileID: 2100000, guid: ff8304ac87898844190515e5131c7350, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -132,7 +131,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.075
+  m_Time: 0.04
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -142,7 +141,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.099416025
+        value: 0.12865186
         inSlope: 0.026914576
         outSlope: 0.026914576
         tangentMode: 0
@@ -150,7 +149,7 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.21727747
       - serializedVersion: 3
-        time: 0.6073299
+        time: 0.5131069
         value: 0
         inSlope: 0
         outSlope: 0
@@ -250,7 +249,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.3
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -277,12 +276,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e07da45c9f42e747878e0f254af24b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 15
+  Speed: 8
   Damage: 10
   _rb: {fileID: 6320523527442016267}
   _bigBullet: {fileID: 8734541828447896232}
+  _explosiveBullet: {fileID: 2555893828798284621, guid: 153e5c4a5f0fb1d4da297023a330fd74, type: 3}
   _hitEffect: {fileID: 2555893828798284621, guid: 8cb81d4612565b147a1fe85c2fcdcf26, type: 3}
   _isBigBullet: 0
+  _isExplosiveBullet: 1
 --- !u!1 &8734541828447896232
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,6 +296,7 @@ GameObject:
   - component: {fileID: 3659182553508391702}
   - component: {fileID: 3653238233248735743}
   - component: {fileID: 1416134753598318658}
+  - component: {fileID: 6978429564180515410}
   m_Layer: 0
   m_Name: BigBullet
   m_TagString: Untagged
@@ -1154,7 +1156,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 75
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1271,15 +1273,15 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0.40195084
-          inSlope: 7.9484544
-          outSlope: 7.9484544
+          value: 0.76143265
+          inSlope: 6.143344
+          outSlope: 6.143344
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.07524094
+          time: 0.03883347
           value: 1
           inSlope: -0
           outSlope: -0
@@ -5157,4 +5159,18 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 5
+  m_Radius: 4.8
+--- !u!114 &6978429564180515410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8734541828447896232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8523f1343e216c7478053550837b6d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bullet: {fileID: 4718549699714053276}
+  _hitEffect: {fileID: 2555893828798284621, guid: aa9f328b04169a941a2f8540d2d3f473, type: 3}
