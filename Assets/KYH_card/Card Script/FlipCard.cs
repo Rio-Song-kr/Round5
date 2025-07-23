@@ -6,60 +6,63 @@ using TMPro;
 using UnityEngine.UI;
 public class FlipCard : MonoBehaviour
 {
-    private bool CardFlip = false; // false = 뒷면, true = 앞면
+    private bool isFlipped = false;      // 뒷면 → 앞면으로 뒤집혔는가?
+    private bool isSelected = false;     // 선택되었는가?
 
-    [Header("Canvas to control")]
-    public GameObject frontCanvas; // 앞면 Canvas
-    public GameObject backCanvas;  // 뒷면 Canvas
+    [Header("앞/뒷면 루트 오브젝트")]
+    public GameObject frontRoot; // frontImage
+    public GameObject backRoot;  // BackImage
 
     [Header("설정")]
     public float flipDuration = 0.25f;
 
+    private CardSelectManager manager;
+
+    public void SetManager(CardSelectManager mgr)
+    {
+        manager = mgr;
+    }
+
     private void Start()
     {
-        // 카드 뒷면 상태로 시작
+        isFlipped = false;
+        isSelected = false;
+
         transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-        CardFlip = false;
 
-        if (frontCanvas != null) frontCanvas.SetActive(false);
-        if (backCanvas != null) backCanvas.SetActive(true);
+        if (frontRoot != null) frontRoot.SetActive(false);
+        if (backRoot != null) backRoot.SetActive(true);
     }
 
-    private void Update()
+    public void OnClickCard()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        // 아직 뒤집지 않은 상태면 → 회전해서 앞면으로
+        if (!isFlipped)
         {
-            Flip();
+            isFlipped = true;
+
+            transform.DORotate(new Vector3(0, 0, 0), flipDuration)
+                .SetEase(Ease.InOutSine)
+                .OnUpdate(() =>
+                {
+                    float yRot = transform.localEulerAngles.y;
+                    if (yRot > 180f) yRot -= 360f;
+                    bool showFront = Mathf.Abs(yRot) <= 90f;
+
+                    frontRoot.SetActive(showFront);
+                    backRoot.SetActive(!showFront);
+                })
+                .OnComplete(() =>
+                {
+                    frontRoot.SetActive(true);
+                    backRoot.SetActive(false);
+                });
         }
-    }
-
-    public void Flip()
-    {
-        CardFlip = !CardFlip;
-        float targetY = CardFlip ? 0f : 180f;
-
-        // 미리 앞면 켜고 뒷면 끔 (회전 중 상태에 따라 다시 바뀔 수 있음)
-        if (frontCanvas != null) frontCanvas.SetActive(true);
-        if (backCanvas != null) backCanvas.SetActive(true);
-
-        transform.DORotate(new Vector3(0, targetY, 0), flipDuration)
-            .SetEase(Ease.InOutSine)
-            .OnUpdate(() =>
-            {
-                float yRot = transform.localEulerAngles.y;
-                if (yRot > 180f) yRot -= 360f;
-
-                // 앞면 보이는 각도: -90 ~ 90
-                bool showFront = Mathf.Abs(yRot) <= 90f;
-
-                if (frontCanvas != null) frontCanvas.SetActive(showFront);
-                if (backCanvas != null) backCanvas.SetActive(!showFront);
-            })
-            .OnComplete(() =>
-            {
-                // 최종 상태 정리
-                if (frontCanvas != null) frontCanvas.SetActive(CardFlip);
-                if (backCanvas != null) backCanvas.SetActive(!CardFlip);
-            });
+        // 이미 앞면이고 아직 선택되지 않았다면 → 선택 처리
+        else if (!isSelected)
+        {
+            isSelected = true;
+            manager?.OnCardSelected(gameObject);
+        }
     }
 }
