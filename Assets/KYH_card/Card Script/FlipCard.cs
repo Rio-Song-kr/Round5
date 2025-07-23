@@ -4,18 +4,22 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
-public class FlipCard : MonoBehaviour
+using UnityEngine.EventSystems;
+public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    private bool isFlipped = false;      // 뒷면 → 앞면으로 뒤집혔는가?
-    private bool isSelected = false;     // 선택되었는가?
+    private bool isFlipped = false;
+    private bool isSelected = false;
+    private bool isHovered = false;
 
     [Header("앞/뒷면 루트 오브젝트")]
-    public GameObject frontRoot; // frontImage
-    public GameObject backRoot;  // BackImage
+    public GameObject frontRoot;
+    public GameObject backRoot;
 
     [Header("설정")]
     public float flipDuration = 0.25f;
+    public float hoverScale = 1.1f;
 
+    private Vector3 originalScale;
     private CardSelectManager manager;
 
     public void SetManager(CardSelectManager mgr)
@@ -27,6 +31,9 @@ public class FlipCard : MonoBehaviour
     {
         isFlipped = false;
         isSelected = false;
+        isHovered = false;
+
+        originalScale = transform.localScale;
 
         transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
 
@@ -34,9 +41,27 @@ public class FlipCard : MonoBehaviour
         if (backRoot != null) backRoot.SetActive(true);
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        isHovered = true;
+        transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isHovered = false;
+        transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!isHovered) return; // 마우스가 올라가 있지 않으면 무시
+
+        OnClickCard(); // 기존 로직 그대로 호출
+    }
+
     public void OnClickCard()
     {
-        // 아직 뒤집지 않은 상태면 → 회전해서 앞면으로
         if (!isFlipped)
         {
             isFlipped = true;
@@ -49,16 +74,15 @@ public class FlipCard : MonoBehaviour
                     if (yRot > 180f) yRot -= 360f;
                     bool showFront = Mathf.Abs(yRot) <= 90f;
 
-                    frontRoot.SetActive(showFront);
-                    backRoot.SetActive(!showFront);
+                    if (frontRoot != null) frontRoot.SetActive(showFront);
+                    if (backRoot != null) backRoot.SetActive(!showFront);
                 })
                 .OnComplete(() =>
                 {
-                    frontRoot.SetActive(true);
-                    backRoot.SetActive(false);
+                    if (frontRoot != null) frontRoot.SetActive(true);
+                    if (backRoot != null) backRoot.SetActive(false);
                 });
         }
-        // 이미 앞면이고 아직 선택되지 않았다면 → 선택 처리
         else if (!isSelected)
         {
             isSelected = true;

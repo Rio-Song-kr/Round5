@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 2485272614314152762}
   - component: {fileID: 1957728228169715252}
   - component: {fileID: 4560187014708586365}
+  - component: {fileID: 6787237898858212578}
   m_Layer: 0
   m_Name: card 1 1
   m_TagString: Untagged
@@ -445,6 +446,7 @@ MonoBehaviour:
   frontRoot: {fileID: 15490871556894537}
   backRoot: {fileID: 1377972328149489905}
   flipDuration: 0.25
+  hoverScale: 1.1
 --- !u!222 &4560187014708586365
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -453,6 +455,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3777309921307386761}
   m_CullTransparentMesh: 1
+--- !u!225 &6787237898858212578
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3777309921307386761}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5347323471987390038
 GameObject:
   m_ObjectHideFlags: 0
