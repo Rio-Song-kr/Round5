@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] private bool _isBigBullet;
     [SerializeField] private bool _isExplosiveBullet;
 
+    private CameraShake _cameraShake;
+
     private void Awake()
     {
         if (_isBigBullet)
@@ -24,6 +27,8 @@ public class Bullet : MonoBehaviour
         {
             _bigBullet.SetActive(false);
         }
+
+        _cameraShake = Camera.main.GetComponent<CameraShake>();
     }
 
     void Start()
@@ -34,16 +39,17 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (_isBigBullet)
-            BigBulletShot(collision);
+            BigBulletShot();
 
         if (_isExplosiveBullet)
         {
-            ExplosiveBulletShot(collision);
+            ExplosiveBulletShot();
         }
         else
         {
             GameObject effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
             effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
+            _cameraShake.ShakeCaller(0.3f, 0.1f);
         }
 
         Destroy(gameObject);
@@ -60,14 +66,14 @@ public class Bullet : MonoBehaviour
         // Player 스크립트 생기면 해당 플레이어를 받아와서 TakeDamage 메소드 호출
     }
 
-    public void BigBulletShot(Collision2D collision)
+    public void BigBulletShot()
     {
         _bigBullet.transform.SetParent(null);
         _bigBullet.GetComponent<ParticleSystem>().Stop();
         Destroy(_bigBullet, 1f);
     }
 
-    public void ExplosiveBulletShot(Collision2D collision)
+    public void ExplosiveBulletShot()
     {
         Instantiate(_explosiveBullet, transform.position, Quaternion.identity);
     }
