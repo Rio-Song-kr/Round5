@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class CameraShake : MonoBehaviour
+public class CameraShake : MonoBehaviourPun
 {
     //
     //NOTES:
@@ -23,15 +25,12 @@ public class CameraShake : MonoBehaviour
 
     void Start()
     {
-        anim = GetComponent<Animation>();
+
     }
 
     public void ShakeCamera()
     {
-        if (anim != null)
-            anim.Play(anim.clip.name);
-        else
-            ShakeCaller(0.25f, 0.1f);
+        ShakeCaller(0.2f, 0.05f);
     }
 
     // 호출용 함수

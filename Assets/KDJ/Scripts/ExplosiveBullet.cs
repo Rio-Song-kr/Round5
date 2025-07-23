@@ -5,10 +5,14 @@ using UnityEngine;
 public class ExplosiveBullet : MonoBehaviour
 {
     private Collider2D[] _colls = new Collider2D[20];
+    private CameraShake _cameraShake;
 
     void Start()
     {
         ExplosionShock();
+        _cameraShake = Camera.main.GetComponent<CameraShake>();
+        _cameraShake.ShakeCaller(0.65f, 0.1f);
+
     }
 
     private void ExplosionShock()

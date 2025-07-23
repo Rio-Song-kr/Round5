@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -48,9 +49,9 @@ public class Bullet : MonoBehaviour
         {
             GameObject effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
             effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
+            _cameraShake.ShakeCaller(0.3f, 0.1f);
         }
 
-        _cameraShake.ShakeCaller(0.2f, 0.05f);
         Destroy(gameObject);
     }
 
