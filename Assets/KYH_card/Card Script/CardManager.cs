@@ -12,7 +12,7 @@ public class CardSelectManager : MonoBehaviour
     public Transform cardSpawnParent; // 생성된 카드가 붙을 부모(캔버스 내 위치 컨테이너)
 
     [Header("출력할 카드 개수")]
-    [SerializeField] public int cardCountToShow = 3; // 한 번에 보여줄 카드 개수
+    public int cardCountToShow = 3; // 한 번에 보여줄 카드 개수
 
     private List<GameObject> currentCards = new(); // 현재 화면에 표시 중인 카드 목록
     private bool hasSelected = false; // 플레이어가 카드를 선택했는지 여부
@@ -57,7 +57,7 @@ public class CardSelectManager : MonoBehaviour
 
             // ㅅ 형태 위치 계산
             float targetX = Mathf.Sin(rad) * radiusX;
-            float targetY = -Mathf.Abs(Mathf.Sin(rad)) * radiusY + yOffset;  // 아래쪽으로 퍼지도록
+            float targetY = -Mathf.Abs(Mathf.Sin(rad)) * radiusY +yOffset;  // 아래쪽으로 퍼지도록
 
             float startY = -600f;
 
@@ -69,7 +69,6 @@ public class CardSelectManager : MonoBehaviour
                 Sequence seq = DOTween.Sequence();
                 seq.Append(rt.DOAnchorPosY(targetY, 0.6f).SetEase(Ease.OutCubic));
                 seq.Join(cg.DOFade(1f, 0.6f));
-                seq.SetAutoKill(true);
             }
 
             FlipCard flip = card.GetComponent<FlipCard>();
