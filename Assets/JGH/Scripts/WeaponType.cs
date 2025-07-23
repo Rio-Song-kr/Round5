@@ -1,5 +1,3 @@
-using UnityEngine;
-
 // 무기 종류를 정의하는 열거형
 public enum WeaponType
 {
