@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class BulletTest : MonoBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private float _shotInterval;
 
-    private float shotInterval = 0.5f;
-    private float shotTimer = 0f;
+    private CameraShake _cameraShake;
+    
+    private float _shotTimer = 0f;
+
+    void Awake()
+    {
+        _cameraShake = Camera.main.GetComponent<CameraShake>();
+    }
 
     void Update()
     {
@@ -17,17 +24,18 @@ public class BulletTest : MonoBehaviour
 
     private void ShotCycle()
     {
-        shotTimer += Time.deltaTime;
-        if (shotTimer >= shotInterval)
+        _shotTimer += Time.deltaTime;
+        if (_shotTimer >= _shotInterval)
         {
             Shot();
-            shotTimer = 0f;
+            _shotTimer = 0f;
         }
     }
 
     private void Shot()
     {
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+        GameObject bullet = Instantiate(_bulletPrefab, transform.position, transform.rotation);
+        _cameraShake.ShakeCaller(0.2f, 0.05f);
     }
 
     private void LookAtMouse()
