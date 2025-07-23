@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -12,13 +11,34 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
     [SerializeField] private WeaponType weaponType = WeaponType.Shotgun; // 무기 타입
     
     [SerializeField] private int maxAmmo = 8;             // 샷건 최대 장탄 수 
-    [SerializeField] private float reloadTime = 2.25f;       // 재장전 시간
+    [SerializeField] private float reloadTime = 3.25f;       // 재장전 시간
     [SerializeField] private int ammoPerShot= 4;       // 소비 탄수
+    [SerializeField] private float autoReloadDelay = 3f; // 일정 시간 동안 미사용 시 자동 장전
 
     // 현재 남은 탄 수
     private int currentAmmo;
     // 재장전 중인지 여부
     private bool isReloading;
+    private float lastAttack; // 마지막 공격
+    
+    private AmmoDisplay AmmoDisplay; // 탄약 아이콘 표시 UI
+    
+     private void Start()
+    {
+        // AmmoDisplay 컴포넌트 찾기
+        AmmoDisplay = FindObjectOfType<AmmoDisplay>();
+        lastAttack = 0;
+    }
+
+    private void Update()
+    {
+        lastAttack += Time.deltaTime;
+        if(lastAttack > reloadTime)
+        {
+            NowReload();
+        }
+        AmmoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+    }
 
     /// <summary>
     /// 무기가 활성화될 때 호출됨 (무기 교체 포함)
@@ -38,18 +58,17 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
     public void Attack(Transform firingPoint)
     {
         // 재장전 중일때 
-        if (isReloading)
+        if (isReloading || currentAmmo < ammoPerShot)
         {
             return;
         }
 
         // 탄약이 격발 갯수보다 작을경우
-        // TODO: 
-        if (currentAmmo < ammoPerShot)
-        {
-            StartCoroutine(Reload());
-            return;
-        }
+        // if (currentAmmo < ammoPerShot)
+        // {
+        //     StartCoroutine(Reload());
+        //     return;
+        // }
 
         // 각도 계산
         float angleStep = (spreadAngle / (pelletCount - 1));
@@ -76,21 +95,35 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
             bullet.GetComponent<ResetBullet>().damage = shotgunPelletDamage;
         }
 
+        lastAttack = 0;
         currentAmmo -= ammoPerShot;
     }
 
 
-    private IEnumerator Reload()
+    // private IEnumerator Reload()
+    // {
+    //     isReloading = true;
+    //     Debug.Log("재장전 중...");
+    //
+    //     yield return new WaitForSeconds(reloadTime);
+    //
+    //     currentAmmo = maxAmmo;
+    //     isReloading = false;
+    //     Debug.Log("재장전 완료!");
+    // }
+    
+    /// <summary>
+    /// 즉시 재장전
+    /// </summary>
+    /// <returns></returns>
+    private void NowReload()
     {
         isReloading = true;
         Debug.Log("재장전 중...");
-
-        yield return new WaitForSeconds(reloadTime);
-
         currentAmmo = maxAmmo;
         isReloading = false;
         Debug.Log("재장전 완료!");
-    }
+    } 
 
     /// <summary>
     /// 무기 초기화 함수

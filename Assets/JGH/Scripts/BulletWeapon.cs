@@ -10,10 +10,30 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     [SerializeField] private WeaponType weaponType = WeaponType.Bullet; // 무기 타입
 
     [SerializeField] private int maxAmmo = 6;       // 최대 탄 수
-    [SerializeField] private float reloadTime = 2f; // 재장전 시간 (초)
+    [SerializeField] private float reloadTime = 3f; // 재장전 시간 (초)
 
     private int currentAmmo;     // 현재 남은 탄 수
     private bool isReloading;    // 재장전 중인지 여부
+    private float lastAttack; // 마지막 공격
+    
+    private AmmoDisplay AmmoDisplay; // 탄약 아이콘 표시 UI
+
+    private void Start()
+    {
+        // AmmoDisplay 컴포넌트 찾기
+        AmmoDisplay = FindObjectOfType<AmmoDisplay>();
+        lastAttack = 0;
+    }
+    
+    private void Update()
+    {
+        lastAttack += Time.deltaTime;
+        if(lastAttack > reloadTime)
+        {
+            NowReload();
+        }
+        AmmoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+    }
 
     /// <summary>
     /// 무기가 활성화될 때 호출됨 (무기 교체 포함)
@@ -31,17 +51,17 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     public void Attack(Transform firingPoint)
     {
         // 재장전
-        if (isReloading)
+        if (isReloading || currentAmmo <= 0)
         {
             return;
         }
-        
-       if (currentAmmo <= 0)
-        {
-            StartCoroutine(Reload());
-            return;
-        }
-
+       //  
+       // if (currentAmmo <= 0)
+       //  {
+       //      StartCoroutine(Reload());
+       //      return;
+       //  }
+       //
         Quaternion bulletRotation = firingPoint.rotation * Quaternion.Euler(0, 0, 90f);
         GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, bulletRotation);
 
@@ -55,19 +75,33 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         // 데미지 설정 :: E
         
         --currentAmmo;
+        lastAttack = 0;
     }
     
+    // /// <summary>
+    // /// 3초 후 재장전
+    // /// </summary>
+    // /// <returns></returns>
+    // private IEnumerator Reload()
+    // {
+    //     isReloading = true;
+    //     Debug.Log("재장전 중...");
+    //
+    //     yield return new WaitForSeconds(reloadTime);
+    //
+    //     currentAmmo = maxAmmo;
+    //     isReloading = false;
+    //     Debug.Log("재장전 완료!");
+    // } 
+    
     /// <summary>
-    /// 재장전
+    /// 즉시 재장전
     /// </summary>
     /// <returns></returns>
-    private IEnumerator Reload()
+    private void NowReload()
     {
         isReloading = true;
         Debug.Log("재장전 중...");
-
-        yield return new WaitForSeconds(reloadTime);
-
         currentAmmo = maxAmmo;
         isReloading = false;
         Debug.Log("재장전 완료!");

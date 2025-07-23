@@ -5,7 +5,7 @@ using UnityEngine;
 public class RazorWeapon : MonoBehaviour, IWeapon
 {
     [SerializeField] private LineRenderer laserRenderer;  // 레이저를 그릴 LineRenderer
-    [SerializeField] private float laserDuration = 2f;   // 레이저 지속 시간
+    [SerializeField] private float laserDuration = 3f;   // 레이저 지속 시간
     [SerializeField] private float laserLength = 20f;    // 레이저 거리
     [SerializeField] private WeaponType weaponType = WeaponType.Laser; // 무기 타입
     
@@ -13,6 +13,24 @@ public class RazorWeapon : MonoBehaviour, IWeapon
     private bool isFiring = false;
     // 재장전 중인지 여부
     private bool isReloading = false;
+    
+    private AmmoDisplay AmmoDisplay; // 탄약 아이콘 표시 UI
+
+    private int maxAmmo = 2; // 최대 장탄 수 
+    private int currentAmmo; // 현재 남은 탄 수
+    
+    private void Start()
+    {
+        // AmmoDisplay 컴포넌트 찾기
+        currentAmmo = maxAmmo; // 초기화 시 최대 장탄 수로 설정
+        AmmoDisplay = FindObjectOfType<AmmoDisplay>();
+    }
+    
+    private void Update()
+    {
+        AmmoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+    }
+
     
     /// <summary>
     /// 레이저 격발
@@ -22,6 +40,8 @@ public class RazorWeapon : MonoBehaviour, IWeapon
     {
         if (isFiring || isReloading) return;
 
+        // 탄창 - 2 
+        currentAmmo -= 2;
         StartCoroutine(FireLaserRoutine(firingPoint));
     }
 
@@ -79,7 +99,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
             elapsed += Time.deltaTime;
             yield return null;
         }
-
+        
         // 비활성화 및 재장전 시작
         laserRenderer.enabled = false;
         isFiring = false;
@@ -87,6 +107,8 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         isReloading = true;
         yield return new WaitForSeconds(2f); // 재장전 시간
         isReloading = false;
+        
+        currentAmmo = maxAmmo; // 초기화 시 최대 장탄 수로 설정
     }
     
     /// <summary>
