@@ -1,8 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 특정 환경이나 게임 내에서 얼음과 관련된 슬램 효과를 관리하고 구현하는 데 사용
+/// </summary>
 public class FrostSlamEffect : MonoBehaviour
 {
     [Header("Expansion Settings")]
@@ -80,33 +82,8 @@ public class FrostSlamEffect : MonoBehaviour
         //# PolygonCollider2D의 초기 포인트 설정
         _polyCollider.SetPath(0, _points);
 
-        //# 시각적인 업데이트
+        //# LineRenderer 업데이트
         UpdateLineRenderer();
-    }
-
-    /// <summary>
-    /// LineRenderer 컴포넌트 설정
-    /// </summary>
-    private void InitializeLineRenderer()
-    {
-        _lineRenderer = gameObject.AddComponent<LineRenderer>();
-
-        //# LineRenderer의 material을 지정하지 않았을 때는 새로운 material 생성
-        _lineRenderer.material = _lineMaterial != null ? _lineMaterial : new Material(Shader.Find("Sprites/Default"));
-
-        //# 시작 line의 두께와 끝 Line의 두께 설정
-        _lineRenderer.startWidth = _lineWidth;
-        _lineRenderer.endWidth = _lineWidth;
-
-        //# 원과 같이 닫혀야 하므로 Loop 설정
-        _lineRenderer.loop = true;
-
-        //# 로컬 좌표계 사용
-        _lineRenderer.useWorldSpace = false;
-
-        //# 시작 line의 색과, 끝 line의 색 설정
-        _lineRenderer.startColor = Color.white;
-        _lineRenderer.endColor = Color.white;
     }
 
     /// <summary>
@@ -114,11 +91,17 @@ public class FrostSlamEffect : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        //# 반지름 확장
-        _currentRadius += _expansionSpeed * Time.deltaTime;
+        //# 반지름 확장 (Ease-out 효과 적용)
+        //# 처음에는 빠르고 끝에는 느리게 확장되도록 속도를 조절합니다.
+        if (_currentRadius < _maxRadius)
+        {
+            float progress = Mathf.Clamp01((_currentRadius - _initialRadius) / (_maxRadius - _initialRadius));
+            float speedMultiplier = Mathf.Cos(progress * Mathf.PI * 0.5f);
+            _currentRadius += _expansionSpeed * speedMultiplier * Time.deltaTime;
+        }
 
         //# 모든 지점이 고정되면 더 이상 업데이트할 필요 없음
-        if (_currentRadius > _maxRadius)
+        if (_currentRadius >= _maxRadius)
         {
             _currentRadius = _maxRadius;
             if (AllPointsFixed()) return;
@@ -224,7 +207,34 @@ public class FrostSlamEffect : MonoBehaviour
         ProcessFixedSegments();
 
         _polyCollider.SetPath(0, _points);
+
+        //# LineRenderer 업데이트
         UpdateLineRenderer();
+    }
+
+    /// <summary>
+    /// LineRenderer 컴포넌트 설정
+    /// </summary>
+    private void InitializeLineRenderer()
+    {
+        _lineRenderer = gameObject.AddComponent<LineRenderer>();
+
+        //# LineRenderer의 material을 지정하지 않았을 때는 새로운 material 생성
+        _lineRenderer.material = _lineMaterial != null ? _lineMaterial : new Material(Shader.Find("Sprites/Default"));
+
+        //# 시작 line의 두께와 끝 Line의 두께 설정
+        _lineRenderer.startWidth = _lineWidth;
+        _lineRenderer.endWidth = _lineWidth;
+
+        //# 원과 같이 닫혀야 하므로 Loop 설정
+        _lineRenderer.loop = true;
+
+        //# 로컬 좌표계 사용
+        _lineRenderer.useWorldSpace = false;
+
+        //# 시작 line의 색과, 끝 line의 색 설정
+        _lineRenderer.startColor = Color.white;
+        _lineRenderer.endColor = Color.white;
     }
 
     /// <summary>
@@ -252,7 +262,7 @@ public class FrostSlamEffect : MonoBehaviour
         var interpolationRanges = new List<Tuple<int, int>>();
 
         //# 원형 구조의 마지막과 처음이 연결되는 경우를 처리하기 위해,
-        //# _pointCount * 2 만큼 루프를 돌려 연속적인 세그먼트를 찾음.
+        //# _pointCount * 2 만큼 루프를 돌려 연속적인 세그먼트를 찾음
         for (int i = 0; i < _pointCount * 2; i++)
         {
             int currentIndex = i % _pointCount;
@@ -326,7 +336,7 @@ public class FrostSlamEffect : MonoBehaviour
         if (inFixedSegment && currentFixedSegmentStart != -1)
         {
             //# 세그먼트의 끝은 _pointCount - 1 (마지막 인덱스)
-            //# ApplyLinearInterpolation에서 이 원형 연결을 처리하도록 함.
+            //# ApplyLinearInterpolation에서 이 원형 연결을 처리하도록 함
             interpolationRanges.Add(new Tuple<int, int>(currentFixedSegmentStart, _pointCount - 1));
         }
 
