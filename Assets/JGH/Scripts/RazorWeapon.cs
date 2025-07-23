@@ -100,6 +100,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
             yield return null;
         }
         
+        AmmoDisplay.reloadIndicator.SetActive(true);
         // 비활성화 및 재장전 시작
         laserRenderer.enabled = false;
         isFiring = false;
@@ -109,6 +110,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         isReloading = false;
         
         currentAmmo = maxAmmo; // 초기화 시 최대 장탄 수로 설정
+        AmmoDisplay.reloadIndicator.SetActive(false);
     }
     
     /// <summary>

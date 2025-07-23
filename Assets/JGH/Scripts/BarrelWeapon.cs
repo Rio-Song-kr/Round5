@@ -33,6 +33,8 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
     private void Update()
     {
         lastAttack += Time.deltaTime;
+        // 탄약이 없으면 리로드 UI 표시 
+        AmmoDisplay.reloadIndicator.SetActive(currentAmmo == 0);
         if(lastAttack > reloadTime)
         {
             NowReload();
@@ -48,8 +50,6 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         currentAmmo = maxAmmo;
         isReloading = false;
     }
-    
-
 
     /// <summary>
     /// 격발 함수
@@ -62,13 +62,6 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         {
             return;
         }
-
-        // 탄약이 격발 갯수보다 작을경우
-        // if (currentAmmo < ammoPerShot)
-        // {
-        //     StartCoroutine(Reload());
-        //     return;
-        // }
 
         // 각도 계산
         float angleStep = (spreadAngle / (pelletCount - 1));
@@ -98,19 +91,6 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         lastAttack = 0;
         currentAmmo -= ammoPerShot;
     }
-
-
-    // private IEnumerator Reload()
-    // {
-    //     isReloading = true;
-    //     Debug.Log("재장전 중...");
-    //
-    //     yield return new WaitForSeconds(reloadTime);
-    //
-    //     currentAmmo = maxAmmo;
-    //     isReloading = false;
-    //     Debug.Log("재장전 완료!");
-    // }
     
     /// <summary>
     /// 즉시 재장전

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,9 @@ public class AmmoDisplay : MonoBehaviour
 {
     [SerializeField] private GameObject ammoContainerPrefab;   // 동그라미 프리팹
     [SerializeField] private Transform ammoContainerParent;     // 탄창 아이콘들이 붙을 부모
+    
+    public GameObject reloadIndicator; // PB Loop 
+    
     private List<GameObject> iconList = new List<GameObject>();
 
     public void UpdateAmmoIcons(int current, int max)
@@ -25,7 +29,8 @@ public class AmmoDisplay : MonoBehaviour
             if (i < current)
                 img.color = Color.white; // 남은 탄약
             else
-                img.color = new Color(1f, 1f, 1f, 0f); // 소모된 탄약은 흐리게
+                img.color = new Color(1f, 1f, 1f, 0f); // 투명 처리
         }
+        
     }
 }

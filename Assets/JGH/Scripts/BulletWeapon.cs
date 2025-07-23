@@ -28,6 +28,7 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     private void Update()
     {
         lastAttack += Time.deltaTime;
+        AmmoDisplay.reloadIndicator.SetActive(currentAmmo == 0);
         if(lastAttack > reloadTime)
         {
             NowReload();
@@ -55,13 +56,7 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         {
             return;
         }
-       //  
-       // if (currentAmmo <= 0)
-       //  {
-       //      StartCoroutine(Reload());
-       //      return;
-       //  }
-       //
+        
         Quaternion bulletRotation = firingPoint.rotation * Quaternion.Euler(0, 0, 90f);
         GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, bulletRotation);
 
@@ -77,22 +72,6 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         --currentAmmo;
         lastAttack = 0;
     }
-    
-    // /// <summary>
-    // /// 3초 후 재장전
-    // /// </summary>
-    // /// <returns></returns>
-    // private IEnumerator Reload()
-    // {
-    //     isReloading = true;
-    //     Debug.Log("재장전 중...");
-    //
-    //     yield return new WaitForSeconds(reloadTime);
-    //
-    //     currentAmmo = maxAmmo;
-    //     isReloading = false;
-    //     Debug.Log("재장전 완료!");
-    // } 
     
     /// <summary>
     /// 즉시 재장전
