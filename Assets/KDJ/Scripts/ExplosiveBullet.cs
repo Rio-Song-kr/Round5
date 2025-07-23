@@ -17,7 +17,8 @@ public class ExplosiveBullet : MonoBehaviour
 
     private void ExplosionShock()
     {
-        int count = Physics2D.OverlapCircleNonAlloc(transform.position, 1f, _colls);
+        // Radius는 폭발 범위
+        int count = Physics2D.OverlapCircleNonAlloc(transform.position, 2f, _colls);
 
         if (count > 0)
         {
@@ -26,8 +27,9 @@ public class ExplosiveBullet : MonoBehaviour
                 Rigidbody2D rb = _colls[i].GetComponent<Rigidbody2D>();
                 if (rb != null)
                 {
+                    // (n / distance.sqrMagnitude) n 부분 숫자가 높으면 폭발 강도가 세집니다.
                     Vector3 distance = _colls[i].transform.position - transform.position;
-                    rb.AddForce(distance * (1.5f / distance.sqrMagnitude), ForceMode2D.Impulse);
+                    rb.AddForce(distance * (5f / distance.sqrMagnitude), ForceMode2D.Impulse);
                 }
             }
         }
