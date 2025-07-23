@@ -15,11 +15,12 @@ public class BoxController : MonoBehaviour
 
     private void Update()
     {
-        if (fixedJoint.IsDestroyed())
+        if (fixedJoint.IsDestroyed() || 
+            (fixedJoint != null && fixedJoint.connectedBody != null && fixedJoint.connectedBody.bodyType == RigidbodyType2D.Dynamic))
         {
             rigid.bodyType = RigidbodyType2D.Dynamic;
-            rigid.mass = 0.2f;
-            rigid.gravityScale = 0.1f;
+            rigid.mass = 0.1f;
+            rigid.gravityScale = 0.3f;
         }        
     }
 
@@ -28,8 +29,8 @@ public class BoxController : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             rigid.bodyType = RigidbodyType2D.Dynamic;
-            rigid.mass = 0.2f;
-            rigid.gravityScale = 0.1f;
+            rigid.mass = 0.1f;
+            rigid.gravityScale = 0.3f;
         }
     }
 }
