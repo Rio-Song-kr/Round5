@@ -142,10 +142,12 @@ public class PopupManager : MonoBehaviour
     /// Resources 폴더에서 PopupManager 프리팹 로드해서 인스턴스 생성
     /// </summary>
     static void CreatePopupManager()
-    {
+    { 
         GameObject popupPrefab = Resources.Load<GameObject>("PopupManager");
 
-       PopupManager popup = popupPrefab.GetComponent<PopupManager>();
+        GameObject popupInstance = Instantiate(popupPrefab);
+        
+       PopupManager popup = popupInstance.GetComponent<PopupManager>();
        instance = popup;
        
        DontDestroyOnLoad(popupPrefab);
@@ -268,6 +270,11 @@ public class PopupManager : MonoBehaviour
     /// </summary>
     void HideAllPanels()
     {
+        if (mainPopupPanel != null)
+        {
+            mainPopupPanel.SetActive(false);
+        }
+        
         if (confirmationPanel != null)
         {
             confirmationPanel.SetActive(false);
@@ -276,11 +283,6 @@ public class PopupManager : MonoBehaviour
         if (passwordChangePanel != null)
         {
             passwordChangePanel.SetActive(false);
-        }
-
-        if (mainPopupPanel != null)
-        {
-            mainPopupPanel.SetActive(false);
         }
     }
 
@@ -461,6 +463,8 @@ public class PopupManager : MonoBehaviour
     /// </summary>
     public void ClosePopup()
     {
+        HideAllPanels();
+        
         // 콜백 함수 참조 정리 (메모리 누수 방지)
         onNoCallback = null;
         onYesCallback = null;
