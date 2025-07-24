@@ -35,7 +35,10 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         originalScale = transform.localScale;
 
-        transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+        // 현재 회전을 유지하고 Y만 180도로 변경
+        Vector3 rot = transform.localEulerAngles;
+        rot.y = 180f;
+        transform.localRotation = Quaternion.Euler(rot);
 
         if (frontRoot != null) frontRoot.SetActive(false);
         if (backRoot != null) backRoot.SetActive(true);
@@ -66,7 +69,18 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             isFlipped = true;
 
-            transform.DORotate(new Vector3(0, 0, 0), flipDuration)
+            // 현재 회전값 가져오기
+            Vector3 startEuler = transform.localEulerAngles;
+
+            // Z축 보정 (360도 이상 값이면 -360 보정 후 부호 반전)
+            float z = startEuler.z;
+            if (z > 180f) z -= 360f;
+            float flippedZ = -z;
+
+            // Y = 0 으로 회전하면서 Z는 반전해서 부채꼴 각도 유지
+            Vector3 targetEuler = new Vector3(0f, 0f, flippedZ);
+
+            transform.DORotate(targetEuler, flipDuration)
                 .SetEase(Ease.InOutSine)
                 .OnUpdate(() =>
                 {
@@ -89,4 +103,5 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             manager?.OnCardSelected(gameObject);
         }
     }
+
 }
