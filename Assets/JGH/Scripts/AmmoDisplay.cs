@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,11 @@ public class AmmoDisplay : MonoBehaviour
     public GameObject reloadIndicator; // PB Loop 
     
     private List<GameObject> iconList = new List<GameObject>();
+
+    private void Start()
+    {
+        SetReloading(false);
+    }
 
     public void UpdateAmmoIcons(int current, int max)
     {
@@ -32,5 +38,11 @@ public class AmmoDisplay : MonoBehaviour
                 img.color = new Color(1f, 1f, 1f, 0f); // 투명 처리
         }
         
+    }
+    
+    public void SetReloading(bool active)
+    {
+        if (reloadIndicator != null)
+            reloadIndicator.SetActive(active);
     }
 }
