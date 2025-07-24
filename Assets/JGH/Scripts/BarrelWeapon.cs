@@ -77,12 +77,14 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         {
             float angle = startAngle + angleStep * i;
 
-            Quaternion rotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle);
+            Quaternion spreadRotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle);
             Vector3 spawnPos = firingPoint.position + firingPoint.right * 0.2f;
 
-            GameObject bullet = Instantiate(bulletPrefab, spawnPos, rotation);
+            GameObject bullet = Instantiate(bulletPrefab, spawnPos, spreadRotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.velocity = bullet.transform.right * bulletSpeed;
+            
+            Vector2 shootDir = spreadRotation * Vector2.right;
+            rb.AddForce(shootDir * bulletSpeed, ForceMode2D.Impulse);
             
             // 탄환 데미지 
             bullet.GetComponent<ResetBullet>().damage = shotgunPelletDamage;

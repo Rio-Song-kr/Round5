@@ -61,12 +61,12 @@ public class ExplosiveBulletWeapon : MonoBehaviour, IWeapon
         GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, bulletRotation);
 
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.velocity = firingPoint.right * bulletSpeed;
+        rb.AddForce(firingPoint.right * bulletSpeed, ForceMode2D.Impulse);
         
         // 데미지 설정 :: S
         // 데미지 70% 적용
         float baseDamage = 100f;
-        bullet.GetComponent<ResetBullet>().damage = baseDamage * 0.7f;
+        bullet.GetComponent<ResetBullet>().damage = baseDamage;
         // 데미지 설정 :: E
         
         --currentAmmo;

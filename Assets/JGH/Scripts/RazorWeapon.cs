@@ -5,7 +5,7 @@ using UnityEngine;
 public class RazorWeapon : MonoBehaviour, IWeapon
 {
     [SerializeField] private LineRenderer laserRenderer;  // 레이저를 그릴 LineRenderer
-    [SerializeField] private float laserDuration = 3f;   // 레이저 지속 시간
+    [SerializeField] private float laserDuration = 2f;   // 레이저 지속 시간
     [SerializeField] private float laserLength = 20f;    // 레이저 거리
     [SerializeField] private WeaponType weaponType = WeaponType.Laser; // 무기 타입
     
@@ -61,7 +61,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         float damageTick = 0.1f;
         float damageTimer = 0f;
         float baseDamage = 100f;
-        float shotgunDamage = baseDamage * 0.7f * 0.3f; // 21
+        float Damage = baseDamage * 0.7f * 0.3f; // 21
         
         
         while (elapsed < laserDuration)
@@ -91,7 +91,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
                     IDamageable damageTarget = hit.collider.GetComponent<IDamageable>();
                     if (damageTarget != null)
                     {
-                        damageTarget.TakeDamage(shotgunDamage);
+                        damageTarget.TakeDamage(Damage);
                     }
                 }
             }

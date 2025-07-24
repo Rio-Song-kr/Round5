@@ -4,8 +4,13 @@ public class ResetBullet : MonoBehaviour
 {
     // 총알이 일정 시간 후 자동으로 제거되도록 설정
     [SerializeField] private float lifeTime = 4f;
-    
+    [SerializeField] private float explosionRadius = 1f;  // 폭발 반경
+    public WeaponType weaponType;
     private Rigidbody2D rb;
+    
+    private GunControll gunController; // 총기 컨트롤러
+
+    private WeaponType currentWeaponType;
     
     // 총알이 충돌 시 적용할 데미지
     public float damage = 100f;
@@ -15,6 +20,9 @@ public class ResetBullet : MonoBehaviour
         // 일정 시간 뒤 총알 자동 삭제
         rb = GetComponent<Rigidbody2D>();
         Destroy(gameObject, lifeTime); 
+        
+        gunController = FindObjectOfType<GunControll>();
+        currentWeaponType = gunController.currentWeapon.GetWeaponType();
     }
     
     private void Update()
@@ -37,14 +45,50 @@ public class ResetBullet : MonoBehaviour
         // 충돌 즉시 제거
         if (!other.CompareTag("Bullet"))  // Bullet끼리 충돌 무시
         {
-            // IDamageable이 있다면 데미지 적용
-            IDamageable target = other.GetComponent<IDamageable>();
+            if (currentWeaponType == WeaponType.ExplosiveBullet)
+                Explode();
+            else
+                DealSingleDamage(other);
+
+            Destroy(gameObject);
+        }
+    }
+    
+    /// <summary>
+    /// 일반 탄알
+    /// </summary>
+    /// <param name="other"></param>
+    private void DealSingleDamage(Collider2D other)
+    {
+        IDamageable target = other.GetComponent<IDamageable>();
+        if (target != null)
+        {
+            target.TakeDamage(damage);
+        }
+    } 
+    /// <summary>
+    /// 폭발 처리 - 중심 및 범위 내 데미지
+    /// </summary>
+    private void Explode()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+
+        foreach (var hit in hits)
+        {
+            IDamageable target = hit.GetComponent<IDamageable>();
             if (target != null)
             {
                 target.TakeDamage(damage);
             }
-
-            Destroy(gameObject);
         }
+
+        Destroy(gameObject);
+    }
+    
+    // TODO: TEST 폭발 반경 시각화
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
 }
