@@ -92,6 +92,18 @@ public class CardSelectManager : MonoBehaviour
         if (hasSelected) return; // 이미 선택했다면 무시
         hasSelected = true;
 
+        // 카드 효과 적용
+        CardEffect effect = selected.GetComponent<CardEffect>();
+        if ( effect != null)
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+
+            if (player != null)
+            {
+                effect.ApplyEffect(player);
+            }
+        }
+
         foreach (GameObject card in currentCards)
         {
             if (card == null) continue;
