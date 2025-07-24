@@ -26,7 +26,7 @@ public class BoxController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Bullet") || collision.gameObject.CompareTag("Hammer"))
         {
             rigid.bodyType = RigidbodyType2D.Dynamic;
             rigid.mass = 0.1f;
