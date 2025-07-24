@@ -4,62 +4,89 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.UI;
-public class FlipCard : MonoBehaviour
+using UnityEngine.EventSystems;
+public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    private bool CardFlip = false; // false = 뒷면, true = 앞면
+    private bool isFlipped = false;
+    private bool isSelected = false;
+    private bool isHovered = false;
 
-    [Header("Canvas to control")]
-    public GameObject frontCanvas; // 앞면 Canvas
-    public GameObject backCanvas;  // 뒷면 Canvas
+    [Header("앞/뒷면 루트 오브젝트")]
+    public GameObject frontRoot;
+    public GameObject backRoot;
 
     [Header("설정")]
     public float flipDuration = 0.25f;
+    public float hoverScale = 1.1f;
+
+    private Vector3 originalScale;
+    private CardSelectManager manager;
+
+    public void SetManager(CardSelectManager mgr)
+    {
+        manager = mgr;
+    }
 
     private void Start()
     {
-        // 카드 뒷면 상태로 시작
+        isFlipped = false;
+        isSelected = false;
+        isHovered = false;
+
+        originalScale = transform.localScale;
+
         transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-        CardFlip = false;
 
-        if (frontCanvas != null) frontCanvas.SetActive(false);
-        if (backCanvas != null) backCanvas.SetActive(true);
+        if (frontRoot != null) frontRoot.SetActive(false);
+        if (backRoot != null) backRoot.SetActive(true);
     }
 
-    private void Update()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        isHovered = true;
+        transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isHovered = false;
+        transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!isHovered) return; // 마우스가 올라가 있지 않으면 무시
+
+        OnClickCard(); // 기존 로직 그대로 호출
+    }
+
+    public void OnClickCard()
+    {
+        if (!isFlipped)
         {
-            Flip();
+            isFlipped = true;
+
+            transform.DORotate(new Vector3(0, 0, 0), flipDuration)
+                .SetEase(Ease.InOutSine)
+                .OnUpdate(() =>
+                {
+                    float yRot = transform.localEulerAngles.y;
+                    if (yRot > 180f) yRot -= 360f;
+                    bool showFront = Mathf.Abs(yRot) <= 90f;
+
+                    if (frontRoot != null) frontRoot.SetActive(showFront);
+                    if (backRoot != null) backRoot.SetActive(!showFront);
+                })
+                .OnComplete(() =>
+                {
+                    if (frontRoot != null) frontRoot.SetActive(true);
+                    if (backRoot != null) backRoot.SetActive(false);
+                });
         }
-    }
-
-    public void Flip()
-    {
-        CardFlip = !CardFlip;
-        float targetY = CardFlip ? 0f : 180f;
-
-        // 미리 앞면 켜고 뒷면 끔 (회전 중 상태에 따라 다시 바뀔 수 있음)
-        if (frontCanvas != null) frontCanvas.SetActive(true);
-        if (backCanvas != null) backCanvas.SetActive(true);
-
-        transform.DORotate(new Vector3(0, targetY, 0), flipDuration)
-            .SetEase(Ease.InOutSine)
-            .OnUpdate(() =>
-            {
-                float yRot = transform.localEulerAngles.y;
-                if (yRot > 180f) yRot -= 360f;
-
-                // 앞면 보이는 각도: -90 ~ 90
-                bool showFront = Mathf.Abs(yRot) <= 90f;
-
-                if (frontCanvas != null) frontCanvas.SetActive(showFront);
-                if (backCanvas != null) backCanvas.SetActive(!showFront);
-            })
-            .OnComplete(() =>
-            {
-                // 최종 상태 정리
-                if (frontCanvas != null) frontCanvas.SetActive(CardFlip);
-                if (backCanvas != null) backCanvas.SetActive(!CardFlip);
-            });
+        else if (!isSelected)
+        {
+            isSelected = true;
+            manager?.OnCardSelected(gameObject);
+        }
     }
 }
