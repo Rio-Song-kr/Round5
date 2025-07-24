@@ -179,7 +179,7 @@ public class UserManager : MonoBehaviour
             GameManager.Instance.UpdateUserName(newDisplayName);
         }
         
-        // Firebase 업데이트 (Auth + Database)
+        // Firebase 업데이트
         if (isFirebaseEnabled)
         {
             // Firebase Auth 프로필 업데이트

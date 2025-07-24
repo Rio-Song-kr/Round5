@@ -132,7 +132,7 @@ public class FirebaseManager : MonoBehaviour
     {
         try
         {
-            string databaseURL = "https://isekaislimeproject-default-rtdb.asia-southeast1.firebasedatabase.app/";
+            string databaseURL = "https://round5-a77c7-default-rtdb.asia-southeast1.firebasedatabase.app/";
         
             if (app != null)
             {
