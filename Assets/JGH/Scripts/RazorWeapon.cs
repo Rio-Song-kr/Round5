@@ -13,8 +13,12 @@ public class RazorWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (isFiring || isReloading || currentAmmo < 2) return;
-
+        
+        StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
         currentAmmo -= 2;
+
+        UpdateAmmoUI();
+        ammoDisplay.reloadIndicator.SetActive(false); 
         
         StartCoroutine(FireLaserRoutine(firingPoint));
     }
@@ -22,6 +26,7 @@ public class RazorWeapon : BaseWeapon
     private IEnumerator FireLaserRoutine(Transform firingPoint)
     {
         isFiring = true;
+        isReloading = false;
         laserRenderer.enabled = true;
 
         float elapsed = 0f;
@@ -51,20 +56,22 @@ public class RazorWeapon : BaseWeapon
             yield return null;
         }
 
-        if (currentAmmo == 0)
-        {
-            UpdateAmmoUI();
-        }
 
-        // 발사 종료 처리 및 재장전
+        // 레이저 종료
         laserRenderer.enabled = false;
-        ammoDisplay.reloadIndicator.SetActive(true);
+        // 리로드 시작 + UI 표시
         isFiring = false;
+        
+        // 리로드 UI 이제 나타남
         isReloading = true;
 
-        yield return new WaitForSeconds(2f); // 재장전 시간
-
+        ammoDisplay.reloadIndicator.SetActive(true);
+        
+        yield return new WaitForSeconds(reloadTime); // 재장전 시간
+        
+        //탄 UI 회복, 리로드 UI OFF
         currentAmmo = maxAmmo;
+        UpdateAmmoUI(); // 탄창 갱신
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
     }

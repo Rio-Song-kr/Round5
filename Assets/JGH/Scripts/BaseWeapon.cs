@@ -3,17 +3,17 @@ using UnityEngine;
 
 public abstract class BaseWeapon : MonoBehaviour, IWeapon
 {
-    [SerializeField] protected int maxAmmo; // 최대 탄약 수
-    [SerializeField] protected Animator animator; // 재장전 애니메이션용 애니메이터
+    public int maxAmmo; // 최대 탄약 수
+    public Animator animator; // 재장전 애니메이션용 애니메이터
 
-    protected int currentAmmo; // 남아 있는 탄약 수
-    protected bool isReloading; // 재장전 여부
-    protected float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
-    protected float idleReloadDelay = 3f; // 공격하지 않았을 때 자동 재장전까지의 대기 시간
-    protected Coroutine idleCheckCoroutine; // 자동 재장전 감지를 위한 코루틴 핸들
-    private Coroutine autoReloadCoroutine; // 리로드 애니메이션과 함께 실행되는 자동 재장전 코루틴 핸들
-    protected float reloadTime = 3f; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
-    protected AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
+    public int currentAmmo; // 남아 있는 탄약 수
+    public bool isReloading; // 재장전 여부
+    public float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
+    public float idleReloadDelay; // 공격하지 않았을 때 자동 재장전까지의 대기 시간
+    public Coroutine idleCheckCoroutine; // 자동 재장전 감지를 위한 코루틴 핸들
+    public Coroutine autoReloadCoroutine; // 리로드 애니메이션과 함께 실행되는 자동 재장전 코루틴 핸들
+    public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
+    public AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
 
     protected virtual void Start()
     {
@@ -50,10 +50,6 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
             StopCoroutine(autoReloadCoroutine);
 
         autoReloadCoroutine = StartCoroutine(AutoReloadRoutine());
-        // if (isReloading) return;
-        // isReloading = true;
-        // animator?.SetTrigger("Reload");
-        // ammoDisplay?.SetReloading(true);
     }
     
     private IEnumerator AutoReloadRoutine()
@@ -99,10 +95,6 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
                 ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
                 lastAttackTime = Time.time;
             }
-            // if (!isReloading && currentAmmo < maxAmmo && Time.time - lastAttackTime >= idleReloadDelay)
-            // {
-            //     StartAutoReload();
-            // }
         }
     }
 
