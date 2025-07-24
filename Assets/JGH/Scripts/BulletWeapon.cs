@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,18 +9,47 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     [SerializeField] private WeaponType weaponType = WeaponType.Bullet; // 무기 타입
 
     [SerializeField] private int maxAmmo = 6;       // 최대 탄 수
-    [SerializeField] private float reloadTime = 2f; // 재장전 시간 (초)
+    [SerializeField] private float reloadTime = 3f; // 재장전 시간 (초)
 
     private int currentAmmo;     // 현재 남은 탄 수
     private bool isReloading;    // 재장전 중인지 여부
+    private float lastAttack; // 마지막 공격
+    private Coroutine autoReloadCoroutine; 
 
+    private Coroutine idleCheckCoroutine; // 즉시 재 탄창 
+    private float idleReloadDelay = 3f;
+    private float lastAttackTime;
+    
+    private AmmoDisplay ammoDisplay; // 탄약 아이콘 표시 UI
+    
+    private void Start()
+    {
+        // AmmoDisplay 컴포넌트 찾기
+        ammoDisplay = FindObjectOfType<AmmoDisplay>();
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        UpdateAmmoUI();
+        ammoDisplay?.SetReloading(false);
+    }
+    
     /// <summary>
     /// 무기가 활성화될 때 호출됨 (무기 교체 포함)
     /// </summary>
     private void OnEnable()
     {
-        currentAmmo = maxAmmo;   // 탄약을 가득 채움
-        isReloading = false;     // 재장전 상태 초기화
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        UpdateAmmoUI();
+        
+        // 리로드 UI 확실히 꺼줌
+        ammoDisplay?.SetReloading(false);
+        StartIdleCheck();
+    }
+    
+    private void OnDisable()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
     }
     
     /// <summary>
@@ -31,63 +59,96 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     public void Attack(Transform firingPoint)
     {
         // 재장전
-        if (isReloading)
+        if (isReloading || currentAmmo <= 0)
         {
             return;
         }
         
-       if (currentAmmo <= 0)
-        {
-            StartCoroutine(Reload());
-            return;
-        }
-
-        Quaternion bulletRotation = firingPoint.rotation * Quaternion.Euler(0, 0, 90f);
-        GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, bulletRotation);
-
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.velocity = firingPoint.right * bulletSpeed;
+        // 총알 생성 및 발사
+        var bullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation * Quaternion.Euler(0, 0, 90f));
+        var rb = bullet.GetComponent<Rigidbody2D>();
+        rb.AddForce(firingPoint.right * bulletSpeed, ForceMode2D.Impulse);
         
-        // 데미지 설정 :: S
-        // 데미지 70% 적용
-        float baseDamage = 100f;
-        bullet.GetComponent<ResetBullet>().damage = baseDamage * 0.7f;
-        // 데미지 설정 :: E
-        
-        --currentAmmo;
+        // 총알의 데미지 설정
+        bullet.GetComponent<ResetBullet>().damage = 100f * 0.7f;
+
+        currentAmmo--;
+        lastAttackTime = Time.time; // 마지막 공격 시간 갱신
+        UpdateAmmoUI();
+
+        if (currentAmmo == 0)
+            StartAutoReload();
     }
-    
-    /// <summary>
-    /// 재장전
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator Reload()
+
+    private void StartAutoReload()
+    {
+        if (autoReloadCoroutine != null)
+            StopCoroutine(autoReloadCoroutine);
+
+        autoReloadCoroutine = StartCoroutine(AutoReloadRoutine());
+    }
+
+    private IEnumerator AutoReloadRoutine()
     {
         isReloading = true;
-        Debug.Log("재장전 중...");
+        ammoDisplay?.SetReloading(true);
 
         yield return new WaitForSeconds(reloadTime);
 
         currentAmmo = maxAmmo;
         isReloading = false;
-        Debug.Log("재장전 완료!");
-    } 
-       
-    /// <summary>
-    /// 무기 초기화 함수
-    /// </summary>
+        UpdateAmmoUI();
+
+        ammoDisplay?.SetReloading(false);
+        lastAttackTime = Time.time; // 리로드 후 타이머 초기화
+    }
+
+    private void StartIdleCheck()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
+
+        idleCheckCoroutine = StartCoroutine(IdleCheckRoutine());
+    }
+
+    private IEnumerator IdleCheckRoutine()
+    {
+        lastAttackTime = Time.time;
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            if (!isReloading && currentAmmo < maxAmmo)
+            {
+                if (Time.time - lastAttackTime >= idleReloadDelay)
+                {
+                    // 즉시 장전
+                    currentAmmo = maxAmmo;
+                    isReloading = false;
+                    ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+                    lastAttackTime = Time.time;
+                }
+            }
+        }
+    }
+
+    private void UpdateAmmoUI()
+    {
+        if (ammoDisplay != null)
+        {
+            ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+            bool shouldReload = currentAmmo == 0 && !isReloading;
+            ammoDisplay.SetReloading(shouldReload);
+        }
+    }
+
+    public WeaponType GetWeaponType() => weaponType;
+
     public void Initialize()
     {
         currentAmmo = maxAmmo;
         isReloading = false;
-    }
-
-    /// <summary>
-    /// 무기 타입 반환
-    /// </summary>
-    /// <returns></returns>
-    public WeaponType GetWeaponType()
-    {
-        return weaponType;
+        UpdateAmmoUI();
+        StartIdleCheck();
     }
 }

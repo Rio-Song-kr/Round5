@@ -1,16 +1,16 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GunControll : MonoBehaviour
 {
-    [SerializeField] private Transform muzzle; // 총알 발사 위치
+    public Transform muzzle; // 총알 발사 위치
     
-    [SerializeField] private GameObject bulletWeaponObject;
-    [SerializeField] private GameObject razorWeaponObject; // 레이저
-    [SerializeField] private GameObject barrelWeaponObject; // 샷건
+    public GameObject bulletWeaponObject;
+    public GameObject razorWeaponObject; // 레이저
+    public GameObject barrelWeaponObject; // 샷건
+    public GameObject ExplosiveBulletWeaponObject; // 폭발성 총알 
 
     // 현재 무기
-    private IWeapon currentWeapon;
+    public IWeapon currentWeapon;
 
     /// <summary>
     /// 처음 시작 시 기본 무기 적용
@@ -40,6 +40,9 @@ public class GunControll : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
             EquipWeapon(barrelWeaponObject);
+        
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            EquipWeapon(ExplosiveBulletWeaponObject);
     }
 
     /// <summary>
@@ -67,6 +70,7 @@ public class GunControll : MonoBehaviour
         bulletWeaponObject.SetActive(false);
         razorWeaponObject.SetActive(false);
         barrelWeaponObject.SetActive(false);
+        ExplosiveBulletWeaponObject.SetActive(false);
 
         // 현재 무기 비우기
         currentWeapon = null;

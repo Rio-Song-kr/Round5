@@ -14,6 +14,31 @@ public class RazorWeapon : MonoBehaviour, IWeapon
     // 재장전 중인지 여부
     private bool isReloading = false;
     
+    private AmmoDisplay AmmoDisplay; // 탄약 아이콘 표시 UI
+
+    private int maxAmmo = 2; // 최대 장탄 수 
+    private int currentAmmo; // 현재 남은 탄 수
+    
+    private void Start()
+    {
+        // AmmoDisplay 컴포넌트 찾기
+        AmmoDisplay = FindObjectOfType<AmmoDisplay>();
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        currentAmmo = maxAmmo;
+        UpdateAmmoUI();
+    }
+
+    private void UpdateAmmoUI()
+    {
+        if (AmmoDisplay != null)
+            AmmoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+    }
+
+    
     /// <summary>
     /// 레이저 격발
     /// </summary>
@@ -21,7 +46,11 @@ public class RazorWeapon : MonoBehaviour, IWeapon
     public void Attack(Transform firingPoint)
     {
         if (isFiring || isReloading) return;
+        if (currentAmmo < 2) return;
 
+        // 탄창 - 2 
+        currentAmmo -= 2;
+        UpdateAmmoUI();
         StartCoroutine(FireLaserRoutine(firingPoint));
     }
 
@@ -41,7 +70,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         float damageTick = 0.1f;
         float damageTimer = 0f;
         float baseDamage = 100f;
-        float shotgunDamage = baseDamage * 0.7f * 0.3f; // 21
+        float Damage = baseDamage * 0.7f * 0.3f; // 21
         
         
         while (elapsed < laserDuration)
@@ -71,7 +100,7 @@ public class RazorWeapon : MonoBehaviour, IWeapon
                     IDamageable damageTarget = hit.collider.GetComponent<IDamageable>();
                     if (damageTarget != null)
                     {
-                        damageTarget.TakeDamage(shotgunDamage);
+                        damageTarget.TakeDamage(Damage);
                     }
                 }
             }
@@ -79,14 +108,21 @@ public class RazorWeapon : MonoBehaviour, IWeapon
             elapsed += Time.deltaTime;
             yield return null;
         }
-
+        
         // 비활성화 및 재장전 시작
         laserRenderer.enabled = false;
+        AmmoDisplay.reloadIndicator.SetActive(true);
+        
         isFiring = false;
-
         isReloading = true;
+        
         yield return new WaitForSeconds(2f); // 재장전 시간
+        
+        currentAmmo = maxAmmo; // 초기화 시 최대 장탄 수로 설정
+        UpdateAmmoUI();
+        
         isReloading = false;
+        AmmoDisplay.reloadIndicator.SetActive(false);
     }
     
     /// <summary>
@@ -98,14 +134,6 @@ public class RazorWeapon : MonoBehaviour, IWeapon
         return weaponType;
     }
 
-    /// <summary>
-    /// 무기 초기화 함수
-    /// </summary>
-    public void Initialize()
-    {
-        
-    }
-    
     /// <summary>
     /// 무기 교체 시 호출
     /// </summary>
