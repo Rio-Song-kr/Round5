@@ -19,14 +19,20 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
     private int currentAmmo;
     // 재장전 중인지 여부
     private bool isReloading;
+    private float lastAttackTime;
     private Coroutine autoReloadCoroutine;
+    private Coroutine idleCheckCoroutine;
+    private float idleReloadDelay = 3f;
 
     private AmmoDisplay ammoDisplay;
 
     private void Start()
     {
         ammoDisplay = FindObjectOfType<AmmoDisplay>();
-        ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        UpdateAmmoUI();
+        ammoDisplay?.SetReloading(false);
     }
 
   
@@ -42,6 +48,13 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         
         // 리로드 UI 확실히 꺼줌
         ammoDisplay?.SetReloading(false);
+        StartIdleCheck();
+    }
+
+    private void OnDisable()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
     }
 
     /// <summary>
@@ -84,6 +97,7 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         }
 
         currentAmmo -= ammoPerShot;
+        lastAttackTime = Time.time;
         UpdateAmmoUI();
 
         if (currentAmmo < ammoPerShot)
@@ -114,6 +128,35 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         UpdateAmmoUI();
 
         ammoDisplay?.SetReloading(false);
+        lastAttackTime = Time.time;
+    }
+
+    private void StartIdleCheck()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
+
+        idleCheckCoroutine = StartCoroutine(IdleCheckRoutine());
+    }
+
+    private IEnumerator IdleCheckRoutine()
+    {
+        lastAttackTime = Time.time;
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            if (!isReloading && currentAmmo < maxAmmo)
+            {
+                if (Time.time - lastAttackTime >= idleReloadDelay)
+                {
+                    currentAmmo = maxAmmo;
+                    isReloading = false;
+                    ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
+                    lastAttackTime = Time.time;
+                }
+            }
+        }
     }
 
     private void UpdateAmmoUI()
@@ -147,5 +190,6 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         currentAmmo = maxAmmo;
         isReloading = false;
         UpdateAmmoUI();
+        StartIdleCheck();
     }
 }

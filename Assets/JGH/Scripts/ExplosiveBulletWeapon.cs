@@ -12,43 +12,51 @@ public class ExplosiveBulletWeapon : MonoBehaviour, IWeapon
 
     private int currentAmmo;
     private bool isReloading;
+    private float lastAttackTime;
     private Coroutine autoReloadCoroutine;
+    private Coroutine idleCheckCoroutine;
+    private float idleReloadDelay = 3f;
 
     private float attackCooldown = 1f;
-    private float lastAttack = 0f;
 
     private AmmoDisplay ammoDisplay;
 
     private void Start()
     {
         ammoDisplay = FindObjectOfType<AmmoDisplay>();
-        ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        UpdateAmmoUI();
+        ammoDisplay?.SetReloading(false);
     }
 
     private void OnEnable()
     {
         currentAmmo = maxAmmo;
         isReloading = false;
-        lastAttack = 0f;
         UpdateAmmoUI();
-        
-        // 리로드 UI 확실히 꺼줌
         ammoDisplay?.SetReloading(false);
+        StartIdleCheck();
+    }
+
+    private void OnDisable()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
     }
 
     public void Attack(Transform firingPoint)
     {
-        if (isReloading || currentAmmo <= 0 || Time.time - lastAttack < attackCooldown)
+        if (isReloading || currentAmmo <= 0 || Time.time - lastAttackTime < attackCooldown)
             return;
 
-        Quaternion bulletRotation = firingPoint.rotation * Quaternion.Euler(0, 0, 90f);
-        GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, bulletRotation);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        var bullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation * Quaternion.Euler(0, 0, 90f));
+        var rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(firingPoint.right * bulletSpeed, ForceMode2D.Impulse);
         bullet.GetComponent<ResetBullet>().damage = 100f;
 
         currentAmmo--;
-        lastAttack = Time.time;
+        lastAttackTime = Time.time;
         UpdateAmmoUI();
 
         if (currentAmmo == 0)
@@ -73,8 +81,36 @@ public class ExplosiveBulletWeapon : MonoBehaviour, IWeapon
         currentAmmo = maxAmmo;
         isReloading = false;
         UpdateAmmoUI();
-
         ammoDisplay?.SetReloading(false);
+        lastAttackTime = Time.time;
+    }
+
+    private void StartIdleCheck()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
+
+        idleCheckCoroutine = StartCoroutine(IdleCheckRoutine());
+    }
+
+    private IEnumerator IdleCheckRoutine()
+    {
+        lastAttackTime = Time.time;
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            if (!isReloading && currentAmmo < maxAmmo)
+            {
+                if (Time.time - lastAttackTime >= idleReloadDelay)
+                {
+                    currentAmmo = maxAmmo;
+                    isReloading = false;
+                    ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
+                    lastAttackTime = Time.time;
+                }
+            }
+        }
     }
 
     private void UpdateAmmoUI()
@@ -95,5 +131,6 @@ public class ExplosiveBulletWeapon : MonoBehaviour, IWeapon
         currentAmmo = maxAmmo;
         isReloading = false;
         UpdateAmmoUI();
+        StartIdleCheck();
     }
 }

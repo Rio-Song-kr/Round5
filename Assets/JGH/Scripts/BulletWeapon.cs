@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -16,15 +15,21 @@ public class BulletWeapon : MonoBehaviour, IWeapon
     private bool isReloading;    // 재장전 중인지 여부
     private float lastAttack; // 마지막 공격
     private Coroutine autoReloadCoroutine; 
+
+    private Coroutine idleCheckCoroutine; // 즉시 재 탄창 
+    private float idleReloadDelay = 3f;
+    private float lastAttackTime;
     
     private AmmoDisplay ammoDisplay; // 탄약 아이콘 표시 UI
-
+    
     private void Start()
     {
         // AmmoDisplay 컴포넌트 찾기
         ammoDisplay = FindObjectOfType<AmmoDisplay>();
-        ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
-        lastAttack = 0;
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        UpdateAmmoUI();
+        ammoDisplay?.SetReloading(false);
     }
     
     /// <summary>
@@ -38,6 +43,13 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         
         // 리로드 UI 확실히 꺼줌
         ammoDisplay?.SetReloading(false);
+        StartIdleCheck();
+    }
+    
+    private void OnDisable()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
     }
     
     /// <summary>
@@ -61,6 +73,7 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         bullet.GetComponent<ResetBullet>().damage = 100f * 0.7f;
 
         currentAmmo--;
+        lastAttackTime = Time.time; // 마지막 공격 시간 갱신
         UpdateAmmoUI();
 
         if (currentAmmo == 0)
@@ -87,6 +100,36 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         UpdateAmmoUI();
 
         ammoDisplay?.SetReloading(false);
+        lastAttackTime = Time.time; // 리로드 후 타이머 초기화
+    }
+
+    private void StartIdleCheck()
+    {
+        if (idleCheckCoroutine != null)
+            StopCoroutine(idleCheckCoroutine);
+
+        idleCheckCoroutine = StartCoroutine(IdleCheckRoutine());
+    }
+
+    private IEnumerator IdleCheckRoutine()
+    {
+        lastAttackTime = Time.time;
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            if (!isReloading && currentAmmo < maxAmmo)
+            {
+                if (Time.time - lastAttackTime >= idleReloadDelay)
+                {
+                    // 즉시 장전
+                    currentAmmo = maxAmmo;
+                    isReloading = false;
+                    ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
+                    lastAttackTime = Time.time;
+                }
+            }
+        }
     }
 
     private void UpdateAmmoUI()
@@ -106,5 +149,6 @@ public class BulletWeapon : MonoBehaviour, IWeapon
         currentAmmo = maxAmmo;
         isReloading = false;
         UpdateAmmoUI();
+        StartIdleCheck();
     }
 }
