@@ -9,10 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7116961395113207998}
-  - component: {fileID: 6118592293696194012}
   - component: {fileID: 8189333786771103303}
   - component: {fileID: 4379445703705398933}
+  - component: {fileID: 5067536740081976038}
   - component: {fileID: 2605173272569185042}
+  - component: {fileID: 5719358230600020384}
   m_Layer: 0
   m_Name: DynamicBoxPlatform1
   m_TagString: Untagged
@@ -39,18 +40,6 @@ Transform:
   - {fileID: 1274019983179221109}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6118592293696194012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1666449156346791276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dff1db27741c66d4292ecd1c9e946bb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &8189333786771103303
 Rigidbody2D:
   serializedVersion: 4
@@ -79,6 +68,25 @@ Rigidbody2D:
   m_CollisionDetection: 0
   m_Constraints: 0
 --- !u!255 &4379445703705398933
+FixedJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666449156346791276}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: 3
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_DampingRatio: 0
+  m_Frequency: 0
+--- !u!255 &5067536740081976038
 FixedJoint2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,6 +163,18 @@ PolygonCollider2D:
       - {x: 2.007273, y: 2.873145}
       - {x: 2.0062842, y: 2.9976945}
   m_UseDelaunayMesh: 0
+--- !u!114 &5719358230600020384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666449156346791276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ab24a61cde258e4580cb89df9ef10c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4727314134170038394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -237,6 +257,7 @@ PrefabInstance:
     - {fileID: -5363366761858254728, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: -2938181817357015089, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: 7164238945391974654, guid: fe5c596846455d04da712de7fee23894, type: 3}
+    - {fileID: 7031791273520029357, guid: fe5c596846455d04da712de7fee23894, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -328,6 +349,7 @@ PrefabInstance:
     - {fileID: -5363366761858254728, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: -2938181817357015089, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: 7164238945391974654, guid: fe5c596846455d04da712de7fee23894, type: 3}
+    - {fileID: 7031791273520029357, guid: fe5c596846455d04da712de7fee23894, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -419,6 +441,7 @@ PrefabInstance:
     - {fileID: -5363366761858254728, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: -2938181817357015089, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: 7164238945391974654, guid: fe5c596846455d04da712de7fee23894, type: 3}
+    - {fileID: 7031791273520029357, guid: fe5c596846455d04da712de7fee23894, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -510,6 +533,7 @@ PrefabInstance:
     - {fileID: -5363366761858254728, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: -2938181817357015089, guid: fe5c596846455d04da712de7fee23894, type: 3}
     - {fileID: 7164238945391974654, guid: fe5c596846455d04da712de7fee23894, type: 3}
+    - {fileID: 7031791273520029357, guid: fe5c596846455d04da712de7fee23894, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
