@@ -45,10 +45,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c3e189b4444ad38c02dbb0e0ed6ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserRenderer: {fileID: 511759567923468218, guid: 22086bcb4cdfe4f25ab8e4bec50b1be5, type: 3}
+  maxAmmo: 2
+  animator: {fileID: 0}
+  bulletSpeed: 10
+  currentAmmo: 2
+  isReloading: 0
+  lastAttackTime: 0
+  idleReloadDelay: 3
+  reloadTime: 3
+  ammoDisplay: {fileID: 0}
+  attackDamage: 5
+  laserRenderer: {fileID: 4165671955444472681}
   laserDuration: 2
   laserLength: 20
-  weaponType: 1
 --- !u!1001 &4527615225766038739
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -121,5 +130,10 @@ PrefabInstance:
 --- !u!4 &1317557962554925328 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3214925765409615299, guid: 22086bcb4cdfe4f25ab8e4bec50b1be5, type: 3}
+  m_PrefabInstance: {fileID: 4527615225766038739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!120 &4165671955444472681 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 511759567923468218, guid: 22086bcb4cdfe4f25ab8e4bec50b1be5, type: 3}
   m_PrefabInstance: {fileID: 4527615225766038739}
   m_PrefabAsset: {fileID: 0}

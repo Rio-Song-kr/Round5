@@ -131,9 +131,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 672375155}
     m_Modifications:
     - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
-      propertyPath: pelletCount
-      value: 5
-      objectReference: {fileID: 0}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1155083537}
+    - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
+      propertyPath: ammoDisplay
+      value: 
+      objectReference: {fileID: 1903485988}
+    - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 4718549699714053276, guid: 63c5f39c429622546a432f027fe25b6b, type: 3}
     - target: {fileID: 8134666902009527489, guid: 3927b53249c634ba9810959a0504633b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.7179963
@@ -178,10 +186,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BarrelWeapon
       objectReference: {fileID: 0}
-    - target: {fileID: 8322198272931037250, guid: 3927b53249c634ba9810959a0504633b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -223,7 +227,7 @@ Transform:
   m_GameObject: {fileID: 134393256}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.06951728, w: 0.99758077}
-  m_LocalPosition: {x: 0.464, y: 0.104, z: 0}
+  m_LocalPosition: {x: 0.491, y: 0.115, z: 0}
   m_LocalScale: {x: 0.43256003, y: 0.2288368, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -514,9 +518,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 672375155}
     m_Modifications:
     - target: {fileID: 1393969881614138380, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
-      propertyPath: laserRenderer
+      propertyPath: animator
       value: 
-      objectReference: {fileID: 334783332}
+      objectReference: {fileID: 1155083537}
+    - target: {fileID: 1393969881614138380, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
+      propertyPath: ammoDisplay
+      value: 
+      objectReference: {fileID: 1903485988}
     - target: {fileID: 1505525768489322101, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.7179963
@@ -569,11 +577,6 @@ PrefabInstance:
 --- !u!1 &334783331 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5178442494790543356, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
-  m_PrefabInstance: {fileID: 334783330}
-  m_PrefabAsset: {fileID: 0}
---- !u!120 &334783332 stripped
-LineRenderer:
-  m_CorrespondingSourceObject: {fileID: 4165671955444472681, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
   m_PrefabInstance: {fileID: 334783330}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &334783333 stripped
@@ -1241,7 +1244,6 @@ GameObject:
   m_Component:
   - component: {fileID: 672375155}
   - component: {fileID: 672375154}
-  - component: {fileID: 672375153}
   - component: {fileID: 672375152}
   m_Layer: 0
   m_Name: GunController
@@ -1267,33 +1269,6 @@ MonoBehaviour:
   razorWeaponObject: {fileID: 334783331}
   barrelWeaponObject: {fileID: 15162110}
   ExplosiveBulletWeaponObject: {fileID: 2528079052232978090}
---- !u!50 &672375153
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 672375151}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!212 &672375154
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1535,10 +1510,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BulletWeapon
       objectReference: {fileID: 0}
-    - target: {fileID: 2528079052184358046, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 4734121969791136909, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1155083537}
+    - target: {fileID: 4734121969791136909, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
+      propertyPath: ammoDisplay
+      value: 
+      objectReference: {fileID: 1903485988}
     - target: {fileID: 5886468128929232924, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.7179963
@@ -1711,12 +1690,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIManagerAsset: {fileID: 11400000, guid: 2a619a9609984be49b53b928dd94e61b, type: 2}
-  hasBackground: 1
+  hasBackground: 0
   useRegularBackground: 0
   webglMode: 0
   overrideColors: 0
-  bar: {fileID: 407648382}
-  background: {fileID: 521147833}
+  bar: {fileID: 0}
+  background: {fileID: 0}
 --- !u!4 &1305372804 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5397161100309149686, guid: d9e91886c7e9ace48911c024ae43fece, type: 3}
@@ -2596,17 +2575,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903485986}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.062463295, w: 0.99804723}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0009014754, y: 0.001352495, z: 0.83597136}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1155083536}
   m_Father: {fileID: 134393257}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -7.162}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.2877, y: 1.0834}
+  m_AnchoredPosition: {x: 0.225, y: -0.856}
   m_SizeDelta: {x: 607.9185, y: 806.1123}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1903485988
@@ -3464,6 +3443,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExplosiveBulletWeapon
       objectReference: {fileID: 0}
+    - target: {fileID: 9213174517932137045, guid: 4779af15d9367484abf9984e1e56feed, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1155083537}
+    - target: {fileID: 9213174517932137045, guid: 4779af15d9367484abf9984e1e56feed, type: 3}
+      propertyPath: ammoDisplay
+      value: 
+      objectReference: {fileID: 1903485988}
+    - target: {fileID: 9213174517932137045, guid: 4779af15d9367484abf9984e1e56feed, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 2555893828798284621, guid: 153e5c4a5f0fb1d4da297023a330fd74, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

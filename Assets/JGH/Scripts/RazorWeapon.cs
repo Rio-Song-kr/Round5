@@ -32,7 +32,6 @@ public class RazorWeapon : BaseWeapon
         float elapsed = 0f;
         float damageTick = 0.1f;
         float damageTimer = 0f;
-        float damage = 100f * 0.7f * 0.3f; // 틱 데미지 21
 
         while (elapsed < laserDuration)
         {
@@ -43,14 +42,6 @@ public class RazorWeapon : BaseWeapon
 
             laserRenderer.SetPosition(0, startPoint);
             laserRenderer.SetPosition(1, endPoint);
-
-            damageTimer += Time.deltaTime;
-            if (damageTimer >= damageTick && hit.collider != null)
-            {
-                damageTimer = 0f;
-                if (hit.collider.TryGetComponent<IDamageable>(out var target))
-                    target.TakeDamage(damage);
-            }
 
             elapsed += Time.deltaTime;
             yield return null;
