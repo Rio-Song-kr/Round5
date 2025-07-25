@@ -54,7 +54,11 @@ public class BulletTest : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void Shot()
     {
-        GameObject bullet = Instantiate(_bulletPrefab, _muzzle.position, _muzzle.rotation);
+        // 240706 수정
+        // GameObject bullet = Instantiate(_bulletPrefab, _muzzle.position, _muzzle.rotation);
+        if (!photonView.IsMine) return; 
+        GameObject bullet = PhotonNetwork.Instantiate(_bulletPrefab.name, _muzzle.position, _muzzle.rotation);
+        
         CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
     }
 

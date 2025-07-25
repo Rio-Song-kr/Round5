@@ -5505,6 +5505,7 @@ GameObject:
   - component: {fileID: 4667092036904492432}
   - component: {fileID: 6320523527442016267}
   - component: {fileID: 3008097210175024082}
+  - component: {fileID: 4284537622121413470}
   m_Layer: 7
   m_Name: Bullet
   m_TagString: Untagged
@@ -5773,10 +5774,32 @@ MonoBehaviour:
   _rb: {fileID: 6320523527442016267}
   _bigBullet: {fileID: 8734541828447896232}
   _explosiveBullet: {fileID: 847708877635331339}
-  _explosiveBulletEffect: {fileID: 2555893828798284621, guid: 153e5c4a5f0fb1d4da297023a330fd74, type: 3}
-  _hitEffect: {fileID: 2555893828798284621, guid: 8cb81d4612565b147a1fe85c2fcdcf26, type: 3}
+  _explosiveBulletEffect: {fileID: 2555893828798284621, guid: a9a46c890467040abba6f181bfe29654, type: 3}
+  _hitEffect: {fileID: 2555893828798284621, guid: e576444c17967495385a31832d112356, type: 3}
   _isBigBullet: 0
-  _isExplosiveBullet: 1
+  _isExplosiveBullet: 0
+--- !u!114 &4284537622121413470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4718549699714053276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &8734541828447896232
 GameObject:
   m_ObjectHideFlags: 0
