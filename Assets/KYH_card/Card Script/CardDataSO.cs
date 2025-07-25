@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardEffect
-{
-    QuickReload,
-    QuickShot,
-    Huge,
-    Defender
-}
+// public enum CardEffect
+// {
+//     QuickReload,
+//     QuickShot,
+//     Huge,
+//     Defender
+// }
 
 [CreateAssetMenu(fileName = "CardData", menuName = "CardSystem/Card Data", order = 0)]
 public class CardDataSO : ScriptableObject
