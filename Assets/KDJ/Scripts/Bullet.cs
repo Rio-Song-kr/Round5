@@ -11,11 +11,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private GameObject _bigBullet;
     [SerializeField] private GameObject _explosiveBullet;
+    [SerializeField] private GameObject _explosiveBulletEffect;
     [SerializeField] private GameObject _hitEffect;
     [SerializeField] private bool _isBigBullet;
     [SerializeField] private bool _isExplosiveBullet;
-
-    private CameraShake _cameraShake;
 
     private void Awake()
     {
@@ -28,7 +27,14 @@ public class Bullet : MonoBehaviour
             _bigBullet.SetActive(false);
         }
 
-        _cameraShake = Camera.main.GetComponent<CameraShake>();
+        if (_isExplosiveBullet)
+        {
+            _explosiveBullet.SetActive(true);
+        }
+        else
+        {
+            _explosiveBullet.SetActive(false);
+        }
     }
 
     void Start()
@@ -48,7 +54,7 @@ public class Bullet : MonoBehaviour
         {
             GameObject effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
             effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
-            _cameraShake.ShakeCaller(0.3f, 0.1f);
+            CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
         }
 
         Destroy(gameObject);
@@ -74,7 +80,7 @@ public class Bullet : MonoBehaviour
 
     public void ExplosiveBulletShot()
     {
-        Instantiate(_explosiveBullet, transform.position, Quaternion.identity);
+        Instantiate(_explosiveBulletEffect, transform.position, Quaternion.identity);
     }
 
 }
