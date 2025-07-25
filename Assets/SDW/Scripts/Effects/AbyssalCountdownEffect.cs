@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,6 +34,11 @@ public class AbyssalCountdownEffect : MonoBehaviour
     private float _targetFillAmount = 1f;
     // # 현재 게이지가 증가 모드인지 여부 (true: 증가, false: 감소)
     private bool _canIncrease = true;
+
+    [Header("Scaling Effect")]
+    [SerializeField] private float _scaleDuration = 0.2f;
+    [SerializeField] private float _targetScaleMultiplier = 1.2f;
+    private Coroutine _scalingCoroutine;
 
     /// <summary>
     /// VFX 오브젝트를 생성하고 초기 상태를 설정
@@ -101,18 +107,55 @@ public class AbyssalCountdownEffect : MonoBehaviour
         _movingLineImg.transform.rotation = Quaternion.Euler(0f, 0f, -fillAmount * 360f);
     }
 
+    /// <summary>
+    /// 카운트다운 효과의 시작 시 호출되는 메서드
+    /// 파티클 효과를 시작하고 목표 스케일로 확대하며, 특정 이펙트 객체를 활성화
+    /// </summary>
     public void StartEffect()
     {
-            // # 파티클 효과 시작 및 octagon 이펙트 활성화
-            _particle.Clear();
-            _particle.Play();
-            _octagonObject.SetActive(true);
+        // # 파티클 효과 시작 및 octagon 이펙트 활성화
+        _particle.Clear();
+        _particle.Play();
+
+        if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
+        _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one * _targetScaleMultiplier, _scaleDuration));
+
+        _octagonObject.SetActive(true);
     }
 
+    /// <summary>
+    /// 카운트다운 효과의 끝에 호출되는 메서드
+    /// </summary>
     public void EndEffect()
     {
-            // # 파티클 효과 중지 및 octagon 이펙트 비활성화
-            _particle.Stop();
-            _octagonObject.SetActive(false);
+        // # 파티클 효과 중지 및 octagon 이펙트 비활성화
+        _particle.Stop();
+
+        if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
+        _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one, _scaleDuration));
+
+        _octagonObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 카운트 다운 감소 시 확장/카운트 다운의 끝에 다시 축소를 제어하는 Coroutine
+    /// </summary>
+    /// <param name="targetScale">목표 Scale</param>
+    /// <param name="duration">목표 Scale 도달까지의 시간</param>
+    /// <returns></returns>
+    private IEnumerator ScaleOverTime(Vector3 targetScale, float duration)
+    {
+        Vector3 startScale = transform.localScale;
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            transform.localScale = Vector3.Lerp(startScale, targetScale, timer / duration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localScale = targetScale;
+        _scalingCoroutine = null;
     }
 }
