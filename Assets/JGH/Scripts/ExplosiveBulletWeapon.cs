@@ -10,7 +10,7 @@ public class ExplosiveBulletWeapon : BaseWeapon
     {
         if (isReloading || currentAmmo <= 0 || Time.time - lastAttackTime < attackCooldown) return;
 
-        Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation * Quaternion.Euler(0, 0, 90f));
+        Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation * Quaternion.Euler(0, 0, -90f));
 
         currentAmmo--;
         lastAttackTime = Time.time;

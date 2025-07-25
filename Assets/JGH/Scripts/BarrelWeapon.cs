@@ -19,7 +19,8 @@ public class BarrelWeapon : BaseWeapon
         for (int i = 0; i < pelletCount; i++)
         {
             float angle = startAngle + angleStep * i;
-            Quaternion spreadRotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle);
+            
+            Quaternion spreadRotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle - 90); 
             Vector3 spawnPos = firingPoint.position + firingPoint.right * 0.2f;
 
             Instantiate(bulletPrefab, spawnPos, spreadRotation);
