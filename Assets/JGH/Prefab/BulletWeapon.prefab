@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5886468128929232924
 Transform:
   m_ObjectHideFlags: 0
@@ -44,8 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3e5f37634b4b9aae8c62af932de708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 9126787767474855383, guid: 6137c4df5c028416ab16ac1daf924ca9, type: 3}
+  maxAmmo: 3
+  animator: {fileID: 0}
   bulletSpeed: 25
+  currentAmmo: 3
+  isReloading: 0
+  lastAttackTime: 0
+  idleReloadDelay: 3
+  reloadTime: 3
+  ammoDisplay: {fileID: 0}
+  attackDamage: 5
+  bulletPrefab: {fileID: 4718549699714053276, guid: 63c5f39c429622546a432f027fe25b6b, type: 3}
   weaponType: 0
-  maxAmmo: 6
-  reloadTime: 2
