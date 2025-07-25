@@ -17,11 +17,35 @@ public class CameraShake : MonoBehaviourPun
 #pragma warning disable 0414 // private field assigned but not used.
 
     [Header("진동 감소 시간 배수 (진동이 줄어드는 속도, 높을수록 진동이 빨리 줄어듭니다)")]
-    [SerializeField] private float _shakeTimeMultiplier;
+    [SerializeField] private float _shakeTimeMultiplier = 2f;
     [Header("다음 진동까지 지연 시간")]
-    [SerializeField] private float _shakeDelay;
+    [SerializeField] private float _shakeDelay = 0.01f;
     private bool isRunning = false;
-    private Animation anim;
+    public static CameraShake Instance { get; private set; }
+
+    public Camera Cam { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    void Update()
+    {
+        if (Cam == null && Camera.main != null)
+        {
+            Cam = Camera.main;
+        }
+    }
 
     void Start()
     {
@@ -49,7 +73,6 @@ public class CameraShake : MonoBehaviourPun
     {
         isRunning = true;
 
-        Vector3 originalPos = transform.localPosition;
         int counter = 0;
 
         while (duration > 0.01f)
@@ -59,14 +82,14 @@ public class CameraShake : MonoBehaviourPun
             var x = Random.Range(-1f, 1f) * (amount / counter);
             var y = Random.Range(-1f, 1f) * (amount / counter);
 
-            transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z), 0.5f);
+            Cam.transform.localPosition = Vector3.Lerp(Cam.transform.localPosition, new Vector3(x, y, -10), 0.5f);
 
             duration -= _shakeTimeMultiplier * Time.deltaTime;
             // 진동 간격을 두기 위한 지연 시간
             yield return new WaitForSeconds(_shakeDelay);
         }
 
-        transform.localPosition = originalPos;
+        Cam.transform.localPosition = new Vector3(0, 0, -10f);
 
         isRunning = false;
     }

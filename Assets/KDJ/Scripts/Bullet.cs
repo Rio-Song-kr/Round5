@@ -15,7 +15,6 @@ public class Bullet : MonoBehaviour
     [SerializeField] private bool _isBigBullet;
     [SerializeField] private bool _isExplosiveBullet;
 
-    private CameraShake _cameraShake;
 
     private void Awake()
     {
@@ -27,8 +26,6 @@ public class Bullet : MonoBehaviour
         {
             _bigBullet.SetActive(false);
         }
-
-        _cameraShake = Camera.main.GetComponent<CameraShake>();
     }
 
     void Start()
@@ -48,7 +45,7 @@ public class Bullet : MonoBehaviour
         {
             GameObject effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
             effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
-            _cameraShake.ShakeCaller(0.3f, 0.1f);
+            CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
         }
 
         Destroy(gameObject);
