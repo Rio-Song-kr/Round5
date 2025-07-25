@@ -26,10 +26,7 @@ public class LoginPanel : MonoBehaviourPun
     [Header("Buttons")]
     [SerializeField] Button signUpButton;
     [SerializeField] Button loginButton;
-
-    [Header("UI Feedback")]
-    // statusText는 실제로 사용되지 않으므로 제거
-    // 필요시 PopupManager.Instance.ShowPopup() 사용
+    
     #endregion
 
     #region 로그인 상태 변수
@@ -478,6 +475,7 @@ public class LoginPanel : MonoBehaviourPun
     /// </summary>
     private IEnumerator CheckAllSystemsReadyAndMoveToLobby()
     {
+        Debug.Log("초기화 되었는지 확인");
         // Firebase Database 초기화 대기
         yield return StartCoroutine(WaitForFirebaseDatabase());
         

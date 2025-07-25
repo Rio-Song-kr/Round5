@@ -7,7 +7,6 @@ public class GunControll : MonoBehaviour
     public GameObject bulletWeaponObject;
     public GameObject razorWeaponObject; // 레이저
     public GameObject barrelWeaponObject; // 샷건
-    public GameObject ExplosiveBulletWeaponObject; // 폭발성 총알 
 
     // 현재 무기
     public IWeapon currentWeapon;
@@ -40,9 +39,6 @@ public class GunControll : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
             EquipWeapon(barrelWeaponObject);
-        
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            EquipWeapon(ExplosiveBulletWeaponObject);
     }
 
     /// <summary>
@@ -70,7 +66,6 @@ public class GunControll : MonoBehaviour
         bulletWeaponObject.SetActive(false);
         razorWeaponObject.SetActive(false);
         barrelWeaponObject.SetActive(false);
-        ExplosiveBulletWeaponObject.SetActive(false);
 
         // 현재 무기 비우기
         currentWeapon = null;
@@ -83,4 +78,5 @@ public class GunControll : MonoBehaviour
         currentWeapon.Initialize();
 
     }
+    
 } 

@@ -5,7 +5,7 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
 {
     public int maxAmmo; // 최대 탄약 수
     public Animator animator; // 재장전 애니메이션용 애니메이터
-    public float bulletSpeed = 10f;
+    public float bulletSpeed;
     public int currentAmmo; // 남아 있는 탄약 수
     public bool isReloading; // 재장전 여부
     public float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
@@ -15,6 +15,10 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
     public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
     public AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
     public int attackDamage; // 
+
+    [Header("탄환 정보")]
+    public bool isBigBullet = false; // 큰 탄환 여부
+    public bool isExplosiveBullet = false; // 폭발성 탄환 여부
 
     protected virtual void Start()
     {
@@ -106,6 +110,17 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
             ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
             ammoDisplay.SetReloading(currentAmmo == 0 && !isReloading);
         }
+    }
+    
+    /// <summary>
+    /// 현재 Animator의 "Reload" 상태에서 재장전 속도를 자동으로 계산하여 설정합니다.
+    /// </summary>
+    /// <param name="reloadTime">재장전 애니메이션의 총 시간 (초)</param>
+    protected void ReloadSpeedFromAnimator()
+    {
+        var clips = animator.GetCurrentAnimatorClipInfo(0);
+        Debug.Log($"reloadTime : {reloadTime}, length : {clips[0].clip.length}");
+        animator.speed = clips[0].clip.length / reloadTime / 2;
     }
 
     public virtual void Initialize()
