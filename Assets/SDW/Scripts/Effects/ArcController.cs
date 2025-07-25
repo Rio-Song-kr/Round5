@@ -19,7 +19,7 @@ public class ArcController : MonoBehaviour
     private float _fastExpansionRadius;
     private float _decelerationDuration;
     private Vector3 _centerPoint;
-    private Vector3 _direction; // # 고정된 이동 방향
+    private Vector3 _direction;
 
     // # 내부 상태 변수
     private float _currentSpeed;
@@ -27,24 +27,7 @@ public class ArcController : MonoBehaviour
     private Camera _mainCamera;
 
     /// <summary>
-    /// EMPEffect에 의해 호출되어 Arc의 모든 동작 설정을 초기화했
-    /// </summary>
-    public void Initialize(Vector3 centerPoint, Vector3 direction, float initialSpeed, float minSpeed, float fastRadius,
-        float decelDuration)
-    {
-        _centerPoint = centerPoint;
-        _direction = direction;
-        _initialExpansionSpeed = initialSpeed;
-        _minExpansionSpeed = minSpeed;
-        _fastExpansionRadius = fastRadius;
-        _decelerationDuration = decelDuration;
-
-        _currentSpeed = _initialExpansionSpeed;
-        _mainCamera = Camera.main;
-    }
-
-    /// <summary>
-    /// 매 프레임마다 자신의 상태를 판단하여 속도를 결정하고 이동
+    /// 매 프레임마다 자신의 상태를 판단하여 속도를 결정하고 이동하며, 화면 밖으로 나가면 비활성화
     /// </summary>
     private void Update()
     {
@@ -70,17 +53,31 @@ public class ArcController : MonoBehaviour
         }
 
         // # 이동 로직 (저장된 방향 사용)
-        transform.position += _direction * _currentSpeed * Time.deltaTime;
+        transform.position += _currentSpeed * Time.deltaTime * _direction;
 
         // # 상태 확인 로직
-        if (IsOffScreen())
-        {
-            gameObject.SetActive(false);
-        }
+        if (IsOffScreen()) gameObject.SetActive(false);
     }
 
     /// <summary>
-    /// 트리거 충돌이 발생했을 때 호출
+    /// EMPEffect에 의해 호출되어 Arc의 모든 동작 설정을 초기화
+    /// </summary>
+    public void Initialize(Vector3 centerPoint, Vector3 direction, float initialSpeed, float minSpeed, float fastRadius,
+        float decelDuration)
+    {
+        _centerPoint = centerPoint;
+        _direction = direction;
+        _initialExpansionSpeed = initialSpeed;
+        _minExpansionSpeed = minSpeed;
+        _fastExpansionRadius = fastRadius;
+        _decelerationDuration = decelDuration;
+
+        _currentSpeed = _initialExpansionSpeed;
+        _mainCamera = Camera.main;
+    }
+
+    /// <summary>
+    /// 트리거 충돌이 발생했을 때 호출되어, 대상 확인 후 이펙트 생성 및 자신을 비활성화
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -89,20 +86,20 @@ public class ArcController : MonoBehaviour
         {
             // # 충돌 이펙트가 지정되어 있다면 생성함
             if (_hitEffectPrefab != null)
-            {
-                Instantiate(_hitEffectPrefab, transform.position, Quaternion.identity);
-            }
+                Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
+
             // # 충돌 후 Arc 오브젝트를 비활성화함
             gameObject.SetActive(false);
         }
     }
 
     /// <summary>
-    /// 자신의 위치가 화면 밖에 있는지 확인
+    /// 자신의 위치가 메인 카메라의 화면 밖에 있는지 확인
     /// </summary>
     private bool IsOffScreen()
     {
         if (_mainCamera == null) return false;
+
         var screenPoint = _mainCamera.WorldToViewportPoint(transform.position);
         return screenPoint.x < 0 || screenPoint.x > 1 || screenPoint.y < 0 || screenPoint.y > 1;
     }
