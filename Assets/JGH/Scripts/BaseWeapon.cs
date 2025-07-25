@@ -15,7 +15,8 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
     public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
     public AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
     public int attackDamage; // 
-
+    
+    
     [Header("탄환 정보")]
     public bool isBigBullet = false; // 큰 탄환 여부
     public bool isExplosiveBullet = false; // 폭발성 탄환 여부
@@ -31,6 +32,7 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
         Initialize();
     }
 
+    
     protected virtual void OnDisable()
     {
         if (idleCheckCoroutine != null)
