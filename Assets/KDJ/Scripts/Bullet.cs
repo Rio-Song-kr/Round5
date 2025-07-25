@@ -11,10 +11,10 @@ public class Bullet : MonoBehaviour
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private GameObject _bigBullet;
     [SerializeField] private GameObject _explosiveBullet;
+    [SerializeField] private GameObject _explosiveBulletEffect;
     [SerializeField] private GameObject _hitEffect;
     [SerializeField] private bool _isBigBullet;
     [SerializeField] private bool _isExplosiveBullet;
-
 
     private void Awake()
     {
@@ -25,6 +25,15 @@ public class Bullet : MonoBehaviour
         else
         {
             _bigBullet.SetActive(false);
+        }
+
+        if (_isExplosiveBullet)
+        {
+            _explosiveBullet.SetActive(true);
+        }
+        else
+        {
+            _explosiveBullet.SetActive(false);
         }
     }
 
@@ -71,7 +80,7 @@ public class Bullet : MonoBehaviour
 
     public void ExplosiveBulletShot()
     {
-        Instantiate(_explosiveBullet, transform.position, Quaternion.identity);
+        Instantiate(_explosiveBulletEffect, transform.position, Quaternion.identity);
     }
 
 }
