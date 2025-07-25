@@ -31,7 +31,10 @@ public class BarrelWeapon : BaseWeapon
         UpdateAmmoUI();
 
         if (currentAmmo < ammoPerShot)
+        {
+            ReloadSpeedFromAnimator();
             StartAutoReload();
+        }
     }
 
     public override WeaponType GetWeaponType()

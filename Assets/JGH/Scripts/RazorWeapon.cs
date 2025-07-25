@@ -58,6 +58,15 @@ public class RazorWeapon : BaseWeapon
 
         ammoDisplay.reloadIndicator.SetActive(true);
         
+        
+        // 애니메이션 트리거 실행
+        animator?.SetTrigger("Reload");
+        yield return null; // 한 프레임 대기하여 클립이 로드되도록 함
+        // 애니메이션 클립 기반으로 리로드 속도 설정
+        ReloadSpeedFromAnimator();
+        
+        
+        
         yield return new WaitForSeconds(reloadTime); // 재장전 시간
         
         //탄 UI 회복, 리로드 UI OFF
