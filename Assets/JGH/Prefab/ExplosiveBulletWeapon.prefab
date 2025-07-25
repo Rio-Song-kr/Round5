@@ -44,8 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b882a611a2a743d49b7b1ee5faf5b1d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 9126787767474855383, guid: 6137c4df5c028416ab16ac1daf924ca9, type: 3}
-  bulletSpeed: 25
-  weaponType: 3
   maxAmmo: 6
+  animator: {fileID: 0}
+  bulletSpeed: 25
+  currentAmmo: 6
+  isReloading: 0
+  lastAttackTime: 0
+  idleReloadDelay: 3
   reloadTime: 3.25
+  ammoDisplay: {fileID: 0}
+  attackDamage: 5
+  bulletPrefab: {fileID: 9126787767474855383, guid: 6137c4df5c028416ab16ac1daf924ca9, type: 3}
+  attackCooldown: 1
+  weaponType: 3

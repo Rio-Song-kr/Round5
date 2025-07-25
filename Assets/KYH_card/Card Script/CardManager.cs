@@ -14,6 +14,13 @@ public class CardSelectManager : MonoBehaviour
     [Header("출력할 카드 개수")]
     public int cardCountToShow = 3; // 한 번에 보여줄 카드 개수
 
+    [Header("부채꼴 배치 설정")]
+    public float xSpacing = 300f; // 카드 간 X 간격 고정값
+    public float curveHeight = 150f; // Y 위치를 곡선처럼 주기 위한 값
+    public float maxAngle = 60f; // 회전 시각 연출
+    public float appearYOffset = -600f;
+
+
     private List<GameObject> currentCards = new(); // 현재 화면에 표시 중인 카드 목록
     private bool hasSelected = false; // 플레이어가 카드를 선택했는지 여부
 
@@ -31,6 +38,7 @@ public class CardSelectManager : MonoBehaviour
             return;
         }
 
+        // 랜덤 카드 선택
         List<int> selectedIndexes = new();
         while (selectedIndexes.Count < cardCountToShow)
         {
@@ -39,11 +47,7 @@ public class CardSelectManager : MonoBehaviour
                 selectedIndexes.Add(rand);
         }
 
-        float radiusX = 550f;   // 좌우 퍼짐 정도 (클수록 더 넓게)
-        float radiusY = 300f;   // 세로 위치의 벌어짐 정도 (낮을수록 덜 위로 올라감)
-        float totalAngle = 100f;
-        float yOffset = 200f;  // 원하는 만큼 위로 올릴 값 ( 원하는 값으로 조절 가능)
-        Vector2 center = Vector2.zero;
+        float centerIndex = (cardCountToShow - 1) / 2f;
 
         for (int i = 0; i < cardCountToShow; i++)
         {
@@ -52,22 +56,25 @@ public class CardSelectManager : MonoBehaviour
             CanvasGroup cg = card.GetComponent<CanvasGroup>();
             if (cg == null) cg = card.AddComponent<CanvasGroup>();
 
-            float angle = -totalAngle / 2f + (totalAngle / (cardCountToShow - 1)) * i;
-            float rad = angle * Mathf.Deg2Rad;
+            float offset = i - centerIndex;
 
-            // ㅅ 형태 위치 계산
-            float targetX = Mathf.Sin(rad) * radiusX;
-            float targetY = -Mathf.Abs(Mathf.Sin(rad)) * radiusY +yOffset;  // 아래쪽으로 퍼지도록
+            //  X 좌표는 등간격으로 고정
+            float x = offset * xSpacing;
 
-            float startY = -600f;
+            //  Y는 부드러운 곡선을 따라 위로 살짝
+            float y = -Mathf.Abs(offset) * curveHeight + curveHeight;
+
+            //  회전도 각도만큼 부채꼴처럼 부여
+            float rotZ = offset * 5f;
 
             if (rt != null)
             {
-                rt.anchoredPosition = new Vector2(targetX, startY);
+                rt.anchoredPosition = new Vector2(x, appearYOffset);
+                rt.localRotation = Quaternion.Euler(0, 0, rotZ); // 왜 회전이 적용이 안되지?
                 cg.alpha = 0f;
 
                 Sequence seq = DOTween.Sequence();
-                seq.Append(rt.DOAnchorPosY(targetY, 0.6f).SetEase(Ease.OutCubic));
+                seq.Append(rt.DOAnchorPos(new Vector2(x, y), 0.6f).SetEase(Ease.OutCubic));
                 seq.Join(cg.DOFade(1f, 0.6f));
             }
 
@@ -83,7 +90,19 @@ public class CardSelectManager : MonoBehaviour
     public void OnCardSelected(GameObject selected)
     {
         if (hasSelected) return; // 이미 선택했다면 무시
-        hasSelected = true; // 선택 플래그 설정
+        hasSelected = true;
+
+        // 카드 효과 적용
+        CardEffect effect = selected.GetComponent<CardEffect>();
+        if ( effect != null)
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+
+            if (player != null)
+            {
+                effect.ApplyEffect(player);
+            }
+        }
 
         foreach (GameObject card in currentCards)
         {

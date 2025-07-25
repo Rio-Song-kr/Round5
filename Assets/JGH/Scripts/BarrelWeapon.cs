@@ -1,99 +1,29 @@
-using System.Collections;
 using UnityEngine;
 
-// 샷건 무기 클래스
-public class BarrelWeapon : MonoBehaviour, IWeapon
+public class BarrelWeapon : BaseWeapon
 {
-    [SerializeField] private GameObject bulletPrefab; // 발사할 총알 프리팹
-    [SerializeField] private int pelletCount = 6; // 발사할 총알 개수
-    [SerializeField] private float spreadAngle = 30f; // 총알 퍼짐 각도
-    [SerializeField] private float bulletSpeed = 10f; // 총알 속도
-    [SerializeField] private WeaponType weaponType = WeaponType.Shotgun; // 무기 타입
-    
-    [SerializeField] private int maxAmmo = 8;             // 샷건 최대 장탄 수 
-    [SerializeField] private float reloadTime = 3.25f;       // 재장전 시간
-    [SerializeField] private int ammoPerShot= 4;       // 소비 탄수
-    // [SerializeField] private float autoReloadDelay = 3f; // 일정 시간 동안 미사용 시 자동 장전
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private int pelletCount = 6; // 퍼지는 총알 개수
+    [SerializeField] private float spreadAngle = 30f; // 퍼지는 각도
+    [SerializeField] private int ammoPerShot = 4; // 발사 시 소비 탄약 수
+    private WeaponType weaponType = WeaponType.Shotgun;
 
-    // 현재 남은 탄 수
-    private int currentAmmo;
-    // 재장전 중인지 여부
-    private bool isReloading;
-    private float lastAttackTime;
-    private Coroutine autoReloadCoroutine;
-    private Coroutine idleCheckCoroutine;
-    private float idleReloadDelay = 3f;
-
-    private AmmoDisplay ammoDisplay;
-
-    private void Start()
+    // 무기 발사
+    public override void Attack(Transform firingPoint)
     {
-        ammoDisplay = FindObjectOfType<AmmoDisplay>();
-        currentAmmo = maxAmmo;
-        isReloading = false;
-        UpdateAmmoUI();
-        ammoDisplay?.SetReloading(false);
-    }
+        if (isReloading || currentAmmo < ammoPerShot) return;
 
-  
-
-    /// <summary>
-    /// 무기가 활성화될 때 호출됨 (무기 교체 포함)
-    /// </summary>
-    private void OnEnable()
-    {
-        currentAmmo = maxAmmo;
-        isReloading = false;
-        UpdateAmmoUI();
-        
-        // 리로드 UI 확실히 꺼줌
-        ammoDisplay?.SetReloading(false);
-        StartIdleCheck();
-    }
-
-    private void OnDisable()
-    {
-        if (idleCheckCoroutine != null)
-            StopCoroutine(idleCheckCoroutine);
-    }
-
-    /// <summary>
-    /// 격발 함수
-    /// </summary>
-    /// <param name="firingPoint"></param>
-    public void Attack(Transform firingPoint)
-    {
-        // 재장전 중일때 
-        if (isReloading || currentAmmo < ammoPerShot)
-        {
-            return;
-        }
-
-        // 각도 계산
-        float angleStep = (spreadAngle / (pelletCount - 1));
+        float angleStep = spreadAngle / (pelletCount - 1);
         float startAngle = -spreadAngle / 2f;
-        
-        // 데미지 계산
-        float baseDamage = 100f;
-        float pistolDamage = baseDamage * 0.7f;        // 권총 데미지: 70
-        float shotgunPelletDamage = pistolDamage * 0.3f; // 샷건 1발 데미지: 21
-
 
         for (int i = 0; i < pelletCount; i++)
         {
             float angle = startAngle + angleStep * i;
-
-            Quaternion spreadRotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle);
+            
+            Quaternion spreadRotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle - 90); 
             Vector3 spawnPos = firingPoint.position + firingPoint.right * 0.2f;
 
-            GameObject bullet = Instantiate(bulletPrefab, spawnPos, spreadRotation);
-            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            
-            Vector2 shootDir = spreadRotation * Vector2.right;
-            rb.AddForce(shootDir * bulletSpeed, ForceMode2D.Impulse);
-            
-            // 탄환 데미지 
-            bullet.GetComponent<ResetBullet>().damage = shotgunPelletDamage;
+            Instantiate(bulletPrefab, spawnPos, spreadRotation);
         }
 
         currentAmmo -= ammoPerShot;
@@ -103,93 +33,9 @@ public class BarrelWeapon : MonoBehaviour, IWeapon
         if (currentAmmo < ammoPerShot)
             StartAutoReload();
     }
-    
-    /// <summary>
-    /// 즉시 재장전
-    /// </summary>
-    /// <returns></returns>
-    private void StartAutoReload()
-    {
-        if (autoReloadCoroutine != null)
-            StopCoroutine(autoReloadCoroutine);
 
-        autoReloadCoroutine = StartCoroutine(AutoReloadRoutine());
-    }
-    
-    private IEnumerator AutoReloadRoutine()
-    {
-        isReloading = true;
-        ammoDisplay?.SetReloading(true);
-
-        yield return new WaitForSeconds(reloadTime);
-
-        currentAmmo = maxAmmo;
-        isReloading = false;
-        UpdateAmmoUI();
-
-        ammoDisplay?.SetReloading(false);
-        lastAttackTime = Time.time;
-    }
-
-    private void StartIdleCheck()
-    {
-        if (idleCheckCoroutine != null)
-            StopCoroutine(idleCheckCoroutine);
-
-        idleCheckCoroutine = StartCoroutine(IdleCheckRoutine());
-    }
-
-    private IEnumerator IdleCheckRoutine()
-    {
-        lastAttackTime = Time.time;
-        while (true)
-        {
-            yield return new WaitForSeconds(0.1f);
-
-            if (!isReloading && currentAmmo < maxAmmo)
-            {
-                if (Time.time - lastAttackTime >= idleReloadDelay)
-                {
-                    currentAmmo = maxAmmo;
-                    isReloading = false;
-                    ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
-                    lastAttackTime = Time.time;
-                }
-            }
-        }
-    }
-
-    private void UpdateAmmoUI()
-    {
-        if (ammoDisplay != null)
-        {
-            ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
-            
-            // currentAmmo == 0일 때만 true, 그 외에는 무조건 false
-            bool shouldReload = currentAmmo == 0 && !isReloading;
-            ammoDisplay.SetReloading(shouldReload);
-        }
-    }
-
- 
-    
-    /// <summary>
-    /// 무기 타입 반환
-    /// </summary>
-    /// <returns></returns>
-    public WeaponType GetWeaponType()
+    public override WeaponType GetWeaponType()
     {
         return weaponType;
-    }
-    
-    /// <summary>
-    /// 무기 초기화 함수
-    /// </summary>
-    public void Initialize()
-    {
-        currentAmmo = maxAmmo;
-        isReloading = false;
-        UpdateAmmoUI();
-        StartIdleCheck();
     }
 }

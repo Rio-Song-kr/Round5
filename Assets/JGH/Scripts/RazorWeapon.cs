@@ -1,147 +1,82 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
-// 레이저 무기 클래스
-public class RazorWeapon : MonoBehaviour, IWeapon
+public class RazorWeapon : BaseWeapon
 {
-    [SerializeField] private LineRenderer laserRenderer;  // 레이저를 그릴 LineRenderer
-    [SerializeField] private float laserDuration = 2f;   // 레이저 지속 시간
-    [SerializeField] private float laserLength = 20f;    // 레이저 거리
-    [SerializeField] private WeaponType weaponType = WeaponType.Laser; // 무기 타입
+    [SerializeField] private LineRenderer laserRenderer;
+    [SerializeField] private float laserDuration = 2f;
+    [SerializeField] private float laserLength = 20f;
     
-    // 레이저 발사 중인지 여부
     private bool isFiring = false;
-    // 재장전 중인지 여부
-    private bool isReloading = false;
+    private WeaponType weaponType = WeaponType.Laser;
     
-    private AmmoDisplay AmmoDisplay; // 탄약 아이콘 표시 UI
-
-    private int maxAmmo = 2; // 최대 장탄 수 
-    private int currentAmmo; // 현재 남은 탄 수
-    
-    private void Start()
+    public override void Attack(Transform firingPoint)
     {
-        // AmmoDisplay 컴포넌트 찾기
-        AmmoDisplay = FindObjectOfType<AmmoDisplay>();
-        Initialize();
-    }
-
-    public void Initialize()
-    {
-        currentAmmo = maxAmmo;
-        UpdateAmmoUI();
-    }
-
-    private void UpdateAmmoUI()
-    {
-        if (AmmoDisplay != null)
-            AmmoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
-    }
-
-    
-    /// <summary>
-    /// 레이저 격발
-    /// </summary>
-    /// <param name="firingPoint"></param>
-    public void Attack(Transform firingPoint)
-    {
-        if (isFiring || isReloading) return;
-        if (currentAmmo < 2) return;
-
-        // 탄창 - 2 
+        if (isFiring || isReloading || currentAmmo < 2) return;
+        
+        StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
         currentAmmo -= 2;
+
         UpdateAmmoUI();
+        ammoDisplay.reloadIndicator.SetActive(false); 
+        
         StartCoroutine(FireLaserRoutine(firingPoint));
     }
 
-    /// <summary>
-    /// 레이저 발사 코루틴
-    /// </summary>
-    /// <param name="firingPoint"></param>
-    /// <returns></returns>
     private IEnumerator FireLaserRoutine(Transform firingPoint)
     {
         isFiring = true;
+        isReloading = false;
         laserRenderer.enabled = true;
 
         float elapsed = 0f;
-        
-        
         float damageTick = 0.1f;
         float damageTimer = 0f;
-        float baseDamage = 100f;
-        float Damage = baseDamage * 0.7f * 0.3f; // 21
-        
-        
+
         while (elapsed < laserDuration)
         {
-            // 레이저 시작 위치와 방향 설정
             Vector3 startPoint = firingPoint.position;
             Vector3 direction = firingPoint.right;
-
-            // Raycast로 충돌 지점 계산
             RaycastHit2D hit = Physics2D.Raycast(startPoint, direction, laserLength);
+            Vector3 endPoint = hit.collider ? (Vector3)hit.point : startPoint + direction * laserLength;
 
-            // 레이저 끝 지점 설정
-            Vector3 endPoint = hit.collider != null ? hit.point : startPoint + direction * laserLength;
-
-            // LineRenderer로 레이저 그리기
             laserRenderer.SetPosition(0, startPoint);
             laserRenderer.SetPosition(1, endPoint);
-            
-            
-            // 틱 데미지 처리
-            damageTimer += Time.deltaTime;
-            if (damageTimer >= damageTick)
-            {
-                damageTimer = 0f;
-                if (hit.collider != null)
-                {
-                    IDamageable damageTarget = hit.collider.GetComponent<IDamageable>();
-                    if (damageTarget != null)
-                    {
-                        damageTarget.TakeDamage(Damage);
-                    }
-                }
-            }
-            
+
             elapsed += Time.deltaTime;
             yield return null;
         }
-        
-        // 비활성화 및 재장전 시작
+
+
+        // 레이저 종료
         laserRenderer.enabled = false;
-        AmmoDisplay.reloadIndicator.SetActive(true);
-        
+        // 리로드 시작 + UI 표시
         isFiring = false;
+        
+        // 리로드 UI 이제 나타남
         isReloading = true;
+
+        ammoDisplay.reloadIndicator.SetActive(true);
         
-        yield return new WaitForSeconds(2f); // 재장전 시간
+        yield return new WaitForSeconds(reloadTime); // 재장전 시간
         
-        currentAmmo = maxAmmo; // 초기화 시 최대 장탄 수로 설정
-        UpdateAmmoUI();
-        
+        //탄 UI 회복, 리로드 UI OFF
+        currentAmmo = maxAmmo;
+        UpdateAmmoUI(); // 탄창 갱신
         isReloading = false;
-        AmmoDisplay.reloadIndicator.SetActive(false);
+        ammoDisplay.reloadIndicator.SetActive(false);
     }
-    
-    /// <summary>
-    ///  무기 타입 반환
-    /// </summary>
-    /// <returns></returns>
-    public WeaponType GetWeaponType()
+
+    public override WeaponType GetWeaponType()
     {
         return weaponType;
     }
 
-    /// <summary>
-    /// 무기 교체 시 호출
-    /// </summary>
     private void OnDisable()
     {
-        StopAllCoroutines();          // 레이저 발사 코루틴 중지
-        laserRenderer.enabled = false; // 라인 렌더러 끄기
-        isFiring = false;            // 상태 초기화
+        StopAllCoroutines();
+        laserRenderer.enabled = false;
+        isFiring = false;
         isReloading = false;
     }
 }
