@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BulletWeapon : BaseWeapon
 {
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private WeaponType weaponType = WeaponType.Bullet;
-
+    public GameObject bulletPrefab;
+    public WeaponType weaponType = WeaponType.Bullet;
+    
     public override void Attack(Transform firingPoint)
     {
         if (isReloading || currentAmmo <= 0) return;
@@ -16,11 +16,16 @@ public class BulletWeapon : BaseWeapon
         UpdateAmmoUI();
 
         if (currentAmmo <= 0)
+        {
+            ReloadSpeedFromAnimator();
             StartAutoReload();
+        }
     }
 
     public override WeaponType GetWeaponType()
     {
         return weaponType;
     }
+
+
 }
