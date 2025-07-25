@@ -38,7 +38,8 @@ public class MultiJointBoxController : MonoBehaviour
         for (int i = 0; i < fixedJoint.Length; i++)
         {
             if (fixedJoint != null && fixedJoint[i].IsDestroyed() || (fixedJoint != null && fixedJoint[i].connectedBody != null && fixedJoint[i].connectedBody.bodyType == RigidbodyType2D.Dynamic))
-            {                
+            {
+
                 return true;
             }
         }
