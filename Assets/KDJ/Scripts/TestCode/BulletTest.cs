@@ -12,7 +12,6 @@ public class BulletTest : MonoBehaviourPun, IPunObservable
     [SerializeField] private GameObject _body;
     [SerializeField] private Transform _muzzle;
 
-    private CameraShake _cameraShake;
 
     private float _shotTimer = 0f;
     private Vector3 _networkPosition;
@@ -21,7 +20,7 @@ public class BulletTest : MonoBehaviourPun, IPunObservable
 
     void Awake()
     {
-        _cameraShake = Camera.main.GetComponent<CameraShake>();
+
     }
 
     void Update()
@@ -45,7 +44,7 @@ public class BulletTest : MonoBehaviourPun, IPunObservable
     private void ShotCycle()
     {
         _shotTimer += Time.deltaTime;
-        if (_shotTimer >= _shotInterval && Input.GetMouseButtonDown(0) && photonView.IsMine)
+        if (_shotTimer >= _shotInterval && Input.GetMouseButton(0) && photonView.IsMine)
         {
             photonView.RPC("Shot", RpcTarget.All);
             _shotTimer = 0f;
@@ -56,7 +55,7 @@ public class BulletTest : MonoBehaviourPun, IPunObservable
     private void Shot()
     {
         GameObject bullet = Instantiate(_bulletPrefab, _muzzle.position, _muzzle.rotation);
-        _cameraShake.ShakeCaller(0.3f, 0.05f);
+        CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
     }
 
     private void LookAtMouse()
