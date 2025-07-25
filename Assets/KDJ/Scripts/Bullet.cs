@@ -4,7 +4,7 @@ using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, IPunObservable
 {
     [SerializeField] public float Speed;
     [SerializeField] public float Damage;
@@ -15,6 +15,9 @@ public class Bullet : MonoBehaviour
     [SerializeField] private GameObject _hitEffect;
     [SerializeField] private bool _isBigBullet;
     [SerializeField] private bool _isExplosiveBullet;
+    
+    // 250726 추가
+    private Vector3 _networkPos;
     
     private void Awake()
     {
@@ -122,5 +125,16 @@ public class Bullet : MonoBehaviour
         PhotonNetwork.Instantiate(_explosiveBulletEffect.name, transform.position, Quaternion.identity);
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+        }
+        else
+        {
+            _networkPos = (Vector3)stream.ReceiveNext();
+        }
+    }
 }
 
