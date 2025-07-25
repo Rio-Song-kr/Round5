@@ -16,6 +16,10 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
     public AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
     public int attackDamage; // 
 
+    [Header("탄환 정보")]
+    public bool isBigBullet = false; // 큰 탄환 여부
+    public bool isExplosiveBullet = false; // 폭발성 탄환 여부
+
     protected virtual void Start()
     {
         ammoDisplay = FindObjectOfType<AmmoDisplay>();
