@@ -42,9 +42,8 @@ public class Bullet : MonoBehaviour
             BigBulletShot();
 
         if (_isExplosiveBullet)
-        {
             ExplosiveBulletShot();
-        }
+
         else
         {
             GameObject effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
