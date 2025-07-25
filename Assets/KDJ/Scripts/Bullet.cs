@@ -60,8 +60,6 @@ public class Bullet : MonoBehaviour
             CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
         }
 
-        // TryDestroy();
-        // PhotonNetwork.Destroy(gameObject);
         // Destroy(gameObject);
         StartCoroutine(SafeDestroy());
     }
@@ -74,32 +72,6 @@ public class Bullet : MonoBehaviour
             PhotonNetwork.Destroy(gameObject);
         }
     }
-
-    /// <summary>
-    /// 다른 클라이언트가 만든 오브젝트를 파괴하는 PunRPC 메소드(권한오류 나서 만듬)
-    /// </summary>
-    // [PunRPC]
-    // void TryDestroy()
-    // {
-    //     PhotonView view = GetComponent<PhotonView>();
-    //
-    //     if (view.IsMine || PhotonNetwork.IsMasterClient)
-    //     {
-    //         // 내가 소유자이거나 마스터면 직접 파괴
-    //         PhotonNetwork.Destroy(gameObject);
-    //     }
-    //     else
-    //     {
-    //         // 마스터에게 Destroy 요청
-    //         view.RPC(nameof(ObjectDestroy), RpcTarget.MasterClient);
-    //     }
-    // }
-    //
-    // [PunRPC]
-    // void ObjectDestroy()
-    // {
-    //     PhotonNetwork.Destroy(gameObject);
-    // }
 
     public void BulletMove(float speed)
     {
@@ -117,7 +89,6 @@ public class Bullet : MonoBehaviour
         {
             PhotonNetwork.Destroy(gameObject);
         }
-        // TryDestroy();
     }
 
     public void Attack()
@@ -143,7 +114,6 @@ public class Bullet : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         PhotonNetwork.Destroy(bullet);
-        // TryDestroy();
     }
 
     [PunRPC]
