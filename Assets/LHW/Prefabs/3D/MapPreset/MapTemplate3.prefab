@@ -902,7 +902,7 @@ HingeJoint2D:
   serializedVersion: 4
   m_EnableCollision: 0
   m_ConnectedRigidBody: {fileID: 2504793395994422218}
-  m_BreakForce: Infinity
+  m_BreakForce: 3
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
@@ -2414,10 +2414,6 @@ PrefabInstance:
     - target: {fileID: 4846043787755002222, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
       propertyPath: m_Name
       value: Rope Gimic
-      objectReference: {fileID: 0}
-    - target: {fileID: 7651441712749653689, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
       propertyPath: m_LocalPosition.x
