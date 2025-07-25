@@ -10,9 +10,9 @@ public class LoadingUIManager : MonoBehaviour
     public static LoadingUIManager Instance;
 
     [Header("UI 참조")]
-    [SerializeField] private GameObject loadingPanel; // 전체 패널
-    [SerializeField] private Slider progressBar;      // 진행률 슬라이더  
-    [SerializeField] private TextMeshProUGUI progressText;       // 퍼센트 표시 텍스트
+    [SerializeField] private GameObject loadingPanel;           // 전체 패널
+    [SerializeField] private Slider progressBar;                // 진행률 슬라이더  
+    [SerializeField] private TextMeshProUGUI progressText;      // 퍼센트 표시 텍스트
 
     private void Awake()
     {
@@ -47,7 +47,7 @@ public class LoadingUIManager : MonoBehaviour
         CardAnimator animator = GetComponentInChildren<CardAnimator>();
         if (animator != null)
         {
-            animator.RestartAnimation(); // 여기!
+            animator.RestartAnimation(); 
         }
     }
 
