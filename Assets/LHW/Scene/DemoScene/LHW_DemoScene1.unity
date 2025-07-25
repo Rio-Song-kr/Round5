@@ -188,6 +188,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4045652427687931408, guid: 566f5fe05663cac4a8a8bc545de4471e, type: 3}
   m_PrefabInstance: {fileID: 30935149}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &94215329
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3227730417961249921, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_TagString
+      value: Hammer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4846043787755002222, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_Name
+      value: Rope Gimic
+      objectReference: {fileID: 0}
+    - target: {fileID: 4846043787755002222, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.5530434
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.8739128
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.2365339
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896074840912759919, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f06d70b02ec499d4fa5fa778838bf9c1, type: 3}
 --- !u!1 &457691274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,6 +1071,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapTemplate1
       objectReference: {fileID: 0}
+    - target: {fileID: 6653152792287258052, guid: 7a2208bb9a5d0324bac9e727309fff6b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7035429729476003297, guid: 7a2208bb9a5d0324bac9e727309fff6b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8579619963266478440, guid: 7a2208bb9a5d0324bac9e727309fff6b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1028,3 +1105,4 @@ SceneRoots:
   - {fileID: 457691276}
   - {fileID: 927194383}
   - {fileID: 1512073273}
+  - {fileID: 94215329}
