@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+/// <summary>
+/// UI 정보를 참조해서 불러와 실행하는 스크립트
+/// </summary>
 public class LoadingUIManager : MonoBehaviour
 {
     public static LoadingUIManager Instance;
@@ -71,6 +74,12 @@ public class LoadingUIManager : MonoBehaviour
         if (progressText != null)
         {
             progressText.text = $"Loading...{Mathf.RoundToInt(progress * 100)}%";
+        }
+
+        // 프로그레스가 100%에 도달했을 경우 자동으로 패널 숨김
+        if (progress >= 1f && loadingPanel != null && loadingPanel.activeSelf)
+        {
+            Hide();
         }
     }
 

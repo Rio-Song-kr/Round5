@@ -9,6 +9,7 @@ public class GameEndManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             SceneLoadingManager.Instance.LoadSceneAsync("CardTest");
+            SceneLoadingManager.Instance.AllowSceneActivation();
         }
     }
 }

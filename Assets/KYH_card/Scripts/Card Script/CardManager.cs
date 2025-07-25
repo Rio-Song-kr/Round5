@@ -27,6 +27,8 @@ public class CardSelectManager : MonoBehaviour
     void Start()
     {
         SpawnRandomCards(); // 시작 시 카드들을 랜덤하게 생성
+        SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
+        Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
     }
 
     // 랜덤 카드 생성 및 화면에 출력
@@ -70,7 +72,7 @@ public class CardSelectManager : MonoBehaviour
             if (rt != null)
             {
                 rt.anchoredPosition = new Vector2(x, appearYOffset);
-                rt.localRotation = Quaternion.Euler(0, 0, rotZ); // 왜 회전이 적용이 안되지?
+                rt.localRotation = Quaternion.Euler(0, 0, rotZ); 
                 cg.alpha = 0f;
 
                 Sequence seq = DOTween.Sequence();
@@ -140,7 +142,9 @@ public class CardSelectManager : MonoBehaviour
 
         Debug.Log("선택된 카드: " + selected.name);
         Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
-        SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
-        
+
+
+        DOVirtual.DelayedCall(2f, () => SceneLoadingManager.Instance.AllowSceneActivation());
+
     }
 }
