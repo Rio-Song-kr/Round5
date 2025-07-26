@@ -50,7 +50,7 @@ public class WeightedRandom<T>
         {
             if (_dic[item] > value)
             {
-                _dic[item] -= value;                
+                _dic[item] -= value;
             }
             else
             {
@@ -131,12 +131,7 @@ public class WeightedRandom<T>
             weight += item.Value;
             if (pivot <= weight)
             {
-                _dic[item.Key] -= 1;
-
-                if(_dic[item.Key] == 0)
-                {
-                    _dic.Remove(item.Key);
-                }
+                Sub(item.Key, 1);
 
                 return item.Key;
             }
