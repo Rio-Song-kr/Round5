@@ -3,22 +3,29 @@ using UnityEngine;
 
 public abstract class BaseWeapon : MonoBehaviour, IWeapon
 {
+    [Header("탄환 정보")]
     public int maxAmmo; // 최대 탄약 수
-    public Animator animator; // 재장전 애니메이션용 애니메이터
-    public float bulletSpeed;
     public int currentAmmo; // 남아 있는 탄약 수
+    public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
+    public bool isBigBullet = false; // 큰 탄환 여부
+    public bool isExplosiveBullet = false; // 폭발성 탄환 여부
+    
+    [Header("재장전 관련")]
+    public Animator animator; // 재장전 애니메이션용 애니메이터
     public bool isReloading; // 재장전 여부
-    public float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
     public float idleReloadDelay; // 공격하지 않았을 때 자동 재장전까지의 대기 시간
     public Coroutine idleCheckCoroutine; // 자동 재장전 감지를 위한 코루틴 핸들
     public Coroutine autoReloadCoroutine; // 리로드 애니메이션과 함께 실행되는 자동 재장전 코루틴 핸들
-    public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
+    
+    [Header("UI 관련")]
     public AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
+    
+    [Header("공격 정보")]
+    public float bulletSpeed;
     public int attackDamage; // 
+    public int attackSpeed; // 
+    public float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
 
-    [Header("탄환 정보")]
-    public bool isBigBullet = false; // 큰 탄환 여부
-    public bool isExplosiveBullet = false; // 폭발성 탄환 여부
 
     protected virtual void Start()
     {
