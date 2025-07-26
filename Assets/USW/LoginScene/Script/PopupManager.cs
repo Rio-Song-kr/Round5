@@ -38,6 +38,14 @@ public class PopupManager : MonoBehaviour
     [SerializeField] TMP_InputField newPasswordInputField;
     [SerializeField] Button changePasswordButton;
     [SerializeField] Button cancelPasswordButton;
+    
+    [Header("닉네임 변경 팝업")]
+    [SerializeField] private GameObject nicknameChangePanel;
+    [SerializeField] private TMP_InputField nicknameInputField;
+    [SerializeField] private Button saveNicknameButton;
+    [SerializeField] private Button  cancelNicknameButton;
+
+    
 
     /// <summary>
     /// 싱글톤으로 인게임 , 메뉴 , 로그인창에 사용될 예정입니다.
@@ -65,9 +73,10 @@ public class PopupManager : MonoBehaviour
         }
     }
 
-    // 확인 팝업에서 사용할 콜백 함수들입니다. 
+    // 확인 팝업 / 닉네임 변경 에서 사용할 콜백 함수들입니다. 
     private Action onYesCallback;
     private Action onNoCallback;
+    private Action<string> onNicknameSaveCallBack;
 
     // 비밀번호 변경 죽복 처리 방지를 위한 bool 변수입니다.
     private bool isProcessingPasswordChange = false;
@@ -77,13 +86,13 @@ public class PopupManager : MonoBehaviour
     /// </summary>
     void SetupButtons()
     {
-        if (closeButton != null)
+        if (closeButton)
         {
             closeButton.onClick.AddListener(ClosePopup);
         }
 
-        // 확인 팝업의 "예" 버튼 - 콜백 실행 후 팝업 닫기
-        if (yesButton != null)
+        // 확인 팝업의 " Yes " 버튼 - 콜백 실행 후 팝업 닫기
+        if (yesButton)
         {
             yesButton.onClick.AddListener(() =>
             {
@@ -92,8 +101,8 @@ public class PopupManager : MonoBehaviour
             });
         }
 
-        // 확인 팝업의 "No" 버튼 - 콜백 실행 후 팝업 닫기
-        if (noButton != null)
+        // 확인 팝업의 " No " 버튼 - 콜백 실행 후 팝업 닫기
+        if (noButton)
         {
             noButton.onClick.AddListener(() =>
             {
@@ -103,36 +112,64 @@ public class PopupManager : MonoBehaviour
         }
 
         // 비밀번호 변경 버튼
-        if (changePasswordButton != null)
+        if (changePasswordButton)
         {
             changePasswordButton.onClick.AddListener(OnChangePasswordClick);
         }
 
         // 비밀번호 변경 취소 버튼
-        if (cancelPasswordButton != null)
+        if (cancelPasswordButton)
         {
             cancelPasswordButton.onClick.AddListener(OnCancelPasswordClick);
         }
+        
+        // 닉네임 변경 버튼
+        if (saveNicknameButton)
+        {
+            saveNicknameButton.onClick.AddListener(OnSaveNicknameClick);
+        }
+
+        if (cancelNicknameButton)
+        {
+            cancelNicknameButton.onClick.AddListener(OnCancleNicknameClick);
+        }
 
         // 모든 패널을 초기에는 비활성화 함 
-        if (confirmationPanel != null)
+        if (confirmationPanel)
         {
             confirmationPanel.SetActive(false);
         }
 
-        if (passwordChangePanel != null)
+        if (passwordChangePanel)
         {
             passwordChangePanel.SetActive(false);
         }
 
+        if (nicknameChangePanel)
+        {
+            nicknameChangePanel.SetActive(false);
+        }
+
         // Enter 키로 비밀번호 변경 실행
-        if (newPasswordInputField != null)
+        if (newPasswordInputField)
         {
             newPasswordInputField.onEndEdit.AddListener(delegate
             {
                 if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 {
                     OnChangePasswordClick();
+                }
+            });
+        }
+        
+        //Enter 키로 닉네임 저장 실행
+        if (nicknameInputField)
+        {
+            nicknameInputField.onEndEdit.AddListener(delegate
+            {
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    OnSaveNicknameClick();
                 }
             });
         }
@@ -159,7 +196,7 @@ public class PopupManager : MonoBehaviour
     }
 
 
-    #region public 공용 API Methods
+    #region 공용 메서드
 
     /// <summary>
     /// 기본 메세지 팝업 표시
@@ -235,7 +272,7 @@ public class PopupManager : MonoBehaviour
     /// </summary>
     void ShowMainPanel()
     {
-        if (mainPopupPanel != null)
+        if (mainPopupPanel)
         {
             mainPopupPanel.SetActive(true);
         }
@@ -247,7 +284,7 @@ public class PopupManager : MonoBehaviour
     /// </summary>
     void ShowConfirmationPanel()
     {
-        if (confirmationPanel != null)
+        if (confirmationPanel)
         {
             confirmationPanel.SetActive(true);
         }
@@ -258,9 +295,17 @@ public class PopupManager : MonoBehaviour
     /// </summary>
     void ShowPasswordChangePanel()
     {
-        if (passwordChangePanel != null)
+        if (passwordChangePanel)
         {
             passwordChangePanel.SetActive(true);
+        }
+    }
+
+    void ShowNicknameChangePanel()
+    {
+        if (nicknameChangePanel)
+        {
+            nicknameChangePanel.SetActive(true);
         }
     }
 
@@ -270,19 +315,24 @@ public class PopupManager : MonoBehaviour
     /// </summary>
     void HideAllPanels()
     {
-        if (mainPopupPanel != null)
+        if (mainPopupPanel)
         {
             mainPopupPanel.SetActive(false);
         }
         
-        if (confirmationPanel != null)
+        if (confirmationPanel)
         {
             confirmationPanel.SetActive(false);
         }
 
-        if (passwordChangePanel != null)
+        if (passwordChangePanel)
         {
             passwordChangePanel.SetActive(false);
+        }
+
+        if (nicknameChangePanel)
+        {
+            nicknameChangePanel.SetActive(false);
         }
     }
 
@@ -456,6 +506,60 @@ public class PopupManager : MonoBehaviour
     #endregion
 
 
+    #region 닉네임 변경 로직
+
+    /// <summary>
+    /// 닉네임 변경 팝업 표시
+    /// </summary>
+    /// <param name="currentNickname">현재 닉네임</param>
+    /// <param name="onSave">저장시 실행할 콜백(쌔 닉네임 전달)</param>
+    public void ShowNicknameChangePopup(string currentNickname, Action<string> onSave)
+    {
+        onNicknameSaveCallBack = onSave;
+        
+        HideAllPanels();
+        ShowNicknameChangePanel();
+        gameObject.SetActive(true);
+
+        if (nicknameInputField)
+        {
+            nicknameInputField.text = currentNickname;
+            nicknameInputField.Select();
+        }
+    }
+
+    void OnSaveNicknameClick()
+    {
+        string newNickname = nicknameInputField.text.Trim();
+
+        if (string.IsNullOrEmpty(newNickname))
+        {
+            ShowPopup("닉네임을 입력해주세요");
+            return;
+        }
+
+        if (newNickname.Length < 2 || newNickname.Length > 12)
+        {
+            ShowPopup("닉네임은 2~12자로 입력해주세요");
+            return;
+        }
+        
+        // 콜백 호출(백앤드는 SettingsPanel 에서 처리되고있습니다.
+        // OnEditNickname 쪽 봐주세요
+        onNicknameSaveCallBack?.Invoke(newNickname);
+        ClosePopup();
+    }
+
+    /// <summary>
+    /// 닉네임 변경 취소
+    /// </summary>
+    void OnCancleNicknameClick()
+    {
+        ClosePopup();
+    }
+
+    #endregion
+
     #region 팝업 컨트롤 메서드
 
     /// <summary>
@@ -468,6 +572,7 @@ public class PopupManager : MonoBehaviour
         // 콜백 함수 참조 정리 (메모리 누수 방지)
         onNoCallback = null;
         onYesCallback = null;
+        onNicknameSaveCallBack = null;
         isProcessingPasswordChange = false;
 
         gameObject.SetActive(false);
