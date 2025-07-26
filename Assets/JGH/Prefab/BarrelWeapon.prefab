@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3747081692612568736}
   m_Layer: 0
   m_Name: BarrelWeapon
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,16 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAmmo: 8
-  animator: {fileID: 0}
-  bulletSpeed: 25
   currentAmmo: 8
-  isReloading: 0
-  lastAttackTime: 0
-  idleReloadDelay: 3
   reloadTime: 3.25
+  isBigBullet: 0
+  isExplosiveBullet: 0
+  animator: {fileID: 0}
+  isReloading: 0
+  idleReloadDelay: 3
   ammoDisplay: {fileID: 0}
+  bulletSpeed: 25
   attackDamage: 5
+  attackSpeed: 0
+  lastAttackTime: 0
   bulletPrefab: {fileID: 9126787767474855383, guid: 6137c4df5c028416ab16ac1daf924ca9, type: 3}
   pelletCount: 5
   spreadAngle: 30
   ammoPerShot: 4
+  weaponType: 2
