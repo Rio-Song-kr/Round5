@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BoxController : MonoBehaviourPun, IPunObservable
@@ -7,8 +8,11 @@ public class BoxController : MonoBehaviourPun, IPunObservable
 
     private Rigidbody2D rigid;
 
+    // 네트워크 동기화용 변수
     private bool isPhysicsEnabled = false;
     private bool networkPhysicsEnabled = false;
+    private Vector3 networkPos;
+    private Quaternion networkRot;
 
     private void Awake()
     {
@@ -21,23 +25,12 @@ public class BoxController : MonoBehaviourPun, IPunObservable
         if (photonView.IsMine &&
             (fixedJoint != null && fixedJoint.connectedBody != null && fixedJoint.connectedBody.bodyType == RigidbodyType2D.Dynamic))
         {
-            Debug.Log("333");
             EnablePhysics();
-
-            // 이게 없으니까 마스터가 아닌 플레이어는 아예 물건이 안옮겨짐            
-
-            /*if (isPhysicsEnabled)
-            {
-                transform.position = Vector3.Lerp(transform.position, networkPos, Time.deltaTime);
-                transform.rotation = Quaternion.Lerp(transform.rotation, networkRot, Time.deltaTime);
-            }
-            */
         }
         if (!photonView.IsMine)
         {
             if (isPhysicsEnabled)
             {
-                Debug.Log("444");
                 transform.position = Vector3.Lerp(transform.position, networkPos, Time.deltaTime * 10f);
                 transform.rotation = Quaternion.Lerp(transform.rotation, networkRot, Time.deltaTime * 10f);
             }
@@ -65,8 +58,7 @@ public class BoxController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    private Vector3 networkPos;
-    private Quaternion networkRot;
+    
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)

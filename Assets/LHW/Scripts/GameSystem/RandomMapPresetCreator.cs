@@ -35,8 +35,8 @@ public class RandomMapPresetCreator : MonoBehaviour
         {
             GameObject selectedMap = mapWeightedRandom.GetRandomItemBySub();
             Vector3 selectedMapPosition = new Vector3(i * mapTransformOffset, 0, 5);
-            PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
-            //Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
+            //PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
+            Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
         }
     }
 
