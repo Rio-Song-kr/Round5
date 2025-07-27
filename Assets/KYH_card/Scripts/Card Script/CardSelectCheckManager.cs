@@ -1,16 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class CardSelectCheckManager : MonoBehaviourPunCallbacks
 {
     private bool hasSelected = false;
-
+    [SerializeField] private TextMeshProUGUI NicknameText;
+    [SerializeField] private TextMeshProUGUI currentSelect;
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
+    public void Init(Player player)
+    {
+        NicknameText.text = player.NickName;
+       // currentSelect.text = 
     }
 
     public void OnCardSelected()
