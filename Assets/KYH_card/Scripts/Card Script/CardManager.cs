@@ -2,8 +2,10 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class CardSelectManager : MonoBehaviour
+public class CardSelectManager : MonoBehaviourPunCallbacks
 {
     [Header("전체 카드 프리팹 리스트")]
     public List<GameObject> allCardPrefabs; // 게임에서 사용할 전체 카드 프리팹 목록
@@ -94,6 +96,8 @@ public class CardSelectManager : MonoBehaviour
         if (hasSelected) return; // 이미 선택했다면 무시
         hasSelected = true;
 
+        
+
         // 카드 효과 적용
         CardEffect effect = selected.GetComponent<CardEffect>();
         if ( effect != null)
@@ -144,7 +148,9 @@ public class CardSelectManager : MonoBehaviour
         Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
 
 
-        DOVirtual.DelayedCall(2f, () => SceneLoadingManager.Instance.AllowSceneActivation());
+        // DOVirtual.DelayedCall(2f, () => SceneLoadingManager.Instance.AllowSceneActivation());
 
     }
+
+    
 }
