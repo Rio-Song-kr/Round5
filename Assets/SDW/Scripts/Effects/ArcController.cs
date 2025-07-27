@@ -62,15 +62,20 @@ public class ArcController : MonoBehaviour
     /// <summary>
     /// EMPEffect에 의해 호출되어 Arc의 모든 동작 설정을 초기화
     /// </summary>
-    public void Initialize(Vector3 centerPoint, Vector3 direction, float initialSpeed, float minSpeed, float fastRadius,
-        float decelDuration)
+    public void Initialize(
+        Vector3 centerPoint,
+        Vector3 direction,
+        float initialSpeed,
+        float minSpeed,
+        float fastRadius,
+        float decelerationDuration)
     {
         _centerPoint = centerPoint;
         _direction = direction;
         _initialExpansionSpeed = initialSpeed;
         _minExpansionSpeed = minSpeed;
         _fastExpansionRadius = fastRadius;
-        _decelerationDuration = decelDuration;
+        _decelerationDuration = decelerationDuration;
 
         _currentSpeed = _initialExpansionSpeed;
         _mainCamera = Camera.main;
