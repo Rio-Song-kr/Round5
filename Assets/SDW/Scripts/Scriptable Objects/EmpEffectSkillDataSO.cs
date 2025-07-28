@@ -18,28 +18,33 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
     public GameObject ArcPrefab;
     private EmpEffect _skillEffect;
     //# 원형 확장에 사용될 개별 Arc 프리팹
-    
+
     // # 생성할 Arc의 총 개수
     public int ArcCount = 30;
-    
+
     private EmpPool<EmpEffect> _empPool;
     public EmpPool<EmpEffect> EmpPool => _empPool;
 
     private ArcPool<ArcController> _arcPool;
     public ArcPool<ArcController> ArcPool => _arcPool;
-    
-    public override void Initialize(GameObject player)
-    {
-        _empPool = new();
-        _empPool.SetPool(SkillEffectPrefab, player.transform);
 
-        _arcPool = new();
-        _arcPool.SetPool(ArcPrefab, ArcCount, player.transform);
+    public Transform PlayerTransform;
+
+    public override void Initialize(Transform playerTransform, Transform effectsTransform)
+    {
+        _empPool = new EmpPool<EmpEffect>();
+        _empPool.SetPool(SkillEffectPrefab, effectsTransform);
+
+        _arcPool = new ArcPool<ArcController>();
+        _arcPool.SetPool(ArcPrefab, ArcCount, effectsTransform);
+
+        PlayerTransform = playerTransform;
     }
 
     public override void Activate()
     {
         var skillEffect = _empPool.Pool.Get();
+        skillEffect.transform.position = PlayerTransform.position;
         skillEffect.Initialize(this);
     }
 }

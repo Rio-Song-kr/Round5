@@ -47,15 +47,9 @@ public class DefenceSkillManager : MonoBehaviour
         var skill = _skillDatabase.SkillDatabase[skillName];
         _skills.Add(skill);
 
+        skill.Initialize(gameObject.transform, _effectsObject.transform);
 
-        if (skill.IsPassive)
-        {
-            skill.Initialize(gameObject);
-            skill.Activate();
-            return;
-        }
-
-        skill.Initialize(_effectsObject);
+        if (skill.IsPassive) skill.Activate();
     }
 
     /// <summary>

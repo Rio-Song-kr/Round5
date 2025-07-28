@@ -8,7 +8,7 @@ public abstract class DefenceSkillDataSO : ScriptableObject
     public float CoolDown;
     //# Passive Skill은 게임 시작 시 바로 활성화, Active Skill은 조작키에 따라 실행
     public bool IsPassive;
-    
+
     [Header("Skill Prefab")]
     [SerializeField] protected GameObject SkillEffectPrefab;
 
@@ -16,9 +16,10 @@ public abstract class DefenceSkillDataSO : ScriptableObject
     /// Skill Effect  생성 및 초기화
     /// Player의 자식으로 생성
     /// </summary>
-    /// <param name="player">Skill Effect의 부모 오브젝트인 플레이어</param>
-    public abstract void Initialize(GameObject player);
-    
+    /// <param name="playerTransform">Skill Effect의 부모 오브젝트인 플레이어</param>
+    /// <param name="effectsTransform">Player와 함께 움직이면 안되는 Effects들의 부모 오브젝트의 Transform</param>
+    public abstract void Initialize(Transform playerTransform, Transform effectsTransform);
+
     /// <summary>
     /// 스킬 활성화
     /// </summary>

@@ -32,26 +32,25 @@ public class EmpEffect : MonoBehaviour
         for (int i = 0; i < _skillData.ArcCount; i++)
         {
             var arcController = _skillData.ArcPool.Pool.Get();
-            
+
             //# Arc가 확장될 방향과 초기 회전값을 계산
             float angle = i * 2f * Mathf.PI / _skillData.ArcCount;
 
             //# 이 방향을 전달
             Vector3 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             arcController.transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
-            arcController.transform.position = transform.parent.position;
-            
+            arcController.transform.position = _skillData.PlayerTransform.position;
+
             arcController.Initialize(
                 _skillData.ArcPool,
                 transform.position,
-                direction, 
+                direction,
                 _skillData.InitialExpansionSpeed,
                 _skillData.MinExpansionSpeed,
                 _skillData.FastExpansionRadius,
                 _skillData.DecelerationDuration);
         }
-        
+
         _skillData.EmpPool.Pool.Release(this);
     }
-    
 }
