@@ -29,7 +29,7 @@ public class GunControll : MonoBehaviourPun
         if (!photonView.IsMine) return;
         
         // 마우스 위치에 따라 총구 회전
-        RotateMuzzleToMouse();
+        // RotateMuzzleToMouse();
         
         // 마우스 왼쪽 버튼 클릭 시 공격
         if (Input.GetMouseButtonDown(0) && photonView.IsMine)
@@ -106,17 +106,17 @@ public class GunControll : MonoBehaviourPun
     /// <summary>
     /// 마우스 따라 회전
     /// </summary>
-    private void RotateMuzzleToMouse()
-    {
-        if (muzzle == null || Camera.main == null) return;
-        
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = mousePosition - muzzle.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        muzzle.rotation = Quaternion.Euler(0, 0, angle);
-        if (muzzle.parent != null)
-        {
-            muzzle.parent.rotation = Quaternion.Euler(0, 0, angle); // 부모 회전
-        }
-    }
+    //private void RotateMuzzleToMouse()
+    //{
+    //    if (muzzle == null || Camera.main == null) return;
+    //    
+    //    Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //    Vector2 direction = mousePosition - muzzle.position;
+    //    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    //    muzzle.rotation = Quaternion.Euler(0, 0, angle);
+    //    if (muzzle.parent != null)
+    //    {
+    //        muzzle.parent.rotation = Quaternion.Euler(0, 0, angle); // 부모 회전
+    //    }
+    //}
 } 
