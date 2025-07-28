@@ -13,9 +13,6 @@ public class BarrelWeapon : BaseWeapon
     {
         if (isReloading || currentAmmo < ammoPerShot) return;
         photonView.RPC(nameof(Shot), RpcTarget.All, firingPoint.position, firingPoint.rotation);
-
-        
-
     }
 
     [PunRPC]
@@ -24,9 +21,6 @@ public class BarrelWeapon : BaseWeapon
         float angleStep = spreadAngle / (pelletCount - 1);
         float startAngle = -spreadAngle / 2f;
 
-        // Quaternion spreadRotation;
-        // Vector3 spawnPos;
-        
         for (int i = 0; i < pelletCount; i++)
         {
             float angle = startAngle + angleStep * i;

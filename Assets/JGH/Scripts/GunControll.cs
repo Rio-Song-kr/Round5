@@ -42,52 +42,22 @@ public class GunControll : MonoBehaviourPun
             }
         }
         
-        if (Input.GetMouseButton(0) )
-        {
-        }
-        
         // TODO: 테스트(숫자 키로 무기 변경)
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            // EquipWeapon(bulletWeaponObject);
             EquipWeapon(WeaponType.Bullet);
-            // photonView.RPC(nameof(ChangeWeapon), RpcTarget.Others, bulletWeaponObject.name);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            // EquipWeapon(razorWeaponObject);
             EquipWeapon(WeaponType.Laser);
-            // photonView.RPC(nameof(ChangeWeapon), RpcTarget.Others, razorWeaponObject.name);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            // EquipWeapon(barrelWeaponObject);
             EquipWeapon(WeaponType.Shotgun);
-            // photonView.RPC(nameof(ChangeWeapon), RpcTarget.Others, barrelWeaponObject.name);
         }
         
-    }
-
-    // TODO: 테스트 
-    [PunRPC]
-    public void ChangeWeapon(string objectName)
-    {
-        if (!photonView.IsMine) return;
-        
-        switch (objectName)
-        {
-            case "BulletWeapon":
-                // EquipWeapon(bulletWeaponObject);
-                break;
-            case "RazorWeapon":
-                // EquipWeapon(razorWeaponObject);
-                break;
-            case "BarrelWeapon":
-                // EquipWeapon(barrelWeaponObject);
-                break;
-        }
     }
     
     public void EquipWeapon(WeaponType weaponType)
@@ -149,28 +119,4 @@ public class GunControll : MonoBehaviourPun
             muzzle.parent.rotation = Quaternion.Euler(0, 0, angle); // 부모 회전
         }
     }
-
-    /// <summary>
-    /// 무기 교체 함수
-    /// </summary>
-    /// <param name="weaponObject"></param>
-    // public void EquipWeapon(GameObject weaponObject)
-    // {
-    //     // 모든 무기 GameObject 끄기
-    //     bulletWeaponObject.SetActive(false);
-    //     razorWeaponObject.SetActive(false);
-    //     barrelWeaponObject.SetActive(false);
-    //
-    //     // 현재 무기 비우기
-    //     currentWeapon = null;
-    //
-    //     // 선택된 무기만 켜기
-    //     weaponObject.SetActive(true);
-    //
-    //     // 무기 스크립트 가져와서 현재 무기로 지정
-    //     currentWeapon = weaponObject.GetComponent<IWeapon>();
-    //     currentWeapon.Initialize();
-    //
-    // }
-    
 } 

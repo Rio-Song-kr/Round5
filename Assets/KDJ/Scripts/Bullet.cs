@@ -16,10 +16,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     [SerializeField] private bool _isBigBullet;              // 큰 총알 여부
     [SerializeField] private bool _isExplosiveBullet;        // 폭발 총알 여부
     
-    // private BaseWeapon _baseWeapon; 
-    
-    
-    
     // 250726 추가
     private Vector3 _networkPosition;
     
@@ -69,49 +65,24 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         StartCoroutine(SafeDestroy());
     }
 
+    // 사용안함 무기에서 바로 호출
     // private void Start()
     // {
     //     BulletMove(_baseWeapon.bulletSpeed);
     // }
     //
-    // [PunRPC]
-    public void InitForce(float speed)
-    {
-        _rb.velocity = Vector2.zero;
-        _rb.angularVelocity = 0f;
-        _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
-    }
     
+    // 탄알이 2개로 날아가는 문제가 있어 추가
     private IEnumerator Start()
     {
         if (!photonView.IsMine)
         {
             // 다른 플레이어가 만든 총알이면, 파괴하지 말고 비활성화만
             gameObject.SetActive(false);
-            // yield break;
         }
-
-        // 내 총알이면 원하는 로직 수행 (예: 힘 적용, 파괴 타이머 등)
-        // yield return null;
-
         // 4초 뒤 파괴
         yield return new WaitForSeconds(4f);
-        // PhotonNetwork.Destroy(gameObject);
     }
-    
-    //
-    // [PunRPC]
-    // public void InitBullet(Vector3 position, Quaternion rotation, float speed)
-    // {
-    //     if (!photonView.IsMine) return;
-    //     transform.position = position;
-    //     transform.rotation = rotation;
-    //
-    //     _rb.velocity = Vector2.zero;
-    //     _rb.angularVelocity = 0f;
-    //
-    //     _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
-    // }
     
     private IEnumerator SafeDestroy()
     {
