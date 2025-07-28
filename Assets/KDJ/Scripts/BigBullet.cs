@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class BigBullet : MonoBehaviour
@@ -23,7 +24,8 @@ public class BigBullet : MonoBehaviour
             effect.transform.LookAt(hitPoint + (hitPoint - new Vector2(collision.transform.position.x, collision.transform.position.y)).normalized);
             _particleSystem.Stop();
             transform.SetParent(null);
-            Instantiate(_explosionEffect, hitPoint, Quaternion.identity);
+            // Instantiate(_explosionEffect, hitPoint, Quaternion.identity);
+            PhotonNetwork.Instantiate("Bullets/Explosive", hitPoint, Quaternion.identity);
             Destroy(gameObject, 1f);
             Destroy(_bullet);
         }

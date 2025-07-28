@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Photon.Pun;
 
 public class RazorWeapon : BaseWeapon
 {
@@ -7,41 +8,46 @@ public class RazorWeapon : BaseWeapon
     [SerializeField] private float laserDuration = 2f;
     [SerializeField] private float laserLength = 20f;
     
+    
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
-    
+
     public override void Attack(Transform firingPoint)
     {
-        if (isFiring || isReloading || currentAmmo < 2) return;
-        
+        if (!photonView.IsMine || isFiring || isReloading || currentAmmo < 2) return;
+            photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
+    }
+    
+    [PunRPC]
+    private void RPC_FireLaser()
+    {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-        currentAmmo -= 2;
 
+        currentAmmo -= 2;
         UpdateAmmoUI();
-        ammoDisplay.reloadIndicator.SetActive(false); 
         
-        StartCoroutine(FireLaserRoutine(firingPoint));
+        ammoDisplay.reloadIndicator.SetActive(false); 
+        StartCoroutine(FireLaserRoutine());
     }
 
-    private IEnumerator FireLaserRoutine(Transform firingPoint)
+    private IEnumerator FireLaserRoutine()
     {
-        isFiring = true;
         isReloading = false;
+        isFiring = true;
         laserRenderer.enabled = true;
 
         float elapsed = 0f;
-        float damageTick = 0.1f;
-        float damageTimer = 0f;
 
         while (elapsed < laserDuration)
         {
-            Vector3 startPoint = firingPoint.position;
-            Vector3 direction = firingPoint.right;
-            RaycastHit2D hit = Physics2D.Raycast(startPoint, direction, laserLength);
-            Vector3 endPoint = hit.collider ? (Vector3)hit.point : startPoint + direction * laserLength;
+            Vector2 start = gunController.muzzle.position;
+            Vector2 direction =  gunController.muzzle.position;
+            
+            RaycastHit2D hit = Physics2D.Raycast(start, direction, laserLength);
+            Vector3 end = hit.collider ? (Vector3)hit.point : start + direction * laserLength;
 
-            laserRenderer.SetPosition(0, startPoint);
-            laserRenderer.SetPosition(1, endPoint);
+            laserRenderer.SetPosition(0, start);
+            laserRenderer.SetPosition(1, end);
 
             elapsed += Time.deltaTime;
             yield return null;
@@ -81,11 +87,13 @@ public class RazorWeapon : BaseWeapon
         return weaponType;
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
         StopAllCoroutines();
         laserRenderer.enabled = false;
         isFiring = false;
         isReloading = false;
     }
+
 }
