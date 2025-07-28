@@ -11,15 +11,18 @@ public class Laser : MonoBehaviour
     private VisualEffect _laserEffect;
     private RaycastHit2D[] _hits = new RaycastHit2D[10];
     private Coroutine _laserCoroutine;
+    private bool _isLaserHit;
+    private LaserSootPool<LaserSoot> _laserSootPool;
+    public LaserSootPool<LaserSoot> LaserSootPool => _laserSootPool;
     public float Duration;
-
 
     void Awake()
     {
+        _laserSootPool = new LaserSootPool<LaserSoot>();
+        _laserSootPool.SetPool(_laserSoot, 10, this.transform); // 레이저 그을림 효과 풀 초기화
         _laserEffect = GetComponent<VisualEffect>();
         _laserEffect.enabled = false;
     }
-
 
     void Update()
     {
@@ -34,24 +37,35 @@ public class Laser : MonoBehaviour
         TestLookAtMouse();
     }
 
+    /// <summary>
+    /// 레이저를 그리는 메서드입니다. 충돌 지점을 _hits 배열에 저장하고 레이저 이펙트를 설정합니다.
+    /// </summary>
     private void LaserBeam()
     {
         CameraShake.Instance.ShakeCaller(0.15f, 0.02f); // 카메라 흔들기 효과
         _laserEffect.SetVector3("StartPos", transform.position); // 레이저 시작 위치 설정
         if (Physics2D.RaycastNonAlloc(transform.position, transform.right, _hits, 100f) > 0)
         {
+            Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
             _laserEffect.SetVector3("EndPos", _hits[0].point); // 레이저가 충돌한 위치로 끝 위치 설정
             _laserEffect.SetVector3("HitPos", _hits[0].point); // 파편 이펙트용 충돌 위치 설정
+            _isLaserHit = true; // 레이저가 충돌했음을 표시
         }
         else
         {
             _laserEffect.SetVector3("EndPos", transform.position + transform.right * 100); // 충돌이 없으면 기본 끝 위치 설정
             _laserEffect.SetVector3("HitPos", transform.position + transform.right * 100); // 파편 이펙트용 기본 위치 설정
+            _isLaserHit = false; // 레이저가 충돌하지 않았음을 표시
         }
     }
 
+    /// <summary>
+    /// 레이저 코루틴입니다. 레이저가 활성화되고 지속 시간 동안 레이저를 그립니다.
+    /// 레이저가 충돌한 경우 그을림 효과를 생성합니다.
+    /// </summary>
     private IEnumerator LaserCoroutine()
     {
+        _isLaserHit = false;
         _laserEffect.enabled = true;
         _laserEffect.SetFloat("Duration", Duration); // 레이저 지속 시간 설정
         float Timer = 0f;
@@ -61,18 +75,34 @@ public class Laser : MonoBehaviour
         while (Timer <= Duration)
         {
             Timer += Time.deltaTime;
+            particleTimer += Time.deltaTime;
             LaserBeam();
+            Debug.Log($"isLaserHit: {_isLaserHit}");
             if (particleTimer >= _particleDelay)
             {
-                GameObject soot = Instantiate(_laserSoot, transform.position, Quaternion.identity); // 레이저 그을림 효과 생성
-                soot.transform.position = _hits[0].point; // 그을림 효과 위치 업데이트
-                soot.transform.SetParent(_hits[0].collider.transform);
+                if (_isLaserHit)
+                {
+                    LaserSoot soot = _laserSootPool.Pool.Get();
+                    if (soot != null)
+                    {
+                        soot.SetPool(_laserSootPool, transform);
+                        soot.transform.position = _hits[0].point; 
+                        soot.gameObject.transform.SetParent(_hits[0].transform);
+                        Rigidbody2D rb = _hits[0].transform.GetComponent<Rigidbody2D>();
+                        if (rb != null)
+                        {
+                            rb.AddForce(-_hits[0].normal * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 반발력 적용
+                        }
+                        particleTimer = 0f; 
+                    }
+                }
             }
             yield return null;
         }
 
-        _laserEffect.enabled = false; // 지속 시간이 끝나면 레이저를 숨깁니다.
-        _laserCoroutine = null; // 코루틴 종료
+        _isLaserHit = false;
+        _laserEffect.enabled = false;
+        _laserCoroutine = null;
     }
 
     /// <summary>
