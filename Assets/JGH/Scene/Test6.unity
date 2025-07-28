@@ -2230,6 +2230,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 429441412}
     m_Modifications:
+    - target: {fileID: -4291808495508441727, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1393969881614138380, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
       propertyPath: animator
       value: 
@@ -2534,6 +2538,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 429441412}
     m_Modifications:
+    - target: {fileID: 827123329813371503, guid: 3927b53249c634ba9810959a0504633b, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
       propertyPath: animator
       value: 
@@ -8778,6 +8786,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 429441412}
     m_Modifications:
+    - target: {fileID: 28940201520656239, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2528079052184358046, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
       propertyPath: m_Name
       value: BulletWeapon
