@@ -34,7 +34,7 @@ public class Laser : MonoBehaviour
             }
         }
 
-        TestLookAtMouse();
+        // TestLookAtMouse();
     }
 
     /// <summary>
@@ -108,10 +108,10 @@ public class Laser : MonoBehaviour
     /// <summary>
     /// 테스트 코드입니다.
     /// </summary>
-    private void TestLookAtMouse()
-    {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0; // 2D 게임이므로 z축은 0으로 설정
-        transform.right = (mousePos - transform.position).normalized; // 레이저 방향을 마우스 위치로 설정
-    }
+    // private void TestLookAtMouse()
+    // {
+    //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //     mousePos.z = 0; // 2D 게임이므로 z축은 0으로 설정
+    //     transform.right = (mousePos - transform.position).normalized; // 레이저 방향을 마우스 위치로 설정
+    // }
 }
