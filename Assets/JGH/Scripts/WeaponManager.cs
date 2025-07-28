@@ -1,13 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : BaseWeapon 
 {
     public static WeaponManager Instance { get; private set; }
     public BarrelWeapon barrelWeapon;
-    
-    // 현재 장착된 무기
-    public BaseWeapon baseWeapon;
+
+    private Bullet _bullet;
     
     private void Awake()
     {
@@ -22,13 +22,27 @@ public class WeaponManager : MonoBehaviour
         DontDestroyOnLoad(gameObject); // 씬 전환 시에도 유지
     }
 
+    private void Start()
+    {
+        _bullet = FindObjectOfType<Bullet>();
+    }
+
+    public override void Attack(Transform firingPoint)
+    {
+    }
+
+    public override WeaponType GetWeaponType()
+    {
+        return WeaponType.Manager;
+    }
+
     /// <summary>
     /// 큰 탄알 조작 함수
     /// </summary>
     /// <param name="value"></param>
     public void SetIsBulletBig(bool value)
     {
-        baseWeapon.isBigBullet = value;
+        isBigBullet = value;
     }
     
     /// <summary>
@@ -38,7 +52,7 @@ public class WeaponManager : MonoBehaviour
     /// <returns></returns>
     public bool GetIsBulletBig(bool value)
     {
-        return baseWeapon.isBigBullet;
+        return isBigBullet;
     }
     
     
@@ -48,7 +62,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="value"></param>
     public void SetIsBulletExplosive(bool value)
     {
-        baseWeapon.isExplosiveBullet = value;
+        isExplosiveBullet = value;
     }
     
     /// <summary>
@@ -57,7 +71,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="value"></param>
     public bool GetIsBulletExplosive()
     {
-        return baseWeapon.isExplosiveBullet;
+        return isExplosiveBullet;
     }
 
     /// <summary>
@@ -66,8 +80,8 @@ public class WeaponManager : MonoBehaviour
     /// <param name="value"></param>
     public void SetBullet(int value)
     {
-        baseWeapon.maxAmmo = value;
-        baseWeapon.currentAmmo = value;
+        maxAmmo = value;
+        currentAmmo = value;
     }
     
     /// <summary>
@@ -76,7 +90,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="value"></param>
     public void GetCurrectBullet(int value)
     {
-        baseWeapon.currentAmmo = value;
+        currentAmmo = value;
     }
     
     /// <summary>
@@ -85,7 +99,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="value"></param>
     public void GetMaxBullet(int value)
     {
-        baseWeapon.maxAmmo = value;
+        maxAmmo = value;
     }
     
     /// <summary>
@@ -112,7 +126,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="value"></param>
     public void SetAttackDamage(int value)
     {
-        baseWeapon.attackDamage = value;
+        attackDamage = value;
     }
     
     /// <summary>
@@ -122,7 +136,7 @@ public class WeaponManager : MonoBehaviour
     /// <returns></returns>
     public int GetAttackDamage()
     {
-        return baseWeapon.attackDamage;
+        return attackDamage;
     }
 
     /// <summary>
@@ -131,7 +145,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="value"></param>
     public void SetReloadTime(int value)
     {
-        baseWeapon.reloadTime = value;
+        reloadTime = value;
     }
     
     /// <summary>
@@ -141,7 +155,7 @@ public class WeaponManager : MonoBehaviour
     /// <returns></returns>
     public float GetReloadTime()
     {
-        return baseWeapon.reloadTime;
+        return reloadTime;
     }
     
     // TODO: 공속 추가 필요
@@ -151,7 +165,7 @@ public class WeaponManager : MonoBehaviour
     // /// <param name="value"></param>
     // public void SetReloadTime(int value)
     // {
-    //     baseWeapon.reloadTime = value;
+    //     reloadTime = value;
     // }
     //
     // /// <summary>
@@ -161,6 +175,6 @@ public class WeaponManager : MonoBehaviour
     // /// <returns></returns>
     // public float GetReloadTime()
     // {
-    //     return baseWeapon.reloadTime;
+    //     return reloadTime;
     // }
 }

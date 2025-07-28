@@ -55,4 +55,5 @@ public class BarrelWeapon : BaseWeapon
         return weaponType;
     }
     
+    
 }
