@@ -5,13 +5,14 @@ using UnityEngine;
 public class DefenceSkillManager : MonoBehaviour
 {
     [SerializeField] private DefenceSkillDatabaseSO _skillDatabase;
-    
+    [SerializeField] private GameObject _effectsObject;
+
     private List<DefenceSkillDataSO> _skills;
     public List<DefenceSkillDataSO> Skills => _skills;
 
     private Coroutine _coroutine;
     private WaitForSeconds _coolDown;
-    
+
     //# Test용
     private Coroutine _testCoroutine;
 
@@ -20,20 +21,20 @@ public class DefenceSkillManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _skills = new();
+        _skills = new List<DefenceSkillDataSO>();
         _skillDatabase.Initialize();
-        
+
         //# 테스트용 - Skill 추가
         AddSkill(DefenceSkills.AbyssalCountdown);
         AddSkill(DefenceSkills.Emp);
         AddSkill(DefenceSkills.FrostSlam);
     }
-    
+
     //# 테스트를 위한 Update
     private void Update()
     {
         if (_testCoroutine != null) return;
-        
+
         _testCoroutine = StartCoroutine(TestUseSkills());
     }
 
@@ -46,9 +47,15 @@ public class DefenceSkillManager : MonoBehaviour
         var skill = _skillDatabase.SkillDatabase[skillName];
         _skills.Add(skill);
 
-        skill.Initialize(gameObject);
 
-        if (skill.IsPassive) skill.Activate();
+        if (skill.IsPassive)
+        {
+            skill.Initialize(gameObject);
+            skill.Activate();
+            return;
+        }
+
+        skill.Initialize(_effectsObject);
     }
 
     /// <summary>
@@ -57,16 +64,16 @@ public class DefenceSkillManager : MonoBehaviour
     public void UseSkills()
     {
         if (_coroutine != null) return;
-        
+
         foreach (var skill in _skills)
         {
             if (skill.IsPassive) continue;
-            
+
             skill.Activate();
-            
-            if(_coolDown == null) _coolDown = new WaitForSeconds(skill.CoolDown);
+
+            if (_coolDown == null) _coolDown = new WaitForSeconds(skill.CoolDown);
         }
-        
+
         _coroutine = StartCoroutine(SKillCoolDown());
     }
 
