@@ -24,6 +24,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     [Header("공격 정보")]
     public float bulletSpeed;
     public int attackDamage; // 
+
     public int attackSpeed; // 
     public float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
     

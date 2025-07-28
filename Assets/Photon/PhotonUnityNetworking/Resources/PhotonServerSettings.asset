@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: kr
+    FixedRegion: 
     Server: 
     Port: 0
     ProxyServer: 
@@ -41,29 +41,9 @@ MonoBehaviour:
   - RespawnSpaceship
   - BulletMove
   - Shot
-  - RPC_BigBulletShot
-  - RPC_ExplosiveBulletShot
-  - RPC_HitEffect
+  - 
   - BigBulletShot
   - ExplosiveBulletShot
-  - ObjectDestroy
-  - TryDestroy
-  - Attack
-  - RPC_FireLaser
-  - FireLaserRoutine
-  - ChangeWeapon
-  - RPC_SetWeapon
-  - RPC_FinishReload
-  - RPC_StartAutoReload
-  - RPC_SetAnimatorSpeed
-  - RPC_SyncAmmo
-  - DefaultBulletShot
-  - RPC_InitBullet
-  - InitBullet
-  - RPC_HideReloadUI
-  - RPC_ShowReloadUI
-  - RPC_SyncAmmoUI
-  - DefaultShot
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
-  DevRegionSetOnce: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0

@@ -15,7 +15,9 @@ GameObject:
   - component: {fileID: 4462082757355081561}
   - component: {fileID: -2714224154409688301}
   - component: {fileID: 3294630567538618672}
-  m_Layer: 0
+  - component: {fileID: -5439550769135930309}
+  - component: {fileID: -3575900009036100070}
+  m_Layer: 10
   m_Name: BackGroundBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,3 +192,43 @@ FixedJoint2D:
   m_ConnectedAnchor: {x: 0, y: 1.0079999}
   m_DampingRatio: 0
   m_Frequency: 0
+--- !u!114 &-5439550769135930309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8979260108434461392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: -7643143536064837612}
+  - {fileID: -3575900009036100070}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &-3575900009036100070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8979260108434461392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

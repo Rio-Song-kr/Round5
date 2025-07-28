@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1393969881614138380}
   m_Layer: 0
   m_Name: LaserWeapon
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,15 +46,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAmmo: 2
-  animator: {fileID: 0}
-  bulletSpeed: 10
   currentAmmo: 2
-  isReloading: 0
-  lastAttackTime: 0
-  idleReloadDelay: 3
   reloadTime: 3
+  isBigBullet: 0
+  isExplosiveBullet: 0
+  animator: {fileID: 0}
+  isReloading: 0
+  idleReloadDelay: 3
   ammoDisplay: {fileID: 0}
+  bulletSpeed: 10
   attackDamage: 5
+  attackSpeed: 0
+  lastAttackTime: 0
   laserRenderer: {fileID: 4165671955444472681}
   laserDuration: 2
   laserLength: 20
@@ -121,6 +124,10 @@ PrefabInstance:
     - target: {fileID: 9121277624104920635, guid: 22086bcb4cdfe4f25ab8e4bec50b1be5, type: 3}
       propertyPath: m_Name
       value: LaserLine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9121277624104920635, guid: 22086bcb4cdfe4f25ab8e4bec50b1be5, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
