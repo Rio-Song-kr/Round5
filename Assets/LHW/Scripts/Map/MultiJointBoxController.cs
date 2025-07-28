@@ -2,6 +2,9 @@ using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// 총알에 피격되는 박스 플랫폼의 행동을 제어함. (두 개 이상의 Joint의 경우)
+/// </summary>
 public class MultiJointBoxController : MonoBehaviourPun, IPunObservable
 {
     FixedJoint2D[] fixedJoint;
@@ -48,8 +51,7 @@ public class MultiJointBoxController : MonoBehaviourPun, IPunObservable
     {
         for (int i = 0; i < fixedJoint.Length; i++)
         {
-            if (photonView.IsMine && (fixedJoint[i].IsDestroyed()))
-                
+            if (photonView.IsMine && (fixedJoint[i].IsDestroyed()))                
             {
                 return true;
             }
@@ -57,6 +59,9 @@ public class MultiJointBoxController : MonoBehaviourPun, IPunObservable
         return false;
     }
 
+    /// <summary>
+    /// 물리 활성화
+    /// </summary>
     private void EnablePhysics()
     {
         networkPhysicsEnabled = true;
@@ -69,7 +74,6 @@ public class MultiJointBoxController : MonoBehaviourPun, IPunObservable
             isPhysicsEnabled = true;
         }
     }
-
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
