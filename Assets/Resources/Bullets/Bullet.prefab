@@ -5769,14 +5769,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e07da45c9f42e747878e0f254af24b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 8
   Damage: 10
   _rb: {fileID: 6320523527442016267}
   _bigBullet: {fileID: 8734541828447896232}
   _explosiveBullet: {fileID: 847708877635331339}
   _explosiveBulletEffect: {fileID: 2555893828798284621, guid: a9a46c890467040abba6f181bfe29654, type: 3}
   _hitEffect: {fileID: 2555893828798284621, guid: e576444c17967495385a31832d112356, type: 3}
-  _isBigBullet: 1
+  _isBigBullet: 0
   _isExplosiveBullet: 1
 --- !u!114 &4284537622121413470
 MonoBehaviour:

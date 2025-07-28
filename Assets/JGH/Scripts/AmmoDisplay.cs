@@ -31,7 +31,13 @@ public class AmmoDisplay : MonoBehaviour
         for (int i = 0; i < iconList.Count; i++)
         {
             iconList[i].SetActive(i < max);  // max를 초과하는건 숨김
-            Image img = iconList[i].GetComponent<Image>();
+            // Image img = iconList[i].GetComponent<Image>();
+            Image img = iconList[i].GetComponentInChildren<Image>();
+            if (img == null)
+            {
+                Debug.LogWarning($"Ammo icon {i}에 Image 컴포넌트가 없습니다.");
+                continue;
+            }
             if (i < current)
                 img.color = Color.white; // 남은 탄약
             else

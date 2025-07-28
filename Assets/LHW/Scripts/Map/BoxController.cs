@@ -2,6 +2,9 @@ using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// 총알에 피격되는 박스 플랫폼의 행동을 제어함. (단일 Joint의 경우)
+/// </summary>
 public class BoxController : MonoBehaviourPun, IPunObservable
 {
     FixedJoint2D fixedJoint;
@@ -22,6 +25,7 @@ public class BoxController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
+        // 자신과 연결된 Joint (자신보다 아래에 있는 오브젝트) 가 파괴되었을 경우 물리 활성화
         if (photonView.IsMine &&
             (fixedJoint != null && fixedJoint.connectedBody != null && fixedJoint.connectedBody.bodyType == RigidbodyType2D.Dynamic))
         {
@@ -39,16 +43,23 @@ public class BoxController : MonoBehaviourPun, IPunObservable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // 총알 혹은 해머에 피격되었을 때 물리 활성화
         if (photonView.IsMine && (collision.gameObject.CompareTag("Bullet") || collision.gameObject.CompareTag("Hammer")))
         {
             EnablePhysics();
         }
     }
 
+    /// <summary>
+    /// 물리 활성화
+    /// </summary>
     private void EnablePhysics()
     {
         networkPhysicsEnabled = true;
 
+        // 물리 판정은 마스터 클라이언트만 하며,
+        // 상대 플레이어는 물리 상태를 Kinematic으로 유지한 채 물리 변화를 읽어오는 방식으로 동기화
+        // 플레이어가 각자 물리 판정을 하는 것을 방지하기 위함
         if (PhotonNetwork.IsMasterClient)
         {
             rigid.bodyType = RigidbodyType2D.Dynamic;
@@ -77,6 +88,7 @@ public class BoxController : MonoBehaviourPun, IPunObservable
             networkPos = (Vector3)stream.ReceiveNext();
             networkRot = (Quaternion)stream.ReceiveNext();
             networkPhysicsEnabled = (bool)stream.ReceiveNext();
+            // 만약 네트워크상 물리 활성화가 누락되었을 경우 한 번 더 체크
             if (networkPhysicsEnabled != isPhysicsEnabled)
             {
                 isPhysicsEnabled = networkPhysicsEnabled;
