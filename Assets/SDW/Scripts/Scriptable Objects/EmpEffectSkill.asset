@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e2484c9ac188747a2f4240d4d5da4d, type: 3}
+  m_Name: EmpEffectSkill
+  m_EditorClassIdentifier: 
+  SkillName: 1
+  CoolDown: 5
+  IsPassive: 0
+  SkillEffectPrefab: {fileID: 7362647545994327, guid: ff351c315345cf3468ae4a906318b621, type: 3}
+  InitialExpansionSpeed: 10
+  MinExpansionSpeed: 0.7
+  FastExpansionRadius: 1
+  DecelerationDuration: 0.5
+  ArcPrefab: {fileID: 1359725081062828864, guid: 1f74af41a3137bb4dad40b21116d591c, type: 3}
+  ArcCount: 30

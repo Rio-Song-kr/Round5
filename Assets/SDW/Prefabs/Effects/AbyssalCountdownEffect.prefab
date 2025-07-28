@@ -200,13 +200,7 @@ MonoBehaviour:
   _movingLineImg: {fileID: 6498664339438408627}
   _vfxPrefab: {fileID: 8649048491170718868, guid: a5093d56b2094b34d92a0fce5fe1aa21, type: 3}
   _octagonObject: {fileID: 7864069421096262263}
-  _increaseTime: 10
-  _useTime: 2
-  _scaleDuration: 0.05
-  _targetScaleMultiplier: 1.2
   _shieldObject: {fileID: 2051925298963498326}
-  _shieldScaleDuration: 0.2
-  _shieldScaleMultiplier: 1.1
 --- !u!1 &4530214428529980354
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,7 +650,7 @@ MonoBehaviour:
   _expandDuration: 1
   _shrinkDuration: 1
   _delayBetweenOctagons: 0.1
-  _pauseDuration: 7
+  _pauseDuration: 3
   _expandCurve:
     serializedVersion: 2
     m_Curve:

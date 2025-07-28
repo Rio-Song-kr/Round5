@@ -8,72 +8,40 @@ using UnityEngine;
 /// </summary>
 public class FrostSlamEffect : MonoBehaviour
 {
-    [Header("Expansion Settings")]
-    // # 초당 확장 속도
-    [SerializeField] private float _expansionSpeed = 10f;
-    // # 확장 시 최대 반지름
-    [SerializeField] private float _maxRadius = 3f;
-    // # 확장 전 시작 반지름
-    [SerializeField] private float _initialRadius = 0.1f;
-    // # Circle의 포인트 수
-    [SerializeField] private int _pointCount = 64;
-    // # 감지할 대상 레이어
-    [SerializeField] private LayerMask _targetLayer;
-    // # 감지 거리
-    [SerializeField] private float _detectOffset = 0.01f;
-    // # sphere 충돌 범위
-    [SerializeField] private float _circleRadius = 0.1f;
-
-    [Header("Line Settings")]
-    // # Line Renderer에 사용할 Material
-    [SerializeField] private Material _lineMaterial;
-    // # Line의 두께
-    [SerializeField] private float _lineWidth = 0.02f;
-
-    [Header("Straighten Settings")]
-    // # 직선화 적용 기준 각도 (이 각도 이상 꺾이면 포인트 유지, 단위: 도)
-    [SerializeField] private float _angleThresholdForStraighten = 120f;
-
-    [Header("Fade Settings")]
-    // # 사라지기 전 대기 시간
-    [SerializeField] private float _fadeDelay = 1f;
-    // # 사라지는 데 걸리는 시간
-    [SerializeField] private float _fadeDuration = 2f;
-    // # 멈췄다고 판단할 속도 임계값
-    [SerializeField] private float _stopVelocityThreshold = 0.01f;
-
-    // # Collider를 자유롭게 수정할 수 있도록 PolygonCollider 사용
+    //# Frost Slam Skill Data
+    private FrostSlamSkillDataSO _skillData;
+    //# Collider를 자유롭게 수정할 수 있도록 PolygonCollider 사용
     private PolygonCollider2D _polyCollider;
-    // # Circle의 포인트
+    //# Circle의 포인트
     private List<Vector2> _points;
-    // # 이전 프레임의 포인트 위치 (속도 계산용)
+    //# 이전 프레임의 포인트 위치 (속도 계산용)
     private List<Vector2> _lastFramePoints;
-    // # 해당 Point가 움직이지 않고 고정되었는지 여부
+    //# 해당 Point가 움직이지 않고 고정되었는지 여부
     private List<bool> _isFixed;
-    // # 현재 반지름
+    //# 현재 반지름
     private float _currentRadius;
-    // # 라인 렌더러
+    //# 라인 렌더러
     private LineRenderer _lineRenderer;
-    // # 페이드 효과가 진행 중인지 여부
-    private bool _isFading = false;
+    //# 페이드 효과가 진행 중인지 여부
+    private bool _isFading;
 
     /// <summary>
-    /// 컴포넌트와 변수들을 초기화하고, 초기 원형을 생성
+    /// 컴포넌트 활성화 시 초기 설정 및 효과 초기화를 수행
     /// </summary>
-    private void Start()
+    private void OnEnable()
     {
-        _polyCollider = GetComponent<PolygonCollider2D>();
-        _points = new List<Vector2>(_pointCount);
-        _lastFramePoints = new List<Vector2>(_pointCount);
-        _isFixed = new List<bool>(_pointCount);
-
-        _currentRadius = _initialRadius;
+        if (_skillData == null) return;
+        
+        _currentRadius = _skillData.InitialRadius;
+        _points.Clear();
+        _lastFramePoints.Clear();
+        _isFixed.Clear();
 
         InitializeLineRenderer();
 
-        for (int i = 0; i < _pointCount; i++)
+        for (int i = 0; i < _skillData.PointCount; i++)
         {
-            float angle = i * 2f * Mathf.PI / _pointCount;
+            float angle = i * 2f * Mathf.PI / _skillData.PointCount;
             var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _currentRadius;
             _points.Add(point);
             _lastFramePoints.Add(point);
@@ -82,6 +50,8 @@ public class FrostSlamEffect : MonoBehaviour
 
         _polyCollider.SetPath(0, _points);
         UpdateLineRenderer();
+
+        _isFading = false;
     }
 
     /// <summary>
@@ -91,47 +61,47 @@ public class FrostSlamEffect : MonoBehaviour
     {
         if (_isFading) return;
 
-        bool expansionCompleted = _currentRadius >= _maxRadius;
+        bool expansionCompleted = _currentRadius >= _skillData.MaxRadius;
         if (!expansionCompleted)
         {
-            float progress = Mathf.Clamp01((_currentRadius - _initialRadius) / (_maxRadius - _initialRadius));
+            float progress = Mathf.Clamp01((_currentRadius - _skillData.InitialRadius) / (_skillData.MaxRadius - _skillData.InitialRadius));
             float speedMultiplier = Mathf.Cos(progress * Mathf.PI * 0.5f);
-            _currentRadius += _expansionSpeed * speedMultiplier * Time.deltaTime;
-            if (_currentRadius >= _maxRadius)
+            _currentRadius += _skillData.ExpansionSpeed * speedMultiplier * Time.deltaTime;
+            if (_currentRadius >= _skillData.MaxRadius)
             {
-                _currentRadius = _maxRadius;
+                _currentRadius = _skillData.MaxRadius;
                 expansionCompleted = true;
             }
         }
 
-        for (int i = 0; i < _pointCount; i++)
+        for (int i = 0; i < _skillData.PointCount; i++)
         {
             if (_isFixed[i]) continue;
 
-            var direction = new Vector2(Mathf.Cos(i * 2f * Mathf.PI / _pointCount), Mathf.Sin(i * 2f * Mathf.PI / _pointCount));
+            var direction = new Vector2(Mathf.Cos(i * 2f * Mathf.PI / _skillData.PointCount), Mathf.Sin(i * 2f * Mathf.PI / _skillData.PointCount));
 
             if (expansionCompleted)
             {
-                _points[i] = direction * _maxRadius;
+                _points[i] = direction * _skillData.MaxRadius;
                 _isFixed[i] = true;
             }
             else
             {
                 float targetDistance = _currentRadius;
-                var targetPosition = (Vector2)transform.position + direction * (targetDistance + _detectOffset);
-                var collider = Physics2D.OverlapCircle(targetPosition, _circleRadius, _targetLayer);
+                var targetPosition = (Vector2)transform.position + direction * (targetDistance + _skillData.DetectOffset);
+                var collider = Physics2D.OverlapCircle(targetPosition, _skillData.CircleRadius, _skillData.TargetLayer);
 
                 if (collider != null)
                 {
-                    float minDistance = _initialRadius;
-                    float maxDistance = targetDistance + _detectOffset;
+                    float minDistance = _skillData.InitialRadius;
+                    float maxDistance = targetDistance + _skillData.DetectOffset;
                     float stopDistance = minDistance;
 
                     for (int j = 0; j < 5; j++)
                     {
                         float testDistance = (minDistance + maxDistance) * 0.5f;
                         var testPosition = (Vector2)transform.position + direction * testDistance;
-                        if (Physics2D.OverlapCircle(testPosition, _circleRadius, _targetLayer) != null)
+                        if (Physics2D.OverlapCircle(testPosition, _skillData.CircleRadius, _skillData.TargetLayer) != null)
                         {
                             maxDistance = testDistance;
                         }
@@ -141,7 +111,7 @@ public class FrostSlamEffect : MonoBehaviour
                             stopDistance = testDistance;
                         }
                     }
-                    stopDistance = Mathf.Max(stopDistance - _detectOffset, _initialRadius);
+                    stopDistance = Mathf.Max(stopDistance - _skillData.DetectOffset, _skillData.InitialRadius);
                     _points[i] = direction * stopDistance;
                     _isFixed[i] = true;
                 }
@@ -159,14 +129,30 @@ public class FrostSlamEffect : MonoBehaviour
         if (AreAllPointsBelowVelocityThreshold())
         {
             _isFading = true;
-            StartCoroutine(FadeOutAndDestroy());
+            StartCoroutine(FadeOutAndInactive());
         }
 
-        // # 다음 프레임의 속도 계산을 위해 현재 포인트 위치를 기록
-        for (int i = 0; i < _pointCount; i++)
+        //# 다음 프레임의 속도 계산을 위해 현재 포인트 위치를 기록
+        for (int i = 0; i < _skillData.PointCount; i++)
         {
             _lastFramePoints[i] = _points[i];
         }
+    }
+
+    /// <summary>
+    /// FrostSlamEffect 컴포넌트 초기화 과정에서 필요한 데이터와 컴포넌트 설정을 수행
+    /// </summary>
+    /// <param name="skillData">슬롯에 로드된 FrostSlamSkillDataSO 인스턴스</param>
+    public void Initialize(FrostSlamSkillDataSO skillData)
+    {
+        _skillData = skillData;
+        
+        _lineRenderer = gameObject.AddComponent<LineRenderer>();
+        
+        _polyCollider = GetComponent<PolygonCollider2D>();
+        _points = new List<Vector2>(_skillData.PointCount);
+        _lastFramePoints = new List<Vector2>(_skillData.PointCount);
+        _isFixed = new List<bool>(_skillData.PointCount);
     }
 
     /// <summary>
@@ -174,10 +160,9 @@ public class FrostSlamEffect : MonoBehaviour
     /// </summary>
     private void InitializeLineRenderer()
     {
-        _lineRenderer = gameObject.AddComponent<LineRenderer>();
-        _lineRenderer.material = _lineMaterial;
-        _lineRenderer.startWidth = _lineWidth;
-        _lineRenderer.endWidth = _lineWidth;
+        _lineRenderer.material = _skillData.LineMaterial;
+        _lineRenderer.startWidth = _skillData.LineWidth;
+        _lineRenderer.endWidth = _skillData.LineWidth;
         _lineRenderer.loop = true;
         _lineRenderer.useWorldSpace = false;
         _lineRenderer.startColor = Color.white;
@@ -191,11 +176,11 @@ public class FrostSlamEffect : MonoBehaviour
     {
         if (Time.deltaTime <= 0) return false;
 
-        for (int i = 0; i < _pointCount; i++)
+        for (int i = 0; i < _skillData.PointCount; i++)
         {
             float distance = Vector2.Distance(_points[i], _lastFramePoints[i]);
             float velocity = distance / Time.deltaTime;
-            if (velocity > _stopVelocityThreshold)
+            if (velocity > _skillData.StopVelocityThreshold)
             {
                 return false;
             }
@@ -212,10 +197,10 @@ public class FrostSlamEffect : MonoBehaviour
         bool inFixedSegment = false;
         var interpolationRanges = new List<Tuple<int, int>>();
 
-        for (int i = 0; i < _pointCount * 2; i++)
+        for (int i = 0; i < _skillData.PointCount * 2; i++)
         {
-            int currentIndex = i % _pointCount;
-            int prevIndex = (currentIndex - 1 + _pointCount) % _pointCount;
+            int currentIndex = i % _skillData.PointCount;
+            int prevIndex = (currentIndex - 1 + _skillData.PointCount) % _skillData.PointCount;
 
             if (_isFixed[currentIndex])
             {
@@ -228,7 +213,7 @@ public class FrostSlamEffect : MonoBehaviour
                 if (inFixedSegment && currentIndex != currentFixedSegmentStart)
                 {
                     var vec1 = _points[currentIndex] - _points[prevIndex];
-                    int nextPotentialIndex = (currentIndex + 1) % _pointCount;
+                    int nextPotentialIndex = (currentIndex + 1) % _skillData.PointCount;
                     var vec2 = Vector2.zero;
 
                     if (_isFixed[nextPotentialIndex])
@@ -237,7 +222,7 @@ public class FrostSlamEffect : MonoBehaviour
                     if (vec1.sqrMagnitude > 0.0001f && vec2.sqrMagnitude > 0.0001f)
                     {
                         float angle = Vector2.Angle(vec1, vec2);
-                        if (angle < 180f - _angleThresholdForStraighten)
+                        if (angle < 180f - _skillData.AngleThresholdForStraighten)
                         {
                             interpolationRanges.Add(new Tuple<int, int>(currentFixedSegmentStart, prevIndex));
                             currentFixedSegmentStart = currentIndex;
@@ -258,7 +243,7 @@ public class FrostSlamEffect : MonoBehaviour
 
         if (inFixedSegment && currentFixedSegmentStart != -1)
         {
-            interpolationRanges.Add(new Tuple<int, int>(currentFixedSegmentStart, _pointCount - 1));
+            interpolationRanges.Add(new Tuple<int, int>(currentFixedSegmentStart, _skillData.PointCount - 1));
         }
 
         foreach (var range in interpolationRanges)
@@ -276,11 +261,11 @@ public class FrostSlamEffect : MonoBehaviour
 
         var startPoint = _points[segStartIdx];
         var endPoint = _points[segEndIdx];
-        int count = segEndIdx >= segStartIdx ? segEndIdx - segStartIdx + 1 : _pointCount - segStartIdx + segEndIdx + 1;
+        int count = segEndIdx >= segStartIdx ? segEndIdx - segStartIdx + 1 : _skillData.PointCount - segStartIdx + segEndIdx + 1;
 
         for (int i = 0; i < count; i++)
         {
-            int pointIndex = (segStartIdx + i) % _pointCount;
+            int pointIndex = (segStartIdx + i) % _skillData.PointCount;
             float t = (float)i / (count - 1);
             _points[pointIndex] = Vector2.Lerp(startPoint, endPoint, t);
         }
@@ -303,26 +288,23 @@ public class FrostSlamEffect : MonoBehaviour
     /// <summary>
     /// 설정된 시간 동안 대기한 후, LineRenderer와 Collider를 서서히 사라지게 하고 최종적으로 게임 오브젝트를 파괴
     /// </summary>
-    private IEnumerator FadeOutAndDestroy()
+    private IEnumerator FadeOutAndInactive()
     {
-        yield return new WaitForSeconds(_fadeDelay);
+        yield return new WaitForSeconds(_skillData.FadeDelay);
 
         float elapsedTime = 0f;
         Color startColor = _lineRenderer.startColor;
 
-        while (elapsedTime < _fadeDuration)
+        while (elapsedTime < _skillData.FadeDuration)
         {
             elapsedTime += Time.deltaTime;
-            float alpha = Mathf.Lerp(startColor.a, 0f, elapsedTime / _fadeDuration);
+            float alpha = Mathf.Lerp(startColor.a, 0f, elapsedTime / _skillData.FadeDuration);
             Color newColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
             _lineRenderer.startColor = newColor;
             _lineRenderer.endColor = newColor;
             yield return null;
         }
-
-        if (_polyCollider != null) _polyCollider.enabled = false;
-        if (_lineRenderer != null) _lineRenderer.enabled = false;
-
-        Destroy(gameObject);
+        
+        gameObject.SetActive(false);
     }
 }
