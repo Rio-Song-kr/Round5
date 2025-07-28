@@ -30,6 +30,10 @@ public class RopeTiedObject : MonoBehaviourPun, IPunObservable
         }
     }
 
+    /// <summary>
+    /// RopeCreator에서 최종적으로 오브젝트를 로프에 연결할 때 호출
+    /// </summary>
+    /// <param name="endRB"></param>
     public void ConnectRopeEnd(Rigidbody2D endRB)
     {
         HingeJoint2D joint = gameObject.AddComponent<HingeJoint2D>();
@@ -39,6 +43,9 @@ public class RopeTiedObject : MonoBehaviourPun, IPunObservable
         joint.connectedAnchor = new Vector2(0f, -distanceFromChaninedEnd);
     }
 
+    /// <summary>
+    /// 물리 활성화
+    /// </summary>
     public void EnablePhysics()
     {
         networkPhysicsEnabled = true;
