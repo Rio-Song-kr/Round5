@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: kr
+  DevRegion: hk
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -44,6 +44,12 @@ MonoBehaviour:
   - 
   - BigBulletShot
   - ExplosiveBulletShot
+  - DefaultShot
+  - RPC_FinishReload
+  - RPC_FireLaser
+  - RPC_SetAnimatorSpeed
+  - RPC_SetWeapon
+  - RPC_StartAutoReload
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1
