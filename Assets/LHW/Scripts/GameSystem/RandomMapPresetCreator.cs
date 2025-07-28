@@ -1,5 +1,3 @@
-using Photon.Pun;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class RandomMapPresetCreator : MonoBehaviour
@@ -21,6 +19,9 @@ public class RandomMapPresetCreator : MonoBehaviour
         RandomMapSelect();
     }
 
+    /// <summary>
+    /// 랜덤 확률 초기 세팅
+    /// </summary>
     private void RandomInit()
     {
         for(int i = 0; i < mapResources.Length; i++)
@@ -29,6 +30,9 @@ public class RandomMapPresetCreator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 랜덤 맵 선택 - 한 번 선택한 맵은 랜덤 확률에서 아예 제외되므로 맵이 중복되지 않게 됨
+    /// </summary>
     private void RandomMapSelect()
     {
         for(int i = 0; i < gameCycleNum; i++)
@@ -40,6 +44,10 @@ public class RandomMapPresetCreator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 맵의 위치를 반환(x축)
+    /// </summary>
+    /// <returns></returns>
     public float GetTransformOffset()
     {
         return mapTransformOffset;

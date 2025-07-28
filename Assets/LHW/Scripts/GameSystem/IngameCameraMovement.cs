@@ -3,11 +3,16 @@ using UnityEngine;
 
 public class IngameCameraMovement : MonoBehaviour
 {
+    // 단일 게임 종료
     [SerializeField] private bool isRoundOver = false;
+    // 게임 세트 종료
     [SerializeField] private bool isRoundSetOver = false;
 
+    // 카메라 왼쪽 이동 시간
     [SerializeField] private float moveLeftDuration = 0.1f;
+    // 카메라 왼쪽 이동 오프셋
     [SerializeField] private float moveLeftDistance = 2f;
+    // 카메라 오른쪽 이동 시간
     [SerializeField] private float moveRightDuration = 0.5f;
 
     // 게임매니저가 없어서 일단 Update로 처리 후 테스트
@@ -29,16 +34,21 @@ public class IngameCameraMovement : MonoBehaviour
 
     private void Update()
     {
+        // 게임(한 세트)이 종료되었을 때
         if(isRoundSetOver)
         {
             SceneChange();
         }
+        // 게임(단일 게임)이 종료되었을 때
         else if (isRoundOver)
         {
             IngameCameraMove();
         }
     }
 
+    /// <summary>
+    /// 카메라 움직임 제어
+    /// </summary>
     private void IngameCameraMove()
     {
         float offset = creator.GetTransformOffset();
@@ -48,9 +58,15 @@ public class IngameCameraMovement : MonoBehaviour
         isRoundOver = false;
     }
 
+    /// <summary>
+    /// 카메라 움직임 코루틴
+    /// </summary>
+    /// <returns></returns>
     IEnumerator MoveCamera()
     {
+        // 카메라를 왼쪽으로 이동
         float elapsedTime = 0f;
+
         while (elapsedTime < moveLeftDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -62,6 +78,7 @@ public class IngameCameraMovement : MonoBehaviour
         mainCamera.transform.position = startPosition - new Vector2(moveLeftDistance, 0);
         startPosition = Camera.main.transform.position;
 
+        // 카메라를 오른쪽으로 이동
         float elaspedTime = 0f;
 
         while(elaspedTime < moveRightDuration)
