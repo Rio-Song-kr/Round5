@@ -1,7 +1,8 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
-public abstract class BaseWeapon : MonoBehaviour, IWeapon
+public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObservable
 {
     [Header("탄환 정보")]
     public int maxAmmo; // 최대 탄약 수
@@ -25,27 +26,79 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
     public int attackDamage; // 
     public int attackSpeed; // 
     public float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
+    
+    [Header("스크립트")]
+    protected GunControll gunController; // 총기 컨트롤러
+    protected Bullet bullet; // 총기 컨트롤러
 
+    private Vector3 _networkPosition;
+    private Quaternion _networkRotation;
+    
 
     protected virtual void Start()
     {
         ammoDisplay = FindObjectOfType<AmmoDisplay>();
         Initialize();
+        StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
+        gunController = FindObjectOfType<GunControll>();
+        bullet = FindObjectOfType<Bullet>();
     }
+    
 
-    protected virtual void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         Initialize();
+        StartCoroutine(DelayedReloadSpeed());
     }
 
-    protected virtual void OnDisable()
+    public override void OnDisable()
     {
-        if (idleCheckCoroutine != null)
-            StopCoroutine(idleCheckCoroutine);
+        base.OnDisable();
+        StopAllCoroutines();
+        isReloading = false;
+    }
+    
+    protected IEnumerator DelayedReloadSpeed()
+    {
+        yield return null;
+        ReloadSpeedFromAnimator();
+    }
+    
+    
+    /// <summary>
+    /// 현재 Animator의 "Reload" 상태에서 재장전 속도를 자동으로 계산하여 설정합니다.
+    /// </summary>
+    protected void ReloadSpeedFromAnimator()
+    {
+        // animator.speed = 1f; 
+        float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
+        // animator.speed = ; 
+        
+        if (photonView.IsMine)
+        {
+            photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
+        }
+    }
+    
+    [PunRPC]
+    protected void RPC_SetAnimatorSpeed(float speed)
+    {
+        if (animator != null)
+        {
+            animator.speed = speed;
+            Debug.Log($"[RPC_SetAnimatorSpeed] 애니메이터 속도 설정: {speed}");
+        }
     }
 
     protected virtual void Update()
     {
+        if (!photonView.IsMine)
+        {
+            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 10f);
+            // transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 100f);
+        }
+        
         if (isReloading && animator != null)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -58,34 +111,45 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
 
     protected void StartAutoReload()
     {
-        if (autoReloadCoroutine != null)
-            StopCoroutine(autoReloadCoroutine);
-
-        autoReloadCoroutine = StartCoroutine(AutoReloadRoutine());
+        if (photonView.IsMine)
+        {
+            photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
+        }
     }
     
-    private IEnumerator AutoReloadRoutine()
+    protected void FinishReload()
+    {
+        if (photonView.IsMine)
+        {
+            photonView.RPC(nameof(RPC_FinishReload), RpcTarget.All);
+        }
+    }
+    
+    [PunRPC]
+    protected void RPC_StartAutoReload()
     {
         isReloading = true;
         ammoDisplay?.SetReloading(true);
-        animator?.SetTrigger("Reload");
 
-        yield return new WaitForSeconds(reloadTime);
+        if (animator != null)
+        {
+            animator.SetTrigger("Reload");
+            ReloadSpeedFromAnimator();
+        }
 
-        currentAmmo = maxAmmo;
-        isReloading = false;
-        UpdateAmmoUI();
-        ammoDisplay?.SetReloading(false);
-        lastAttackTime = Time.time;
+        // 리로드 시간 후 자동 완료 호출
+        Invoke(nameof(FinishReload), reloadTime);
     }
 
-    protected void FinishReload()
+    [PunRPC]
+    protected void RPC_FinishReload()
     {
         currentAmmo = maxAmmo;
         isReloading = false;
         UpdateAmmoUI();
         ammoDisplay?.SetReloading(false);
     }
+ 
 
     protected void NowIdleCheck()
     {
@@ -109,26 +173,13 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
             }
         }
     }
+    
 
     protected void UpdateAmmoUI()
     {
-        if (ammoDisplay != null)
-        {
-            ammoDisplay.UpdateAmmoIcons(currentAmmo, maxAmmo);
-            ammoDisplay.SetReloading(currentAmmo == 0 && !isReloading);
-        }
+        ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
     }
     
-    /// <summary>
-    /// 현재 Animator의 "Reload" 상태에서 재장전 속도를 자동으로 계산하여 설정합니다.
-    /// </summary>
-    /// <param name="reloadTime">재장전 애니메이션의 총 시간 (초)</param>
-    protected void ReloadSpeedFromAnimator()
-    {
-        var clips = animator.GetCurrentAnimatorClipInfo(0);
-        Debug.Log($"reloadTime : {reloadTime}, length : {clips[0].clip.length}");
-        animator.speed = clips[0].clip.length / reloadTime / 2;
-    }
 
     public virtual void Initialize()
     {
@@ -140,4 +191,26 @@ public abstract class BaseWeapon : MonoBehaviour, IWeapon
 
     public abstract void Attack(Transform firingPoint);
     public abstract WeaponType GetWeaponType();
+    
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+            stream.SendNext(currentAmmo);
+        }
+        else
+        {
+            Vector3 position = (Vector3)stream.ReceiveNext();
+            Quaternion rotation = (Quaternion)stream.ReceiveNext();
+            currentAmmo = (int)stream.ReceiveNext();
+        
+            transform.position = position;
+            transform.rotation = rotation;
+
+            UpdateAmmoUI();
+            
+        }
+    }
 }
