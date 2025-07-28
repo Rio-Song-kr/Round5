@@ -27,15 +27,20 @@ public class Laser : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0)) // 마우스 왼쪽 버튼을 누르고 있는 동안 레이저를 그립니다.
+        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
         {
-            if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
-            {
-                _laserCoroutine = StartCoroutine(LaserCoroutine());
-            }
+            ShootLaser();
         }
 
         // TestLookAtMouse();
+    }
+
+    public void ShootLaser()
+    {
+        if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
+        {
+            _laserCoroutine = StartCoroutine(LaserCoroutine());
+        }
     }
 
     /// <summary>
@@ -87,14 +92,14 @@ public class Laser : MonoBehaviour
                     if (soot != null)
                     {
                         soot.SetPool(_laserSootPool, transform);
-                        soot.transform.position = _hits[0].point; 
+                        soot.transform.position = _hits[0].point;
                         soot.gameObject.transform.SetParent(_hits[0].transform);
                         Rigidbody2D rb = _hits[0].transform.GetComponent<Rigidbody2D>();
                         if (rb != null)
                         {
                             rb.AddForce(-_hits[0].normal * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 반발력 적용
                         }
-                        particleTimer = 0f; 
+                        particleTimer = 0f;
                     }
                 }
             }
