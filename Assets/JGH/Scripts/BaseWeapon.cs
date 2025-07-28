@@ -26,7 +26,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     [SerializeField] protected float bulletSpeed;
     [SerializeField] protected int attackDamage; // 
 
-    [SerializeField] protected int attackSpeed; // 
+    [SerializeField] protected float attackSpeed; // 
     [SerializeField] protected float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
     
     [Header("스크립트")]
@@ -47,6 +47,14 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         laser = FindObjectOfType<Laser>();
     }
     
+    /// <summary>
+    /// 기준 공격 속도 체크 메서드 추가
+    /// </summary>
+    /// <returns></returns>
+    protected bool CanAttack()
+    {
+        return Time.time - lastAttackTime >= 1f / attackSpeed;
+    }
 
     public override void OnEnable()
     {

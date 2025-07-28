@@ -12,6 +12,8 @@ public class BarrelWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (isReloading || currentAmmo < ammoPerShot) return;
+        if (!CanAttack()) return; // 공격 속도 체크
+        
         photonView.RPC(nameof(Shot), RpcTarget.All, firingPoint.position, firingPoint.rotation);
     }
 

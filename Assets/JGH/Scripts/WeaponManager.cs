@@ -158,23 +158,21 @@ public class WeaponManager : BaseWeapon
         return reloadTime;
     }
     
-    // TODO: 공속 추가 필요
-    // /// <summary>
-    // /// 과 조작 함수
-    // /// </summary>
-    // /// <param name="value"></param>
-    // public void SetReloadTime(int value)
-    // {
-    //     reloadTime = value;
-    // }
-    //
-    // /// <summary>
-    // /// 재장전 반환 함수
-    // /// </summary>
-    // /// <param name="value"></param>
-    // /// <returns></returns>
-    // public float GetReloadTime()
-    // {
-    //     return reloadTime;
-    // }
+    /// <summary>
+    /// 공격속도 조작 함수
+    /// </summary>
+    /// <param name="value"></param>
+    public void SetAttackSpeedTime(int value)
+    {
+        attackSpeed = value;
+    }
+    
+    /// <summary>
+    /// 공격속도 반환 함수
+    /// </summary>
+    /// <returns></returns>
+    public float GetAttackSpeedTime()
+    {
+        return attackSpeed;
+    }
 }

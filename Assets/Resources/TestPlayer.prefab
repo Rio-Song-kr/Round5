@@ -284,13 +284,29 @@ PrefabInstance:
       value: GunController
       objectReference: {fileID: 0}
     - target: {fileID: 1470188945381459923, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: attackSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1470188945381459923, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: playerPhotonView
       value: 
       objectReference: {fileID: 4265872397972782931}
     - target: {fileID: 2504265868667214732, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: attackSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504265868667214732, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: playerPhotonView
       value: 
       objectReference: {fileID: 4265872397972782931}
+    - target: {fileID: 3267092243127718957, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3267092243127718957, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 8257513121930973288}
     - target: {fileID: 3603533485485798058, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: animator
       value: 
@@ -300,6 +316,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6403870264031513139}
     - target: {fileID: 3603533485485798058, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: attackSpeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3603533485485798058, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: isReloading
       value: 1
       objectReference: {fileID: 0}
@@ -307,6 +327,14 @@ PrefabInstance:
       propertyPath: playerPhotonView
       value: 
       objectReference: {fileID: 4265872397972782931}
+    - target: {fileID: 3728293179759162144, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728293179759162144, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 4917734991165836343}
     - target: {fileID: 6168669692492258499, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: muzzle
       value: 
@@ -400,7 +428,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 4917734991165836343}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -487,6 +516,17 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &4917734991165836343 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1470188945381459923, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+  m_PrefabInstance: {fileID: 5789488256732744676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2781040608888304676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd3e5f37634b4b9aae8c62af932de708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6403870264031513139 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 614595072458015191, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
