@@ -32,7 +32,7 @@ public class Laser : MonoBehaviour
             ShootLaser();
         }
 
-        // TestLookAtMouse();
+        TestLookAtMouse();
     }
 
     public void ShootLaser()
@@ -97,7 +97,8 @@ public class Laser : MonoBehaviour
                         Rigidbody2D rb = _hits[0].transform.GetComponent<Rigidbody2D>();
                         if (rb != null)
                         {
-                            rb.AddForce(-_hits[0].normal * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 반발력 적용
+                            rb.AddForce((_hits[0].point - new Vector2(transform.position.x, transform.position.y)).normalized
+                            * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 넉백 적용
                         }
                         particleTimer = 0f;
                     }
@@ -114,10 +115,10 @@ public class Laser : MonoBehaviour
     /// <summary>
     /// 테스트 코드입니다.
     /// </summary>
-    // private void TestLookAtMouse()
-    // {
-    //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //     mousePos.z = 0; // 2D 게임이므로 z축은 0으로 설정
-    //     transform.right = (mousePos - transform.position).normalized; // 레이저 방향을 마우스 위치로 설정
-    // }
+    private void TestLookAtMouse()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0; // 2D 게임이므로 z축은 0으로 설정
+        transform.right = (mousePos - transform.position).normalized; // 레이저 방향을 마우스 위치로 설정
+    }
 }
