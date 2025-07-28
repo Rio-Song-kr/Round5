@@ -32,7 +32,7 @@ public class Laser : MonoBehaviour
             ShootLaser();
         }
 
-        TestLookAtMouse();
+        //TestLookAtMouse();
     }
 
     public void ShootLaser()
@@ -50,7 +50,7 @@ public class Laser : MonoBehaviour
     {
         CameraShake.Instance.ShakeCaller(0.15f, 0.02f); // 카메라 흔들기 효과
         _laserEffect.SetVector3("StartPos", transform.position); // 레이저 시작 위치 설정
-        if (Physics2D.RaycastNonAlloc(transform.position, transform.right, _hits, 100f) > 0)
+        if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f) > 0)
         {
             Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
             _laserEffect.SetVector3("EndPos", _hits[0].point); // 레이저가 충돌한 위치로 끝 위치 설정
@@ -59,8 +59,8 @@ public class Laser : MonoBehaviour
         }
         else
         {
-            _laserEffect.SetVector3("EndPos", transform.position + transform.right * 100); // 충돌이 없으면 기본 끝 위치 설정
-            _laserEffect.SetVector3("HitPos", transform.position + transform.right * 100); // 파편 이펙트용 기본 위치 설정
+            _laserEffect.SetVector3("EndPos", transform.position + transform.up * 100); // 충돌이 없으면 기본 끝 위치 설정
+            _laserEffect.SetVector3("HitPos", transform.position + transform.up * 100); // 파편 이펙트용 기본 위치 설정
             _isLaserHit = false; // 레이저가 충돌하지 않았음을 표시
         }
     }
@@ -119,6 +119,6 @@ public class Laser : MonoBehaviour
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0; // 2D 게임이므로 z축은 0으로 설정
-        transform.right = (mousePos - transform.position).normalized; // 레이저 방향을 마우스 위치로 설정
+        transform.up = (mousePos - transform.position).normalized; // 레이저 방향을 마우스 위치로 설정
     }
 }
