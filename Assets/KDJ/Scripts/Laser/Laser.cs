@@ -15,6 +15,7 @@ public class Laser : MonoBehaviour
     private LaserSootPool<LaserSoot> _laserSootPool;
     public LaserSootPool<LaserSoot> LaserSootPool => _laserSootPool;
     public float Duration;
+    public bool CanShoot => _laserCoroutine == null; // 레이저가 활성화되어 있지 않으면 true
 
     void Awake()
     {
@@ -28,7 +29,7 @@ public class Laser : MonoBehaviour
     {
         if (Input.GetMouseButton(0)) // 마우스 왼쪽 버튼을 누르고 있는 동안 레이저를 그립니다.
         {
-            if (_laserCoroutine == null) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
+            if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
             {
                 _laserCoroutine = StartCoroutine(LaserCoroutine());
             }
