@@ -7,6 +7,7 @@ using UnityEngine.VFX;
 public class Laser : MonoBehaviour
 {
     [SerializeField] private GameObject _laserSoot; // 레이저 그을림 효과
+    [SerializeField] private float _particleDelay;
     private VisualEffect _laserEffect;
     private RaycastHit2D[] _hits = new RaycastHit2D[10];
     private Coroutine _laserCoroutine;
@@ -54,14 +55,20 @@ public class Laser : MonoBehaviour
         _laserEffect.enabled = true;
         _laserEffect.SetFloat("Duration", Duration); // 레이저 지속 시간 설정
         float Timer = 0f;
-        GameObject soot = Instantiate(_laserSoot, transform.position, Quaternion.identity); // 레이저 그을림 효과 생성
+        float particleTimer = 0f;
+
 
         while (Timer <= Duration)
         {
             Timer += Time.deltaTime;
             LaserBeam();
-            soot.transform.position = _hits[0].point; // 그을림 효과 위치 업데이트
-            yield return null; // 다음 프레임까지 대기
+            if (particleTimer >= _particleDelay)
+            {
+                GameObject soot = Instantiate(_laserSoot, transform.position, Quaternion.identity); // 레이저 그을림 효과 생성
+                soot.transform.position = _hits[0].point; // 그을림 효과 위치 업데이트
+                soot.transform.SetParent(_hits[0].collider.transform);
+            }
+            yield return null;
         }
 
         _laserEffect.enabled = false; // 지속 시간이 끝나면 레이저를 숨깁니다.
