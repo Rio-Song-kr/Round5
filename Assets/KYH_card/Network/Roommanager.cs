@@ -37,6 +37,27 @@ public class Roommanager : MonoBehaviour
         playerPanels.Add(player.ActorNumber, item);
     }
 
+    public void PlayerPanelSpawn()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            startButton.interactable = false;
+        }
+
+        // 내가 새로 입장 했을 떄 호출
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            GameObject obj = Instantiate(playerPanelItemPrefabs);
+            obj.transform.SetParent(PlayerPanelContent);
+            PlayerPanelItem item = obj.GetComponent<PlayerPanelItem>();
+            // 초기화
+            item.Init(player);
+            playerPanels.Add(player.ActorNumber, item);
+        }
+    }
+
 
     private bool isSceneLoading = false;
     public void GameStart()
@@ -60,31 +81,12 @@ public class Roommanager : MonoBehaviour
                 return false;
             }
         }
-
+        Debug.Log("모든 플레이어가 준비 완료 되었음");
         return true;
     }
 
 
-    public void PlayerPanelSpawn()
-    {
-        PhotonNetwork.AutomaticallySyncScene = true;
-
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            startButton.interactable = false;
-        }
-
-        // 내가 새로 입장 했을 떄 호출
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            GameObject obj = Instantiate(playerPanelItemPrefabs);
-            obj.transform.SetParent(PlayerPanelContent);
-            PlayerPanelItem item = obj.GetComponent<PlayerPanelItem>();
-            // 초기화
-            item.Init(player);
-            playerPanels.Add(player.ActorNumber, item);
-        }
-    }
+    
 
     public void PlayerPanelDestroy(Player player)
     {
