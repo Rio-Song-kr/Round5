@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8134666902009527489}
   - component: {fileID: 3747081692612568736}
-  - component: {fileID: 827123329813371503}
+  - component: {fileID: 4294100252120459521}
   m_Layer: 0
   m_Name: BarrelWeapon
   m_TagString: Untagged
@@ -54,16 +54,15 @@ MonoBehaviour:
   isReloading: 0
   idleReloadDelay: 3
   ammoDisplay: {fileID: 0}
-  bulletSpeed: 25
+  bulletSpeed: 10
   attackDamage: 5
   attackSpeed: 0
   lastAttackTime: 0
-  bulletPrefab: {fileID: 4718549699714053276, guid: 655d787c752092a4889f82377f3734a0, type: 3}
   pelletCount: 5
   spreadAngle: 30
   ammoPerShot: 4
   weaponType: 2
---- !u!114 &827123329813371503
+--- !u!114 &4294100252120459521
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,8 +80,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 3747081692612568736}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

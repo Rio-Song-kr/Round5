@@ -7,7 +7,7 @@ public class GunControll : MonoBehaviourPun
 
     [Header("본인 무기 오브젝트 (기능 포함)")]
     public GameObject bulletWeaponObject;
-    public GameObject razorWeaponObject; // 레이저
+    public GameObject LaserWeaponObject; // 레이저
     public GameObject barrelWeaponObject; // 샷건
     
     private GameObject currentWeaponObject;
@@ -70,13 +70,13 @@ public class GunControll : MonoBehaviourPun
                 currentWeaponObject = bulletWeaponObject;
                 break;
             case WeaponType.Laser:
-                currentWeaponObject = razorWeaponObject;
+                currentWeaponObject = LaserWeaponObject;
                 break;
             case WeaponType.Shotgun:
                 currentWeaponObject = barrelWeaponObject;
                 break;
         }
-
+        
         currentWeaponObject.SetActive(true);
         currentWeapon = currentWeaponObject.GetComponent<IWeapon>();
         currentWeapon?.Initialize();
@@ -99,7 +99,7 @@ public class GunControll : MonoBehaviourPun
     private void DisableAllWeapons()
     {
         bulletWeaponObject.SetActive(false);
-        razorWeaponObject.SetActive(false);
+        LaserWeaponObject.SetActive(false);
         barrelWeaponObject.SetActive(false);
     }
 
