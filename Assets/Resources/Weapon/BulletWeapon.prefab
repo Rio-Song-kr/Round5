@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5886468128929232924}
   - component: {fileID: 4734121969791136909}
-  - component: {fileID: 28940201520656239}
+  - component: {fileID: -1844121569876475778}
   m_Layer: 0
   m_Name: BulletWeapon
   m_TagString: Untagged
@@ -54,13 +54,12 @@ MonoBehaviour:
   isReloading: 0
   idleReloadDelay: 3
   ammoDisplay: {fileID: 0}
-  bulletSpeed: 25
+  bulletSpeed: 10
   attackDamage: 5
   attackSpeed: 0
   lastAttackTime: 0
-  bulletPrefab: {fileID: 4718549699714053276, guid: 63c5f39c429622546a432f027fe25b6b, type: 3}
   weaponType: 0
---- !u!114 &28940201520656239
+--- !u!114 &-1844121569876475778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
