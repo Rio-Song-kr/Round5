@@ -71,7 +71,7 @@ public class BulletTest : MonoBehaviourPun, IPunObservable
         }
 
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePosition.z = 0; // Ensure the z-coordinate is zero for 2D
+        mousePosition.z = 0; // Ensure the z-coordinate is zero for 2D 
         Vector3 direction = (mousePosition - transform.position).normalized;
         transform.up = direction; // Set the bullet's rotation to face the mouse
     }
