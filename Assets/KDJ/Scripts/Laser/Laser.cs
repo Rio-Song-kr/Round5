@@ -12,24 +12,28 @@ public class Laser : MonoBehaviour
     private RaycastHit2D[] _hits = new RaycastHit2D[10];
     private Coroutine _laserCoroutine;
     private bool _isLaserHit;
-    private LaserSootPool<LaserSoot> _laserSootPool;
-    public LaserSootPool<LaserSoot> LaserSootPool => _laserSootPool;
+    // private LaserSootPool<LaserSoot> _laserSootPool;
+    // public LaserSootPool<LaserSoot> LaserSootPool => _laserSootPool;
+    private PoolManager _laserSootPool;
     [Header("레이저 세팅")]
     public float Duration;
     public float LaserScale = 1f;
 
     public bool CanShoot => _laserCoroutine == null; // 레이저가 활성화되어 있지 않으면 true
 
-    void Awake()
+    private void Awake()
     {
-        _laserSootPool = new LaserSootPool<LaserSoot>();
-        _laserSootPool.SetPool(_laserSoot, 10, this.transform); // 레이저 그을림 효과 풀 초기화
+        // _laserSootPool = new LaserSootPool<LaserSoot>();
+        // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
+        _laserSootPool = FindFirstObjectByType<PoolManager>();
+        _laserSootPool.InitializePool(_laserSoot.name, _laserSoot, 5, 10);
+
         _laserEffect = GetComponent<VisualEffect>();
         _laserEffect.enabled = false;
         transform.localScale = Vector3.one; // 레이저 오브젝트의 스케일을 초기화
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
         {
@@ -79,7 +83,7 @@ public class Laser : MonoBehaviour
         _laserEffect.enabled = true;
         _laserEffect.SetFloat("ScaleMultiply", LaserScale); // 레이저 스케일 설정
         _laserEffect.SetFloat("Duration", Duration); // 레이저 지속 시간 설정
-        Vector3 scale = (transform.parent != null) ? transform.parent.lossyScale : Vector3.one;
+        var scale = transform.parent != null ? transform.parent.lossyScale : Vector3.one;
         _laserEffect.SetVector3("ParentScale", scale); // 부모 오브젝트의 스케일 설정
         float Timer = 0f;
         float particleTimer = 0f;
@@ -95,17 +99,23 @@ public class Laser : MonoBehaviour
             {
                 if (_isLaserHit)
                 {
-                    LaserSoot soot = _laserSootPool.Pool.Get();
+                    // LaserSoot soot = _laserSootPool.Pool.Get();
+                    var soot = _laserSootPool.Instantiate(
+                            _laserSoot.name,
+                            transform.position,
+                            transform.rotation)
+                        .GetComponent<LaserSoot>();
+
                     if (soot != null)
                     {
                         soot.SetPool(_laserSootPool, transform);
                         soot.transform.position = _hits[0].point;
                         soot.gameObject.transform.SetParent(_hits[0].transform);
-                        Rigidbody2D rb = _hits[0].transform.GetComponent<Rigidbody2D>();
+                        var rb = _hits[0].transform.GetComponent<Rigidbody2D>();
                         if (rb != null)
                         {
                             rb.AddForce((_hits[0].point - new Vector2(transform.position.x, transform.position.y)).normalized
-                            * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 넉백 적용
+                                        * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 넉백 적용
                         }
                         particleTimer = 0f;
                     }
@@ -124,7 +134,7 @@ public class Laser : MonoBehaviour
     /// </summary>
     private void TestLookAtMouse()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0; // 2D 게임이므로 z축은 0으로 설정
         transform.up = (mousePos - transform.position).normalized; // 레이저 방향을 마우스 위치로 설정
     }
