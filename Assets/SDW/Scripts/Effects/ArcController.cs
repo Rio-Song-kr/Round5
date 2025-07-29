@@ -1,9 +1,10 @@
+using Photon.Pun;
 using UnityEngine;
 
 /// <summary>
 /// 개별 Arc 오브젝트의 이동, 충돌 감지 및 생명 주기를 완벽하게 독립적으로 관리
 /// </summary>
-public class ArcController : MonoBehaviour
+public class ArcController : MonoBehaviourPun
 {
     [Header("Collision Settings")]
     //# 충돌 시 대상에게 입힐 데미지
@@ -25,21 +26,11 @@ public class ArcController : MonoBehaviour
     private float _currentSpeed;
     private float _decelerationTimer;
     private Camera _mainCamera;
-    private ArcPool<ArcController> _pool;
+    private PoolManager _pools;
 
-    private GameObject _hitEffectObj;
-    private ParticleSystem _hitEffect;
-
-    /// <summary>
-    /// 초기화 메서드로, ArcController 객체의 초기 설정을 수행
-    /// </summary>
-    private void Start()
-    {
-        _hitEffectObj = Instantiate(_hitEffectPrefab, transform.parent);
-        _hitEffect = _hitEffectObj.GetComponentInChildren<ParticleSystem>();
-        _hitEffect.Stop();
-        _hitEffect.Clear();
-    }
+    private GameObject _hitEffectObject;
+    private VfxArcEffect _hitEffect;
+    private bool _isReleased;
 
     /// <summary>
     /// 매 프레임마다 자신의 상태를 판단하여 속도를 결정하고 이동하며, 화면 밖으로 나가면 Pool에 반환
@@ -71,14 +62,19 @@ public class ArcController : MonoBehaviour
         transform.position += _currentSpeed * Time.deltaTime * _direction;
 
         //# 상태 확인 로직
-        if (IsOffScreen()) _pool.Pool.Release(this);
+        if (IsOffScreen())
+        {
+            if (_isReleased) return;
+            _pools.Destroy(_hitEffectObject);
+            _pools.Destroy(gameObject);
+        }
     }
 
     /// <summary>
     /// EMPEffect에 의해 호출되어 Arc의 모든 동작 설정을 초기화
     /// </summary>
     public void Initialize(
-        ArcPool<ArcController> pool,
+        PoolManager pool,
         Vector3 centerPoint,
         Vector3 direction,
         float initialSpeed,
@@ -86,7 +82,7 @@ public class ArcController : MonoBehaviour
         float fastRadius,
         float decelerationDuration)
     {
-        _pool = pool;
+        _pools = pool;
         _centerPoint = centerPoint;
         _direction = direction;
         _initialExpansionSpeed = initialSpeed;
@@ -98,6 +94,12 @@ public class ArcController : MonoBehaviour
         _mainCamera = Camera.main;
 
         _decelerationTimer = 0f;
+        _isReleased = false;
+
+        //# Pool에서 VFX_Arc를 꺼냄
+        _hitEffectObject = _pools.Instantiate("VFX_Arc", transform.position, transform.rotation);
+        _hitEffect = _hitEffectObject.GetComponent<VfxArcEffect>();
+        _hitEffect.Initialize(_pools);
     }
 
     /// <summary>
@@ -105,16 +107,31 @@ public class ArcController : MonoBehaviour
     /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (_isReleased || !photonView.IsMine || photonView == null) return;
+        // if (_isReleased) return;
+
         //# 충돌한 오브젝트가 지정된 타겟 레이어에 속하는지 확인함
         if ((_targetLayer.value & 1 << other.gameObject.layer) > 0)
         {
-            _hitEffectObj.transform.SetPositionAndRotation(transform.position, transform.rotation);
+            _hitEffectObject.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
-            _hitEffect.Stop();
-            _hitEffect.Clear();
+            PlayHitEffect(transform.position, transform.rotation);
+
+            //# Pool에 ArcController 반환
+            _pools.Destroy(gameObject);
+            _isReleased = true;
+        }
+    }
+
+    /// <summary>
+    /// Hit Effect 재생 RPC
+    /// </summary>
+    private void PlayHitEffect(Vector3 position, Quaternion rotation)
+    {
+        if (_hitEffectObject != null && _hitEffect != null || photonView != null || !_isReleased)
+        {
+            _hitEffectObject.transform.SetPositionAndRotation(position, rotation);
             _hitEffect.Play();
-
-            _pool.Pool.Release(this);
         }
     }
 

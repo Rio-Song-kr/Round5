@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "FrostSlamSkill", menuName = "Skills/FrostSlamSkill")]
@@ -18,7 +19,7 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
     public float DetectOffset = 0.1f;
     //# sphere 충돌 범위
     public float CircleRadius = 0.2f;
-    
+
     [Header("Line Settings")]
     //# Line Renderer에 사용할 Material
     public Material LineMaterial;
@@ -38,13 +39,26 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
     public float StopVelocityThreshold = 0.01f;
 
     private FrostSlamEffect _skillEffect;
-    
-    public override void Initialize(GameObject player)
+    private Transform _playerTransform;
+
+    public override void Initialize(Transform playerTransform, Transform effectsTransform)
     {
-        _skillEffect = Instantiate(SkillEffectPrefab, player.transform).GetComponent<FrostSlamEffect>();
+        _skillEffect = PhotonNetwork.Instantiate(
+                "DefenceEffect/" + SkillEffectPrefab.name,
+                effectsTransform.position,
+                effectsTransform.rotation)
+            .GetComponent<FrostSlamEffect>();
+        _skillEffect.transform.parent = effectsTransform;
         _skillEffect.gameObject.SetActive(false);
         _skillEffect.Initialize(this);
+
+        _playerTransform = playerTransform;
     }
-    
-    public override void Activate() => _skillEffect.gameObject.SetActive(true);
+
+    public override void Activate(Vector3 skillPosition)
+    {
+        // _skillEffect.transform.position = _playerTransform.position;
+        _skillEffect.transform.position = skillPosition;
+        _skillEffect.gameObject.SetActive(true);
+    }
 }
