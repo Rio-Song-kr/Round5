@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "AbyssalCountdownSkill", menuName = "Skills/AbyssalCountdownSkill")]
@@ -25,10 +26,15 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
 
     public override void Initialize(Transform playerTransform, Transform effectsTransform)
     {
-        _skillEffect = Instantiate(SkillEffectPrefab, playerTransform).GetComponent<AbyssalCountdownEffect>();
+        _skillEffect = PhotonNetwork.Instantiate(
+                "DefenceEffect/" + SkillEffectPrefab.name,
+                playerTransform.position,
+                playerTransform.rotation)
+            .GetComponent<AbyssalCountdownEffect>();
+        _skillEffect.transform.parent = playerTransform;
         _skillEffect.gameObject.SetActive(false);
         _skillEffect.Initialize(this);
     }
 
-    public override void Activate() => _skillEffect.gameObject.SetActive(true);
+    public override void Activate(Vector3 skillPoisition) => _skillEffect.gameObject.SetActive(true);
 }

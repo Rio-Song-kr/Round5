@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "FrostSlamSkill", menuName = "Skills/FrostSlamSkill")]
@@ -42,16 +43,22 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
 
     public override void Initialize(Transform playerTransform, Transform effectsTransform)
     {
-        _skillEffect = Instantiate(SkillEffectPrefab, effectsTransform).GetComponent<FrostSlamEffect>();
+        _skillEffect = PhotonNetwork.Instantiate(
+                "DefenceEffect/" + SkillEffectPrefab.name,
+                effectsTransform.position,
+                effectsTransform.rotation)
+            .GetComponent<FrostSlamEffect>();
+        _skillEffect.transform.parent = effectsTransform;
         _skillEffect.gameObject.SetActive(false);
         _skillEffect.Initialize(this);
 
         _playerTransform = playerTransform;
     }
 
-    public override void Activate()
+    public override void Activate(Vector3 skillPosition)
     {
-        _skillEffect.transform.position = _playerTransform.position;
+        // _skillEffect.transform.position = _playerTransform.position;
+        _skillEffect.transform.position = skillPosition;
         _skillEffect.gameObject.SetActive(true);
     }
 }

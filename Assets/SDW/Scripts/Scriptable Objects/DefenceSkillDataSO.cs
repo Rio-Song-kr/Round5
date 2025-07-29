@@ -18,10 +18,11 @@ public abstract class DefenceSkillDataSO : ScriptableObject
     /// </summary>
     /// <param name="playerTransform">Skill Effect의 부모 오브젝트인 플레이어</param>
     /// <param name="effectsTransform">Player와 함께 움직이면 안되는 Effects들의 부모 오브젝트의 Transform</param>
-    public abstract void Initialize(Transform playerTransform, Transform effectsTransform);
+    /// <param name="mainCamera">플레이어의 메인 카메라</param>
+    public abstract void Initialize(Transform playerTransform, Transform effectsTransformm);
 
     /// <summary>
     /// 스킬 활성화
     /// </summary>
-    public abstract void Activate();
+    public abstract void Activate(Vector3 skillPosition);
 }

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class DefenceSkillManager : MonoBehaviour
+public class DefenceSkillManager : MonoBehaviourPun
 {
     [SerializeField] private DefenceSkillDatabaseSO _skillDatabase;
     [SerializeField] private GameObject _effectsObject;
@@ -13,6 +14,8 @@ public class DefenceSkillManager : MonoBehaviour
     private Coroutine _coroutine;
     private WaitForSeconds _coolDown;
 
+    private PhotonView _photonView;
+
     //# Test용
     private Coroutine _testCoroutine;
 
@@ -21,21 +24,28 @@ public class DefenceSkillManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        _photonView = GetComponent<PhotonView>();
+
+        // if (!_photonView.IsMine) return;
+
+        _effectsObject = GameObject.FindGameObjectWithTag("Effects");
+
         _skills = new List<DefenceSkillDataSO>();
         _skillDatabase.Initialize();
 
         //# 테스트용 - Skill 추가
-        AddSkill(DefenceSkills.AbyssalCountdown);
+        // AddSkill(DefenceSkills.AbyssalCountdown);
         AddSkill(DefenceSkills.Emp);
-        AddSkill(DefenceSkills.FrostSlam);
+        // AddSkill(DefenceSkills.FrostSlam);
     }
 
     //# 테스트를 위한 Update
     private void Update()
     {
-        if (_testCoroutine != null) return;
+        if (!Input.GetMouseButtonDown(1)) return;
 
-        _testCoroutine = StartCoroutine(TestUseSkills());
+        if (_photonView.IsMine)
+            _photonView.RPC(nameof(UseSkills), RpcTarget.All, transform.position);
     }
 
     /// <summary>
@@ -49,13 +59,14 @@ public class DefenceSkillManager : MonoBehaviour
 
         skill.Initialize(gameObject.transform, _effectsObject.transform);
 
-        if (skill.IsPassive) skill.Activate();
+        if (skill.IsPassive && _photonView.IsMine) skill.Activate(transform.position);
     }
 
     /// <summary>
     /// 마우스 우클릭 시 Defence Skill들을 실행
     /// </summary>
-    public void UseSkills()
+    [PunRPC]
+    public void UseSkills(Vector3 skillPosition)
     {
         if (_coroutine != null) return;
 
@@ -63,7 +74,7 @@ public class DefenceSkillManager : MonoBehaviour
         {
             if (skill.IsPassive) continue;
 
-            skill.Activate();
+            skill.Activate(skillPosition);
 
             if (_coolDown == null) _coolDown = new WaitForSeconds(skill.CoolDown);
         }
@@ -79,13 +90,5 @@ public class DefenceSkillManager : MonoBehaviour
     {
         yield return _coolDown;
         _coroutine = null;
-    }
-
-    //# 테스트용 - cooldown 내에 재호출 시 사용되는지 여부 확인
-    private IEnumerator TestUseSkills()
-    {
-        yield return new WaitForSeconds(4f);
-        UseSkills();
-        _testCoroutine = null;
     }
 }
