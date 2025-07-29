@@ -51,7 +51,10 @@ VisualEffect:
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
-      m_Array: []
+      m_Array:
+      - m_Value: 2
+        m_Name: Divide
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
@@ -127,3 +130,4 @@ MonoBehaviour:
   _laserSoot: {fileID: 63926126280430481, guid: d8581ee95c56d884b90da9f234f5b3e8, type: 3}
   _particleDelay: 0.01
   Duration: 2
+  LaserScale: 1

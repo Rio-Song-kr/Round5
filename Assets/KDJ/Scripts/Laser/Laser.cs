@@ -14,7 +14,10 @@ public class Laser : MonoBehaviour
     private bool _isLaserHit;
     private LaserSootPool<LaserSoot> _laserSootPool;
     public LaserSootPool<LaserSoot> LaserSootPool => _laserSootPool;
+    [Header("레이저 세팅")]
     public float Duration;
+    public float LaserScale = 1f;
+
     public bool CanShoot => _laserCoroutine == null; // 레이저가 활성화되어 있지 않으면 true
 
     void Awake()
@@ -23,6 +26,7 @@ public class Laser : MonoBehaviour
         _laserSootPool.SetPool(_laserSoot, 10, this.transform); // 레이저 그을림 효과 풀 초기화
         _laserEffect = GetComponent<VisualEffect>();
         _laserEffect.enabled = false;
+        transform.localScale = Vector3.one; // 레이저 오브젝트의 스케일을 초기화
     }
 
     void Update()
@@ -73,7 +77,10 @@ public class Laser : MonoBehaviour
     {
         _isLaserHit = false;
         _laserEffect.enabled = true;
+        _laserEffect.SetFloat("ScaleMultiply", LaserScale); // 레이저 스케일 설정
         _laserEffect.SetFloat("Duration", Duration); // 레이저 지속 시간 설정
+        Vector3 scale = (transform.parent != null) ? transform.parent.lossyScale : Vector3.one;
+        _laserEffect.SetVector3("ParentScale", scale); // 부모 오브젝트의 스케일 설정
         float Timer = 0f;
         float particleTimer = 0f;
 
