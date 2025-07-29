@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: kr
     Server: 
     Port: 0
     ProxyServer: 
@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: hk
+  DevRegion: kr
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -51,5 +51,5 @@ MonoBehaviour:
   - RPC_SetWeapon
   - RPC_StartAutoReload
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1
