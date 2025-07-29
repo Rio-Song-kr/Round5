@@ -134,7 +134,7 @@ public class Bullet : MonoBehaviourPun
     }
     
     [PunRPC]
-    public void InitBullet(Vector3 direction, float speed)
+    public void InitBullet(float speed)
     {
         _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
         StartCoroutine(DestroyAfterDelay(4f));

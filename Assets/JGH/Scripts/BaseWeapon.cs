@@ -87,10 +87,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
         // animator.speed = ; 
         
-        if (photonView.IsMine)
-        {
-            photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
-        }
+        photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
     }
     
     [PunRPC]
@@ -105,12 +102,6 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected virtual void Update()
     {
-        // if (!photonView.IsMine)
-        // {
-        //     transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 10f);
-        //     // transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 100f);
-        // }
-        
         if (isReloading && animator != null)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -123,18 +114,12 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void StartAutoReload()
     {
-        if (photonView.IsMine)
-        {
-            photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
-        }
+        photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
     }
     
     protected void FinishReload()
     {
-        if (photonView.IsMine)
-        {
-            photonView.RPC(nameof(RPC_FinishReload), RpcTarget.All);
-        }
+        photonView.RPC(nameof(RPC_FinishReload), RpcTarget.All);
     }
     
     [PunRPC]

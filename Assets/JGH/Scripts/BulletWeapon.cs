@@ -24,24 +24,26 @@ public class BulletWeapon : BaseWeapon
         GameObject bulletObj = PhotonNetwork.Instantiate("Bullets/Bullet", firingPoint.position, firingPoint.rotation);
 
         PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
-        
-        currentAmmo--;
-        lastAttackTime = Time.time;
 
-        UpdateAmmoUI();
-
-        if (currentAmmo <= 0)
-        {
-            StartAutoReload();
-        }
-            
         if (bulletView != null)
         {
-            bulletView.RPC("InitBullet", RpcTarget.All, firingPoint.up, bulletSpeed);
+            bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed);
         }
-        
-        CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
-        
+        // if (photonView.IsMine)
+        // {
+            currentAmmo--;
+            lastAttackTime = Time.time;
+
+            UpdateAmmoUI();
+
+            if (currentAmmo <= 0)
+            {
+                StartAutoReload();
+            }
+
+
+            CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
+        // }
         // photonView.RPC(nameof(Shot), RpcTarget.All, firingPoint.position, firingPoint.rotation);
     }
 
