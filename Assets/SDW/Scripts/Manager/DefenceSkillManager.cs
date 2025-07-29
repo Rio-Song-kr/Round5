@@ -26,8 +26,6 @@ public class DefenceSkillManager : MonoBehaviourPun
     {
         _photonView = GetComponent<PhotonView>();
 
-        // if (!_photonView.IsMine) return;
-
         _effectsObject = GameObject.FindGameObjectWithTag("Effects");
 
         _skills = new List<DefenceSkillDataSO>();
@@ -36,7 +34,7 @@ public class DefenceSkillManager : MonoBehaviourPun
         //# 테스트용 - Skill 추가
         // AddSkill(DefenceSkills.AbyssalCountdown);
         AddSkill(DefenceSkills.Emp);
-        // AddSkill(DefenceSkills.FrostSlam);
+        AddSkill(DefenceSkills.FrostSlam);
     }
 
     //# 테스트를 위한 Update

@@ -1,5 +1,3 @@
-using ExitGames.Client.Photon.StructWrapping;
-using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EmpEffectSkill", menuName = "Skills/EmpEffectSkill")]
