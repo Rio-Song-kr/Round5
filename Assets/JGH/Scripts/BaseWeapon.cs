@@ -23,7 +23,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     [SerializeField] protected AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
     
     [Header("공격 정보")]
-    [SerializeField] protected float bulletSpeed;
+    public float bulletSpeed;
     [SerializeField] protected int attackDamage; // 
 
     [SerializeField] protected float attackSpeed; // 
@@ -105,11 +105,11 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected virtual void Update()
     {
-        if (!photonView.IsMine)
-        {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 10f);
-            // transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 100f);
-        }
+        // if (!photonView.IsMine)
+        // {
+        //     transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 10f);
+        //     // transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 100f);
+        // }
         
         if (isReloading && animator != null)
         {
