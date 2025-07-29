@@ -59,10 +59,16 @@ public class Bullet : MonoBehaviourPun, IPunObservable
             DefaultShot(collision);
         }
 
-        // 약간의 시간 지연 후 안전하게 파괴
-        // Destroy(gameObject);
+        PlayerHitTest playerHitTest = collision.collider.GetComponent<PlayerHitTest>();
+        if (playerHitTest != null)
+        {
+            Attack(playerHitTest); // 플레이어에게 공격
+        }
 
-        StartCoroutine(SafeDestroy());
+        // 약간의 시간 지연 후 안전하게 파괴
+            // Destroy(gameObject);
+
+            StartCoroutine(SafeDestroy());
     }
 
     // 사용안함 무기에서 바로 호출
@@ -123,9 +129,13 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public void Attack()
+    /// <summary>
+    /// 테스트용으로 매개변수를 테스트 플레이어로 설정
+    /// 나중에 변경해야됨
+    /// </summary>
+    public void Attack(PlayerHitTest playerHitTest)
     {
-        // Player 스크립트 생기면 해당 플레이어를 받아와서 TakeDamage 메소드 호출
+        playerHitTest.TakeDamage(1);
     }
 
 
