@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +35,7 @@ public class AbyssalCountdownEffect : MonoBehaviour
     private float _targetFillAmount = 1f;
     //# 현재 게이지가 증가 모드인지 여부 (true: 증가, false: 감소)
     private bool _canIncrease = true;
-    
+
     [Header("Shield Effect")]
     [SerializeField] private GameObject _shieldObject;
 
@@ -49,7 +50,7 @@ public class AbyssalCountdownEffect : MonoBehaviour
         _particle.Stop();
         _particle.Clear();
     }
-    
+
     /// <summary>
     /// 카운트다운 게이지를 업데이트하고 이펙트 상태를 관리
     /// </summary>
@@ -90,9 +91,10 @@ public class AbyssalCountdownEffect : MonoBehaviour
     public void Initialize(AbyssalSkillDataSO skillData)
     {
         _skillData = skillData;
-        
+
         //# VFX 프리팹을 현재 위치에 생성하여 자식으로 설정
-        _vfxObject = Instantiate(_vfxPrefab, transform.position, transform.rotation, transform);
+        _vfxObject = PhotonNetwork.Instantiate("DefenceEffect/" + _vfxPrefab.name, transform.position, transform.rotation);
+        _vfxObject.transform.parent = transform;
 
         //# 생성된 VFX 오브젝트에서 파티클 시스템 컴포넌트를 가져옴
         _particle = _vfxObject.GetComponentInChildren<ParticleSystem>();
@@ -107,7 +109,6 @@ public class AbyssalCountdownEffect : MonoBehaviour
         //# octagon 이펙트는 초기에 비활성화
         _octagonObject.SetActive(false);
     }
-
 
     /// <summary>
     /// 계산된 채움량을 각 UI 이미지 요소에 적용하여 카운트다운 효과를 시각화
@@ -134,8 +135,9 @@ public class AbyssalCountdownEffect : MonoBehaviour
         _particle.Play();
 
         if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
-        _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one * _skillData.TargetScaleMultiplier, _skillData.ScalingDuration));
-        
+        _scalingCoroutine =
+            StartCoroutine(ScaleOverTime(Vector3.one * _skillData.TargetScaleMultiplier, _skillData.ScalingDuration));
+
         _shieldObject.SetActive(true);
         _octagonObject.SetActive(true);
     }

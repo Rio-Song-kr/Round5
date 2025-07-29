@@ -24,34 +24,14 @@ public class FrostSlamEffect : MonoBehaviour
     private LineRenderer _lineRenderer;
     //# 페이드 효과가 진행 중인지 여부
     private bool _isFading;
+    private bool _isInitialized = false;
 
     /// <summary>
-    /// 컴포넌트 활성화 시 초기 설정 및 효과 초기화를 수행
+    /// 컴포넌트 비활성화 시 초기화
     /// </summary>
-    private void OnEnable()
+    private void OnDisable()
     {
-        if (_skillData == null) return;
-        
-        _currentRadius = _skillData.InitialRadius;
-        _points.Clear();
-        _lastFramePoints.Clear();
-        _isFixed.Clear();
-
-        InitializeLineRenderer();
-
-        for (int i = 0; i < _skillData.PointCount; i++)
-        {
-            float angle = i * 2f * Mathf.PI / _skillData.PointCount;
-            var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _currentRadius;
-            _points.Add(point);
-            _lastFramePoints.Add(point);
-            _isFixed.Add(false);
-        }
-
-        _polyCollider.SetPath(0, _points);
-        UpdateLineRenderer();
-
-        _isFading = false;
+        _isInitialized = false;
     }
 
     /// <summary>
@@ -59,7 +39,7 @@ public class FrostSlamEffect : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (_isFading) return;
+        if (!_isInitialized || _isFading) return;
 
         bool expansionCompleted = _currentRadius >= _skillData.MaxRadius;
         if (!expansionCompleted)
@@ -153,6 +133,33 @@ public class FrostSlamEffect : MonoBehaviour
         _points = new List<Vector2>(_skillData.PointCount);
         _lastFramePoints = new List<Vector2>(_skillData.PointCount);
         _isFixed = new List<bool>(_skillData.PointCount);
+
+        Activate();
+        _isInitialized = true;
+    }
+
+    private void Activate()
+    {
+        _currentRadius = _skillData.InitialRadius;
+        _points.Clear();
+        _lastFramePoints.Clear();
+        _isFixed.Clear();
+
+        InitializeLineRenderer();
+
+        for (int i = 0; i < _skillData.PointCount; i++)
+        {
+            float angle = i * 2f * Mathf.PI / _skillData.PointCount;
+            var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _currentRadius;
+            _points.Add(point);
+            _lastFramePoints.Add(point);
+            _isFixed.Add(false);
+        }
+
+        _polyCollider.SetPath(0, _points);
+        UpdateLineRenderer();
+
+        _isFading = false;
     }
 
     /// <summary>

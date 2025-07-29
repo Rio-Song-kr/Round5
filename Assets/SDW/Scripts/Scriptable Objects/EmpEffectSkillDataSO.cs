@@ -1,45 +1,48 @@
 using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EmpEffectSkill", menuName = "Skills/EmpEffectSkill")]
 public class EmpEffectSkillDataSO : DefenceSkillDataSO
 {
     [Header("Expansion Settings")]
-    // # 초기 확장 속도
+    //# 초기 확장 속도
     public float InitialExpansionSpeed = 10f;
-    // # 최소 확장 속도
+    //# 최소 확장 속도
     public float MinExpansionSpeed = 0.7f;
-    // # 빠른 확장이 끝나는 지점의 반경
+    //# 빠른 확장이 끝나는 지점의 반경
     public float FastExpansionRadius = 1f;
-    // # 빠른 확장 속도에서 최소 속도로 감속되는 데 걸리는 시간
+    //# 빠른 확장 속도에서 최소 속도로 감속되는 데 걸리는 시간
     public float DecelerationDuration = 0.5f;
 
     [Header("Arc Settings")]
     public GameObject ArcPrefab;
+    public GameObject VfxArcPrefab;
     private EmpEffect _skillEffect;
     //# 원형 확장에 사용될 개별 Arc 프리팹
-    
+
     // # 생성할 Arc의 총 개수
     public int ArcCount = 30;
-    
-    private EmpPool<EmpEffect> _empPool;
-    public EmpPool<EmpEffect> EmpPool => _empPool;
 
-    private ArcPool<ArcController> _arcPool;
-    public ArcPool<ArcController> ArcPool => _arcPool;
-    
-    public override void Initialize(GameObject player)
+    private PoolManager _pools;
+    public PoolManager Pools => _pools;
+
+    public Vector3 SkillPosition;
+
+    public override void Initialize(Transform playerTransform, Transform effectsTransform)
     {
-        _empPool = new();
-        _empPool.SetPool(SkillEffectPrefab, player.transform);
-
-        _arcPool = new();
-        _arcPool.SetPool(ArcPrefab, ArcCount, player.transform);
+        _pools = FindFirstObjectByType<PoolManager>();
+        _pools.InitializePool("EmpEffect", SkillEffectPrefab, 2, 5);
+        _pools.InitializePool("Arc", ArcPrefab, 30, 70);
+        _pools.InitializePool("VFX_Arc", VfxArcPrefab, 30, 70);
     }
 
-    public override void Activate()
+    public override void Activate(Vector3 skillPosition)
     {
-        var skillEffect = _empPool.Pool.Get();
+        SkillPosition = skillPosition;
+
+        var skillEffectObject = _pools.Instantiate("EmpEffect", SkillPosition, Quaternion.identity);
+        var skillEffect = skillEffectObject.GetComponent<EmpEffect>();
         skillEffect.Initialize(this);
     }
 }
