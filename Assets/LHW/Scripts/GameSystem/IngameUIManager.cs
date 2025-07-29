@@ -8,13 +8,11 @@ public class IngameUIManager : MonoBehaviour
     private void OnEnable()
     {
         TestIngameManager.OnRoundOver += RoundOverPanelShow;
-        TestIngameManager.OnGameOver += RestartPanelShow;
     }
 
     private void OnDisable()
     {
         TestIngameManager.OnRoundOver -= RoundOverPanelShow;
-        TestIngameManager.OnGameOver -= RestartPanelShow;
     }
 
     private void RoundOverPanelShow()
@@ -27,7 +25,7 @@ public class IngameUIManager : MonoBehaviour
         roundOverPanel.SetActive(false);
     }
 
-    private void RestartPanelShow()
+    public void RestartPanelShow()
     {
         gameRestartPanel.SetActive(true);
     }

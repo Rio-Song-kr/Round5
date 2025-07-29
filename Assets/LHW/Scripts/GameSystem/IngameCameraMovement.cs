@@ -107,6 +107,11 @@ public class IngameCameraMovement : MonoBehaviour
         roundUIController.ShrinkImage();
         mainCamera.transform.position = targetPosition;
         startPosition = Camera.main.transform.position;
+        TestIngameManager.Instance.GameSetStart();
+        if (TestIngameManager.Instance.IsGameOver)
+        {
+            gameUIManager.RestartPanelShow();
+        }
         
         cameraCoroutine = null;
     }
@@ -115,6 +120,6 @@ public class IngameCameraMovement : MonoBehaviour
     {
         gameUIManager.HideRoundOverPanel();
         // 씬 로드 - 용호님 비동기 로드 씬이 어느거지?
-        Debug.Log("씬 전환");
+        Debug.Log("씬 전환");        
     }
 }

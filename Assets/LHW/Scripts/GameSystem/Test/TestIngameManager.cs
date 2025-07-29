@@ -26,10 +26,11 @@ public class TestIngameManager : MonoBehaviour
 
     public static event Action OnRoundOver;
     public static event Action OnGameSetOver;
-    public static event Action OnGameOver;
 
     private bool isRoundOver = false;
+    private bool isGameSetOver = false;
     private bool isGameOver = false;
+    public bool IsGameOver {  get { return isGameOver; } }
 
     private Dictionary<string, int> playerRoundScore = new Dictionary<string, int>();
     private Dictionary<string, int> playerGameScore = new Dictionary<string, int>();
@@ -54,14 +55,6 @@ public class TestIngameManager : MonoBehaviour
         {
             RoundOver("Left");
         }
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            GameSetOver("Left");
-        }
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            GameSetOver("Right");
-        }
     }
 
     public string ReadScore(out int leftScore, out int rightScore)
@@ -75,6 +68,17 @@ public class TestIngameManager : MonoBehaviour
     {
         rightScore = playerGameScore["Right"];
         return playerGameScore["Left"];
+    }
+
+    public void GameStart()
+    {
+        isRoundOver = false;
+        isGameSetOver = false;
+        isGameOver = false;
+        playerRoundScore["Left"] = 0;
+        playerRoundScore["Right"] = 0;
+        playerGameScore["Left"] = 0;
+        playerGameScore["Right"] = 0;
     }
 
     public void RoundStart()
@@ -102,18 +106,30 @@ public class TestIngameManager : MonoBehaviour
 
     public void GameSetStart()
     {
-        isGameOver = false;
+        isGameSetOver = false;
 
-        playerRoundScore["Left"] = 0;
-        playerRoundScore["Right"] = 0;
+        if (playerRoundScore["Right"] >= 2 || playerRoundScore["Left"] >= 2)
+        {
+            playerRoundScore["Left"] = 0;
+            playerRoundScore["Right"] = 0;
+        }
     }
 
     private void GameSetOver(string winner)
     {
-        isGameOver = true;
+        isGameSetOver = true;
         playerGameScore[winner] += 1;        
         currentWinner = winner;
 
         OnGameSetOver?.Invoke();
+        if (playerGameScore["Left"] >= 3 || playerGameScore["Right"] >= 3)
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        isGameOver = true;
     }
 }
