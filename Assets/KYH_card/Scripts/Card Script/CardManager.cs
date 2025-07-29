@@ -7,6 +7,9 @@ using Photon.Realtime;
 
 public class CardSelectManager : MonoBehaviourPunCallbacks
 {
+    
+    [SerializeField] private CardSelectCheckManager cardSelectCheckManager;
+
     [Header("전체 카드 프리팹 리스트")]
     public List<GameObject> allCardPrefabs; // 게임에서 사용할 전체 카드 프리팹 목록
 
@@ -24,14 +27,21 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
 
     private List<GameObject> currentCards = new(); // 현재 화면에 표시 중인 카드 목록
-    private bool hasSelected = false; // 플레이어가 카드를 선택했는지 여부
+    [SerializeField] private bool hasSelect = false; // 플레이어가 카드를 선택했는지 여부
 
     void Start()
     {
+        cardSelectCheckManager.cardSelectPanelSpawn();
+        cardSelectCheckManager.CardSelectPanelSpawn(PhotonNetwork.LocalPlayer);
         SpawnRandomCards(); // 시작 시 카드들을 랜덤하게 생성
-        SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
+       // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
         Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
     }
+
+   private void Awake()
+   {
+       PhotonNetwork.AutomaticallySyncScene = true;
+   }
 
     // 랜덤 카드 생성 및 화면에 출력
     public void SpawnRandomCards()
@@ -93,22 +103,35 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     // 카드 하나가 선택되었을 때 호출됨
     public void OnCardSelected(GameObject selected)
     {
-        if (hasSelected) return; // 이미 선택했다면 무시
-        hasSelected = true;
 
-        
-
-        // 카드 효과 적용
-        CardEffect effect = selected.GetComponent<CardEffect>();
-        if ( effect != null)
+        if (hasSelect == true)
         {
-            GameObject player = GameObject.FindWithTag("Player");
-
-            if (player != null)
-            {
-                effect.ApplyEffect(player);
-            }
+            return;
         }
+
+
+        hasSelect = true;
+
+        Debug.Log("내 카드 선택 완료됨");
+
+        if (cardSelectCheckManager.cardSelectPanels.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out CardSelectPanelItem panel))
+        {
+            panel.OnCardSelected();
+
+            panel.SelectCheck(PhotonNetwork.LocalPlayer);
+        }
+
+      //  // 카드 효과 적용
+      //  CardEffect effect = selected.GetComponent<CardEffect>();
+      //  if ( effect != null)
+      //  {
+      //      Player player = GameObject.FindWithTag("Player");
+      //
+      //      if (player != null)
+      //      {
+      //          effect.ApplyEffect(player);
+      //      }
+      //  }
 
         foreach (GameObject card in currentCards)
         {
@@ -147,10 +170,29 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         Debug.Log("선택된 카드: " + selected.name);
         Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
 
+        
 
-        // DOVirtual.DelayedCall(2f, () => SceneLoadingManager.Instance.AllowSceneActivation());
+       // DOVirtual.DelayedCall(2f, () => SceneLoadingManager.Instance.AllowSceneActivation());
+       // DOVirtual.DelayedCall(2f, () => PhotonNetwork.LoadLevel("Game Scene"));
+    }
 
+    public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        base.OnPlayerPropertiesUpdate(target, propertiesThatChanged);
+
+        if (propertiesThatChanged.ContainsKey("Select"))
+        {
+            cardSelectCheckManager.cardSelectPanels[target.ActorNumber].SelectCheck(target);
+
+            if (PhotonNetwork.IsMasterClient && cardSelectCheckManager.AllPlayerCardSelectCheck() == true)
+            {
+                Debug.Log(" 모든 플레이어 카드 선택 완료 → Game Scene 로드");
+                PhotonNetwork.LoadLevel("Game Scene");
+            }
+        }
     }
 
     
+
+
 }

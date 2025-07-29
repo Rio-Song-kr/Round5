@@ -42,7 +42,7 @@ public class SceneLoadingManager : MonoBehaviour
 
     /// <summary>
     /// 비동기 로딩 코루틴
-    /// </summary> 
+    /// </summary>
 
     private IEnumerator LoadAsyncRoutine(string sceneName)
     {
@@ -50,6 +50,11 @@ public class SceneLoadingManager : MonoBehaviour
         float timer = 0f;
 
         LoadingUIManager.Instance?.Show();
+
+        /// if( LoadingUIManager.Instance != null )
+        /// {
+        ///     LoadingUIManager.Inctance.Show();
+        /// }
 
         currentOperation = SceneManager.LoadSceneAsync(sceneName);
         currentOperation.allowSceneActivation = false;
@@ -64,6 +69,10 @@ public class SceneLoadingManager : MonoBehaviour
         // 90% 도달 시, 1.5초 유지 후 대기
         LoadingUIManager.Instance?.UpdateProgress(1f);
 
+        /// if( LoadingUIManager.Instance != null )
+        /// {
+        ///      LoadingUIManaber.Inctance.UpdateProgress(1f);
+        /// }
         while (timer < minDisplayTime)
         {
             timer += Time.deltaTime;
