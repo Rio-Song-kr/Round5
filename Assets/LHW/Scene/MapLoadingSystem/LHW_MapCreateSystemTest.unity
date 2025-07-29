@@ -1769,7 +1769,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab8c52bdffdc2c458ec62abe781004a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIImage: {fileID: 8388473462963842460, guid: 4928d143bd3dda54cbe274c78e796c99, type: 3}
+  UIImagePrefab: {fileID: 8388473462963842460, guid: 4928d143bd3dda54cbe274c78e796c99, type: 3}
+  leftPanelContent: {fileID: 1475270984}
+  rightPanelContent: {fileID: 88413802}
+  leftUIImage: []
+  rightUIImage: []
 --- !u!1 &1083402127
 GameObject:
   m_ObjectHideFlags: 0

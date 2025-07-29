@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TestIngameManager : MonoBehaviour
@@ -26,6 +27,7 @@ public class TestIngameManager : MonoBehaviour
 
     public static event Action OnRoundOver;
     public static event Action OnGameSetOver;
+    public static event Action OnSkillObtained;
 
     private bool isRoundOver = false;
     private bool isGameSetOver = false;
@@ -35,6 +37,10 @@ public class TestIngameManager : MonoBehaviour
     private Dictionary<string, int> playerRoundScore = new Dictionary<string, int>();
     private Dictionary<string, int> playerGameScore = new Dictionary<string, int>();
     private string currentWinner;
+
+    // 테스트용
+    private List<string> leftPlayerSkill = new List<string>();
+    private List<string> rightPlayerSkill = new List<string>();
 
     private void Init()
     {
@@ -54,6 +60,14 @@ public class TestIngameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.E))
         {
             RoundOver("Left");
+        }
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            ObtainSkill("Left", "1");
+        }
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            ObtainSkill("Right", "2");
         }
     }
 
@@ -132,4 +146,46 @@ public class TestIngameManager : MonoBehaviour
     {
         isGameOver = true;
     }
+
+    #region TestCode - Card
+
+    public string[] GetSkillInfo(string player)
+    {
+        if(player == "Left")
+        {
+            string[] skillInfo = new string[leftPlayerSkill.Count];
+            for (int i = 0; i < leftPlayerSkill.Count; i++)
+            {
+                skillInfo[i] = leftPlayerSkill[i];
+            }
+            return skillInfo;
+        }
+        else if(player == "Right")
+        {
+            string[] skillInfo = new string[rightPlayerSkill.Count];
+            for (int i = 0; i < rightPlayerSkill.Count; i++)
+            {
+                skillInfo[i] = rightPlayerSkill[i];
+            }
+            return skillInfo;
+        }
+        return null;
+    }
+
+    public void ObtainSkill(string player, string skill)
+    {
+        if(player == "Left")
+        {
+            leftPlayerSkill.Add(skill);
+            Debug.Log(skill);
+        }
+        else if(player == "Right")
+        {
+            rightPlayerSkill.Add(skill);
+            Debug.Log(skill);
+        }
+        OnSkillObtained?.Invoke();
+    }
+
+    #endregion
 }
