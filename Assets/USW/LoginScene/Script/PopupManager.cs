@@ -45,6 +45,13 @@ public class PopupManager : MonoBehaviour
     [SerializeField] private Button saveNicknameButton;
     [SerializeField] private Button  cancelNicknameButton;
 
+    [Header("룸 코드 팝업")] [SerializeField] private GameObject roomcodePanel;
+    [SerializeField] private TMP_InputField roomcodeInputField;
+    [SerializeField] private Button confirmJoinButton;
+    [SerializeField] private Button cancelJoinButton;
+    
+
+    
     
 
     /// <summary>
@@ -77,6 +84,7 @@ public class PopupManager : MonoBehaviour
     private Action onYesCallback;
     private Action onNoCallback;
     private Action<string> onNicknameSaveCallBack;
+    private Action<string> onRoomCodeJoinCallBack;
 
     // 비밀번호 변경 죽복 처리 방지를 위한 bool 변수입니다.
     private bool isProcessingPasswordChange = false;
@@ -133,6 +141,16 @@ public class PopupManager : MonoBehaviour
         {
             cancelNicknameButton.onClick.AddListener(OnCancleNicknameClick);
         }
+        
+        // 방 코드 입력 버튼
+        if (confirmJoinButton)
+        {
+            confirmJoinButton.onClick.AddListener(OnConfirmJoinClick);
+        }
+        if (cancelJoinButton)
+        {
+            cancelJoinButton.onClick.AddListener(OnCancelJoinClick);
+        }
 
         // 모든 패널을 초기에는 비활성화 함 
         if (confirmationPanel)
@@ -148,6 +166,11 @@ public class PopupManager : MonoBehaviour
         if (nicknameChangePanel)
         {
             nicknameChangePanel.SetActive(false);
+        }
+
+        if (roomcodePanel)
+        {
+            roomcodePanel.SetActive(false);
         }
 
         // Enter 키로 비밀번호 변경 실행
@@ -170,6 +193,18 @@ public class PopupManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 {
                     OnSaveNicknameClick();
+                }
+            });
+        }
+        
+        // Enter 키로 방 참가 실행
+        if (roomcodeInputField)
+        {
+            roomcodeInputField.onEndEdit.AddListener(delegate
+            {
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    OnConfirmJoinClick();
                 }
             });
         }
@@ -334,6 +369,9 @@ public class PopupManager : MonoBehaviour
         {
             nicknameChangePanel.SetActive(false);
         }
+        
+        if(roomcodePanel)
+        {roomcodePanel.SetActive(false);}
     }
 
     #endregion
@@ -512,7 +550,7 @@ public class PopupManager : MonoBehaviour
     /// 닉네임 변경 팝업 표시
     /// </summary>
     /// <param name="currentNickname">현재 닉네임</param>
-    /// <param name="onSave">저장시 실행할 콜백(쌔 닉네임 전달)</param>
+    /// <param name="onSave">저장시 실행할 콜백(새 닉네임 전달)</param>
     public void ShowNicknameChangePopup(string currentNickname, Action<string> onSave)
     {
         onNicknameSaveCallBack = onSave;
@@ -560,6 +598,78 @@ public class PopupManager : MonoBehaviour
 
     #endregion
 
+
+    #region 방 참가 관련 메서드들
+
+    /// <summary>
+    /// 방 코드 입력 팝업 표시
+    /// </summary>
+    /// <param name="onJoin">방 참가 시 실행할 콜백</param>
+    public void ShowRoomCodeInputPopup(Action<string> onJoin)
+    {
+        onRoomCodeJoinCallBack = onJoin;
+
+        HideAllPanels();
+        ShowRoomCodeInputPanel();
+        gameObject.SetActive(true);
+
+        if (roomcodeInputField)
+        {
+            roomcodeInputField.text = "";
+            roomcodeInputField.Select();
+        }
+    }
+    
+    /// <summary>
+    /// 방 코드 입력 패널 표시
+    /// </summary>
+    void ShowRoomCodeInputPanel()
+    {
+        if (roomcodePanel)
+        {
+            roomcodePanel.SetActive(true);
+        }
+    }
+    
+    void OnConfirmJoinClick()
+    {
+        string roomCode = roomcodeInputField.text.Trim();
+
+        if (string.IsNullOrEmpty(roomCode))
+        {
+            ShowPopup("방 코드를 입력해주세요");
+            return;
+        }
+
+        if (roomCode.Length != 4)
+        {
+            ShowPopup("4자리의 방 코드를 입력하세요");
+            return;
+        }
+
+        if (!int.TryParse(roomCode, out int code))
+        {
+            ShowPopup("숫자만 입력 가능합니다");
+            return;
+        }
+
+        // 콜백 호출
+        onRoomCodeJoinCallBack?.Invoke(roomCode);
+        ClosePopup();
+    }
+    
+    /// <summary>
+    /// 방 코드 입력 취소
+    /// </summary>
+    void OnCancelJoinClick()
+    {
+        ClosePopup();
+    }
+    
+    
+
+    #endregion
+    
     #region 팝업 컨트롤 메서드
 
     /// <summary>
@@ -574,6 +684,7 @@ public class PopupManager : MonoBehaviour
         onYesCallback = null;
         onNicknameSaveCallBack = null;
         isProcessingPasswordChange = false;
+        onRoomCodeJoinCallBack = null;
 
         gameObject.SetActive(false);
     }
