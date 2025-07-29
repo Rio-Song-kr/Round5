@@ -1,18 +1,25 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class BarrelWeapon : BaseWeapon
 {
-    public GameObject bulletPrefab;
     public int pelletCount = 6; // 퍼지는 총알 개수
     public float spreadAngle = 30f; // 퍼지는 각도
     public int ammoPerShot = 4; // 발사 시 소비 탄약 수
     public WeaponType weaponType = WeaponType.Shotgun;
-
+    
     // 무기 발사
     public override void Attack(Transform firingPoint)
     {
         if (isReloading || currentAmmo < ammoPerShot) return;
+        if (!CanAttack()) return; // 공격 속도 체크
+        
+        photonView.RPC(nameof(Shot), RpcTarget.All, firingPoint.position, firingPoint.rotation);
+    }
 
+    [PunRPC]
+    public void Shot(Vector3 firePos, Quaternion fireRot)
+    {
         float angleStep = spreadAngle / (pelletCount - 1);
         float startAngle = -spreadAngle / 2f;
 
@@ -20,25 +27,35 @@ public class BarrelWeapon : BaseWeapon
         {
             float angle = startAngle + angleStep * i;
             
-            Quaternion spreadRotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle - 90); 
-            Vector3 spawnPos = firingPoint.position + firingPoint.right * 0.2f;
-
-            Instantiate(bulletPrefab, spawnPos, spreadRotation);
+            // Quaternion spreadRotation = fireRot * Quaternion.Euler(0, 0, angle - 90);
+            Quaternion spreadRotation = fireRot * Quaternion.Euler(0, 0, angle);
+            Vector3 spawnPos = firePos + (fireRot * Vector3.up) * 0.2f;
+        
+            // PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
+            GameObject bulletObj = PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
+            if (bulletObj.TryGetComponent(out Bullet bullet))
+            {
+                bullet.BulletMove(bulletSpeed);
+                bullet.StartCoroutine(bullet.DestroyAfterDelay(4f));
+            }
         }
-
         currentAmmo -= ammoPerShot;
         lastAttackTime = Time.time;
         UpdateAmmoUI();
-
+        
         if (currentAmmo < ammoPerShot)
         {
             ReloadSpeedFromAnimator();
             StartAutoReload();
         }
+
+        CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
     }
 
     public override WeaponType GetWeaponType()
     {
         return weaponType;
     }
+    
+    
 }

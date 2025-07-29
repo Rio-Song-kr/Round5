@@ -14,6 +14,9 @@ public class RopeCreator : MonoBehaviour
         GenerateRope();
     }
 
+    /// <summary>
+    /// 로프 링크 프리팹을 인스펙터에 입력한 Links 수만큼 생성하고 Hinge Joint로 연결
+    /// </summary>
     private void GenerateRope()
     {
         Rigidbody2D previousRB = hook;

@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [Header("로딩 관련")]
@@ -23,14 +23,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject roomListItemPrefabs;
     [SerializeField] private Transform roomListContent;
 
+    [SerializeField] private GameObject roomPanel;
+
+
     private Dictionary<string, GameObject> roomListItems = new Dictionary<string, GameObject>();
 
+    [SerializeField] private Roommanager Roommanager;
+    [SerializeField] private CardSelectManager cardSelectManager;
     private void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
         loadingPanel.SetActive(true);
         nicknamePanel.SetActive(false);
         lobbyPanel.SetActive(false);
+        roomPanel.SetActive(false);
         nicknameAdmitButton.onClick.AddListener(NicknameAdmit);
         roomNameAdmitButton.onClick.AddListener(CreateRoom);
     }
@@ -39,8 +45,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         base.OnConnectedToMaster();
         Debug.Log("마스터 서버 연결됨");
-        loadingPanel.SetActive(false);
-        nicknamePanel.SetActive(true);
+        if (loadingPanel.activeSelf)
+        {
+            loadingPanel.SetActive(false);
+        }
+        else
+        {
+            PhotonNetwork.JoinLobby();
+        }
+            nicknamePanel.SetActive(true);
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -53,7 +66,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void NicknameAdmit()
     {
-        if(string.IsNullOrWhiteSpace(nicknameField.text))
+        if (string.IsNullOrWhiteSpace(nicknameField.text))
         {
             Debug.Log("닉네임 입력 값 없음");
             return;
@@ -68,12 +81,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnJoinedLobby();
         Debug.Log("로비 참가 완료됨");
         nicknamePanel.SetActive(false);
+        roomPanel.SetActive(false);
         lobbyPanel.SetActive(true);
+
     }
 
     public void CreateRoom()
     {
-        if(string.IsNullOrEmpty(roomNameField.text))
+        if (string.IsNullOrEmpty(roomNameField.text))
         {
             Debug.Log("방 이름은 공백이 들어갈 수 없습니다.");
             return;
@@ -81,8 +96,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         roomNameAdmitButton.interactable = false;
 
-        RoomOptions options = new RoomOptions { MaxPlayers = 2};
-        PhotonNetwork.CreateRoom(roomNameField.text,options);
+        RoomOptions options = new RoomOptions { MaxPlayers = 2 };
+        PhotonNetwork.CreateRoom(roomNameField.text, options);
         roomNameField.text = null;
     }
 
@@ -97,9 +112,30 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         base.OnJoinedRoom();
         lobbyPanel.SetActive(false);
+        roomPanel.SetActive(true);
         Debug.Log($"{roomNameField.text} 방 참가 완료");
+        Roommanager.PlayerPanelSpawn();
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        if (newPlayer != PhotonNetwork.LocalPlayer)
+        {
+            Roommanager.PlayerPanelSpawn(newPlayer);
+        }
+    }
+
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+
+        if (otherPlayer != PhotonNetwork.LocalPlayer)
+        {
+            Roommanager.PlayerPanelDestroy(otherPlayer);
+        }
+    }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         base.OnRoomListUpdate(roomList);
@@ -128,6 +164,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 roomListItems.Add(info.Name, roomListItem);
             }
         }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        base.OnPlayerPropertiesUpdate(target, propertiesThatChanged);
+
+        // 기존 준비 체크 로직
+        Roommanager.playerPanels[target.ActorNumber].ReadyCheck(target);
+
+        
+    }
+
+    public override void OnMasterClientSwitched(Player newClientPlayer)
+    {
+        base.OnMasterClientSwitched(newClientPlayer);
+        Roommanager.PlayerPanelSpawn(newClientPlayer);
     }
     private void Update()
     {

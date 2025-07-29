@@ -1,31 +1,47 @@
 using UnityEngine;
+using Photon.Pun;
 
 public class BulletWeapon : BaseWeapon
 {
-    public GameObject bulletPrefab;
     public WeaponType weaponType = WeaponType.Bullet;
+
     
     public override void Attack(Transform firingPoint)
     {
         if (isReloading || currentAmmo <= 0) return;
+        if (!CanAttack()) return; // 공격 속도 체크
+        
+        photonView.RPC(nameof(Shot), RpcTarget.All, firingPoint.position, firingPoint.rotation);
+    }
 
-        Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation * Quaternion.Euler(0, 0, -90f));
 
+    [PunRPC]
+    public void Shot(Vector3 position, Quaternion rotation)
+    {
+        GameObject bulletObj = PhotonNetwork.Instantiate("Bullets/Bullet", position, rotation);
+        if (bulletObj.TryGetComponent(out Bullet bullet))
+        {
+            bullet.GetComponent<Bullet>().BulletMove(bulletSpeed);
+        }
+        bullet.StartCoroutine(bullet.DestroyAfterDelay(4f));
+        
+        
         currentAmmo--;
         lastAttackTime = Time.time;
-        UpdateAmmoUI();
 
+        UpdateAmmoUI();
+        
         if (currentAmmo <= 0)
         {
-            ReloadSpeedFromAnimator();
             StartAutoReload();
         }
+        
+        CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
     }
 
     public override WeaponType GetWeaponType()
     {
         return weaponType;
     }
-
 
 }
