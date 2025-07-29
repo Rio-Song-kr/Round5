@@ -45,13 +45,13 @@ public class IngameCameraMovement : MonoBehaviour
         startPosition = Camera.main.transform.position;
 
         TestIngameManager.OnRoundOver += IngameCameraMove;
-        TestIngameManager.OnGameOver += SceneChange;
+        TestIngameManager.OnGameSetOver += SceneChange;
     }
 
     private void OnDisable()
     {
         TestIngameManager.OnRoundOver -= IngameCameraMove;
-        TestIngameManager.OnGameOver -= SceneChange;
+        TestIngameManager.OnGameSetOver -= SceneChange;
     }
 
     /// <summary>

@@ -687,6 +687,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 184093941}
+  - component: {fileID: 184093942}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -713,8 +714,28 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 70, y: -70}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &184093942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184093940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990caa48e108f744384d134642ce0aaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftWinImages:
+  - {fileID: 624789507}
+  - {fileID: 1701253569}
+  - {fileID: 1899763386}
+  rightWinImages:
+  - {fileID: 1266607908}
+  - {fileID: 1450967070}
+  - {fileID: 8480847}
 --- !u!1 &240859594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1707,6 +1728,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1052363875}
+  - component: {fileID: 1052363876}
   m_Layer: 5
   m_Name: CardInfo
   m_TagString: Untagged
@@ -1735,6 +1757,19 @@ RectTransform:
   m_AnchoredPosition: {x: -960, y: -540}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1052363876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052363874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ab8c52bdffdc2c458ec62abe781004a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIImage: {fileID: 8388473462963842460, guid: 4928d143bd3dda54cbe274c78e796c99, type: 3}
 --- !u!1 &1083402127
 GameObject:
   m_ObjectHideFlags: 0

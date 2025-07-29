@@ -71,6 +71,12 @@ public class TestIngameManager : MonoBehaviour
         return currentWinner;
     }
 
+    public int ReadRoundScore(out int rightScore)
+    {
+        rightScore = playerGameScore["Right"];
+        return playerGameScore["Left"];
+    }
+
     public void RoundStart()
     {
         isRoundOver = false;
@@ -97,13 +103,17 @@ public class TestIngameManager : MonoBehaviour
     public void GameSetStart()
     {
         isGameOver = false;
+
+        playerRoundScore["Left"] = 0;
+        playerRoundScore["Right"] = 0;
     }
 
     private void GameSetOver(string winner)
     {
         isGameOver = true;
-        playerGameScore[winner] += 1;
+        playerGameScore[winner] += 1;        
         currentWinner = winner;
+
         OnGameSetOver?.Invoke();
     }
 }
