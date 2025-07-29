@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
+using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using Photon.Realtime;
-using Photon.Pun.Demo.Cockpit;
-using Photon.Pun;
 
 public class PlayerPanelItem : MonoBehaviour
 {
@@ -23,14 +20,14 @@ public class PlayerPanelItem : MonoBehaviour
         HostImage.enabled = player.IsMasterClient;
         ReadyButton.interactable = player.IsLocal;
 
-        if(!player.IsLocal)
+        if (!player.IsLocal)
         {
             return;
         }
 
         isReady = false;
 
-        ReadyPropertyUpdate();
+        ReadyPropertyUpdate(PhotonNetwork.LocalPlayer);
 
         ReadyButton.onClick.RemoveListener(ReadyButtonClick);
         ReadyButton.onClick.AddListener(ReadyButtonClick);
@@ -44,20 +41,27 @@ public class PlayerPanelItem : MonoBehaviour
 
         readyButtonImage.color = isReady ? Color.green : Color.cyan;
 
-        ReadyPropertyUpdate();
+
+
+        ReadyPropertyUpdate(PhotonNetwork.LocalPlayer);
     }
 
-    public void ReadyPropertyUpdate()
+    public void ReadyPropertyUpdate(Player player)
     {
         ExitGames.Client.Photon.Hashtable playerProperty = new ExitGames.Client.Photon.Hashtable();
         playerProperty["Ready"] = isReady;
+        if (isReady == true)
+        {
+            Debug.Log($"{player.NickName} 이 준비 완료됨");
+        }
+
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperty);
     }
 
     public void ReadyCheck(Player player)
     {
-        if(player.CustomProperties.TryGetValue("Ready", out object value))
+        if (player.CustomProperties.TryGetValue("Ready", out object value))
         {
             readyText.text = (bool)value ? "Ready" : "Click Ready";
 

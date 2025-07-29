@@ -1,77 +1,74 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using Photon.Pun;
 
 public class RazorWeapon : BaseWeapon
 {
-    [SerializeField] private LineRenderer laserRenderer;
     [SerializeField] private float laserDuration = 2f;
-    [SerializeField] private float laserLength = 20f;
-    
     
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
+    
 
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine || isFiring || isReloading || currentAmmo < 2) return;
-            photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
+            photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, firingPoint.position, firingPoint.up);
     }
-    
+
+
     [PunRPC]
-    private void RPC_FireLaser()
+    private void RPC_FireLaser(Vector3 origin, Vector3 direction)
     {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-
+        
         currentAmmo -= 2;
         UpdateAmmoUI();
         
-        ammoDisplay.reloadIndicator.SetActive(false); 
+        ammoDisplay.reloadIndicator.SetActive(false);
+        
+        // 위치 및 방향 지정
+        laser.transform.position = origin;
+        laser.transform.up = direction;
+        laser.ShootLaser(); // Laser.cs의 ShootLaser 메서드를 호출하여 레이저 발사
+        
         StartCoroutine(FireLaserRoutine());
     }
 
+    // protected override void Update() 
+    // {
+    //     laser.transform.position = gunController.muzzle.position;
+    //     laser.transform.up = gunController.muzzle.up;
+    // }
+    
     private IEnumerator FireLaserRoutine()
     {
-        isReloading = false;
         isFiring = true;
-        laserRenderer.enabled = true;
-
-        float elapsed = 0f;
-
-        while (elapsed < laserDuration)
-        {
-            Vector2 start = gunController.muzzle.position;
-            Vector2 direction =  gunController.muzzle.position;
-            
-            RaycastHit2D hit = Physics2D.Raycast(start, direction, laserLength);
-            Vector3 end = hit.collider ? (Vector3)hit.point : start + direction * laserLength;
-
-            laserRenderer.SetPosition(0, start);
-            laserRenderer.SetPosition(1, end);
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-
-        // 레이저 종료
-        laserRenderer.enabled = false;
-        // 리로드 시작 + UI 표시
+        isReloading = false;
+        
+        laser.Duration = laserDuration;
+        
+        // laser.transform.position = gunController.muzzle.position;
+        // laser.transform.up = gunController.muzzle.up;
+        
+        // laser.ShootLaser(gunController.muzzle.position, gunController.muzzle.up);
+        
+        yield return new WaitForSeconds(laserDuration);
+        
         isFiring = false;
         
-        // 리로드 UI 이제 나타남
-        isReloading = true;
-
-        ammoDisplay.reloadIndicator.SetActive(true);
+        StartAutoReload();
         
+        isReloading = true;
+        
+        ammoDisplay.reloadIndicator.SetActive(true);
         
         // 애니메이션 트리거 실행
         animator?.SetTrigger("Reload");
         yield return null; // 한 프레임 대기하여 클립이 로드되도록 함
         // 애니메이션 클립 기반으로 리로드 속도 설정
         ReloadSpeedFromAnimator();
-        
-        
         
         yield return new WaitForSeconds(reloadTime); // 재장전 시간
         
@@ -81,19 +78,16 @@ public class RazorWeapon : BaseWeapon
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
     }
-
+    
     public override WeaponType GetWeaponType()
     {
-        return weaponType;
+        return WeaponType.Laser;
     }
-
+    
     public override void OnDisable()
     {
         base.OnDisable();
-        StopAllCoroutines();
-        laserRenderer.enabled = false;
         isFiring = false;
-        isReloading = false;
     }
 
 }
