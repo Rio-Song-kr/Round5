@@ -671,6 +671,7 @@ GameObject:
   - component: {fileID: 1957728228169715252}
   - component: {fileID: 4560187014708586365}
   - component: {fileID: 6787237898858212578}
+  - component: {fileID: 1430774995244301478}
   m_Layer: 0
   m_Name: Quick Reload
   m_TagString: Untagged
@@ -735,6 +736,28 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1430774995244301478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3777309921307386761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5347323471987390038
 GameObject:
   m_ObjectHideFlags: 0

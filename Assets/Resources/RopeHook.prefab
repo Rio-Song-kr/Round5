@@ -182,8 +182,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.22123909
+        time: 0.005783081
+        value: 0.044771194
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -233,7 +233,7 @@ LineRenderer:
   m_MaskInteraction: 0
   m_UseWorldSpace: 1
   m_Loop: 0
-  m_ApplyActiveColorSpace: 1
+  m_ApplyActiveColorSpace: 0
 --- !u!1 &6704482900740947221
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +262,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 10}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1451548949993756916}
@@ -286,7 +286,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
