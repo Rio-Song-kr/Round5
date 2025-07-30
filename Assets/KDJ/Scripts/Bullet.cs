@@ -3,7 +3,7 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPun
+public class Bullet : MonoBehaviourPun,IPunObservable
     // , IPunObservable
 {
     // 무기에서 조절
@@ -188,19 +188,19 @@ public class Bullet : MonoBehaviourPun
         PhotonNetwork.Instantiate("Bullets/Explosive", transform.position, Quaternion.identity);
     }
 
-    // public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    // {
-    //     if (stream.IsWriting)
-    //     {
-    //         stream.SendNext(transform.position);
-    //         stream.SendNext(transform.rotation);
-    //     }
-    //     else
-    //     {
-    //         _networkPosition = (Vector3)stream.ReceiveNext();
-    //         _networkRotation = (Quaternion)stream.ReceiveNext();
-    //     }
-    // }
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+        }
+        else
+        {
+            _networkPosition = (Vector3)stream.ReceiveNext();
+            _networkRotation = (Quaternion)stream.ReceiveNext();
+        }
+    }
 
 }
 
