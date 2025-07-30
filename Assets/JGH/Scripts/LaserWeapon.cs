@@ -14,26 +14,32 @@ public class RazorWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine || isFiring || isReloading || currentAmmo < 2) return;
-            photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, firingPoint.position, firingPoint.up);
-    }
-
-
-    [PunRPC]
-    private void RPC_FireLaser(Vector3 origin, Vector3 direction)
-    {
-        StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
+        
         
         currentAmmo -= 2;
         UpdateAmmoUI();
         
         ammoDisplay.reloadIndicator.SetActive(false);
         
-        // 위치 및 방향 지정
-        laser.transform.position = origin;
-        laser.transform.up = direction;
-        laser.ShootLaser(); // Laser.cs의 ShootLaser 메서드를 호출하여 레이저 발사
-        
-        StartCoroutine(FireLaserRoutine());
+        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, firingPoint.position, firingPoint.up);
+        // photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
+        // photonView.RPC(nameof(FireLaserRoutine), RpcTarget.All, gunController.muzzle.position, gunController.muzzle.up);
+    }
+
+    [PunRPC]
+    private void RPC_FireLaser(Vector3 position, Vector3 direction)
+    // private void RPC_FireLaser()
+    {
+            StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
+
+            // // 위치 및 방향 지정
+            laser.transform.position = position;
+            laser.transform.up = direction;
+            
+            laser.Duration = laserDuration;
+            laser.ShootLaser(); // Laser.cs의 ShootLaser 메서드를 호출하여 레이저 발사
+            
+            StartCoroutine(FireLaserRoutine());
     }
 
     // protected override void Update() 
@@ -42,12 +48,12 @@ public class RazorWeapon : BaseWeapon
     //     laser.transform.up = gunController.muzzle.up;
     // }
     
+    [PunRPC]
     private IEnumerator FireLaserRoutine()
     {
         isFiring = true;
         isReloading = false;
         
-        laser.Duration = laserDuration;
         
         // laser.transform.position = gunController.muzzle.position;
         // laser.transform.up = gunController.muzzle.up;
@@ -67,7 +73,6 @@ public class RazorWeapon : BaseWeapon
         // 애니메이션 트리거 실행
         animator?.SetTrigger("Reload");
         yield return null; // 한 프레임 대기하여 클립이 로드되도록 함
-        // 애니메이션 클립 기반으로 리로드 속도 설정
         ReloadSpeedFromAnimator();
         
         yield return new WaitForSeconds(reloadTime); // 재장전 시간

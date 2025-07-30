@@ -42,7 +42,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // ammoDisplay = FindObjectOfType<AmmoDisplay>();
         Initialize();
         StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
-        gunController = FindObjectOfType<GunControll>();
+        gunController = GetComponent<GunControll>();
         bullet = FindObjectOfType<Bullet>();
         laser = FindObjectOfType<Laser>();
     }
