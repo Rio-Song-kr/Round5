@@ -51,6 +51,12 @@ MonoBehaviour:
   - RPC_SetWeapon
   - RPC_StartAutoReload
   - SetIsWinner
+  - UseSkills
+  - RPC_SyncMasterCanvas
+  - RPC_SwitchToClientCanvas
+  - RPC_Flip
+  - RPC_SpawnCards
+  - SpawnRandomCards1
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
