@@ -18,8 +18,6 @@ public class AbyssalCountdownEffect : MonoBehaviour
     //# 쉴드 효과 원형 이미지
 
     [Header("Effects Prefabs")]
-    //# 카운트다운 완료 시 생성할 VFX 파티클 프리팹
-    [SerializeField] private GameObject _vfxPrefab;
     //# 카운트다운 완료 시 활성화할 octagon 이펙트 오브젝트
     [SerializeField] private GameObject _octagonObject;
 
@@ -40,6 +38,12 @@ public class AbyssalCountdownEffect : MonoBehaviour
     [SerializeField] private GameObject _shieldObject;
 
     private Coroutine _scalingCoroutine;
+    private Transform _playerTransform;
+
+    private void OnDisable()
+    {
+        _skillData.Pools.Destroy(_vfxObject);
+    }
 
     /// <summary>
     /// 카운트다운 이펙트 초기화 메서드
@@ -86,14 +90,25 @@ public class AbyssalCountdownEffect : MonoBehaviour
     }
 
     /// <summary>
+    /// effect의 위치 동기화
+    /// </summary>
+    private void LateUpdate()
+    {
+        if (transform == null || _playerTransform == null) return;
+        transform.position = _playerTransform.position;
+        _vfxObject.transform.position = _playerTransform.position;
+    }
+
+    /// <summary>
     /// VFX 오브젝트를 생성하고 초기 상태를 설정
     /// </summary>
-    public void Initialize(AbyssalSkillDataSO skillData)
+    public void Initialize(AbyssalSkillDataSO skillData, Transform playerTransform)
     {
         _skillData = skillData;
+        _playerTransform = playerTransform;
 
         //# VFX 프리팹을 현재 위치에 생성하여 자식으로 설정
-        _vfxObject = PhotonNetwork.Instantiate("DefenceEffect/" + _vfxPrefab.name, transform.position, transform.rotation);
+        _vfxObject = _skillData.Pools.Instantiate("VFX_CorePoolEffect", transform.position, transform.rotation);
         _vfxObject.transform.parent = transform;
 
         //# 생성된 VFX 오브젝트에서 파티클 시스템 컴포넌트를 가져옴

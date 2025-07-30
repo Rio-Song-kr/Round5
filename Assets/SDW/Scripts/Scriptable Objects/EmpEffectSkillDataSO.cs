@@ -26,20 +26,25 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
     public PoolManager Pools => _pools;
 
     public Vector3 SkillPosition;
+    private Transform _effectTransform;
 
-    public override void Initialize(Transform playerTransform, Transform effectsTransform)
+    public override void Initialize(Transform effectsTransform)
     {
+        _effectTransform = effectsTransform;
+
         _pools = FindFirstObjectByType<PoolManager>();
         _pools.InitializePool("EmpEffect", SkillEffectPrefab, 2, 5);
         _pools.InitializePool("Arc", ArcPrefab, 30, 70);
         _pools.InitializePool("VFX_Arc", VfxArcPrefab, 30, 70);
     }
 
-    public override void Activate(Vector3 skillPosition)
+    public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
     {
         SkillPosition = skillPosition;
 
         var skillEffectObject = _pools.Instantiate("EmpEffect", SkillPosition, Quaternion.identity);
+        skillEffectObject.transform.parent = _effectTransform;
+
         var skillEffect = skillEffectObject.GetComponent<EmpEffect>();
         skillEffect.Initialize(this);
     }
