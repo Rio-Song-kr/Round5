@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class TestIngameManager : MonoBehaviour
@@ -26,14 +28,20 @@ public class TestIngameManager : MonoBehaviour
 
     public static event Action OnRoundOver;
     public static event Action OnGameSetOver;
-    public static event Action OnGameOver;
+    public static event Action OnSkillObtained;
 
     private bool isRoundOver = false;
+    private bool isGameSetOver = false;
     private bool isGameOver = false;
+    public bool IsGameOver {  get { return isGameOver; } }
 
     private Dictionary<string, int> playerRoundScore = new Dictionary<string, int>();
     private Dictionary<string, int> playerGameScore = new Dictionary<string, int>();
     private string currentWinner;
+
+    // 테스트용
+    private List<string> leftPlayerSkill = new List<string>();
+    private List<string> rightPlayerSkill = new List<string>();
 
     private void Init()
     {
@@ -56,11 +64,11 @@ public class TestIngameManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.T))
         {
-            GameSetOver("Left");
+            ObtainSkill("Left", "1");
         }
         if(Input.GetKeyDown(KeyCode.Y))
         {
-            GameSetOver("Right");
+            ObtainSkill("Right", "2");
         }
     }
 
@@ -75,6 +83,17 @@ public class TestIngameManager : MonoBehaviour
     {
         rightScore = playerGameScore["Right"];
         return playerGameScore["Left"];
+    }
+
+    public void GameStart()
+    {
+        isRoundOver = false;
+        isGameSetOver = false;
+        isGameOver = false;
+        playerRoundScore["Left"] = 0;
+        playerRoundScore["Right"] = 0;
+        playerGameScore["Left"] = 0;
+        playerGameScore["Right"] = 0;
     }
 
     public void RoundStart()
@@ -102,18 +121,78 @@ public class TestIngameManager : MonoBehaviour
 
     public void GameSetStart()
     {
-        isGameOver = false;
+        isGameSetOver = false;
 
-        playerRoundScore["Left"] = 0;
-        playerRoundScore["Right"] = 0;
+        if (playerRoundScore["Right"] >= 2 || playerRoundScore["Left"] >= 2)
+        {
+            playerRoundScore["Left"] = 0;
+            playerRoundScore["Right"] = 0;
+        }
     }
 
     private void GameSetOver(string winner)
     {
-        isGameOver = true;
+        isGameSetOver = true;
         playerGameScore[winner] += 1;        
         currentWinner = winner;
 
         OnGameSetOver?.Invoke();
+        if (playerGameScore["Left"] >= 3 || playerGameScore["Right"] >= 3)
+        {
+            GameOver();
+        }
     }
+
+    private void GameOver()
+    {
+        isGameOver = true;
+    }
+
+    public void SceneChange()
+    {
+        // 카드 선택 씬으로 전환
+        Debug.Log("Scene Change");
+    }
+
+    #region TestCode - Card
+
+    public string[] GetSkillInfo(string player)
+    {
+        if(player == "Left")
+        {
+            string[] skillInfo = new string[leftPlayerSkill.Count];
+            for (int i = 0; i < leftPlayerSkill.Count; i++)
+            {
+                skillInfo[i] = leftPlayerSkill[i];
+            }
+            return skillInfo;
+        }
+        else if(player == "Right")
+        {
+            string[] skillInfo = new string[rightPlayerSkill.Count];
+            for (int i = 0; i < rightPlayerSkill.Count; i++)
+            {
+                skillInfo[i] = rightPlayerSkill[i];
+            }
+            return skillInfo;
+        }
+        return null;
+    }
+
+    public void ObtainSkill(string player, string skill)
+    {
+        if(player == "Left")
+        {
+            leftPlayerSkill.Add(skill);
+            Debug.Log(skill);
+        }
+        else if(player == "Right")
+        {
+            rightPlayerSkill.Add(skill);
+            Debug.Log(skill);
+        }
+        OnSkillObtained?.Invoke();
+    }
+
+    #endregion
 }

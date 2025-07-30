@@ -1,5 +1,4 @@
-using Photon.Pun.Demo.PunBasics;
-using System.Collections;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,15 +11,17 @@ public class RoundOverPanelController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text winnerText;
     [SerializeField] private Image leftImage;
-    [SerializeField] private Image LeftFillImage;
+    [SerializeField] private Image leftFillImage;
     [SerializeField] private Image rightImage;
-    [SerializeField] private Image RightFillImage;
+    [SerializeField] private Image rightFillImage;
+    [SerializeField] private Image sceneChangePanel;
+
+    [Header("Offset")]
+    [SerializeField] private float imageShrinkDelay = 0.1f;
 
     Color textColor;
     string leftTextColor = "#FF8400";
     string rightTextColor = "#009EFF";
-
-    private Coroutine shrink;
 
     private void OnEnable()
     {
@@ -75,35 +76,22 @@ public class RoundOverPanelController : MonoBehaviour
 
     private void ImageInit(int left, int right)
     {
-        if(left == 0) LeftFillImage.fillAmount = 0;
-        else LeftFillImage.fillAmount = (float)left / 2;
+        if(left == 0) leftFillImage.fillAmount = 0;
+        else leftFillImage.fillAmount = (float)left / 2;
         
-        if(right == 0) RightFillImage.fillAmount = 0;
-        else RightFillImage.fillAmount = (float)right / 2;
-    }
+        if(right == 0) rightFillImage.fillAmount = 0;
+        else rightFillImage.fillAmount = (float)right / 2;
 
-    public void ShrinkImage()
-    {
-        shrink = StartCoroutine(ShrinkCoroutine());
-    }
-
-    IEnumerator ShrinkCoroutine()
-    { 
-        float postDelay = 0.05f;
-        float elapsedTime = 0;
-        while(elapsedTime < postDelay)
+        leftImage.rectTransform.DOScale(new Vector3(0, 0, 0), imageShrinkDelay).SetDelay(gameUIManager.RoundOverPanelDuration - imageShrinkDelay);
+        rightImage.rectTransform.DOScale(new Vector3(0, 0, 0), imageShrinkDelay).SetDelay(gameUIManager.RoundOverPanelDuration - imageShrinkDelay);
+    
+        if(left == 2)
         {
-            elapsedTime += Time.deltaTime;
-            float t = 1 - elapsedTime / postDelay;
-
-            leftImage.rectTransform.localScale = new Vector3(t, t, t);
-            rightImage.rectTransform.localScale = new Vector3(t, t, t);
-            yield return null;
+            sceneChangePanel.transform.DOMove(transform.position, 1f).SetDelay(1f);
         }
-        leftImage.rectTransform.localScale = new Vector3(0, 0, 0);
-        rightImage.rectTransform.localScale = new Vector3(0, 0, 0);
-        gameUIManager.HideRoundOverPanel();
-
-        shrink = null;
+        else if(right == 2)
+        {
+            sceneChangePanel.transform.DOMove(transform.position, 1f).SetDelay(1f);
+        }
     }
 }
