@@ -17,24 +17,38 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
     public float TargetScaleMultiplier = 1.2f;
 
     [Header("Shield Effect Settings")]
+    public GameObject ShieldPrefab;
     //# Abyssal SKill 활성화/비활성화 시 무적 Shield의 Scale이 증가/감소 하는데 소요되는 시간
     public float ShieldScaleDuration = 0.2f;
     //# Abyssal SKill 활성화/비활성화 시 무적 Shield의 Scale
     public float ShieldScaleMultiplier = 1.1f;
 
+    [Header("Particle Effect Settings")]
+    public GameObject VfxCorePullPrefab;
+
     private AbyssalCountdownEffect _skillEffect;
 
-    public override void Initialize(Transform playerTransform, Transform effectsTransform)
+    private PoolManager _pools;
+    public PoolManager Pools => _pools;
+
+    private Transform _effectTransform;
+
+    public override void Initialize(Transform effectsTransform)
     {
-        _skillEffect = PhotonNetwork.Instantiate(
-                "DefenceEffect/" + SkillEffectPrefab.name,
-                playerTransform.position,
-                playerTransform.rotation)
-            .GetComponent<AbyssalCountdownEffect>();
-        _skillEffect.transform.parent = playerTransform;
-        _skillEffect.gameObject.SetActive(false);
-        _skillEffect.Initialize(this);
+        _effectTransform = effectsTransform;
+
+        _pools = FindFirstObjectByType<PoolManager>();
+        _pools.InitializePool("AbyssalCountEffect", SkillEffectPrefab, 2, 5);
+        _pools.InitializePool("VFX_CorePoolEffect", VfxCorePullPrefab, 2, 5);
+        _pools.InitializePool("ShieldEffect", ShieldPrefab, 2, 5);
     }
 
-    public override void Activate(Vector3 skillPoisition) => _skillEffect.gameObject.SetActive(true);
+    public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
+    {
+        var skillEffectObject = _pools.Instantiate("AbyssalCountEffect", skillPosition, Quaternion.identity);
+        skillEffectObject.transform.parent = _effectTransform;
+
+        var skillEffect = skillEffectObject.GetComponent<AbyssalCountdownEffect>();
+        skillEffect.Initialize(this, playerTransform);
+    }
 }

@@ -1,4 +1,3 @@
-using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "FrostSlamSkill", menuName = "Skills/FrostSlamSkill")]
@@ -38,27 +37,33 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
     //# 멈췄다고 판단할 속도 임계값
     public float StopVelocityThreshold = 0.01f;
 
+    [Header("Particle Effect Settings")]
+    public GameObject VfxSmokePrefab;
     private FrostSlamEffect _skillEffect;
-    private Transform _playerTransform;
 
-    public override void Initialize(Transform playerTransform, Transform effectsTransform)
+    private PoolManager _pools;
+    public PoolManager Pools => _pools;
+
+    public Vector3 SkillPoisition;
+    private Transform _effectTransform;
+
+    public override void Initialize(Transform effectsTransform)
     {
-        _skillEffect = PhotonNetwork.Instantiate(
-                "DefenceEffect/" + SkillEffectPrefab.name,
-                effectsTransform.position,
-                effectsTransform.rotation)
-            .GetComponent<FrostSlamEffect>();
-        _skillEffect.transform.parent = effectsTransform;
-        _skillEffect.gameObject.SetActive(false);
-        _skillEffect.Initialize(this);
+        _effectTransform = effectsTransform;
 
-        _playerTransform = playerTransform;
+        _pools = FindFirstObjectByType<PoolManager>();
+        _pools.InitializePool("FrostSlamEffect", SkillEffectPrefab, 2, 5);
+        _pools.InitializePool("VFX_Smoke", VfxSmokePrefab, 2, 5);
     }
 
-    public override void Activate(Vector3 skillPosition)
+    public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
     {
-        // _skillEffect.transform.position = _playerTransform.position;
-        _skillEffect.transform.position = skillPosition;
-        _skillEffect.gameObject.SetActive(true);
+        SkillPoisition = skillPosition;
+
+        var skillEffectObject = _pools.Instantiate("FrostSlamEffect", skillPosition, Quaternion.identity);
+        skillEffectObject.transform.parent = _effectTransform;
+
+        var skillEffect = skillEffectObject.GetComponent<FrostSlamEffect>();
+        skillEffect.Initialize(this);
     }
 }
