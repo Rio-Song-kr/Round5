@@ -11,6 +11,8 @@ public class RandomMapPresetCreator : MonoBehaviour
     // 단일 라운드 수
     [SerializeField] int gameCycleNum = 3;
 
+    [SerializeField] Transform mapListTransform;
+
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
     private void OnEnable()
@@ -40,7 +42,8 @@ public class RandomMapPresetCreator : MonoBehaviour
             GameObject selectedMap = mapWeightedRandom.GetRandomItemBySub();
             Vector3 selectedMapPosition = new Vector3(i * mapTransformOffset, 0, 5);
             //PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
-            Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
+            GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
+            map.transform.SetParent(mapListTransform);
         }
     }
 
