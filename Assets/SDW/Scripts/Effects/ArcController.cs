@@ -99,6 +99,7 @@ public class ArcController : MonoBehaviourPun
         //# Pool에서 VFX_Arc를 꺼냄
         _hitEffectObject = _pools.Instantiate("VFX_Arc", transform.position, transform.rotation);
         _hitEffect = _hitEffectObject.GetComponent<VfxArcEffect>();
+        _hitEffect.Stop();
         _hitEffect.Initialize(_pools);
     }
 

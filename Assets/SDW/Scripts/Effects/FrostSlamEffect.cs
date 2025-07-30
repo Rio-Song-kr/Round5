@@ -24,15 +24,21 @@ public class FrostSlamEffect : MonoBehaviour
     private LineRenderer _lineRenderer;
     //# 페이드 효과가 진행 중인지 여부
     private bool _isFading;
-    private bool _isInitialized = false;
+    private bool _isInitialized;
 
     /// <summary>
-    /// 컴포넌트 비활성화 시 초기화
+    /// 컴포넌트 연결
     /// </summary>
-    private void OnDisable()
+    private void Awake()
     {
-        _isInitialized = false;
+        _lineRenderer = gameObject.AddComponent<LineRenderer>();
+        _polyCollider = GetComponent<PolygonCollider2D>();
     }
+
+    /// <summary>
+    /// 비활성화 시 초기화
+    /// </summary>
+    private void OnDisable() => _isInitialized = false;
 
     /// <summary>
     /// 매 프레임마다 원을 확장하고, 충돌을 감지하며, 모든 움직임이 멈추면 사라지는 효과를 시작
@@ -44,7 +50,8 @@ public class FrostSlamEffect : MonoBehaviour
         bool expansionCompleted = _currentRadius >= _skillData.MaxRadius;
         if (!expansionCompleted)
         {
-            float progress = Mathf.Clamp01((_currentRadius - _skillData.InitialRadius) / (_skillData.MaxRadius - _skillData.InitialRadius));
+            float progress = Mathf.Clamp01((_currentRadius - _skillData.InitialRadius) /
+                                           (_skillData.MaxRadius - _skillData.InitialRadius));
             float speedMultiplier = Mathf.Cos(progress * Mathf.PI * 0.5f);
             _currentRadius += _skillData.ExpansionSpeed * speedMultiplier * Time.deltaTime;
             if (_currentRadius >= _skillData.MaxRadius)
@@ -58,7 +65,8 @@ public class FrostSlamEffect : MonoBehaviour
         {
             if (_isFixed[i]) continue;
 
-            var direction = new Vector2(Mathf.Cos(i * 2f * Mathf.PI / _skillData.PointCount), Mathf.Sin(i * 2f * Mathf.PI / _skillData.PointCount));
+            var direction = new Vector2(Mathf.Cos(i * 2f * Mathf.PI / _skillData.PointCount),
+                Mathf.Sin(i * 2f * Mathf.PI / _skillData.PointCount));
 
             if (expansionCompleted)
             {
@@ -126,10 +134,7 @@ public class FrostSlamEffect : MonoBehaviour
     public void Initialize(FrostSlamSkillDataSO skillData)
     {
         _skillData = skillData;
-        
-        _lineRenderer = gameObject.AddComponent<LineRenderer>();
-        
-        _polyCollider = GetComponent<PolygonCollider2D>();
+
         _points = new List<Vector2>(_skillData.PointCount);
         _lastFramePoints = new List<Vector2>(_skillData.PointCount);
         _isFixed = new List<bool>(_skillData.PointCount);
@@ -138,6 +143,10 @@ public class FrostSlamEffect : MonoBehaviour
         _isInitialized = true;
     }
 
+    /// <summary>
+    /// 초기 활성화 및 설정 프로세싱을 수행
+    /// 스킬 데이터를 기반으로 효과의 초기 상태를 구성하고 시각적 요소들을 초기화
+    /// </summary>
     private void Activate()
     {
         _currentRadius = _skillData.InitialRadius;
@@ -160,6 +169,13 @@ public class FrostSlamEffect : MonoBehaviour
         UpdateLineRenderer();
 
         _isFading = false;
+
+
+        var smokeEffectObject = _skillData.Pools.Instantiate("VFX_Smoke", _skillData.SkillPoisition, Quaternion.identity);
+        var smokeEffect = smokeEffectObject.GetComponent<VfxSmokeEffect>();
+        smokeEffect.Stop();
+        smokeEffect.Initialize(_skillData.Pools);
+        smokeEffect.Play();
     }
 
     /// <summary>
@@ -300,18 +316,18 @@ public class FrostSlamEffect : MonoBehaviour
         yield return new WaitForSeconds(_skillData.FadeDelay);
 
         float elapsedTime = 0f;
-        Color startColor = _lineRenderer.startColor;
+        var startColor = _lineRenderer.startColor;
 
         while (elapsedTime < _skillData.FadeDuration)
         {
             elapsedTime += Time.deltaTime;
             float alpha = Mathf.Lerp(startColor.a, 0f, elapsedTime / _skillData.FadeDuration);
-            Color newColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
+            var newColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
             _lineRenderer.startColor = newColor;
             _lineRenderer.endColor = newColor;
             yield return null;
         }
-        
-        gameObject.SetActive(false);
+
+        _skillData.Pools.Destroy(gameObject);
     }
 }

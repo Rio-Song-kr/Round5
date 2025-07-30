@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class IngameCameraMovement : MonoBehaviour
 {
+    /*
+
     [Header("Reference")]
     [SerializeField] IngameUIManager gameUIManager;
     [SerializeField] RoundOverPanelController roundUIController;    
@@ -104,9 +106,13 @@ public class IngameCameraMovement : MonoBehaviour
         }
         yield return postCameraDelay;        
 
-        roundUIController.ShrinkImage();
         mainCamera.transform.position = targetPosition;
         startPosition = Camera.main.transform.position;
+        TestIngameManager.Instance.GameSetStart();
+        if (TestIngameManager.Instance.IsGameOver)
+        {
+            gameUIManager.RestartPanelShow();
+        }
         
         cameraCoroutine = null;
     }
@@ -115,6 +121,7 @@ public class IngameCameraMovement : MonoBehaviour
     {
         gameUIManager.HideRoundOverPanel();
         // æ¿ ∑ŒµÂ - øÎ»£¥‘ ∫Òµø±‚ ∑ŒµÂ æ¿¿Ã æÓ¥¿∞≈¡ˆ?
-        Debug.Log("æ¿ ¿¸»Ø");
+        Debug.Log("æ¿ ¿¸»Ø");        
     }
+    */
 }

@@ -39,5 +39,7 @@ public class StaticScoreUI : MonoBehaviour
         {
             rightWinImages[i].SetActive(true);
         }
+
+        TestIngameManager.Instance.SceneChange();
     }
 }

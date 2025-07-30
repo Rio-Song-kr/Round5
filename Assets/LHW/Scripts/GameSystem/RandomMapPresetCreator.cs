@@ -6,10 +6,13 @@ public class RandomMapPresetCreator : MonoBehaviour
     [SerializeField] GameObject[] mapResources;
 
     // 맵 위치 오프셋
-    [SerializeField] float mapTransformOffset = 35;    
+    [SerializeField] private float mapTransformOffset = 35;
+    public float MapTransformOffset { get { return mapTransformOffset; } }
 
     // 단일 라운드 수
     [SerializeField] int gameCycleNum = 3;
+
+    [SerializeField] Transform mapListTransform;
 
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
@@ -40,16 +43,8 @@ public class RandomMapPresetCreator : MonoBehaviour
             GameObject selectedMap = mapWeightedRandom.GetRandomItemBySub();
             Vector3 selectedMapPosition = new Vector3(i * mapTransformOffset, 0, 5);
             //PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
-            Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
+            GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
+            map.transform.SetParent(mapListTransform);
         }
-    }
-
-    /// <summary>
-    /// 맵의 위치를 반환(x축)
-    /// </summary>
-    /// <returns></returns>
-    public float GetTransformOffset()
-    {
-        return mapTransformOffset;
     }
 }
