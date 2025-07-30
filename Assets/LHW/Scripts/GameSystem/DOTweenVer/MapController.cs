@@ -1,11 +1,19 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class MapController : MonoBehaviour
 {
-    public void Start()
+    [SerializeField] float mapChangeDelay = 0.8f;
+
+    private Coroutine moveCoroutine;
+
+    public void Update()
     {
-       GoToNextStage();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GoToNextStage();
+        }
     }
 
     public void GoToNextStage()
@@ -16,11 +24,27 @@ public class MapController : MonoBehaviour
 
     private void MapShake()
     {
-        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90).SetDelay(1f);
+        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90);
     }
 
     private void MapMove()
     {
+        moveCoroutine = StartCoroutine(MovementCoroutine());
+    }
 
+    IEnumerator MovementCoroutine()
+    {
+        WaitForSeconds delay = new WaitForSeconds(mapChangeDelay);
+
+        MapDynamicMovement[] movements = GetComponentsInChildren<MapDynamicMovement>();
+        for (int i = 0; i < movements.Length; i++)
+        {
+            if (movements[i] != null)
+            {
+                movements[i].DynamicMove();
+                yield return delay;
+            }
+        }
+        moveCoroutine = null;
     }
 }
