@@ -1,0 +1,70 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TestPlayer : MonoBehaviour
+{
+    [SerializeField] private float _speed;
+    [SerializeField] private Rigidbody2D _rb2d;
+    [SerializeField] private GameObject _testEffect;
+
+    private Vector2 _moveInput;
+    private bool _isGrounded;
+
+    private void Update()
+    {
+        PlayerHandler();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 6)
+        {
+            _isGrounded = true;
+        } 
+
+        if (collision.gameObject.layer == 11)
+        {
+            GameObject effect = Instantiate(_testEffect, collision.contacts[0].point, Quaternion.identity);
+            effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 6)
+        {
+            _isGrounded = false;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        
+    }
+
+    private void PlayerHandler()
+    {
+        InputHandler();
+        MoveHandler();
+        JumpHandler();
+    }
+
+    private void InputHandler()
+    {
+        _moveInput.x = Input.GetAxis("Horizontal");
+    }
+
+    private void MoveHandler()
+    {
+        
+    }
+
+    private void JumpHandler()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _rb2d.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
+        }
+    }
+}
