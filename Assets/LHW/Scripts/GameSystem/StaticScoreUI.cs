@@ -7,7 +7,8 @@ public class StaticScoreUI : MonoBehaviour
     [SerializeField] GameObject[] rightWinImages;
 
     [Header("Offset")]
-    [SerializeField] float scoreObtainDelay = 1.6f;
+    [Tooltip("스코어 획득 애니메이션 종료 후 실제 점수 이미지 반영 딜레이, 스코어 획득 애니메이션 전체 길이보다 약간 길게 설정해주세요")]
+    [SerializeField] float scoreObtainDelay = 2f;
 
     private void OnEnable()
     {
@@ -97,6 +98,10 @@ public class StaticScoreUI : MonoBehaviour
                 }
             }
         }
-        TestIngameManager.Instance.SceneChange();
+
+        if (leftWinNum != 3 && rightWinNum != 3)
+        {
+            TestIngameManager.Instance.SceneChange();
+        }
     }
 }

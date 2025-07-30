@@ -28,6 +28,7 @@ public class TestIngameManager : MonoBehaviour
 
     public static event Action OnRoundOver;
     public static event Action OnGameSetOver;
+    public static event Action OnGameOver;
     public static event Action OnSkillObtained;
 
     private bool isRoundOver = false;
@@ -148,6 +149,7 @@ public class TestIngameManager : MonoBehaviour
     private void GameOver()
     {
         isGameOver = true;
+        OnGameOver?.Invoke();        
     }
 
     public void SceneChange()

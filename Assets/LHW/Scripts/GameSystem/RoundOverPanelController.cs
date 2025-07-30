@@ -11,23 +11,30 @@ public class RoundOverPanelController : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TMP_Text winnerText;
+    [Space(15f)]
     [SerializeField] private Image leftImage;
     [SerializeField] private Image leftFillImage;
     [SerializeField] private Transform leftInitTransform;
+    [Space(15f)]
     [SerializeField] private Image rightImage;
     [SerializeField] private Image rightFillImage;
     [SerializeField] private Transform rightInitTransform;
+    [Space(15f)]
     [SerializeField] private Image sceneChangePanel;
-
+    [Space(15f)]
     [SerializeField] private Transform[] leftImageWinSpot;
     [SerializeField] private Transform[] rightImageWinSpot;
-
     [SerializeField] private Transform losePosition;
 
     [Header("Offset")]
-    [SerializeField] private float imageShrinkDelay = 0.1f;
+    [Tooltip("매 라운드마다 나타난 승리 횟수 이미지가 줄어드는 데 걸리는 시간")]
+    [SerializeField] private float roundImageShrinkDuration = 0.1f;
+    [Space(15f)]
+    [Tooltip("한 라운드가 완전히 끝났을 때, 애니메이션 효과로 승리자 이미지(원)가 줄어드는데 걸리는 시간")]
     [SerializeField] private float winImageShrinkDuration = 0.1f;
+    [Tooltip("한 라운드가 완전히 끝났을 때, 승리자에 대한 애니메이션 효과가 시작되기 전 딜레이")]
     [SerializeField] private float winImageShrinkDelay = 1.6f;
+    [Tooltip("한 라운드가 완전히 끝났을 때, 애니메이션 효과로 승리자 이미지(원)이 이동하는 데 걸리는 시간")]
     [SerializeField] private float winImageMoveDuration = 0.3f;
 
     Color textColor;
@@ -108,8 +115,8 @@ public class RoundOverPanelController : MonoBehaviour
             return;
         }
 
-        leftImage.rectTransform.DOScale(new Vector3(0, 0, 0), imageShrinkDelay).SetDelay(gameUIManager.RoundOverPanelDuration - imageShrinkDelay);
-        rightImage.rectTransform.DOScale(new Vector3(0, 0, 0), imageShrinkDelay).SetDelay(gameUIManager.RoundOverPanelDuration - imageShrinkDelay);
+        leftImage.rectTransform.DOScale(new Vector3(0, 0, 0), roundImageShrinkDuration).SetDelay(gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
+        rightImage.rectTransform.DOScale(new Vector3(0, 0, 0), roundImageShrinkDuration).SetDelay(gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
     }
 
     private void AddScoreAnimation(Image winnerImage)
