@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class TestIngameManager : MonoBehaviour
@@ -145,6 +146,12 @@ public class TestIngameManager : MonoBehaviour
     private void GameOver()
     {
         isGameOver = true;
+    }
+
+    public void SceneChange()
+    {
+        // 카드 선택 씬으로 전환
+        Debug.Log("Scene Change");
     }
 
     #region TestCode - Card

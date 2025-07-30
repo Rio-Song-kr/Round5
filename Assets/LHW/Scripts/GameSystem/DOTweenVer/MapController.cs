@@ -4,16 +4,20 @@ using System.Collections;
 
 public class MapController : MonoBehaviour
 {
-    [SerializeField] float mapChangeDelay = 0.8f;
+    [Header("Offset")]
+    [SerializeField] private float mapChangeDelay = 0.8f;
+    public float MapChangeDelay { get { return mapChangeDelay; } }
 
     private Coroutine moveCoroutine;
 
-    public void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GoToNextStage();
-        }
+        TestIngameManager.OnRoundOver += GoToNextStage;
+    }
+
+    private void OnDisable()
+    {
+        TestIngameManager.OnRoundOver -= GoToNextStage;
     }
 
     public void GoToNextStage()

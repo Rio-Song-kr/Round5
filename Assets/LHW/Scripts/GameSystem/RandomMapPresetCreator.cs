@@ -6,7 +6,8 @@ public class RandomMapPresetCreator : MonoBehaviour
     [SerializeField] GameObject[] mapResources;
 
     // 맵 위치 오프셋
-    [SerializeField] float mapTransformOffset = 35;    
+    [SerializeField] private float mapTransformOffset = 35;
+    public float MapTransformOffset { get { return mapTransformOffset; } }
 
     // 단일 라운드 수
     [SerializeField] int gameCycleNum = 3;
@@ -45,14 +46,5 @@ public class RandomMapPresetCreator : MonoBehaviour
             GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
             map.transform.SetParent(mapListTransform);
         }
-    }
-
-    /// <summary>
-    /// 맵의 위치를 반환(x축)
-    /// </summary>
-    /// <returns></returns>
-    public float GetTransformOffset()
-    {
-        return mapTransformOffset;
     }
 }
