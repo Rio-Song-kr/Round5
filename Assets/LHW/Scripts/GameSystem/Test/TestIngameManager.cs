@@ -28,10 +28,12 @@ public class TestIngameManager : MonoBehaviour
 
     public static event Action OnRoundOver;
     public static event Action OnGameSetOver;
+    public static event Action OnGameOver;
     public static event Action OnSkillObtained;
 
     private bool isRoundOver = false;
     private bool isGameSetOver = false;
+    public bool IsGameSetOver { get { return isGameSetOver; } }
     private bool isGameOver = false;
     public bool IsGameOver {  get { return isGameOver; } }
 
@@ -79,10 +81,11 @@ public class TestIngameManager : MonoBehaviour
         return currentWinner;
     }
 
-    public int ReadRoundScore(out int rightScore)
+    public string ReadRoundScore(out int leftScore, out int rightScore)
     {
+        leftScore = playerGameScore["Left"];
         rightScore = playerGameScore["Right"];
-        return playerGameScore["Left"];
+        return currentWinner;
     }
 
     public void GameStart()
@@ -146,6 +149,7 @@ public class TestIngameManager : MonoBehaviour
     private void GameOver()
     {
         isGameOver = true;
+        OnGameOver?.Invoke();        
     }
 
     public void SceneChange()

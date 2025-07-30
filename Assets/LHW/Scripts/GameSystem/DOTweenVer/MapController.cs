@@ -5,6 +5,7 @@ using System.Collections;
 public class MapController : MonoBehaviour
 {
     [Header("Offset")]
+    [Tooltip("∏  ¿¸»Ø Ω√¿€ µÙ∑π¿Ã")]
     [SerializeField] private float mapChangeDelay = 0.8f;
     public float MapChangeDelay { get { return mapChangeDelay; } }
 
