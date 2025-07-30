@@ -39,7 +39,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected virtual void Start()
     {
-        ammoDisplay = FindObjectOfType<AmmoDisplay>();
+        // ammoDisplay = FindObjectOfType<AmmoDisplay>();
         Initialize();
         StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
         gunController = FindObjectOfType<GunControll>();
