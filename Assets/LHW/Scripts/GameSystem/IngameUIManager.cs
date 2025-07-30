@@ -51,6 +51,10 @@ public class IngameUIManager : MonoBehaviour
         yield return delay;
         HideRoundOverPanel();
         TestIngameManager.Instance.RoundStart();
+        if(TestIngameManager.Instance.IsGameSetOver)
+        {
+            TestIngameManager.Instance.GameSetStart();
+        }
 
         ROPanelCoroutine = null;
     }

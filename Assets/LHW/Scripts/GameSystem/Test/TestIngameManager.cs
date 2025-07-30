@@ -32,6 +32,7 @@ public class TestIngameManager : MonoBehaviour
 
     private bool isRoundOver = false;
     private bool isGameSetOver = false;
+    public bool IsGameSetOver { get { return isGameSetOver; } }
     private bool isGameOver = false;
     public bool IsGameOver {  get { return isGameOver; } }
 
@@ -79,10 +80,11 @@ public class TestIngameManager : MonoBehaviour
         return currentWinner;
     }
 
-    public int ReadRoundScore(out int rightScore)
+    public string ReadRoundScore(out int leftScore, out int rightScore)
     {
+        leftScore = playerGameScore["Left"];
         rightScore = playerGameScore["Right"];
-        return playerGameScore["Left"];
+        return currentWinner;
     }
 
     public void GameStart()
