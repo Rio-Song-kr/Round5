@@ -169,37 +169,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1549085678986508392
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5841041127285632321}
-  m_Layer: 8
-  m_Name: Muzzle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5841041127285632321
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1549085678986508392}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3609203795374112102}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7030079410466946597
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +202,6 @@ Transform:
   m_Children:
   - {fileID: 8425117921598181413}
   - {fileID: 2491929980095070438}
-  - {fileID: 5841041127285632321}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4172933043109275282
@@ -283,10 +251,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GunController
       objectReference: {fileID: 0}
-    - target: {fileID: 6168669692492258499, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
-      propertyPath: muzzle
-      value: 
-      objectReference: {fileID: 5841041127285632321}
     - target: {fileID: 8272402196766608130, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.0140002

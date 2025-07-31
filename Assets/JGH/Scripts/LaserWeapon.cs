@@ -5,13 +5,14 @@ using Photon.Pun;
 public class LaserWeapon : BaseWeapon
 {
     [SerializeField] private float laserDuration = 2f;
-    
+    [SerializeField] private GameObject laserPrefab;
+
+    private GameObject currentLaserInstance;
+    private Laser currentLaser;
+
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
-    [SerializeField] private GameObject currentLaserInstance;
-    
-    // private PoolManager _laserSootPool;
-    
+
     private GunControll gunController;
         
 
@@ -27,84 +28,95 @@ public class LaserWeapon : BaseWeapon
         if (isFiring || isReloading || currentAmmo < 2) return;
         currentAmmo -= 2;
         
-        UpdateAmmoUI();
-        
-        ammoDisplay.reloadIndicator.SetActive(false);
-        
-        // 위치 및 방향 지정
-        Laser laserComponent = GetComponent<Laser>();
-        laserComponent.transform.position = gunController.muzzle.position;
-        laserComponent.transform.up = gunController.muzzle.up;
-            
-        laserComponent.Duration = laserDuration;
-        laserComponent.ShootLaser(); // Laser.cs의 ShootLaser 메서드를 호출하여 레이저 발사
+       
         
         photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
     }
     
     [PunRPC]
-    private void RPC_FireLaser()
+    private IEnumerator RPC_FireLaser()
     {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-        
-            
+
+        UpdateAmmoUI();
+
+        ammoDisplay.reloadIndicator.SetActive(false);
+
+        // 0.1초 대기 - 위치 어긋남 방지
+        yield return new WaitForSeconds(0.1f);
+
+        if (currentLaserInstance != null)
+        {
+            Destroy(currentLaserInstance);
+        }
+
+        // 1. 레이저 프리팹 생성
+        currentLaserInstance = Instantiate(laserPrefab);
+
+        // 2. muzzle에 붙임
+        currentLaserInstance.transform.SetParent(gunController.muzzle);
+
+        // 3. 위치와 방향 로컬 기준으로 맞춤
+        currentLaserInstance.transform.localPosition = Vector3.zero;
+        currentLaserInstance.transform.localRotation = Quaternion.identity;
+
+        // 4. Shoot
+        currentLaser = currentLaserInstance.GetComponent<Laser>();
+        currentLaser.Duration = laserDuration;
+        currentLaser.ShootLaser();
+
         StartCoroutine(FireLaserRoutine());
     }
-    
+
     private IEnumerator FireLaserRoutine()
     {
         isFiring = true;
         isReloading = false;
 
         yield return new WaitForSeconds(laserDuration);
-        
+
         isFiring = false;
         StartAutoReload();
 
+        // 레이저 정리
+        if (currentLaserInstance != null)
+        {
+            Destroy(currentLaserInstance);
+        }
+
+        currentLaserInstance = null;
+        currentLaser = null;
+
+        // 리로드 애니메이션 및 타이밍
         isReloading = true;
         ammoDisplay.reloadIndicator.SetActive(true);
         
         // 애니메이션 트리거 실행
         animator?.SetTrigger("Reload");
-        yield return null; // 한 프레임 대기하여 클립이 로드되도록 함
-        ReloadSpeedFromAnimator();
 
+        yield return null;
+        ReloadSpeedFromAnimator();
         yield return new WaitForSeconds(reloadTime);
-        
+
         currentAmmo = maxAmmo;
         UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
-        // Destroy();
     }
-    
-    protected override void Update()
-    {
-        base.Update();
-        if (currentLaserInstance != null && gunController.muzzle != null)
-        {
-            currentLaserInstance.transform.position = gunController.muzzle.position;
-            currentLaserInstance.transform.up = gunController.muzzle.up;
-        }
-    }
-    
+
     public override WeaponType GetWeaponType()
     {
         return WeaponType.Laser;
     }
-    
+
     public override void OnDisable()
     {
         base.OnDisable();
         isFiring = false;
-        // Destroy();
-    }
 
-    // private void Destroy()
-    // {
-    //     foreach (Transform child in transform)
-    //     {
-    //         PhotonNetwork.Destroy(child.gameObject);
-    //     }
-    // }
+        if (currentLaserInstance != null)
+        {
+            Destroy(currentLaserInstance);
+        }
+    }
 }

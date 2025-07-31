@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1449758375720128253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2172768708684117327}
+  m_Layer: 8
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2172768708684117327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449758375720128253}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 1.511, y: -1.025, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8272402196766608130}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1466236343909835023
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,6 +62,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2172768708684117327}
   - {fileID: 6534293807182600893}
   - {fileID: 7360177062828982765}
   - {fileID: 316725613175163714}
@@ -50,7 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b373c34ba309748c3834c9f2fbb6b80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  muzzle: {fileID: 0}
+  muzzle: {fileID: 2172768708684117327}
   bulletWeaponObject: {fileID: 8556937525478883264}
   LaserWeaponObject: {fileID: 7254323180950547275}
   barrelWeaponObject: {fileID: 7331540530853936494}
@@ -495,6 +527,10 @@ PrefabInstance:
       propertyPath: ammoDisplay
       value: 
       objectReference: {fileID: 614595072458015191}
+    - target: {fileID: -6399808413141404025, guid: df9c5927702af9f4f8639850164a474a, type: 3}
+      propertyPath: laserPrefab
+      value: 
+      objectReference: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
     - target: {fileID: 2456755947761413157, guid: df9c5927702af9f4f8639850164a474a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.665
@@ -539,7 +575,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LaserWeapon
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6165780168419295017, guid: df9c5927702af9f4f8639850164a474a, type: 3}
+    - {fileID: 3722627603329298429, guid: df9c5927702af9f4f8639850164a474a, type: 3}
+    - {fileID: 5235703630447416284, guid: df9c5927702af9f4f8639850164a474a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
