@@ -36,12 +36,14 @@ public class EmpEffect : MonoBehaviourPun
 
             //# 방향 계산
             Vector3 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            var rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
+
 
             //# Pool에서 Arc를 Get
             var arcControllerObject = _skillData.Pools.Instantiate(
                 "Arc",
-                _skillData.SkillPosition,
-                Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg)
+                _skillData.SkillPosition + direction * _skillData.InitialialRadius,
+                rotation
             );
 
             var arcController = arcControllerObject.GetComponent<ArcController>();
@@ -49,6 +51,7 @@ public class EmpEffect : MonoBehaviourPun
             //# 기존 매개변수로 초기화
             arcController.Initialize(
                 _skillData.Pools,
+                _skillData,
                 transform.position,
                 direction,
                 _skillData.InitialExpansionSpeed,

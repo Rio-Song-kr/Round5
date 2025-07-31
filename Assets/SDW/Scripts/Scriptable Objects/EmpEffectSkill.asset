@@ -16,27 +16,34 @@ MonoBehaviour:
   CoolDown: 5
   IsPassive: 0
   Status:
-  - EffectType: 8
+  - EffectType: 5
     EffectValue: 0.3
     Duration: -1
     RemainingTime: -1
     IsPermanent: 1
-  - EffectType: 7
+    CanAddPlayer: 1
+  - EffectType: 8
     EffectValue: 0.125
     Duration: -1
     RemainingTime: -1
     IsPermanent: 1
+    CanAddPlayer: 0
   - EffectType: 1
-    EffectValue: 0.4
+    EffectValue: -0.4
     Duration: 2
     RemainingTime: 2
     IsPermanent: 0
+    CanAddPlayer: 1
   SkillEffectPrefab: {fileID: 7362647545994327, guid: ff351c315345cf3468ae4a906318b621, type: 3}
   InitialExpansionSpeed: 10
   MinExpansionSpeed: 0.7
   FastExpansionRadius: 1
   DecelerationDuration: 0.5
+  InitialialRadius: 0.3
   ArcPrefab: {fileID: 1359725081062828864, guid: 1f74af41a3137bb4dad40b21116d591c, type: 3}
   VfxArcPrefab: {fileID: 4176774620949802689, guid: 7041c0922d827984581b9bf153f337cf, type: 3}
+  TargetMask:
+    serializedVersion: 2
+    m_Bits: 1344
   ArcCount: 30
-  SkillPosition: {x: -2.4799082, y: 2.790604, z: 0}
+  SkillPosition: {x: 0.2608442, y: 3.1879294, z: 0}

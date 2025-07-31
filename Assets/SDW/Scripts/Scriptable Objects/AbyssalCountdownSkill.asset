@@ -17,20 +17,23 @@ MonoBehaviour:
   IsPassive: 1
   Status:
   - EffectType: 4
-    EffectValue: -1
+    EffectValue: 0
     Duration: 2
     RemainingTime: 2
     IsPermanent: 0
-  - EffectType: 5
+    CanAddPlayer: 1
+  - EffectType: 7
+    EffectValue: 0.5
+    Duration: 5
+    RemainingTime: 5
+    IsPermanent: 0
+    CanAddPlayer: 0
+  - EffectType: 6
     EffectValue: 0.2
     Duration: -1
     RemainingTime: -1
     IsPermanent: 0
-  - EffectType: 6
-    EffectValue: 0.9
-    Duration: -1
-    RemainingTime: -1
-    IsPermanent: 0
+    CanAddPlayer: 0
   SkillEffectPrefab: {fileID: 3728486530921057730, guid: bc4905f44ada4ec479389443682c7722, type: 3}
   ChargeTime: 10
   ActivateTime: 5
