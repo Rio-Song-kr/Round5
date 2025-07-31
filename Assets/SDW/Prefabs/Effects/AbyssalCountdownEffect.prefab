@@ -160,6 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1752954430760361498}
   - component: {fileID: 1673884797553369805}
+  - component: {fileID: 7170443945219211807}
   m_Layer: 0
   m_Name: AbyssalCountdownEffect
   m_TagString: Untagged
@@ -198,9 +199,30 @@ MonoBehaviour:
   _filledCircleImg: {fileID: 5986032786210601209}
   _movingCircleImg: {fileID: 796373922054590605}
   _movingLineImg: {fileID: 6498664339438408627}
-  _vfxPrefab: {fileID: 8649048491170718868, guid: a5093d56b2094b34d92a0fce5fe1aa21, type: 3}
   _octagonObject: {fileID: 7864069421096262263}
   _shieldObject: {fileID: 2051925298963498326}
+--- !u!114 &7170443945219211807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728486530921057730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &4530214428529980354
 GameObject:
   m_ObjectHideFlags: 0

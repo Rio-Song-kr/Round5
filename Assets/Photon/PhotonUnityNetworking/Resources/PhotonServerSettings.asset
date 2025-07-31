@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: hk
+  DevRegion: kr
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -50,7 +50,15 @@ MonoBehaviour:
   - RPC_SetAnimatorSpeed
   - RPC_SetWeapon
   - RPC_StartAutoReload
+  - SetIsWinner
   - UseSkills
+  - RPC_SyncMasterCanvas
+  - RPC_SwitchToClientCanvas
+  - RPC_Flip
+  - RPC_SpawnCards
+  - SpawnRandomCards1
+  - UseActiveSkills
+  - UsePassiveSkills
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

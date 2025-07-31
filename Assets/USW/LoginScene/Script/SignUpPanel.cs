@@ -51,7 +51,6 @@ public class SignUpPanel : MonoBehaviour
 
     /// <summary>
     /// UI 상태를 초기값으로 되돌림
-    /// 회원가입 버튼을 비활성화하여 이메일 중복체크 강제
     /// </summary>
     private void ResetUI()
     {
@@ -60,14 +59,13 @@ public class SignUpPanel : MonoBehaviour
         isEmailVerified = false;
         verifiedEmail = "";
 
-        signUpButton.interactable = false;
+        signUpButton.interactable = true; 
         emailCheckButton.interactable = true;
     }
 
     /// <summary>
     /// 이메일 입력 필드 값 변경 시 호출되는 콜백
     /// 이전에 검증된 이메일과 다른 값이 입력되면 검증 상태를 초기화
-    /// 사용자가 검증된 이메일을 다시 수정하는 것을 방지하기 위한 UX 설계
     /// </summary>
     /// <param name="newEmail">새로 입력된 이메일 문자열</param>
     private void OnEmailInputChanged(string newEmail)
@@ -83,15 +81,13 @@ public class SignUpPanel : MonoBehaviour
 
     /// <summary>
     /// 회원가입 버튼의 활성화 상태를 업데이트
-    /// TODO :지금은 이메일 검증 완료 여부를 확인안하고있지만 추후에 붙일예정.
+    /// 이메일 검증과 관계없이 회원가입 버튼은 활성화하고, SignUp() 메서드에서 검증 처리
     /// </summary>
     private void UpdateSignUpButtonState()
     {
-        // 이메일 중복체크가 완료된 경우에만 회원가입 버튼 활성화
         if (signUpButton != null)
         {
-            // 이메일 검증 상태도 고려
-            signUpButton.interactable = !isSigningUp && isEmailVerified;
+            signUpButton.interactable = !isSigningUp;
         }
     }
 
@@ -126,6 +122,7 @@ public class SignUpPanel : MonoBehaviour
                 if (task.IsCanceled)
                 {
                     ShowPopup("이메일 확인이 취소되었습니다");
+                    ResetEmailCheckUI(); 
                     return;
                 }
 
@@ -145,13 +142,14 @@ public class SignUpPanel : MonoBehaviour
                         ShowPopup(GetUserFriendlyErrorFromMessage(errorMessage));
                     }
 
+                    ResetEmailCheckUI(); 
                     return;
                 }
 
                 // 성공 - 사용 가능한 이메일이므로 즉시 삭제
                 FirebaseUser tempUser = task.Result.User;
 
-                // 임시 계정 삭제하여 실제 데이터베이스에 불필요한 데이터 남기지 않음
+                // 임시 계정 삭제하여 실제 데이터베이스에 데이터 남기지 않음
                 tempUser.DeleteAsync().ContinueWithOnMainThread(deleteTask =>
                 {
                     if (deleteTask.IsCompletedSuccessfully)
@@ -172,9 +170,10 @@ public class SignUpPanel : MonoBehaviour
                     }
                     else
                     {
-                        // 삭제 실패
                         ShowPopup("이메일 확인 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
                     }
+                    
+                    ResetEmailCheckUI(); 
                 });
             });
     }
@@ -223,7 +222,7 @@ public class SignUpPanel : MonoBehaviour
     {
         if (!isEmailVerified || verifiedEmail != emailInputField.text.Trim())
         {
-            ShowPopup("이메일 중복 확인을 먼저 완료해주세요");
+            ShowPopup("이메일 중복체크를 먼저 해주세요");
             return;
         }
 
@@ -288,7 +287,6 @@ public class SignUpPanel : MonoBehaviour
     /// Firebase 오류 메시지를 한국어로 변환
     /// </summary>
     /// <param name="errorMessage">원본 오류 메시지</param>
-    /// <returns>한국어로 변환</returns>
     private string GetUserFriendlyErrorFromMessage(string errorMessage)
     {
         if (string.IsNullOrEmpty(errorMessage))
@@ -386,7 +384,7 @@ public class SignUpPanel : MonoBehaviour
 
         if (signUpButton != null)
         {
-            signUpButton.interactable = isEmailVerified;
+            signUpButton.interactable = true; 
         }
     }
 
@@ -424,7 +422,7 @@ public class SignUpPanel : MonoBehaviour
     /// </summary>
     private IEnumerator WaitForSignOutComplete()
     {
-        // 로그아웃 완료까지 기다리기 (최대 3초)
+
         float waitTime = 0f;
         const float maxWaitTime = 3f;
 
@@ -433,8 +431,7 @@ public class SignUpPanel : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             waitTime += 0.1f;
         }
-
-        // 추가 안전 대기 - 네트워크 지연 등을 고려함.
+        
         yield return new WaitForSeconds(0.5f);
 
         // UI 상태 리셋

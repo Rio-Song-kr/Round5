@@ -1,9 +1,21 @@
+using System.Collections;
 using UnityEngine;
 
 public class IngameUIManager : MonoBehaviour
 {
+    [Header("Panels")]
     [SerializeField] GameObject roundOverPanel;
     [SerializeField] GameObject gameRestartPanel;
+
+    [Header("Offset")]
+    [Tooltip("라운드 종료 패널 지속 시간")]
+    [SerializeField] private float roundOverPanelDuration = 3.5f;
+    public float RoundOverPanelDuration { get { return roundOverPanelDuration; } }
+    [Tooltip("게임 종료 후 재시작 패널 활성화 딜레이")]
+    [SerializeField] private float restartPanelShowDelay = 3.5f;
+
+    Coroutine ROPanelCoroutine;
+    Coroutine restartPanelCoroutine;
 
     private void OnEnable()
     {
@@ -19,7 +31,7 @@ public class IngameUIManager : MonoBehaviour
 
     private void RoundOverPanelShow()
     {
-        roundOverPanel.SetActive(true);
+        ROPanelCoroutine = StartCoroutine(RoundOverPanelCoroutine());
     }
 
     public void HideRoundOverPanel()
@@ -27,13 +39,37 @@ public class IngameUIManager : MonoBehaviour
         roundOverPanel.SetActive(false);
     }
 
-    private void RestartPanelShow()
+    public void RestartPanelShow()
     {
-        gameRestartPanel.SetActive(true);
+        restartPanelCoroutine = StartCoroutine(RestartPanelCoroutine());
     }
 
     public void HideRestartPanel()
     {
         gameRestartPanel.SetActive(false);
+    }
+
+    IEnumerator RoundOverPanelCoroutine()
+    {
+        WaitForSeconds delay = new WaitForSeconds(roundOverPanelDuration);
+        roundOverPanel.SetActive(true);
+
+        yield return delay;
+        HideRoundOverPanel();
+        TestIngameManager.Instance.RoundStart();
+        if (TestIngameManager.Instance.IsGameSetOver)
+        {
+            TestIngameManager.Instance.GameSetStart();
+        }
+
+        ROPanelCoroutine = null;
+    }
+
+    IEnumerator RestartPanelCoroutine()
+    {
+        yield return new WaitForSeconds(restartPanelShowDelay);
+
+        gameRestartPanel.SetActive(true);
+        restartPanelCoroutine = null;
     }
 }

@@ -17,12 +17,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [Header("Panel References")]
     [SerializeField] private GameObject localPanel; 
     
+
+
+    
     private string currentRoomCode = "0000";
     private bool isInRoom = false;
     private bool hasGeneratedCode = false;
+    private bool isLoadingScene = false;
     
     private void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true; 
+        
         InitializeUI();
         
         // Photon 연결
@@ -34,11 +40,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
     
     private void Update()
     {
+        
+        
         // ESC 키 처리
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (roomCodePanel != null && roomCodePanel.activeInHierarchy)
             {
+                
                 CloseRoomCodePanel();
             }
         }
@@ -52,6 +61,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         if (roomCodeText != null) roomCodeText.text = "ROOMCODE: " + currentRoomCode;
         if (roomCodePanel != null) roomCodePanel.SetActive(false);
+   
         
         if (generateCodeButton != null) generateCodeButton.onClick.AddListener(OnGenerateCodeClick);
         if (joinRoomButton != null) joinRoomButton.onClick.AddListener(OnJoinRoomClick);
@@ -61,6 +71,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     
     public void OnGenerateCodeClick()
     {
+        if (isLoadingScene) return; // 혹시나 로딩중이면 버튼 비활성화 
+        
         if (isInRoom)
         {
             PhotonNetwork.LeaveRoom();
@@ -85,6 +97,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     
     public void OnJoinRoomClick()
     {
+        if (isLoadingScene) return; 
+        
         if (isInRoom)
         {
             PhotonNetwork.LeaveRoom();
@@ -100,6 +114,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     
     private void CloseRoomCodePanel()
     {
+        if (isLoadingScene) return;
+        
         if (isInRoom)
         {
             PhotonNetwork.LeaveRoom();
@@ -149,14 +165,48 @@ public class RoomManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(roomCode);
     }
     
+    /// <summary>
+    /// 플레이어 수 체크 및 게임 시작
+    /// </summary>
+    private void CheckPlayersAndStartGame()
+    {
+        if (!PhotonNetwork.IsMasterClient || isLoadingScene) return;
+        
+        int currentPlayerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        
+        if (currentPlayerCount >= 2)
+        {
+            // 2명이 모두 들어왔을 때 게임 시작
+            StartCoroutine(StartGameSequence());
+        }
+    }
+    
+    /// <summary>
+    /// 게임 시작 순서
+    /// </summary>
+    private IEnumerator StartGameSequence()
+    {
+        isLoadingScene = true;
+        
+        // 버튼들 비활성화
+        if (generateCodeButton != null) generateCodeButton.interactable = false;
+        if (joinRoomButton != null) joinRoomButton.interactable = false;
+        
+        yield return new WaitForSeconds(1f);
+        
+        // 모든 클라이언트가 함께 씬 로드
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("TempLoadingScene"); // 비동기 로딩 씬으로 이동
+        }
+    }
+    
     #endregion
     
     #region UI Management
     
     private void ShowMessage(string message)
     {
-        Debug.Log(message);
-        
         if (PopupManager.Instance)
         {
             PopupManager.Instance.ShowPopup(message);
@@ -173,7 +223,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         hasGeneratedCode = true;
         currentRoomCode = PhotonNetwork.CurrentRoom.Name;
         
-        if(roomCodeText != null) 
+        if(roomCodeText) 
         {
             roomCodeText.text = "ROOMCODE: " + currentRoomCode;
         }
@@ -184,14 +234,32 @@ public class RoomManager : MonoBehaviourPunCallbacks
         isInRoom = true;
         currentRoomCode = PhotonNetwork.CurrentRoom.Name;
         
-        if(roomCodeText != null) 
+        if(roomCodeText) 
         {
             roomCodeText.text = "ROOMCODE: " + currentRoomCode;
         }
         
         ShowRoomCodePanel();
+        CheckPlayersAndStartGame();
     }
-    
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        CheckPlayersAndStartGame();
+    }
+
+    // 플레이어가 랜뽑했을때
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        isLoadingScene = false;
+        
+        if(generateCodeButton) generateCodeButton.interactable = true;
+        if(joinRoomButton) joinRoomButton.interactable = true;
+  
+        
+        CheckPlayersAndStartGame();
+    }
+
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         ShowMessage($"방 생성 실패: {message}");
@@ -219,6 +287,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         isInRoom = false;
+        
+        if (generateCodeButton) generateCodeButton.interactable = true;
+        if (joinRoomButton) joinRoomButton.interactable = true;
+        
+     
         
         if (roomCodeText) 
             roomCodeText.text = "ROOMCODE: 0000";

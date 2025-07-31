@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1955753613819064047}
   m_Layer: 0
   m_Name: 3DPlatform3
-  m_TagString: Untagged
+  m_TagString: Hookable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,71 +96,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Platform1 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6558130674658153798, guid: 117af87263f6d504e89997a96a0ea256, type: 3}
+      propertyPath: m_TagString
+      value: Hookable
+      objectReference: {fileID: 0}
     - target: {fileID: 8740329403993519234, guid: 117af87263f6d504e89997a96a0ea256, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -1242413567265339898, guid: 117af87263f6d504e89997a96a0ea256, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6558130674658153798, guid: 117af87263f6d504e89997a96a0ea256, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6384115148373561204}
+      addedObject: {fileID: 1957119050421183164}
     - targetCorrespondingSourceObject: {fileID: 6558130674658153798, guid: 117af87263f6d504e89997a96a0ea256, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1957119050421183164}
+      addedObject: {fileID: 2042369236869570505}
   m_SourcePrefab: {fileID: 100100000, guid: 117af87263f6d504e89997a96a0ea256, type: 3}
 --- !u!1 &3342246608278972843 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6558130674658153798, guid: 117af87263f6d504e89997a96a0ea256, type: 3}
   m_PrefabInstance: {fileID: 8458079573487090925}
   m_PrefabAsset: {fileID: 0}
---- !u!61 &6384115148373561204
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3342246608278972843}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.3124342, y: 0.7254772}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.41896868, y: 2.4509544}
-  m_EdgeRadius: 0
 --- !u!114 &1957119050421183164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,6 +520,57 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!60 &2042369236869570505
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342246608278972843}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: de110c6ee4fddb146b11e7b9d7d75cbf, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.5222995, y: 1.9529362}
+      - {x: -0.52318746, y: -0.50163275}
+      - {x: 0.5000778, y: -0.49593484}
+      - {x: 0.499579, y: 0.50443137}
+      - {x: -0.103105426, y: 0.5032233}
+      - {x: -0.10223245, y: 1.9537691}
+  m_UseDelaunayMesh: 0
 --- !u!4 &7316093838990064190 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1217904955650885331, guid: 117af87263f6d504e89997a96a0ea256, type: 3}

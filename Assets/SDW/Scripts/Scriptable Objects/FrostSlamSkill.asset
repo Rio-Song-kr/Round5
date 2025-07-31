@@ -22,7 +22,7 @@ MonoBehaviour:
   PointCount: 48
   TargetLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1088
   DetectOffset: 0.1
   CircleRadius: 0.2
   LineMaterial: {fileID: 2100000, guid: 5084f92c48a335a47bd088fd62e622ef, type: 2}
@@ -31,3 +31,5 @@ MonoBehaviour:
   FadeDelay: 0.1
   FadeDuration: 0.3
   StopVelocityThreshold: 0.01
+  VfxSmokePrefab: {fileID: 2664536468069338131, guid: 40ecf8d11bd84c246b9c11facb48177d, type: 3}
+  SkillPoisition: {x: -0.3626496, y: -1.1371835, z: 0}

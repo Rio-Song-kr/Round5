@@ -23,21 +23,26 @@ public class VfxArcEffect : MonoBehaviourPun
     }
 
     /// <summary>
-    /// 파티클 재생
-    /// </summary>
-    public void Play()
-    {
-        _hitParticle.Stop();
-        _hitParticle.Clear();
-        _hitParticle.Play();
-        _coroutine = StartCoroutine(ReturnPool());
-    }
-
-    /// <summary>
     /// 초기화 메서드를 통해 필요한 리소스와 설정값을 할당
     /// </summary>
     /// <param name="pools">파티클 효과 풀 관리 객체</param>
     public void Initialize(PoolManager pools) => _pools = pools;
+
+    /// <summary>
+    /// 파티클 재생
+    /// </summary>
+    public void Play()
+    {
+        Stop();
+        _hitParticle.Play();
+        _coroutine = StartCoroutine(ReturnPool());
+    }
+
+    public void Stop()
+    {
+        _hitParticle.Stop();
+        _hitParticle.Clear();
+    }
 
     /// <summary>
     /// 풀로 객체 반환 및 해제 로직을 실행하는 비동기 메서드
