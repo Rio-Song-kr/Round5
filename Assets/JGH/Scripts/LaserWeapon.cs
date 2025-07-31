@@ -5,22 +5,13 @@ using Photon.Pun;
 public class LaserWeapon : BaseWeapon
 {
     [SerializeField] private float laserDuration = 2f;
-    [SerializeField] private GameObject laserPrefab;
 
     private GameObject currentLaserInstance;
     private Laser currentLaser;
 
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
-
-    private GunControll gunController;
-        
-
-    protected override void Start()
-    {
-        base.Start();
-        gunController = GetComponentInParent<GunControll>();
-    }
+   
 
     public override void Attack(Transform firingPoint)
     {
