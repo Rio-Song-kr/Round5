@@ -6,6 +6,7 @@ using UnityEngine.VFX;
 public class TestHookTrajectory : MonoBehaviour
 {
     [SerializeField] private VisualEffect _hookEffect;
+    [SerializeField] private GameObject _hookCrosshair;
 
     private RaycastHit2D[] _hits = new RaycastHit2D[10];
     private bool _isRayHit;
@@ -27,6 +28,7 @@ public class TestHookTrajectory : MonoBehaviour
         else
         {
             _hookEffect.enabled = false; // 이펙트 비활성화
+            _hookCrosshair.SetActive(false); // 크로스헤어 비활성화
         }
     }
 
@@ -42,11 +44,14 @@ public class TestHookTrajectory : MonoBehaviour
         {
             Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
             _hookEffect.SetVector3("EndPos", _hits[0].point); // 레이저가 충돌한 위치로 끝 위치 설정
+            _hookCrosshair.transform.position = _hits[0].point; // 크로스헤어 위치를 충돌 지점으로 설정
+            _hookCrosshair.SetActive(true); // 크로스헤어 활성화
             _isRayHit = true; // 레이저가 충돌했음을 표시
         }
         else
         {
             _hookEffect.SetVector3("EndPos", transform.position + transform.up * 100); // 충돌이 없으면 기본 끝 위치 설정
+            _hookCrosshair.SetActive(false); // 크로스헤어 비활성화
         }
     }
 
