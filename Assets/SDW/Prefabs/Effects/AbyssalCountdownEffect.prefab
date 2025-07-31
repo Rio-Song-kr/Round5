@@ -201,6 +201,7 @@ MonoBehaviour:
   _movingLineImg: {fileID: 6498664339438408627}
   _octagonObject: {fileID: 7864069421096262263}
   _shieldObject: {fileID: 2051925298963498326}
+  _playerMoved: 0
 --- !u!114 &7170443945219211807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +220,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 1752954430760361498}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
