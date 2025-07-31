@@ -26,7 +26,7 @@ public class Laser : MonoBehaviour
         // _laserSootPool = new LaserSootPool<LaserSoot>();
         // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
         _laserSootPool = FindFirstObjectByType<PoolManager>();
-        _laserSootPool.InitializePool(_laserSoot.name, _laserSoot, 5, 10);
+        _laserSootPool.InitializePool(_laserSoot.name, _laserSoot, 100, 200);
 
         _laserEffect = GetComponent<VisualEffect>();
         _laserEffect.enabled = false;

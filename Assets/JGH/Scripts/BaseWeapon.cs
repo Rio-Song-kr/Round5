@@ -28,12 +28,9 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     [SerializeField] protected float attackSpeed; // 
     [SerializeField] protected float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
-    
-    [Header("스크립트")]
-    protected GunControll gunController; // 총기 컨트롤러
-    protected Bullet bullet; // 총기 컨트롤러
-    protected Laser laser;
 
+    // private PhotonView photonView;
+    
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
 
@@ -42,9 +39,6 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // ammoDisplay = FindObjectOfType<AmmoDisplay>();
         Initialize();
         StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
-        gunController = GetComponent<GunControll>();
-        bullet = FindObjectOfType<Bullet>();
-        laser = FindObjectOfType<Laser>();
     }
     
     /// <summary>
@@ -83,9 +77,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     /// </summary>
     protected void ReloadSpeedFromAnimator()
     {
-        // animator.speed = 1f; 
         float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
-        // animator.speed = ; 
         
         photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
     }

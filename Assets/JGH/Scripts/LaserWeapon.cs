@@ -1,87 +1,91 @@
-using System;
 using UnityEngine;
 using System.Collections;
 using Photon.Pun;
 
-public class RazorWeapon : BaseWeapon
+public class LaserWeapon : BaseWeapon
 {
     [SerializeField] private float laserDuration = 2f;
     
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
+    [SerializeField] private GameObject currentLaserInstance;
     
+    // private PoolManager _laserSootPool;
+    
+    private GunControll gunController;
+        
+
+    protected override void Start()
+    {
+        base.Start();
+        gunController = GetComponentInParent<GunControll>();
+    }
 
     public override void Attack(Transform firingPoint)
     {
-        if (!photonView.IsMine || isFiring || isReloading || currentAmmo < 2) return;
-        
-        
+        if (!photonView.IsMine) return;
+        if (isFiring || isReloading || currentAmmo < 2) return;
         currentAmmo -= 2;
+        
         UpdateAmmoUI();
         
         ammoDisplay.reloadIndicator.SetActive(false);
         
-        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, firingPoint.position, firingPoint.up);
-        // photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
-        // photonView.RPC(nameof(FireLaserRoutine), RpcTarget.All, gunController.muzzle.position, gunController.muzzle.up);
-    }
-
-    [PunRPC]
-    private void RPC_FireLaser(Vector3 position, Vector3 direction)
-    // private void RPC_FireLaser()
-    {
-            StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-
-            // // 위치 및 방향 지정
-            laser.transform.position = position;
-            laser.transform.up = direction;
+        // 위치 및 방향 지정
+        Laser laserComponent = GetComponent<Laser>();
+        laserComponent.transform.position = gunController.muzzle.position;
+        laserComponent.transform.up = gunController.muzzle.up;
             
-            laser.Duration = laserDuration;
-            laser.ShootLaser(); // Laser.cs의 ShootLaser 메서드를 호출하여 레이저 발사
-            
-            StartCoroutine(FireLaserRoutine());
+        laserComponent.Duration = laserDuration;
+        laserComponent.ShootLaser(); // Laser.cs의 ShootLaser 메서드를 호출하여 레이저 발사
+        
+        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
     }
-
-    // protected override void Update() 
-    // {
-    //     laser.transform.position = gunController.muzzle.position;
-    //     laser.transform.up = gunController.muzzle.up;
-    // }
     
     [PunRPC]
+    private void RPC_FireLaser()
+    {
+        StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
+        
+            
+        StartCoroutine(FireLaserRoutine());
+    }
+    
     private IEnumerator FireLaserRoutine()
     {
         isFiring = true;
         isReloading = false;
-        
-        
-        // laser.transform.position = gunController.muzzle.position;
-        // laser.transform.up = gunController.muzzle.up;
-        
-        // laser.ShootLaser(gunController.muzzle.position, gunController.muzzle.up);
-        
+
         yield return new WaitForSeconds(laserDuration);
         
         isFiring = false;
-        
         StartAutoReload();
-        
+
         isReloading = true;
-        
         ammoDisplay.reloadIndicator.SetActive(true);
         
         // 애니메이션 트리거 실행
         animator?.SetTrigger("Reload");
         yield return null; // 한 프레임 대기하여 클립이 로드되도록 함
         ReloadSpeedFromAnimator();
+
+        yield return new WaitForSeconds(reloadTime);
         
-        yield return new WaitForSeconds(reloadTime); // 재장전 시간
-        
-        //탄 UI 회복, 리로드 UI OFF
         currentAmmo = maxAmmo;
-        UpdateAmmoUI(); // 탄창 갱신
+        UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
+        // Destroy();
+    }
+    
+    protected override void Update()
+    {
+        base.Update();
+        if (currentLaserInstance != null && gunController.muzzle != null)
+        {
+            currentLaserInstance.transform.position = gunController.muzzle.position;
+            currentLaserInstance.transform.up = gunController.muzzle.up;
+        }
     }
     
     public override WeaponType GetWeaponType()
@@ -93,6 +97,14 @@ public class RazorWeapon : BaseWeapon
     {
         base.OnDisable();
         isFiring = false;
+        // Destroy();
     }
 
+    // private void Destroy()
+    // {
+    //     foreach (Transform child in transform)
+    //     {
+    //         PhotonNetwork.Destroy(child.gameObject);
+    //     }
+    // }
 }
