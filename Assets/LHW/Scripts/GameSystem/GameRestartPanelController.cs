@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 게임 재시작 패널 조작
+/// </summary>
 public class GameRestartPanelController : MonoBehaviour
 {
     [SerializeField] Button yesButton;
