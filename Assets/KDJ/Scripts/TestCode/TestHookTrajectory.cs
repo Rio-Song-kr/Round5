@@ -38,11 +38,11 @@ public class TestHookTrajectory : MonoBehaviour
     /// </summary>
     private void HookTrajectory()
     {
-        _hookEffect.enabled = true; // 이펙트를 활성화
         _hookEffect.SetVector3("StartPos", transform.position); // 레이저 시작 위치 설정
         if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f) > 0)
         {
             Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
+            _hookEffect.enabled = true; // 이펙트를 활성화
             _hookEffect.SetVector3("EndPos", _hits[0].point); // 레이저가 충돌한 위치로 끝 위치 설정
             _hookCrosshair.transform.position = _hits[0].point; // 크로스헤어 위치를 충돌 지점으로 설정
             _hookCrosshair.SetActive(true); // 크로스헤어 활성화
@@ -50,7 +50,9 @@ public class TestHookTrajectory : MonoBehaviour
         }
         else
         {
-            _hookEffect.SetVector3("EndPos", transform.position + transform.up * 100); // 충돌이 없으면 기본 끝 위치 설정
+            // _hookEffect.SetVector3("EndPos", transform.position + transform.up * 100); // 충돌이 없으면 기본 끝 위치 설정
+            // 안닿으면 안쏜다
+            _hookEffect.enabled = false; // 이펙트 비활성화
             _hookCrosshair.SetActive(false); // 크로스헤어 비활성화
         }
     }
