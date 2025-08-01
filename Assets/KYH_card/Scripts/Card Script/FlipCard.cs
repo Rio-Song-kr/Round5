@@ -3,7 +3,7 @@ using DG.Tweening.Core;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private bool isFlipped = false;
     private bool isSelected = false;
@@ -18,6 +18,7 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public float hoverScale = 1.1f;
 
     private Vector3 originalScale;
+    private int cardIndex;
     private CardSelectManager manager;
 
     private bool isInteractable = true;
@@ -31,6 +32,10 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         manager = mgr;
     }
 
+    public void SetCardIndex(int index)
+    {
+        cardIndex = index;
+    }
     private void Start()
     {
         isFlipped = false;
@@ -82,8 +87,7 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             PlayFlipAnimation();
 
             // RPC로 상대 클라이언트에게도 flip 애니메이션 동기화
-            PhotonView photonView = PhotonView.Get(this);
-            photonView.RPC(nameof(RPC_Flip), RpcTarget.Others);
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.Others, cardIndex);
 
 
         }
@@ -101,7 +105,7 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         PlayFlipAnimation();
     }
 
-    void PlayFlipAnimation()
+    public void PlayFlipAnimation()
     {
         // 현재 회전값 가져오기
         Vector3 startEuler = transform.localEulerAngles;
