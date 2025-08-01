@@ -130,7 +130,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 1
-    textureScale: {x: 0.75, y: 0.75}
+    textureScale: {x: 0.5, y: 0.75}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
@@ -149,5 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 147905787da42de45b3ff277cf021658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hookEffect: {fileID: 0}
   _hookCrosshair: {fileID: 0}
+  _hookLineRenderer: {fileID: 0}
+  _hookHitEffect: {fileID: 3310369482459089586, guid: ae5cb958901105144a0568b013aad026, type: 3}
