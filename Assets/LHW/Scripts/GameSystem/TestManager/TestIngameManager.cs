@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 
+/// <summary>
+/// 테스트용으로 만들어 둔 인게임 시스템 매니저
+/// </summary>
 public class TestIngameManager : MonoBehaviour
 {
     #region Singleton
@@ -154,7 +155,7 @@ public class TestIngameManager : MonoBehaviour
 
     public void SceneChange()
     {
-        // 카드 선택 씬으로 전환
+        // TODO : 카드 선택 씬으로 전환
         Debug.Log("Scene Change");
     }
 
