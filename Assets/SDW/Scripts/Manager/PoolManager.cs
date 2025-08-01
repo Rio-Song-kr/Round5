@@ -23,7 +23,7 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
             _pools[prefabId] = new ObjectPool<GameObject>(
                 () =>
                 {
-                    var newGameObject = Instantiate(prefab);
+                    var newGameObject = GameObject.Instantiate(prefab);
 
                     if (newGameObject.GetComponent<PhotonView>() == null)
                         newGameObject.AddComponent<PhotonView>();
@@ -32,7 +32,7 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
                 },
                 obj => obj.SetActive(true),
                 obj => obj.SetActive(false),
-                obj => Destroy(obj),
+                obj => GameObject.Destroy(obj),
                 true,
                 defaultCapacity,
                 maxSize

@@ -14,9 +14,11 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
     public float DecelerationDuration = 0.5f;
 
     [Header("Arc Settings")]
+    public float InitialialRadius = 0.3f;
     public GameObject ArcPrefab;
     public GameObject VfxArcPrefab;
     private EmpEffect _skillEffect;
+    public LayerMask TargetMask;
     //# 원형 확장에 사용될 개별 Arc 프리팹
 
     // # 생성할 Arc의 총 개수

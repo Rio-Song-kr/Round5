@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 원형 카운트다운 이펙트를 제어하는 컨트롤러
 /// </summary>
-public class AbyssalCountdownEffect : MonoBehaviour
+public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
 {
     [Header("Circle UI")]
     //# 카운트다운 게이지의 채워지는 원형 이미지
@@ -36,9 +36,15 @@ public class AbyssalCountdownEffect : MonoBehaviour
 
     [Header("Shield Effect")]
     [SerializeField] private GameObject _shieldObject;
+    [SerializeField] private bool _playerMoved;
+    private float _shieldTimeCount;
+    private float _moveAcceleratesInvincibilityLossRate = 0.2f;
+    private float _shieldActiveTime = 2f;
+    private bool _shieldEffectActivated;
 
     private Coroutine _scalingCoroutine;
     private Transform _playerTransform;
+    private IStatusEffectable _status;
 
     private void OnDisable()
     {
@@ -60,6 +66,7 @@ public class AbyssalCountdownEffect : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (photonView.IsMine && Input.GetKeyDown(KeyCode.Alpha4)) _playerMoved = !_playerMoved;
         //# 현재 채움량을 목표값으로 부드럽게 이동
         if (_currentFillAmount > _targetFillAmount) _currentFillAmount -= Time.deltaTime / _skillData.ActivateTime;
         else if (_currentFillAmount < _targetFillAmount) _currentFillAmount += Time.deltaTime / _skillData.ChargeTime;
@@ -85,6 +92,21 @@ public class AbyssalCountdownEffect : MonoBehaviour
             EndEffect();
         }
 
+        if (_shieldEffectActivated)
+        {
+            //# 플레이어가 움직일 경우, 사용 시간 감소
+            if (_playerMoved) _shieldTimeCount += Time.deltaTime * (1 + _moveAcceleratesInvincibilityLossRate);
+            else _shieldTimeCount += Time.deltaTime;
+
+            if (_shieldTimeCount >= _shieldActiveTime)
+            {
+                _status.RemoveStatusEffect(StatusEffectType.Invincibility);
+                _shieldObject.SetActive(false);
+                _shieldTimeCount = 0f;
+                _shieldEffectActivated = false;
+            }
+        }
+
         //# 계산된 채움량을 UI 요소들에 적용
         SetFillAmount(_currentFillAmount);
     }
@@ -106,6 +128,9 @@ public class AbyssalCountdownEffect : MonoBehaviour
     {
         _skillData = skillData;
         _playerTransform = playerTransform;
+        _status = playerTransform.GetComponent<PlayerStatus>();
+
+        _shieldTimeCount = 0f;
 
         //# VFX 프리팹을 현재 위치에 생성하여 자식으로 설정
         _vfxObject = _skillData.Pools.Instantiate("VFX_CorePoolEffect", transform.position, transform.rotation);
@@ -153,8 +178,9 @@ public class AbyssalCountdownEffect : MonoBehaviour
         _scalingCoroutine =
             StartCoroutine(ScaleOverTime(Vector3.one * _skillData.TargetScaleMultiplier, _skillData.ScalingDuration));
 
-        _shieldObject.SetActive(true);
+        UseShieldEffect();
         _octagonObject.SetActive(true);
+        _shieldTimeCount = 0f;
     }
 
     /// <summary>
@@ -168,8 +194,31 @@ public class AbyssalCountdownEffect : MonoBehaviour
         if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
         _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one, _skillData.ScalingDuration));
 
-        _shieldObject.SetActive(false);
         _octagonObject.SetActive(false);
+    }
+
+    //todo Coroutine 대신에 TimeDeltaTime으로 처리해야할 듯
+    //# 플레이어의 이동이 있을 때는 사용 시간이 깍히는 시간이 20% 증가해야 함
+    //# 이동 시 -> Time.deltaTime * 1.2, 정지 시 -> Time.deltaTime
+    private void UseShieldEffect()
+    {
+        _shieldObject.SetActive(true);
+
+        foreach (var status in _skillData.Status)
+        {
+            if (status.EffectType == StatusEffectType.MoveAcceleratesInvincibilityLoss)
+            {
+                _moveAcceleratesInvincibilityLossRate = status.EffectValue;
+                continue;
+            }
+
+            if (status.EffectType != StatusEffectType.Invincibility) continue;
+
+            _status.ApplyStatusEffect(status.EffectType, status.EffectValue, status.Duration);
+            _shieldActiveTime = status.Duration;
+
+            _shieldEffectActivated = true;
+        }
     }
 
     /// <summary>
@@ -192,5 +241,12 @@ public class AbyssalCountdownEffect : MonoBehaviour
 
         transform.localScale = targetScale;
         _scalingCoroutine = null;
+    }
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+            stream.SendNext(_playerMoved);
+        else
+            _playerMoved = (bool)stream.ReceiveNext();
     }
 }

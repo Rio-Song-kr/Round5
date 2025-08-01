@@ -26,22 +26,23 @@ public class Laser : MonoBehaviour
         // _laserSootPool = new LaserSootPool<LaserSoot>();
         // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
         _laserSootPool = FindFirstObjectByType<PoolManager>();
-        _laserSootPool.InitializePool(_laserSoot.name, _laserSoot, 5, 10);
+        _laserSootPool.InitializePool(_laserSoot.name, _laserSoot, 100, 200);
 
         _laserEffect = GetComponent<VisualEffect>();
         _laserEffect.enabled = false;
         transform.localScale = Vector3.one; // 레이저 오브젝트의 스케일을 초기화
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
-        {
-            ShootLaser();
-        }
-
-        //TestLookAtMouse();
-    }
+    // 레이저 발사시 중복 발사됨
+    // private void Update()
+    // {
+    //     if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
+    //     {
+    //         ShootLaser();
+    //     }
+    //
+    //     //TestLookAtMouse();
+    // }
 
     public void ShootLaser()
     {
@@ -87,8 +88,8 @@ public class Laser : MonoBehaviour
         _laserEffect.SetVector3("ParentScale", scale); // 부모 오브젝트의 스케일 설정
         float Timer = 0f;
         float particleTimer = 0f;
-
-
+        
+        
         while (Timer <= Duration)
         {
             Timer += Time.deltaTime;
@@ -105,7 +106,7 @@ public class Laser : MonoBehaviour
                             transform.position,
                             transform.rotation)
                         .GetComponent<LaserSoot>();
-
+        
                     if (soot != null)
                     {
                         soot.SetPool(_laserSootPool, transform);
@@ -121,9 +122,9 @@ public class Laser : MonoBehaviour
                     }
                 }
             }
-            yield return null;
+        yield return null;
         }
-
+        
         _isLaserHit = false;
         _laserEffect.enabled = false;
         _laserCoroutine = null;
