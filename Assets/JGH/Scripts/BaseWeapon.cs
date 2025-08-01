@@ -8,6 +8,10 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     [SerializeField] protected GameObject bulletPrefab;
     [SerializeField] protected GameObject laserPrefab;
     
+    // private PhotonView photonView;
+    protected GunControll gunController;
+    protected Bullet bullet; 
+    
     [Header("탄환 정보")]
     [SerializeField] protected int maxAmmo; // 최대 탄약 수
     [SerializeField] protected int currentAmmo; // 남아 있는 탄약 수
@@ -32,8 +36,6 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     [SerializeField] protected float attackSpeed; // 
     [SerializeField] protected float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
 
-    // private PhotonView photonView;
-    protected GunControll gunController;
     
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
@@ -42,6 +44,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     {
         // ammoDisplay = FindObjectOfType<AmmoDisplay>();
         gunController = GetComponentInParent<GunControll>();
+        bullet = GetComponent<Bullet>();
         Initialize();
         StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
     }
