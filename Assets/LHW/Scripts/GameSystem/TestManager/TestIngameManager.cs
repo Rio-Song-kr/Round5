@@ -42,6 +42,11 @@ public class TestIngameManager : MonoBehaviour
     private Dictionary<string, int> playerGameScore = new Dictionary<string, int>();
     private string currentWinner;
 
+    private int roundMaxWin = 2;
+    private int GameMaxWin = 2;
+    private int currentGameRound = 0;
+    public int CurrentGameRound { get { return currentGameRound; } }
+
     // 테스트용
     private List<string> leftPlayerSkill = new List<string>();
     private List<string> rightPlayerSkill = new List<string>();
@@ -98,6 +103,7 @@ public class TestIngameManager : MonoBehaviour
         playerRoundScore["Right"] = 0;
         playerGameScore["Left"] = 0;
         playerGameScore["Right"] = 0;
+        currentGameRound = 0;
     }
 
     public void RoundStart()
@@ -111,13 +117,15 @@ public class TestIngameManager : MonoBehaviour
         playerRoundScore[winner] += 1;
         currentWinner = winner;
 
-        if(playerRoundScore["Right"] >=2)
+        if(playerRoundScore["Right"] >= roundMaxWin)
         {
             GameSetOver("Right");
+            currentGameRound++;
         }
-        else if (playerRoundScore["Left"] >= 2)
+        else if (playerRoundScore["Left"] >= roundMaxWin)
         {
             GameSetOver("Left");
+            currentGameRound++;
         }
         Debug.Log(winner);
         OnRoundOver?.Invoke();
@@ -127,11 +135,11 @@ public class TestIngameManager : MonoBehaviour
     {
         isGameSetOver = false;
 
-        if (playerRoundScore["Right"] >= 2 || playerRoundScore["Left"] >= 2)
+        if (playerRoundScore["Right"] >= roundMaxWin || playerRoundScore["Left"] >= roundMaxWin)
         {
             playerRoundScore["Left"] = 0;
             playerRoundScore["Right"] = 0;
-        }
+        }        
     }
 
     private void GameSetOver(string winner)
@@ -139,9 +147,8 @@ public class TestIngameManager : MonoBehaviour
         isGameSetOver = true;
         playerGameScore[winner] += 1;        
         currentWinner = winner;
-
         OnGameSetOver?.Invoke();
-        if (playerGameScore["Left"] >= 3 || playerGameScore["Right"] >= 3)
+        if (playerGameScore["Left"] >= 2 || playerGameScore["Right"] >= 2)
         {
             GameOver();
         }
