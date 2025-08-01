@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EmpEffectSkill", menuName = "Skills/EmpEffectSkill")]
@@ -38,13 +39,18 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
         _pools.InitializePool("EmpEffect", SkillEffectPrefab, 2, 5);
         _pools.InitializePool("Arc", ArcPrefab, 30, 70);
         _pools.InitializePool("VFX_Arc", VfxArcPrefab, 30, 70);
+        // _pools.InitializePool("Effects/EmpEffect", 2, 5);
+        // _pools.InitializePool("Effects/Arc", 30, 70);
+        // _pools.InitializePool("Effects/VFX_Arc", 30, 70);
     }
 
     public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
     {
         SkillPosition = skillPosition;
 
-        var skillEffectObject = _pools.Instantiate("EmpEffect", SkillPosition, Quaternion.identity);
+        // var skillEffectObject = _pools.Instantiate("EmpEffect", SkillPosition, Quaternion.identity);
+        // var skillEffectObject = _pools.Instantiate("Effects/EmpEffect", SkillPosition, Quaternion.identity);
+        var skillEffectObject = PhotonNetwork.Instantiate("EmpEffect", SkillPosition, Quaternion.identity);
         skillEffectObject.transform.parent = _effectTransform;
 
         var skillEffect = skillEffectObject.GetComponent<EmpEffect>();

@@ -51,6 +51,7 @@ public class VfxArcEffect : MonoBehaviourPun
     {
         yield return new WaitForSeconds(_hitParticle.main.duration);
         _coroutine = null;
-        _pools.Destroy(gameObject);
+        // _pools.Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 }
