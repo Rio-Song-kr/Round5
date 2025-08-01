@@ -1,6 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
 
+/// <summary>
+/// 게임 플레이 내내 고정적으로 유지되는 점수 UI
+/// </summary>
 public class StaticScoreUI : MonoBehaviour
 {
     [SerializeField] GameObject[] leftWinImages;
@@ -32,6 +35,9 @@ public class StaticScoreUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 매 라운드마다 특정 플레이어가 1승을 할 시에 UI로 표시. 라운드의 최종 승리자가 나올 시 패배자가 1승을 했을 경우 해당 UI를 비활성화
+    /// </summary>
     private void RoundScoreChange()
     {
         string currentWinner = TestIngameManager.Instance.ReadScore(out int left, out int right);
@@ -43,7 +49,7 @@ public class StaticScoreUI : MonoBehaviour
                 if (!leftWinImages[i].activeSelf)
                 {
                     leftWinImages[i].SetActive(true);
-                    
+
                     break;
                 }
             }
@@ -56,13 +62,16 @@ public class StaticScoreUI : MonoBehaviour
                 if (!rightWinImages[i].activeSelf)
                 {
                     rightWinImages[i].SetActive(true);
-                    
+
                     break;
                 }
             }
         }
     }
 
+    /// <summary>
+    /// 특정 라운드의 최종 승리자를 UI로 반영
+    /// </summary>
     private void GameScoreChange()
     {
         string currentWinner = TestIngameManager.Instance.ReadRoundScore(out int leftWinNum, out int rightWinNum);
@@ -71,31 +80,17 @@ public class StaticScoreUI : MonoBehaviour
         if (currentWinner == "Left")
         {
             leftWinImages[leftWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
-            if (rightRoundNum == 1)
+            if (rightRoundNum == 1 && rightWinImages[rightRoundNum - 1].activeSelf)
             {
-                for (int i = rightWinImages.Length - 1; i >= 0; i--)
-                {
-                    if (rightWinImages[i].activeSelf)
-                    {
-                        rightWinImages[i].SetActive(false);
-                        break;
-                    }
-                }
+                rightWinImages[rightRoundNum - 1].SetActive(false);
             }
         }
         else if (currentWinner == "Right")
         {
             rightWinImages[rightWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
-            if (leftRoundNum == 1)
+            if (leftRoundNum == 1 && leftWinImages[leftWinNum - 1].activeSelf)
             {
-                for (int i = leftWinImages.Length - 1; i >= 0; i--)
-                {
-                    if (leftWinImages[i].activeSelf)
-                    {
-                        leftWinImages[i].SetActive(false);
-                        break;
-                    }
-                }
+                leftWinImages[leftWinNum - 1].SetActive(false);
             }
         }
 

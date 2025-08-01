@@ -12,7 +12,6 @@ public class ArcController : MonoBehaviourPun
     //# 충돌 시 생성될 이펙트 프리팹
     [SerializeField] private GameObject _hitEffectPrefab;
     //# 충돌을 감지할 대상의 레이어
-    [SerializeField] private LayerMask _targetLayer;
 
     //# EMPEffect로부터 초기화받는 설정값들
     private float _initialExpansionSpeed;
@@ -31,6 +30,8 @@ public class ArcController : MonoBehaviourPun
     private GameObject _hitEffectObject;
     private VfxArcEffect _hitEffect;
     private bool _isReleased;
+
+    private EmpEffectSkillDataSO _skillData;
 
     /// <summary>
     /// 매 프레임마다 자신의 상태를 판단하여 속도를 결정하고 이동하며, 화면 밖으로 나가면 Pool에 반환
@@ -75,6 +76,7 @@ public class ArcController : MonoBehaviourPun
     /// </summary>
     public void Initialize(
         PoolManager pool,
+        EmpEffectSkillDataSO skillData,
         Vector3 centerPoint,
         Vector3 direction,
         float initialSpeed,
@@ -83,6 +85,8 @@ public class ArcController : MonoBehaviourPun
         float decelerationDuration)
     {
         _pools = pool;
+        _skillData = skillData;
+
         _centerPoint = centerPoint;
         _direction = direction;
         _initialExpansionSpeed = initialSpeed;
@@ -112,7 +116,7 @@ public class ArcController : MonoBehaviourPun
         // if (_isReleased) return;
 
         //# 충돌한 오브젝트가 지정된 타겟 레이어에 속하는지 확인함
-        if ((_targetLayer.value & 1 << other.gameObject.layer) > 0)
+        if ((_skillData.TargetMask.value & 1 << other.gameObject.layer) > 0)
         {
             _hitEffectObject.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
