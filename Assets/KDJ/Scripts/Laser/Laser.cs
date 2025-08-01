@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -101,7 +102,12 @@ public class Laser : MonoBehaviour
                 if (_isLaserHit)
                 {
                     // LaserSoot soot = _laserSootPool.Pool.Get();
-                    var soot = _laserSootPool.Instantiate(
+                    // var soot = _laserSootPool.Instantiate(
+                    //         _laserSoot.name,
+                    //         transform.position,
+                    //         transform.rotation)
+                    //     .GetComponent<LaserSoot>();
+                    var soot = PhotonNetwork.Instantiate(
                             _laserSoot.name,
                             transform.position,
                             transform.rotation)
