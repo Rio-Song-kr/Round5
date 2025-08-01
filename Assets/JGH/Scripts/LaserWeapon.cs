@@ -35,7 +35,7 @@ public class LaserWeapon : BaseWeapon
         ammoDisplay.reloadIndicator.SetActive(false);
 
         // 0.1초 대기 - 위치 어긋남 방지
-        yield return new WaitForSeconds(0.1f);
+        // yield return new WaitForSeconds(0.1f);
 
         if (currentLaserInstance != null)
         {
