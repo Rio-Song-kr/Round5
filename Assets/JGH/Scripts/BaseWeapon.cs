@@ -23,28 +23,22 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     [SerializeField] protected AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
     
     [Header("공격 정보")]
-    [SerializeField] protected float bulletSpeed;
+    public float bulletSpeed;
     [SerializeField] protected int attackDamage; // 
 
     [SerializeField] protected float attackSpeed; // 
     [SerializeField] protected float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
-    
-    [Header("스크립트")]
-    protected GunControll gunController; // 총기 컨트롤러
-    protected Bullet bullet; // 총기 컨트롤러
-    protected Laser laser;
 
+    // private PhotonView photonView;
+    
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
 
     protected virtual void Start()
     {
-        ammoDisplay = FindObjectOfType<AmmoDisplay>();
+        // ammoDisplay = FindObjectOfType<AmmoDisplay>();
         Initialize();
         StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
-        gunController = FindObjectOfType<GunControll>();
-        bullet = FindObjectOfType<Bullet>();
-        laser = FindObjectOfType<Laser>();
     }
     
     /// <summary>
@@ -83,14 +77,9 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     /// </summary>
     protected void ReloadSpeedFromAnimator()
     {
-        // animator.speed = 1f; 
         float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
-        // animator.speed = ; 
         
-        if (photonView.IsMine)
-        {
-            photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
-        }
+        photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
     }
     
     [PunRPC]
@@ -105,12 +94,6 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected virtual void Update()
     {
-        if (!photonView.IsMine)
-        {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 10f);
-            // transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 100f);
-        }
-        
         if (isReloading && animator != null)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -123,18 +106,12 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void StartAutoReload()
     {
-        if (photonView.IsMine)
-        {
-            photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
-        }
+        photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
     }
     
     protected void FinishReload()
     {
-        if (photonView.IsMine)
-        {
-            photonView.RPC(nameof(RPC_FinishReload), RpcTarget.All);
-        }
+        photonView.RPC(nameof(RPC_FinishReload), RpcTarget.All);
     }
     
     [PunRPC]

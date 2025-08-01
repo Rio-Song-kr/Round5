@@ -17,28 +17,31 @@ MonoBehaviour:
   IsPassive: 0
   Status:
   - EffectType: 2
-    EffectValue: -2
+    EffectValue: -1
     Duration: 0.5
     RemainingTime: 0.5
     IsPermanent: 0
+    CanAddPlayer: 1
   - EffectType: 3
     EffectValue: -1
     Duration: 0.5
     RemainingTime: 0.5
     IsPermanent: 0
+    CanAddPlayer: 1
   - EffectType: 1
-    EffectValue: 0.5
+    EffectValue: -0.5
     Duration: 1.5
     RemainingTime: 1.5
     IsPermanent: 0
+    CanAddPlayer: 1
   SkillEffectPrefab: {fileID: 6383351256617116317, guid: e0c2eb55749c8924599fe7f70e6e7123, type: 3}
   ExpansionSpeed: 10
   MaxRadius: 3
-  InitialRadius: 0.1
+  InitialRadius: 0.3
   PointCount: 48
   TargetLayer:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 1344
   DetectOffset: 0.1
   CircleRadius: 0.2
   LineMaterial: {fileID: 2100000, guid: 5084f92c48a335a47bd088fd62e622ef, type: 2}
@@ -48,4 +51,4 @@ MonoBehaviour:
   FadeDuration: 0.3
   StopVelocityThreshold: 0.01
   VfxSmokePrefab: {fileID: 2664536468069338131, guid: 40ecf8d11bd84c246b9c11facb48177d, type: 3}
-  SkillPoisition: {x: -0.3626496, y: -1.1371835, z: 0}
+  SkillPoisition: {x: -0.8990174, y: 2.8997867, z: 0}

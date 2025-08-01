@@ -7,6 +7,7 @@ public class DefenceSkillManager : MonoBehaviourPun
 {
     [SerializeField] private DefenceSkillDatabaseSO _skillDatabase;
     [SerializeField] private GameObject _effectsObject;
+    private IStatusEffectable _status;
 
     private List<DefenceSkillDataSO> _skills;
     public List<DefenceSkillDataSO> Skills => _skills;
@@ -20,6 +21,7 @@ public class DefenceSkillManager : MonoBehaviourPun
     private Coroutine _testCoroutine;
 
     private bool _isAllJoined;
+    private bool _isStarted;
 
     /// <summary>
     /// Skill 및 Skill Database 초기화
@@ -27,12 +29,14 @@ public class DefenceSkillManager : MonoBehaviourPun
     private void Start()
     {
         _photonView = GetComponent<PhotonView>();
+
         _effectsObject = GameObject.FindGameObjectWithTag("Effects");
+        _status = GetComponent<PlayerStatus>();
 
         _skills = new List<DefenceSkillDataSO>();
         _skillDatabase.Initialize();
 
-        //# 테스트용 - Skill 추가
+        //# 테스트용 - Skill 추가, 추후 카드 선택 시 AddSkill을 추가하여 사용
         AddSkill(DefenceSkills.AbyssalCountdown);
         AddSkill(DefenceSkills.Emp);
         AddSkill(DefenceSkills.FrostSlam);
@@ -47,9 +51,10 @@ public class DefenceSkillManager : MonoBehaviourPun
         {
             StartCoroutine(DelayedTime());
             _isAllJoined = false;
+            _isStarted = true;
         }
 
-        if (!Input.GetMouseButtonDown(1)) return;
+        if (!Input.GetMouseButtonDown(1) || !_isStarted) return;
 
         if (_photonView.IsMine) _photonView.RPC(nameof(UseActiveSkills), RpcTarget.All, transform.position);
     }
@@ -97,6 +102,22 @@ public class DefenceSkillManager : MonoBehaviourPun
         _skills.Add(skill);
 
         skill.Initialize(_effectsObject.transform);
+
+        switch (skillName)
+        {
+            // case DefenceSkills.AbyssalCountdown:
+            //     break;
+            case DefenceSkills.Emp:
+                foreach (var status in skill.Status)
+                {
+                    if (!status.IsPermanent || !status.CanAddPlayer) continue;
+
+                    _status.ApplyStatusEffect(status.EffectType, status.EffectValue, status.Duration, status.IsPermanent);
+                }
+                break;
+            // case DefenceSkills.FrostSlam:
+            //     break;
+        }
     }
 
     /// <summary>
