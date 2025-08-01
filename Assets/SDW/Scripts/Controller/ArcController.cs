@@ -66,8 +66,10 @@ public class ArcController : MonoBehaviourPun
         if (IsOffScreen())
         {
             if (_isReleased) return;
-            _pools.Destroy(_hitEffectObject);
-            _pools.Destroy(gameObject);
+            // _pools.Destroy(_hitEffectObject);
+            // _pools.Destroy(gameObject);
+            PhotonNetwork.Destroy(_hitEffectObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
@@ -101,7 +103,9 @@ public class ArcController : MonoBehaviourPun
         _isReleased = false;
 
         //# Pool에서 VFX_Arc를 꺼냄
-        _hitEffectObject = _pools.Instantiate("VFX_Arc", transform.position, transform.rotation);
+        // _hitEffectObject = _pools.Instantiate("VFX_Arc", transform.position, transform.rotation);
+        // _hitEffectObject = _pools.Instantiate("Effects/VFX_Arc", transform.position, transform.rotation);
+        _hitEffectObject = PhotonNetwork.Instantiate("VFX_Arc", transform.position, transform.rotation);
         _hitEffect = _hitEffectObject.GetComponent<VfxArcEffect>();
         _hitEffect.Stop();
         _hitEffect.Initialize(_pools);
@@ -114,6 +118,7 @@ public class ArcController : MonoBehaviourPun
     {
         if (_isReleased || !photonView.IsMine || photonView == null) return;
         // if (_isReleased) return;
+        if (_skillData == null) return;
 
         //# 충돌한 오브젝트가 지정된 타겟 레이어에 속하는지 확인함
         if ((_skillData.TargetMask.value & 1 << other.gameObject.layer) > 0)
@@ -123,7 +128,8 @@ public class ArcController : MonoBehaviourPun
             PlayHitEffect(transform.position, transform.rotation);
 
             //# Pool에 ArcController 반환
-            _pools.Destroy(gameObject);
+            // _pools.Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
             _isReleased = true;
         }
     }

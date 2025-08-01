@@ -40,7 +40,13 @@ public class EmpEffect : MonoBehaviourPun
 
 
             //# Pool에서 Arc를 Get
-            var arcControllerObject = _skillData.Pools.Instantiate(
+            // var arcControllerObject = _skillData.Pools.Instantiate(
+            //     // "Arc",
+            //     "Effects/Arc",
+            //     _skillData.SkillPosition + direction * _skillData.InitialialRadius,
+            //     rotation
+            // );
+            var arcControllerObject = PhotonNetwork.Instantiate(
                 "Arc",
                 _skillData.SkillPosition + direction * _skillData.InitialialRadius,
                 rotation
@@ -63,6 +69,7 @@ public class EmpEffect : MonoBehaviourPun
 
 
         //# Pool에 EmpEffect 반환
-        _skillData.Pools.Destroy(gameObject);
+        // _skillData.Pools.Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 }

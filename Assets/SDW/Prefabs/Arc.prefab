@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3352222560101819550}
   - component: {fileID: -7635788150478375134}
   - component: {fileID: -3500680549221587832}
+  - component: {fileID: -4564315906163817190}
   m_Layer: 0
   m_Name: Arc
   m_TagString: Untagged
@@ -102,9 +103,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 10
   _hitEffectPrefab: {fileID: 4176774620949802689, guid: 7041c0922d827984581b9bf153f337cf, type: 3}
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 1088
 --- !u!61 &3352222560101819550
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -195,7 +193,24 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -4564315906163817190}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-4564315906163817190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359725081062828864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

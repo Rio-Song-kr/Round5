@@ -8,6 +8,7 @@ public class BulletWeapon : BaseWeapon
     
     public override void Attack(Transform firingPoint)
     {
+        if (!photonView.IsMine) return;
         if (isReloading || currentAmmo <= 0) return;
         if (!CanAttack()) return; // 공격 속도 체크
         
@@ -27,7 +28,7 @@ public class BulletWeapon : BaseWeapon
 
         if (bulletView != null)
         {
-            bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed);
+            bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, PhotonNetwork.Time);
         }
         // if (photonView.IsMine)
         // {

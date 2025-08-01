@@ -5,22 +5,13 @@ using Photon.Pun;
 public class LaserWeapon : BaseWeapon
 {
     [SerializeField] private float laserDuration = 2f;
-    [SerializeField] private GameObject laserPrefab;
 
     private GameObject currentLaserInstance;
     private Laser currentLaser;
 
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
-
-    private GunControll gunController;
-        
-
-    protected override void Start()
-    {
-        base.Start();
-        gunController = GetComponentInParent<GunControll>();
-    }
+   
 
     public override void Attack(Transform firingPoint)
     {
@@ -30,20 +21,21 @@ public class LaserWeapon : BaseWeapon
         
        
         
-        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
+        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
     
     [PunRPC]
-    private IEnumerator RPC_FireLaser()
+    private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-
+        float lag = (float)(PhotonNetwork.Time - fireTime);
+        yield return new WaitForSeconds(lag); // 지연 보상 적용
         UpdateAmmoUI();
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
         // 0.1초 대기 - 위치 어긋남 방지
-        yield return new WaitForSeconds(0.1f);
+        // yield return new WaitForSeconds(0.1f);
 
         if (currentLaserInstance != null)
         {

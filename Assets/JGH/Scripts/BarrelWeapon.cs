@@ -11,11 +11,14 @@ public class BarrelWeapon : BaseWeapon
     // 무기 발사
     public override void Attack(Transform firingPoint)
     {
+        if (!photonView.IsMine) return;
         if (isReloading || currentAmmo < ammoPerShot) return;
         if (!CanAttack()) return; // 공격 속도 체크
         
         float angleStep = spreadAngle / (pelletCount - 1);
         float startAngle = -spreadAngle / 2f;
+
+        double fireTime = PhotonNetwork.Time;
 
         for (int i = 0; i < pelletCount; i++)
         {
@@ -31,7 +34,7 @@ public class BarrelWeapon : BaseWeapon
             if (bulletView != null)
             {
                 Vector3 direction = spreadRotation * Vector3.up;
-                bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed);
+                bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
             }
             // if (bulletObj.TryGetComponent(out Bullet bullet))
             // {
