@@ -201,8 +201,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
             Quaternion rotation = (Quaternion)stream.ReceiveNext();
             currentAmmo = (int)stream.ReceiveNext();
         
-            transform.position = position;
-            transform.rotation = rotation;
+            transform.position = Vector3.Lerp(transform.position, position, Time.deltaTime * 10f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
 
             UpdateAmmoUI();
             

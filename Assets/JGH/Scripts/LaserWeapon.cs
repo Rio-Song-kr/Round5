@@ -21,14 +21,15 @@ public class LaserWeapon : BaseWeapon
         
        
         
-        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All);
+        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
     
     [PunRPC]
-    private IEnumerator RPC_FireLaser()
+    private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-
+        float lag = (float)(PhotonNetwork.Time - fireTime);
+        yield return new WaitForSeconds(lag); // 지연 보상 적용
         UpdateAmmoUI();
 
         ammoDisplay.reloadIndicator.SetActive(false);
