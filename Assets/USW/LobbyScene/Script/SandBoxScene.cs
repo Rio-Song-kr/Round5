@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,7 +19,12 @@ public class SandBoxScene : MonoBehaviour
         anim.Play("Welcome Out");
         
         yield return new WaitForSeconds(animationLength);
-        
-        SceneManager.LoadScene("SandBoxScene");
+
+
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Disconnect();
+        }
+        SceneManager.LoadScene("KDJ_TestScene");
     }
 }

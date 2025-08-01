@@ -70,31 +70,4 @@ public class TempPlayManager : MonoBehaviourPunCallbacks
         // 예외 상황 - 기본값 반환
         return Vector2.zero;
     }
-    
-    /// <summary>
-    /// 에디터에서 스폰 포인트 시각화
-    /// </summary>
-    private void OnDrawGizmosSelected()
-    {
-        // Transform 스폰 포인트 그리기
-        if (playerSpawnPoints != null)
-        {
-            for (int i = 0; i < playerSpawnPoints.Length; i++)
-            {
-                if (playerSpawnPoints[i] != null)
-                {
-                    Gizmos.color = i == 0 ? Color.blue : Color.red;
-                    Gizmos.DrawWireSphere(playerSpawnPoints[i].position, 0.5f);
-                    Gizmos.DrawWireCube(playerSpawnPoints[i].position, Vector3.one);
-                }
-            }
-        }
-        
-        // 기본 스폰 위치 그리기
-        for (int i = 0; i < defaultSpawnPositions.Length; i++)
-        {
-            Gizmos.color = i == 0 ? Color.cyan : Color.yellow;
-            Gizmos.DrawWireSphere(defaultSpawnPositions[i], 0.3f);
-        }
-    }
 }
