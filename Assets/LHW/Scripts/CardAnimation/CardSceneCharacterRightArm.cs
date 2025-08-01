@@ -37,9 +37,9 @@ public class CardSceneCharacterRightArm : MonoBehaviour
 
     public void SelectCard(int cardNum)
     {
-        if (cardNum == 3) targetCardNum = 0;
-        else if (cardNum == 4) targetCardNum = 1;
-        else if (cardNum == 5) targetCardNum = 2;
+        if (cardNum == 2) targetCardNum = 0;
+        else if (cardNum == 3) targetCardNum = 1;
+        else if (cardNum == 4) targetCardNum = 2;
         else targetCardNum = 3;
     }
 }
