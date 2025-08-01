@@ -5,7 +5,6 @@ public class CardSceneCharacterLeftArm : MonoBehaviour
 {
     [SerializeField] Transform shoulderTransform;
     [SerializeField] Transform currentHandTarget;
-
     [SerializeField] Transform[] cardsTransforms;
 
     private SplineContainer splineContainer;
@@ -22,23 +21,7 @@ public class CardSceneCharacterLeftArm : MonoBehaviour
 
     void Update()
     {
-        if (currentHandTarget == null || shoulderTransform == null) return;        
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            targetCardNum = SelectCard(1);
-            Debug.Log(targetCardNum);   
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            targetCardNum = SelectCard(2);
-            Debug.Log(targetCardNum);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            targetCardNum = SelectCard(3);
-            Debug.Log(targetCardNum);
-        }
+        if (splineContainer == null || currentHandTarget == null || shoulderTransform == null) return;
 
         shoulderKnot.Position = shoulderTransform.position;
         currentHandTarget.position = Vector3.Lerp(currentHandTarget.position, cardsTransforms[targetCardNum].position, Time.deltaTime * 10f);
@@ -52,10 +35,10 @@ public class CardSceneCharacterLeftArm : MonoBehaviour
         spline.SetKnot(1, new BezierKnot(mid));
     }
 
-    private int SelectCard(int cardNum)
+    public void SelectCard(int cardNum)
     {
-        if (cardNum == 1) return 0;
-        else if (cardNum == 2) return 1;
-        else return 2;
+        if (cardNum == 1) targetCardNum = 0;
+        else if (cardNum == 2) targetCardNum = 1;
+        else targetCardNum = 2;
     }
 }
