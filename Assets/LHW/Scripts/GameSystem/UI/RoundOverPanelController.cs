@@ -152,7 +152,6 @@ public class RoundOverPanelController : MonoBehaviour
     private void AddScoreAnimation(Image winnerImage)
     {
         string currentWinner = TestIngameManager.Instance.ReadRoundScore(out int leftScore, out int rightScore);
-        Debug.Log(leftScore);
         if (currentWinner == "Left")
         {
             leftImage.transform.DOScale(new Vector3(0.13f, 0.13f, 0.13f), winImageShrinkDuration).SetDelay(winImageShrinkDelay);

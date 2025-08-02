@@ -20,9 +20,6 @@ public class MapDynamicMovement : MonoBehaviour
     {
         mapController = GetComponentInParent<MapController>();
         randomMapPresetCreator = GetComponentInParent<RandomMapPresetCreator>();
-
-        Debug.Log(mapController);
-        Debug.Log(randomMapPresetCreator);
     }
 
     public void DynamicMove()

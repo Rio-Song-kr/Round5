@@ -145,7 +145,6 @@ public class TestIngameManager : MonoBehaviour
             GameSetOver("Left");
             currentGameRound++;
         }
-        Debug.Log(winner);
         OnRoundOver?.Invoke();
     }
 
