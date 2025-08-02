@@ -27,10 +27,14 @@ public class TestIngameManager : MonoBehaviour
 
     #endregion
 
+    public static event Action onCardSelectEnd;
     public static event Action OnRoundOver;
     public static event Action OnGameSetOver;
     public static event Action OnGameOver;
     public static event Action OnSkillObtained;
+
+    private bool isCardSelectTime = false;
+    public bool IsCardSelectTime { get {  return isCardSelectTime; } } 
 
     private bool isRoundOver = false;
     private bool isGameSetOver = false;
@@ -57,13 +61,15 @@ public class TestIngameManager : MonoBehaviour
         playerRoundScore.Add("Right", 0);
         playerGameScore.Add("Left", 0);
         playerGameScore.Add("Right", 0);
+        GameStart();
     }
 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Q))
         {
-            // 카드 셀렉팅 종료
+            CardSelectEnd();
+            RoundStart();
         }
 
         // 테스트용 코드
@@ -101,6 +107,7 @@ public class TestIngameManager : MonoBehaviour
 
     public void GameStart()
     {
+        isCardSelectTime = true;
         isRoundOver = false;
         isGameSetOver = false;
         isGameOver = false;
@@ -109,6 +116,12 @@ public class TestIngameManager : MonoBehaviour
         playerGameScore["Left"] = 0;
         playerGameScore["Right"] = 0;
         currentGameRound = 0;
+    }
+
+    public void CardSelectEnd()
+    {
+        isCardSelectTime = false;
+        onCardSelectEnd?.Invoke();
     }
 
     public void RoundStart()
@@ -150,7 +163,8 @@ public class TestIngameManager : MonoBehaviour
     private void GameSetOver(string winner)
     {
         isGameSetOver = true;
-        playerGameScore[winner] += 1;        
+        isCardSelectTime = true;
+        playerGameScore[winner] += 1;
         currentWinner = winner;
         OnGameSetOver?.Invoke();
         if (playerGameScore["Left"] >= 2 || playerGameScore["Right"] >= 2)
@@ -163,12 +177,6 @@ public class TestIngameManager : MonoBehaviour
     {
         isGameOver = true;
         OnGameOver?.Invoke();        
-    }
-
-    public void SceneChange()
-    {
-        // TODO : 카드 선택 씬으로 전환
-        Debug.Log("Scene Change");
     }
 
     #region TestCode - Card

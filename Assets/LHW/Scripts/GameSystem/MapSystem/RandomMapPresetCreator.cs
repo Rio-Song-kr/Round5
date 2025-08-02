@@ -54,6 +54,7 @@ public class RandomMapPresetCreator : MonoBehaviour
 
     public void MapUpdate(int round)
     {
+        if (TestIngameManager.Instance.IsGameOver) return;
         Debug.Log(round);
         mapListTransform[round - 1].gameObject.SetActive(false);
         mapListTransform[round].gameObject.SetActive(true);
