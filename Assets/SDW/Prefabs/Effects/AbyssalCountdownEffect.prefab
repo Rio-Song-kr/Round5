@@ -161,7 +161,8 @@ GameObject:
   - component: {fileID: 1752954430760361498}
   - component: {fileID: 1673884797553369805}
   - component: {fileID: 7170443945219211807}
-  m_Layer: 0
+  - component: {fileID: 1774871938980140801}
+  m_Layer: 15
   m_Name: AbyssalCountdownEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,9 +199,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _octagonObject: {fileID: 7864069421096262263}
   _circleFill: {fileID: 5973489254601537283}
+  _collider: {fileID: 0}
   SkillData: {fileID: 11400000, guid: 0399de20996c6534b8c804af21ab91d8, type: 2}
   ShieldObject: {fileID: 2051925298963498326}
-  _playerMoved: 0
 --- !u!114 &7170443945219211807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +225,41 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!58 &1774871938980140801
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728486530921057730}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2
 --- !u!1 &4530214428529980354
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +270,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3955675136492296634}
   - component: {fileID: 5973489254601537283}
+  - component: {fileID: 7801618330278826945}
   m_Layer: 5
   m_Name: Circle
   m_TagString: Untagged
@@ -280,7 +317,32 @@ MonoBehaviour:
   _filledCircleImg: {fileID: 5986032786210601209}
   _movingCircleImg: {fileID: 796373922054590605}
   _movingLineImg: {fileID: 6498664339438408627}
+  CurrentFillAmount: 0
   CanIncrese: 1
+  StartEffect: 0
+  PlayerMoved: 0
+--- !u!114 &7801618330278826945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4530214428529980354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5350036020021803779
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,6 +991,10 @@ PrefabInstance:
     - target: {fileID: 3452656125990451006, guid: 2d2057109c8a09c4f9a25b886bffe55c, type: 3}
       propertyPath: m_Name
       value: Shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 3452656125990451006, guid: 2d2057109c8a09c4f9a25b886bffe55c, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3452656125990451006, guid: 2d2057109c8a09c4f9a25b886bffe55c, type: 3}
       propertyPath: m_IsActive
