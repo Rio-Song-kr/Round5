@@ -7,6 +7,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 {
     [SerializeField] protected GameObject bulletPrefab;
     [SerializeField] protected GameObject laserPrefab;
+    [SerializeField] protected GameObject fragmentPrefab;
+    [SerializeField] protected GameObject explosivePrefab;
     
     // private PhotonView photonView;
     protected GunControll gunController;
@@ -39,10 +41,20 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
+    
+    protected PoolManager _poolManager;
 
     protected virtual void Start()
     {
         // ammoDisplay = FindObjectOfType<AmmoDisplay>();
+        _poolManager = FindFirstObjectByType<PoolManager>();
+        
+        _poolManager.InitializePool("Bullet", bulletPrefab, 1, 1);
+        _poolManager.InitializePool("Fragment", fragmentPrefab, 1, 1);
+        _poolManager.InitializePool("Laser", laserPrefab, 1, 1);
+        _poolManager.InitializePool("Explosive", explosivePrefab, 1, 1);
+        
+        
         gunController = GetComponentInParent<GunControll>();
         bullet = GetComponent<Bullet>();
         Initialize();
