@@ -10,6 +10,7 @@ public class IngameUIManager : MonoBehaviour
     [SerializeField] RandomMapPresetCreator creator;
 
     [Header("Panels")]
+    [SerializeField] GameObject cardSelectPanel;
     [SerializeField] GameObject roundOverPanel;
     [SerializeField] GameObject gameRestartPanel;
 

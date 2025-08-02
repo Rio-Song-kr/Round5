@@ -1,14 +1,16 @@
-using LHWtestScript;
 using UnityEngine;
 
 public class CardSelectByHandManager : MonoBehaviour
 {
     [SerializeField] GameObject[] cards;
     [SerializeField] CardSceneArmController armController;
-
+    
+    // 스크립트 충돌 문제로 임시 주석처리했습니다. 용호님의 플립카드 스크립트와 연결 필요
+    /*
     private int selectedIndex = -1;
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.D))
         {
             SelectRightCard();
@@ -63,4 +65,5 @@ public class CardSelectByHandManager : MonoBehaviour
             }
         }
     }
+    */
 }

@@ -61,6 +61,11 @@ public class TestIngameManager : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            // 카드 셀렉팅 종료
+        }
+
         // 테스트용 코드
         if(Input.GetKeyDown(KeyCode.R))
         {
