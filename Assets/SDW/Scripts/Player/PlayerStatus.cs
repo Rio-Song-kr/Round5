@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour, IStatusEffectable
@@ -117,7 +118,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         }
 
         //# 값이 변경된 경우에만 Invoke
-        if (Mathf.Abs(prevSpeed - _calculatedGroundSpeed) > 0.1f)
+        if (Mathf.Abs(prevSpeed - _calculatedGroundSpeed) > 0.05f)
             OnPlayerSpeedValueChanged?.Invoke(_calculatedGroundSpeed, _calculatedAirSpeed);
 
         if (prevInvincibility != _isInvincibility)

@@ -12,6 +12,9 @@ public class DefenceSkillManager : MonoBehaviourPun
     private List<DefenceSkillDataSO> _skills;
     public List<DefenceSkillDataSO> Skills => _skills;
 
+    private List<DefenceSkills> _skillNames;
+    public List<DefenceSkills> SkillNames => _skillNames;
+
     private Coroutine _coroutine;
     private WaitForSeconds _coolDown;
 
@@ -35,6 +38,8 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         _skills = new List<DefenceSkillDataSO>();
         _skillDatabase.Initialize();
+
+        _skillNames = new List<DefenceSkills>();
 
         //# 테스트용 - Skill 추가, 추후 카드 선택 시 AddSkill을 추가하여 사용
         AddSkill(DefenceSkills.AbyssalCountdown);
@@ -100,6 +105,8 @@ public class DefenceSkillManager : MonoBehaviourPun
     {
         var skill = _skillDatabase.SkillDatabase[skillName];
         _skills.Add(skill);
+
+        _skillNames.Add(skillName);
 
         skill.Initialize(_effectsObject.transform);
 
