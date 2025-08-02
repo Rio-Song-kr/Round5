@@ -1,54 +1,62 @@
+using System;
 using System.Collections;
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Splines.ExtrusionShapes;
 
 /// <summary>
 /// 원형 카운트다운 이펙트를 제어하는 컨트롤러
 /// </summary>
 public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
 {
-    [Header("Circle UI")]
-    //# 카운트다운 게이지의 채워지는 원형 이미지
-    [SerializeField] private Image _filledCircleImg;
-    //# 카운트다운 게이지의 움직이는 원형 이미지
-    [SerializeField] private Image _movingCircleImg;
-    //# 카운트다운 게이지의 움직이는 라인 이미지
-    [SerializeField] private Image _movingLineImg;
-    //# 쉴드 효과 원형 이미지
-
     [Header("Effects Prefabs")]
     //# 카운트다운 완료 시 활성화할 octagon 이펙트 오브젝트
     [SerializeField] private GameObject _octagonObject;
+    [SerializeField] private CircleFillController _circleFill;
+    [SerializeField] private CircleCollider2D _collider;
 
     //# Abyssal Countdown Skill Data
-    private AbyssalSkillDataSO _skillData;
+    public AbyssalSkillDataSO SkillData;
     //# 생성된 VFX 오브젝트의 파티클 시스템 컴포넌트
     private ParticleSystem _particle;
     //# 생성된 VFX 오브젝트의 참조
     private GameObject _vfxObject;
-    //# 현재 게이지의 채움 정도 (0~1)
-    private float _currentFillAmount = 0f;
-    //# 목표로 하는 게이지의 채움 정도 (0~1)
-    private float _targetFillAmount = 1f;
-    //# 현재 게이지가 증가 모드인지 여부 (true: 증가, false: 감소)
-    private bool _canIncrease = true;
 
     [Header("Shield Effect")]
-    [SerializeField] private GameObject _shieldObject;
-    [SerializeField] private bool _playerMoved;
+    //# 쉴드 효과 원형 이미지
+    public GameObject ShieldObject;
     private float _shieldTimeCount;
     private float _moveAcceleratesInvincibilityLossRate = 0.2f;
     private float _shieldActiveTime = 2f;
     private bool _shieldEffectActivated;
 
+    private float _pullRate = 0.2f;
+
     private Coroutine _scalingCoroutine;
+
     private Transform _playerTransform;
+    private TestPlayerMove _myPlayer;
     private IStatusEffectable _status;
+
+    private Vector3 _networkPosition;
+
+    private bool _isStarted;
+    private int _vfxViewId;
+
+    private GameObject _targetPlayer;
+    private int _targetViewId;
+
+    private void Awake()
+    {
+        PhotonNetwork.SendRate = 40;
+        PhotonNetwork.SerializationRate = 20;
+    }
 
     private void OnDisable()
     {
-        _skillData.Pools.Destroy(_vfxObject);
+        if (_vfxObject != null)
+            PhotonNetwork.Destroy(_vfxObject);
     }
 
     /// <summary>
@@ -56,6 +64,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// </summary>
     private void Start()
     {
+        if (_particle == null) return;
         //# 파티클을 중지하고 기존 파티클들을 제거
         _particle.Stop();
         _particle.Clear();
@@ -66,49 +75,45 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// </summary>
     private void Update()
     {
-        if (photonView.IsMine && Input.GetKeyDown(KeyCode.Alpha4)) _playerMoved = !_playerMoved;
-        //# 현재 채움량을 목표값으로 부드럽게 이동
-        if (_currentFillAmount > _targetFillAmount) _currentFillAmount -= Time.deltaTime / _skillData.ActivateTime;
-        else if (_currentFillAmount < _targetFillAmount) _currentFillAmount += Time.deltaTime / _skillData.ChargeTime;
+        if (!photonView.IsMine || !_isStarted) return;
 
-        //# 증가 모드에서 게이지가 거의 완전히 채워졌을 때의 처리
-        if (_canIncrease && Mathf.Abs(_currentFillAmount - 1f) < 0.01f)
+        // 끌어당김 로직
+        if (_targetPlayer != null)
         {
-            //# 게이지를 완전히 채우고 감소 모드로 전환
-            _currentFillAmount = 1f;
-            _targetFillAmount = 0f;
-            _canIncrease = false;
-
-            StartEffect();
+            if (Vector3.Distance(_playerTransform.position, _targetPlayer.transform.position) > 1.2f)
+            {
+                Vector2 direction = (_playerTransform.position - _targetPlayer.transform.position).normalized;
+                var moveAmount = direction * _pullRate * Time.deltaTime;
+                _targetPlayer.transform.Translate(moveAmount, Space.World);
+                photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, _targetViewId, _targetPlayer.transform.position);
+            }
         }
-        //# 감소 모드에서 게이지가 거의 완전히 비워졌을 때의 처리
-        else if (!_canIncrease && Mathf.Abs(_currentFillAmount) < 0.01f)
-        {
-            //# 게이지를 완전히 비우고 증가 모드로 전환
-            _currentFillAmount = 0f;
-            _targetFillAmount = 1f;
-            _canIncrease = true;
 
-            EndEffect();
+        //# 증가 모드 -> 감소 모드로 변경되었을 때 처리
+        if (_circleFill.StartEffect && !_circleFill.CanIncrese)
+        {
+            photonView.RPC(nameof(StartEffect), RpcTarget.All);
+            _circleFill.StartEffect = false;
+            _collider.enabled = true;
+        }
+
+        //# 감소 모드 -> 증가 모드로 변경되었을 때 처리
+        else if (_circleFill.StartEffect && _circleFill.CanIncrese)
+        {
+            photonView.RPC(nameof(EndEffect), RpcTarget.All);
+            _circleFill.StartEffect = false;
+            _collider.enabled = false;
         }
 
         if (_shieldEffectActivated)
         {
             //# 플레이어가 움직일 경우, 사용 시간 감소
-            if (_playerMoved) _shieldTimeCount += Time.deltaTime * (1 + _moveAcceleratesInvincibilityLossRate);
+            if (_circleFill.PlayerMoved) _shieldTimeCount += Time.deltaTime * (1 + _moveAcceleratesInvincibilityLossRate);
             else _shieldTimeCount += Time.deltaTime;
 
             if (_shieldTimeCount >= _shieldActiveTime)
-            {
-                _status.RemoveStatusEffect(StatusEffectType.Invincibility);
-                _shieldObject.SetActive(false);
-                _shieldTimeCount = 0f;
-                _shieldEffectActivated = false;
-            }
+                photonView.RPC(nameof(DisableShieldEffect), RpcTarget.All);
         }
-
-        //# 계산된 채움량을 UI 요소들에 적용
-        SetFillAmount(_currentFillAmount);
     }
 
     /// <summary>
@@ -116,67 +121,127 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// </summary>
     private void LateUpdate()
     {
-        if (transform == null || _playerTransform == null) return;
-        transform.position = _playerTransform.position;
-        _vfxObject.transform.position = _playerTransform.position;
+        if (!_isStarted) return;
+
+        if (photonView.IsMine)
+        {
+            transform.position = _playerTransform.position;
+            _vfxObject.transform.position = _playerTransform.position;
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 5f);
+            _vfxObject.transform.position = Vector3.Lerp(_vfxObject.transform.position, _networkPosition, Time.deltaTime * 5f);
+        }
     }
 
     /// <summary>
     /// VFX 오브젝트를 생성하고 초기 상태를 설정
     /// </summary>
-    public void Initialize(AbyssalSkillDataSO skillData, Transform playerTransform)
+    public void Initialize(AbyssalSkillDataSO skillData, int playerViewId)
     {
-        _skillData = skillData;
-        _playerTransform = playerTransform;
-        _status = playerTransform.GetComponent<PlayerStatus>();
+        SkillData = skillData;
 
-        _shieldTimeCount = 0f;
+        if (!photonView.IsMine) return;
+
+        //# 본인만 가지고 있음
+        _collider = GetComponent<CircleCollider2D>();
+        _collider.enabled = false;
 
         //# VFX 프리팹을 현재 위치에 생성하여 자식으로 설정
-        _vfxObject = _skillData.Pools.Instantiate("VFX_CorePoolEffect", transform.position, transform.rotation);
-        _vfxObject.transform.parent = transform;
+        _vfxObject = PhotonNetwork.Instantiate("VFX_CorePoolEffect", transform.position, transform.rotation);
 
         //# 생성된 VFX 오브젝트에서 파티클 시스템 컴포넌트를 가져옴
         _particle = _vfxObject.GetComponentInChildren<ParticleSystem>();
 
-        _shieldObject.GetComponent<ShieldEffect>().Init(_skillData.ShieldScaleMultiplier, _skillData.ShieldScaleDuration);
-        _shieldObject.SetActive(false);
+        var vfxView = _vfxObject.GetComponent<PhotonView>();
+        _vfxViewId = vfxView.ViewID;
 
         //# 파티클을 중지하고 기존 파티클들을 제거
-        _particle.Stop();
-        _particle.Clear();
+        photonView.RPC(nameof(InitializeComponent), RpcTarget.All, playerViewId, _vfxViewId);
 
-        //# octagon 이펙트는 초기에 비활성화
-        _octagonObject.SetActive(false);
+        _octagonObject.SetActive(true);
     }
 
-    /// <summary>
-    /// 계산된 채움량을 각 UI 이미지 요소에 적용하여 카운트다운 효과를 시각화
-    /// </summary>
-    /// <param name="fillAmount">적용할 채움량 (0~1 범위)</param>
-    public void SetFillAmount(float fillAmount)
+    [PunRPC]
+    private void InitializeComponent(int playerViewId, int vfxViewId)
     {
-        //# 채워지는 원형 이미지와 움직이는 원형 이미지의 fillAmount 설정
-        _filledCircleImg.fillAmount = fillAmount;
-        _movingCircleImg.fillAmount = fillAmount;
+        var playerTransform = PhotonView.Find(playerViewId).transform;
+        _playerTransform = playerTransform;
+        _myPlayer = _playerTransform.GetComponent<TestPlayerMove>();
 
-        //# 움직이는 라인 이미지를 채움량에 따라 회전 (360도 기준)
-        _movingLineImg.transform.rotation = Quaternion.Euler(0f, 0f, -fillAmount * 360f);
+        var effect = playerTransform.GetComponent<AbyssalCountdownEffect>();
+
+        if (SkillData == null)
+            SkillData = effect.SkillData;
+
+        if (ShieldObject == null)
+            ShieldObject = effect.ShieldObject;
+
+        foreach (var effectStatus in SkillData.Status)
+        {
+            if (effectStatus.EffectType == StatusEffectType.PullOtherPlayer)
+                _pullRate = effectStatus.EffectValue;
+            else if (effectStatus.EffectType == StatusEffectType.MoveAcceleratesInvincibilityLoss)
+                _moveAcceleratesInvincibilityLossRate = effectStatus.EffectValue;
+        }
+
+        ShieldObject.GetComponent<ShieldEffect>().Init(SkillData.ShieldScaleMultiplier, SkillData.ShieldScaleDuration);
+        ShieldObject.SetActive(false);
+        _shieldTimeCount = 0f;
+
+        if (_status == null)
+            _status = playerTransform.GetComponent<PlayerStatus>();
+
+        _vfxViewId = vfxViewId;
+        var vfxView = PhotonView.Find(vfxViewId);
+
+        _vfxObject = vfxView.gameObject;
+        _particle = vfxView.GetComponentInChildren<ParticleSystem>();
+
+        photonView.RPC(nameof(EndEffect), RpcTarget.All);
+
+        _isStarted = true;
+
+        //# 제대로 초기화가 안되는 문제가 있어서 RPC에서 다시 초기화
+        _circleFill.Initialize(SkillData.ActivateTime, SkillData.ChargeTime);
+        _myPlayer.OnPlayerMoveStateChanged += _circleFill.OnPlayerMoveChanged;
+        _circleFill.gameObject.SetActive(true);
+    }
+
+    private void StartVfx()
+    {
+        _particle.Play();
+    }
+
+    private void StopVfx()
+    {
+        _particle.Stop();
+        _particle.Clear();
+    }
+
+    [PunRPC]
+    private void DisableShieldEffect()
+    {
+        _status.RemoveStatusEffect(StatusEffectType.Invincibility);
+        ShieldObject.SetActive(false);
+        _shieldTimeCount = 0f;
+        _shieldEffectActivated = false;
     }
 
     /// <summary>
     /// 카운트다운 효과의 시작 시 호출되는 메서드
     /// 파티클 효과를 시작하고 목표 스케일로 확대하며, 특정 이펙트 객체를 활성화
     /// </summary>
+    [PunRPC]
     public void StartEffect()
     {
         //# 파티클 효과 시작 및 octagon 이펙트 활성화
-        _particle.Clear();
-        _particle.Play();
+        StartVfx();
 
         if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
         _scalingCoroutine =
-            StartCoroutine(ScaleOverTime(Vector3.one * _skillData.TargetScaleMultiplier, _skillData.ScalingDuration));
+            StartCoroutine(ScaleOverTime(Vector3.one * SkillData.TargetScaleMultiplier, SkillData.ScalingDuration));
 
         UseShieldEffect();
         _octagonObject.SetActive(true);
@@ -186,13 +251,15 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// 카운트다운 효과의 끝에 호출되는 메서드
     /// </summary>
+    [PunRPC]
     public void EndEffect()
     {
         //# 파티클 효과 중지 및 octagon 이펙트 비활성화
-        _particle.Stop();
+        // photonView.RPC(nameof(StopVfx), RpcTarget.All);
+        StopVfx();
 
         if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
-        _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one, _skillData.ScalingDuration));
+        _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one, SkillData.ScalingDuration));
 
         _octagonObject.SetActive(false);
     }
@@ -202,9 +269,9 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     //# 이동 시 -> Time.deltaTime * 1.2, 정지 시 -> Time.deltaTime
     private void UseShieldEffect()
     {
-        _shieldObject.SetActive(true);
+        ShieldObject.SetActive(true);
 
-        foreach (var status in _skillData.Status)
+        foreach (var status in SkillData.Status)
         {
             if (status.EffectType == StatusEffectType.MoveAcceleratesInvincibilityLoss)
             {
@@ -220,13 +287,11 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
             _shieldEffectActivated = true;
         }
     }
-
     /// <summary>
     /// 카운트 다운 감소 시 확장/카운트 다운의 끝에 다시 축소를 제어하는 Coroutine
     /// </summary>
     /// <param name="targetScale">목표 Scale</param>
     /// <param name="duration">목표 Scale 도달까지의 시간</param>
-    /// <returns></returns>
     private IEnumerator ScaleOverTime(Vector3 targetScale, float duration)
     {
         var startScale = transform.localScale;
@@ -242,11 +307,93 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         transform.localScale = targetScale;
         _scalingCoroutine = null;
     }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
-            stream.SendNext(_playerMoved);
+            stream.SendNext(transform.position);
         else
-            _playerMoved = (bool)stream.ReceiveNext();
+            _networkPosition = (Vector3)stream.ReceiveNext();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!photonView.IsMine || !other.gameObject.CompareTag("Player")) return;
+
+        var targetView = other.GetComponent<PhotonView>();
+
+        if (targetView.IsMine) return;
+
+        _targetPlayer = other.gameObject;
+
+        //# 네트워크 지연 문제로, Player가 충돌이 감지됨에도 이동하는 문제가 있음
+        //# 충돌된 플레이어가 AbyssalCountdown을 가지고 있다면 로컬에서도 바로 멈추기 위해 작성
+        var targetDefenceSkill = _targetPlayer.GetComponent<DefenceSkillManager>();
+
+        if (targetDefenceSkill.SkillNames.Contains(DefenceSkills.AbyssalCountdown))
+        {
+            if (!_status.HasStatusEffect(StatusEffectType.FreezePlayer))
+            {
+                _myPlayer.SetFreeze(true);
+                photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
+            }
+        }
+
+        _targetViewId = other.GetComponent<PhotonView>().ViewID;
+
+        float duration = SkillData.ActivateTime * _circleFill.CurrentFillAmount;
+
+
+        // 다른 클라이언트에 동기화
+        photonView.RPC(nameof(ApplyFreeze), RpcTarget.Others, _targetViewId, duration);
+        Debug.Log($"Enter - {_targetViewId}");
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (photonView.IsMine && other.CompareTag("Player"))
+        {
+            Debug.Log($"Exit - {_targetViewId}");
+            _targetViewId = other.GetComponent<PhotonView>().ViewID;
+            _targetPlayer = null;
+            photonView.RPC(nameof(RemoveFreeze), RpcTarget.Others, _targetViewId);
+            _targetViewId = 0;
+
+            _myPlayer.SetFreeze(false);
+            photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
+        }
+    }
+
+    [PunRPC]
+    private void ApplyFreeze(int viewId, float duration)
+    {
+        var targetView = PhotonView.Find(viewId);
+        var otherStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
+        otherStatus.ApplyStatusEffect(
+            StatusEffectType.FreezePlayer,
+            // -0.1f,
+            1f,
+            duration
+        );
+    }
+
+    [PunRPC]
+    private void RemoveFreeze(int viewId)
+    {
+        var targetView = PhotonView.Find(viewId);
+        var otherStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
+
+        if (otherStatus != null)
+            otherStatus.RemoveStatusEffect(StatusEffectType.FreezePlayer);
+    }
+
+    [PunRPC]
+    private void SyncTargetPosition(int viewId, Vector3 position)
+    {
+        var targetView = PhotonView.Find(viewId);
+        if (targetView != null)
+        {
+            targetView.transform.position = position;
+        }
     }
 }

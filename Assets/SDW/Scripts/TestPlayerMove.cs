@@ -1,0 +1,141 @@
+using System;
+using Photon.Pun;
+using UnityEngine;
+
+public class TestPlayerMove : MonoBehaviourPun, IPunObservable
+{
+    private Vector3 _networkPosition;
+    private Quaternion _networkRotation;
+    private PlayerStatus _status;
+
+    private float _moveSpeed = 5f;
+    private float _airSpeed = 0.2f;
+    private bool _isFreeze = false;
+
+    public Action<bool> OnPlayerMoveStateChanged;
+
+    private bool _isPlayerMoved;
+    private bool _prevPlayerMoveState;
+
+    private void Awake()
+    {
+        _status = GetComponent<PlayerStatus>();
+    }
+
+    private void Start()
+    {
+        _status.OnPlayerSpeedValueChanged += SetMoveSpeed;
+    }
+
+    private void Update()
+    {
+        LookAtMouse();
+        // ShotCycle();
+        CharMove();
+        NetworkSync();
+    }
+
+    public void NetworkSync()
+    {
+        if (!photonView.IsMine)
+        {
+            // Synchronize position and rotation for non-local players
+            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * _moveSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 100f);
+        }
+    }
+
+    // 무기 컨트롤러에서 조절
+    // private void ShotCycle()
+    // {
+    //     _shotTimer += Time.deltaTime;
+    //     if (_shotTimer >= _shotInterval && Input.GetMouseButton(0) && photonView.IsMine)
+    //     {
+    //         photonView.RPC("Shot", RpcTarget.All);
+    //         _shotTimer = 0f;
+    //     }
+    // }
+    //
+    // [PunRPC]
+    // private void Shot()
+    // {
+    //     // 240706 수정
+    //     // GameObject bullet = Instantiate(_bulletPrefab, _muzzle.position, _muzzle.rotation);
+    //     if (!photonView.IsMine) return; 
+    //     GameObject bullet = PhotonNetwork.Instantiate("Bullets/Bullet", _muzzle.position, _muzzle.rotation);
+    //     
+    //     CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
+    // }
+
+    private void LookAtMouse()
+    {
+        if (!photonView.IsMine)
+        {
+            return; // Only allow rotation for the master client
+        }
+
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = 0; // Ensure the z-coordinate is zero for 2D 
+        var direction = (mousePosition - transform.position).normalized;
+        transform.up = direction; // Set the bullet's rotation to face the mouse
+    }
+
+    private void CharMove()
+    {
+        if (!photonView.IsMine || _isFreeze)
+        {
+            return; // Only allow movement for the master client
+        }
+
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+
+        var moveDirection = new Vector3(horizontal, vertical, 0).normalized;
+        if (moveDirection.magnitude > 0.1f)
+        {
+            transform.Translate(moveDirection * Time.deltaTime * _moveSpeed, Space.World);
+
+            //# 이전에 움직이지 않았을 때만 Invoke
+            if (!_isPlayerMoved)
+            {
+                _isPlayerMoved = true;
+                OnPlayerMoveStateChanged?.Invoke(_isPlayerMoved);
+            }
+        }
+        else
+        {
+            //# 이전에 움직였을 때만 Invoke
+            if (_isPlayerMoved)
+            {
+                _isPlayerMoved = false;
+                OnPlayerMoveStateChanged?.Invoke(_isPlayerMoved);
+            }
+        }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+        }
+        else if (stream.IsReading)
+        {
+            _networkPosition = (Vector3)stream.ReceiveNext();
+            _networkRotation = (Quaternion)stream.ReceiveNext();
+        }
+    }
+
+    private void SetMoveSpeed(float moveSpeed, float airSpeed)
+    {
+        if (moveSpeed != 0) _isFreeze = false;
+        _moveSpeed = moveSpeed;
+        _airSpeed = airSpeed;
+    }
+
+    public void SetFreeze(bool value)
+    {
+        _isFreeze = value;
+    }
+}

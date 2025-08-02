@@ -1,4 +1,5 @@
 using UnityEngine;
+using Photon.Pun;
 
 public class RandomMapPresetCreator : MonoBehaviour
 {
@@ -12,14 +13,17 @@ public class RandomMapPresetCreator : MonoBehaviour
     // 단일 라운드 수
     [SerializeField] int gameCycleNum = 3;
 
-    [SerializeField] Transform mapListTransform;
+    [SerializeField] Transform[] mapListTransform;
 
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
-    private void OnEnable()
+    private void Awake()
     {
-        RandomInit();
-        RandomMapSelect();
+        for (int i = 0; i < mapListTransform.Length; i++)
+        {
+            RandomInit();
+            RandomMapSelect(i);
+        }
     }
 
     /// <summary>
@@ -36,15 +40,22 @@ public class RandomMapPresetCreator : MonoBehaviour
     /// <summary>
     /// 랜덤 맵 선택 - 한 번 선택한 맵은 랜덤 확률에서 아예 제외되므로 맵이 중복되지 않게 됨
     /// </summary>
-    private void RandomMapSelect()
+    private void RandomMapSelect(int round)
     {
         for(int i = 0; i < gameCycleNum; i++)
         {
             GameObject selectedMap = mapWeightedRandom.GetRandomItemBySub();
-            Vector3 selectedMapPosition = new Vector3(i * mapTransformOffset, 0, 5);
-            //PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
+            Vector3 selectedMapPosition = new Vector3((i + 1) * mapTransformOffset, 0, 5);
+            //GameObject map =  PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
             GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
-            map.transform.SetParent(mapListTransform);
+            map.transform.SetParent(mapListTransform[round]);
         }
+    }
+
+    public void MapUpdate(int round)
+    {
+        Debug.Log(round);
+        mapListTransform[round - 1].gameObject.SetActive(false);
+        mapListTransform[round].gameObject.SetActive(true);
     }
 }
