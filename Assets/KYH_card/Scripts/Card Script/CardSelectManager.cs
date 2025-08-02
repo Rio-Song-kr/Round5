@@ -2,6 +2,7 @@ using DG.Tweening;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using LHWtestScript;
 using UnityEngine;
 
 public class CardSelectManager : MonoBehaviourPunCallbacks
@@ -10,25 +11,25 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private CardSelectCheckManager cardSelectCheckManager;
 
-    [Header("ÀüÃ¼ Ä«µå ÇÁ¸®ÆÕ ¸®½ºÆ®")]
-    public List<GameObject> allCardPrefabs; // °ÔÀÓ¿¡¼­ »ç¿ëÇÒ ÀüÃ¼ Ä«µå ÇÁ¸®ÆÕ ¸ñ·Ï
+    [Header("ï¿½ï¿½Ã¼ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®")]
+    public List<GameObject> allCardPrefabs; // ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 
-    [Header("ºÎ¸ð ·¹ÀÌ¾Æ¿ô ±×·ì")]
-    public Transform cardSpawnParent1; // »ý¼ºµÈ Ä«µå°¡ ºÙÀ» ºÎ¸ð(Äµ¹ö½º ³» À§Ä¡ ÄÁÅ×ÀÌ³Ê)
+    [Header("ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½Ì¾Æ¿ï¿½ ï¿½×·ï¿½")]
+    public Transform cardSpawnParent1; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½(Äµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½)
     public Transform cardSpawnParent2;
 
-    [Header("Ãâ·ÂÇÒ Ä«µå °³¼ö")]
-    public int cardCountToShow = 3; // ÇÑ ¹ø¿¡ º¸¿©ÁÙ Ä«µå °³¼ö
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+    public int cardCountToShow = 3; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    [Header("ºÎÃ¤²Ã ¹èÄ¡ ¼³Á¤")]
-    public float xSpacing = 300f; // Ä«µå °£ X °£°Ý °íÁ¤°ª
-    public float curveHeight = 150f; // Y À§Ä¡¸¦ °î¼±Ã³·³ ÁÖ±â À§ÇÑ °ª
-    public float maxAngle = 60f; // È¸Àü ½Ã°¢ ¿¬Ãâ
+    [Header("ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½")]
+    public float xSpacing = 300f; // Ä«ï¿½ï¿½ ï¿½ï¿½ X ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public float curveHeight = 150f; // Y ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½î¼±Ã³ï¿½ï¿½ ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+    public float maxAngle = 60f; // È¸ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
     public float appearYOffset = -600f;
 
 
-    private List<GameObject> currentCards = new(); // ÇöÀç È­¸é¿¡ Ç¥½Ã ÁßÀÎ Ä«µå ¸ñ·Ï
-    [SerializeField] private bool hasSelect = false; // ÇÃ·¹ÀÌ¾î°¡ Ä«µå¸¦ ¼±ÅÃÇß´ÂÁö ¿©ºÎ
+    private List<GameObject> currentCards = new(); // ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½
+    [SerializeField] private bool hasSelect = false; // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ Ä«ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ß´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     void Start()
     {
@@ -36,7 +37,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         cardSelectCheckManager.cardSelectPanelSpawn();
         cardSelectCheckManager.CardSelectPanelSpawn(PhotonNetwork.LocalPlayer);
         // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
-        // Debug.Log("°ÔÀÓ ¾À À¸·Î ³Ñ¾î°¡±â À§ÇØ ·Îµù ÁøÇà");
+        // Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½");
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -51,7 +52,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    // ·£´ý Ä«µå »ý¼º ¹× È­¸é¿¡ Ãâ·Â
+    // ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È­ï¿½é¿¡ ï¿½ï¿½ï¿½
     public List<int> GetRandomCardIndexes()
     {
         List<int> indexes = new();
@@ -72,14 +73,14 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     public void SpawnCardsFromIndexes(int[] indexes, bool canInteract)
     {
-        Debug.Log("Ä«µå »ý¼º ½ÃÀÛ");
+        Debug.Log("Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         currentCards.Clear();
 
         float centerIndex = (indexes.Length - 1) / 2f;
 
         for (int i = 0; i < indexes.Length; i++)
         {
-            Debug.Log("Æ÷ ¹® ¾ÈÀ¸·Î µé¾î¿ÔÀ½");
+            Debug.Log("ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             GameObject card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent1);
             RectTransform rt = card.GetComponent<RectTransform>();
             CanvasGroup cg = card.GetComponent<CanvasGroup>();
@@ -101,11 +102,11 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
                 seq.Join(cg.DOFade(1f, 0.6f));
             }
 
-            FlipCard flip = card.GetComponent<FlipCard>();
+            LHWFlipCard flip = card.GetComponent<LHWFlipCard>();
             if (flip != null)
             {
                 flip.SetManager(this);
-                flip.SetCardIndex(i); // ÀÎµ¦½º ±â¹Ý µ¿±âÈ­¿ë
+                flip.SetCardIndex(i); // ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½
                 flip.SetInteractable(canInteract);
             }
 
@@ -116,14 +117,14 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     public void SpawnClientCardsFromIndexes(int[] indexes, bool canInteract)
     {
-        Debug.Log("Ä«µå »ý¼º ½ÃÀÛ");
+        Debug.Log("Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         currentCards.Clear();
 
         float centerIndex = (indexes.Length - 1) / 2f;
 
         for (int i = 0; i < indexes.Length; i++)
         {
-            Debug.Log("Æ÷ ¹® ¾ÈÀ¸·Î µé¾î¿ÔÀ½");
+            Debug.Log("ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             GameObject card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent2);
             RectTransform rt = card.GetComponent<RectTransform>();
             CanvasGroup cg = card.GetComponent<CanvasGroup>();
@@ -145,11 +146,11 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
                 seq.Join(cg.DOFade(1f, 0.6f));
             }
 
-            FlipCard flip = card.GetComponent<FlipCard>();
+            LHWFlipCard flip = card.GetComponent<LHWFlipCard>();
             if (flip != null)
             {
                 flip.SetManager(this);
-                flip.SetCardIndex(i); // ÀÎµ¦½º ±â¹Ý µ¿±âÈ­¿ë
+                flip.SetCardIndex(i); // ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½
                 flip.SetInteractable(canInteract);
             }
 
@@ -165,7 +166,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     {
         if (index >= 0 && index < currentCards.Count)
         {
-            FlipCard flip = currentCards[index].GetComponent<FlipCard>();
+            LHWFlipCard flip = currentCards[index].GetComponent<LHWFlipCard>();
             if (flip != null)
             {
                 flip.PlayFlipAnimation();
@@ -174,7 +175,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     }
    
 
-    // Ä«µå ÇÏ³ª°¡ ¼±ÅÃµÇ¾úÀ» ¶§ È£ÃâµÊ
+    // Ä«ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÃµÇ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ï¿½
     public void OnCardSelected(GameObject selected)
     {
 
@@ -186,7 +187,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
         hasSelect = true;
 
-        Debug.Log("³» Ä«µå ¼±ÅÃ ¿Ï·áµÊ");
+        Debug.Log("ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½");
 
         if (cardSelectCheckManager.cardSelectPanels.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out CardSelectPanelItem panel))
         {
@@ -195,7 +196,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             panel.SelectCheck(PhotonNetwork.LocalPlayer);
         }
 
-        //  // Ä«µå È¿°ú Àû¿ë
+        //  // Ä«ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         //  CardEffect effect = selected.GetComponent<CardEffect>();
         //  if ( effect != null)
         //  {
@@ -213,36 +214,36 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
             if (card == selected)
             {
-                // ¼±ÅÃµÈ Ä«µå ¡æ ÆäÀÌµå¾Æ¿ô
+                // ï¿½ï¿½ï¿½Ãµï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½Æ¿ï¿½
                 CanvasGroup cg = card.GetComponent<CanvasGroup>();
                 if (cg == null) cg = card.AddComponent<CanvasGroup>();
 
                 cg.DOFade(0f, 0.5f)
                   .SetEase(Ease.InOutSine)
-                  .OnComplete(() => Destroy(card)); // ¾Ö´Ï¸ÞÀÌ¼Ç ³¡³ª¸é »èÁ¦
+                  .OnComplete(() => Destroy(card)); // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
             else
             {
-                // ¼±ÅÃµÇÁö ¾ÊÀº Ä«µå ¡æ È¸Àü ¹æÇâÀ¸·Î ÀÌµ¿ + Ãà¼Ò + ÆäÀÌµå¾Æ¿ô
+                // ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ + ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½Ìµï¿½Æ¿ï¿½
                 RectTransform rt = card.GetComponent<RectTransform>();
                 CanvasGroup cg = card.GetComponent<CanvasGroup>();
                 if (cg == null) cg = card.AddComponent<CanvasGroup>();
 
                 float angleZ = rt.localEulerAngles.z; // rotZ
-                Vector2 direction = Quaternion.Euler(0, 0, angleZ) * Vector2.up; // È¸Àü ¹æÇâ ±âÁØ À§ÂÊ
+                Vector2 direction = Quaternion.Euler(0, 0, angleZ) * Vector2.up; // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 Vector2 targetPos = rt.anchoredPosition + direction * 400f;
 
                 Sequence seq = DOTween.Sequence();
-                seq.Join(rt.DOAnchorPos(targetPos, 2f).SetEase(Ease.InCubic)); // ³¯¾Æ°¡µí ÀÌµ¿
-                seq.Join(rt.DOScale(0.1f, 2f).SetEase(Ease.InCubic));           // ÀÛ¾ÆÁö±â
+                seq.Join(rt.DOAnchorPos(targetPos, 2f).SetEase(Ease.InCubic)); // ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+                seq.Join(rt.DOScale(0.1f, 2f).SetEase(Ease.InCubic));           // ï¿½Û¾ï¿½ï¿½ï¿½ï¿½ï¿½
                 seq.Join(cg.DOFade(0f, 2f));
                 seq.Join(rt.DOLocalRotate(new Vector3(180f, 180f, angleZ), 2f, RotateMode.FastBeyond360));
                 seq.OnComplete(() => Destroy(card));
             }
         }
 
-        Debug.Log("¼±ÅÃµÈ Ä«µå: " + selected.name);
-        Debug.Log("°ÔÀÓ ¾À À¸·Î ³Ñ¾î°¡±â À§ÇØ ·Îµù ÁøÇà");
+        Debug.Log("ï¿½ï¿½ï¿½Ãµï¿½ Ä«ï¿½ï¿½: " + selected.name);
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½");
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -265,9 +266,9 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
             if (PhotonNetwork.IsMasterClient && cardSelectCheckManager.AllPlayerCardSelectCheck() == true)
             {
-                Debug.Log(" ¸ðµç ÇÃ·¹ÀÌ¾î Ä«µå ¼±ÅÃ ¿Ï·á ¡æ Game Scene ·Îµå");
+                Debug.Log(" ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ Game Scene ï¿½Îµï¿½");
                 PhotonNetwork.LoadLevel("Game Scene");
-                // ¾À ÀüÈ¯ ÇÊ¿äÇÑ ºÎºÐ
+                // ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½Îºï¿½
             }
         }
     }

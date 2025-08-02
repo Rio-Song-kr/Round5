@@ -3,62 +3,62 @@ using DG.Tweening.Core;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
-<<<<<<< .merge_file_bBKpLx
 namespace LHWtestScript
 {
     public class LHWFlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
-=======
-public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
-{
-    private bool isFlipped = false;
-    private bool isSelected = false;
-    private bool isHovered = false;
-
-    [Header("¾Õ/µÞ¸é ·çÆ® ¿ÀºêÁ§Æ®")]
-    public GameObject frontRoot;
-    public GameObject backRoot;
-
-    [Header("¼³Á¤")]
-    public float flipDuration = 0.25f;
-    public float hoverScale = 1.1f;
-
-    private Vector3 originalScale;
-    private int cardIndex;
-    private CardSelectManager manager;
-
-    private bool isInteractable = true;
-
-    public void SetInteractable(bool value)
-    {
-        isInteractable = value;
-    }
-    public void SetManager(CardSelectManager mgr)
-    {
-        manager = mgr;
-    }
-
-    public void SetCardIndex(int index)
-    {
-        cardIndex = index;
-    }
-    private void Start()
->>>>>>> .merge_file_sE85et
+// public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+// {
+//     private bool isFlipped = false;
+//     private bool isSelected = false;
+//     private bool isHovered = false;
+//
+//     [Header("ï¿½ï¿½/ï¿½Þ¸ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")]
+//     public GameObject frontRoot;
+//     public GameObject backRoot;
+//
+//     [Header("ï¿½ï¿½ï¿½ï¿½")]
+//     public float flipDuration = 0.25f;
+//     public float hoverScale = 1.1f;
+//
+//     private Vector3 originalScale;
+//     private int cardIndex;
+//     private CardSelectManager manager;
+//
+//     private bool isInteractable = true;
+//
+//     public void SetInteractable(bool value)
+//     {
+//         isInteractable = value;
+//     }
+//     public void SetManager(CardSelectManager mgr)
+//     {
+//         manager = mgr;
+//     }
+//
+//     public void SetCardIndex(int index)
+//     {
+//         cardIndex = index;
+//     }
+//     private void Start()
+// >>>>>>> .merge_file_sE85et
     {
         private bool isFlipped = false;
         public bool IsFlipped { get { return isFlipped; } }
         private bool isSelected = false;
         private bool isHovered = false;
 
-        [Header("¾Õ/µÞ¸é ·çÆ® ¿ÀºêÁ§Æ®")]
+        [Header("ï¿½ï¿½/ï¿½Þ¸ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")]
         public GameObject frontRoot;
         public GameObject backRoot;
 
-        [Header("¼³Á¤")]
+        [Header("ï¿½ï¿½ï¿½ï¿½")]
         public float flipDuration = 0.25f;
         public float hoverScale = 1.1f;
 
         private Vector3 originalScale;
         private CardSelectManager manager;
+        
+         private int cardIndex;
 
         private bool isInteractable = true;
 
@@ -70,6 +70,11 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
         {
             manager = mgr;
         }
+        
+         public void SetCardIndex(int index)
+         {
+             cardIndex = index;
+         }
 
         private void Start()
         {
@@ -79,7 +84,7 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
             originalScale = transform.localScale;
 
-            // ÇöÀç È¸ÀüÀ» À¯ÁöÇÏ°í Y¸¸ 180µµ·Î º¯°æ
+            // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ Yï¿½ï¿½ 180ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Vector3 rot = transform.localEulerAngles;
             rot.y = 180f;
             transform.localRotation = Quaternion.Euler(rot);
@@ -90,50 +95,50 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
+            if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
             isHovered = true;
             transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
         }
 
-<<<<<<< .merge_file_bBKpLx
+// <<<<<<< .merge_file_bBKpLx
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
+            if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             isHovered = false;
             transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
         }
-=======
-            // RPC·Î »ó´ë Å¬¶óÀÌ¾ðÆ®¿¡°Ôµµ flip ¾Ö´Ï¸ÞÀÌ¼Ç µ¿±âÈ­
-            manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.Others, cardIndex);
->>>>>>> .merge_file_sE85et
+// =======
+            // RPCï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½Ôµï¿½ flip ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½È­
+            // manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.Others, cardIndex);
+// >>>>>>> .merge_file_sE85et
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (!isInteractable || !isHovered) return; //Å¬¸¯ Á¦ÇÑ Æ÷ÇÔ
+            if (!isInteractable || !isHovered) return; //Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            OnClickCard(); // ±âÁ¸ ·ÎÁ÷ ±×´ë·Î È£Ãâ
+            OnClickCard(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ È£ï¿½ï¿½
         }
 
         public void OnClickCard()
         {
-            if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
+            if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
             if (!isFlipped)
             {
                 isFlipped = true;
 
-<<<<<<< .merge_file_bBKpLx
-                // ·ÎÄÃ ¾Ö´Ï¸ÞÀÌ¼Ç ½ÇÇà
-                PlayFlipAnimation();
-=======
-    public void PlayFlipAnimation()
-    {
-        // ÇöÀç È¸Àü°ª °¡Á®¿À±â
-        Vector3 startEuler = transform.localEulerAngles;
->>>>>>> .merge_file_sE85et
+// <<<<<<< .merge_file_bBKpLx
+//                 // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
+                 PlayFlipAnimation();
+// =======
+    // public void PlayFlipAnimation()
+    // {
+    //     // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //     Vector3 startEuler = transform.localEulerAngles;
+// >>>>>>> .merge_file_sE85et
 
-                // RPC·Î »ó´ë Å¬¶óÀÌ¾ðÆ®¿¡°Ôµµ flip ¾Ö´Ï¸ÞÀÌ¼Ç µ¿±âÈ­
+                // RPCï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½Ôµï¿½ flip ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½È­
                 PhotonView photonView = PhotonView.Get(this);
                 photonView.RPC(nameof(RPC_Flip), RpcTarget.Others);
 
@@ -157,15 +162,15 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
         {
             if (isFlipped) return;
 
-            // ÇöÀç È¸Àü°ª °¡Á®¿À±â
+            // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             Vector3 startEuler = transform.localEulerAngles;
 
-            // ZÃà º¸Á¤ (360µµ ÀÌ»ó °ªÀÌ¸é -360 º¸Á¤ ÈÄ ºÎÈ£ ¹ÝÀü)
+            // Zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (360ï¿½ï¿½ ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ -360 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½)
             float z = startEuler.z;
             if (z > 180f) z -= 360f;
             float flippedZ = -z;
 
-            // Y = 0 À¸·Î È¸ÀüÇÏ¸é¼­ Z´Â ¹ÝÀüÇØ¼­ ºÎÃ¤²Ã °¢µµ À¯Áö
+            // Y = 0 ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï¸é¼­ Zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Vector3 targetEuler = new Vector3(0f, 0f, flippedZ);
 
             transform.DORotate(targetEuler, flipDuration)
