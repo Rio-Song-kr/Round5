@@ -6,7 +6,11 @@ using UnityEngine;
 /// </summary>
 public class IngameUIManager : MonoBehaviour
 {
+    [Header("Reference")]
+    [SerializeField] RandomMapPresetCreator creator;
+
     [Header("Panels")]
+    [SerializeField] GameObject cardSelectPanel;
     [SerializeField] GameObject roundOverPanel;
     [SerializeField] GameObject gameRestartPanel;
 
@@ -66,6 +70,8 @@ public class IngameUIManager : MonoBehaviour
         TestIngameManager.Instance.RoundStart();
         if (TestIngameManager.Instance.IsGameSetOver)
         {
+            Debug.Log("새 세트 시작");
+            creator.MapUpdate(TestIngameManager.Instance.CurrentGameRound);
             TestIngameManager.Instance.GameSetStart();
         }
 

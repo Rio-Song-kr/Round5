@@ -43,6 +43,7 @@ public class MapController : MonoBehaviour
     /// </summary>
     private void MapMove()
     {
+        Debug.Log("½ÇÇà");
         moveCoroutine = StartCoroutine(MovementCoroutine());
     }
 

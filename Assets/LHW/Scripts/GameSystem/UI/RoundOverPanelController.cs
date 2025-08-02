@@ -70,7 +70,7 @@ public class RoundOverPanelController : MonoBehaviour
     }
 
     /// <summary>
-    /// 승자를 표시함(텍스트
+    /// 승자를 표시함(텍스트)
     /// </summary>
     /// <param name="winner"></param>
     /// <param name="left"></param>
