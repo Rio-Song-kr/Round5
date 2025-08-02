@@ -1230,7 +1230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzle: {fileID: 320669454}
   bulletWeaponObject: {fileID: 877295033}
-  razorWeaponObject: {fileID: 1946649845}
+  LaserWeaponObject: {fileID: 0}
   barrelWeaponObject: {fileID: 227888313}
 --- !u!212 &429441411
 SpriteRenderer:
@@ -2714,6 +2714,10 @@ PrefabInstance:
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 4718549699714053276, guid: 655d787c752092a4889f82377f3734a0, type: 3}
+    - target: {fileID: 4294100252120459521, guid: 3927b53249c634ba9810959a0504633b, type: 3}
+      propertyPath: sceneViewId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8134666902009527489, guid: 3927b53249c634ba9810959a0504633b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.7179963
@@ -9408,6 +9412,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 429441412}
     m_Modifications:
+    - target: {fileID: -1844121569876475778, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 28940201520656239, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
       propertyPath: sceneViewId
       value: 1
@@ -9626,11 +9634,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0eddd9f1f686784681e0506c8170b26, type: 3}
---- !u!1 &1946649845 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5178442494790543356, guid: d6937139c632043c2b96f69e7a163f42, type: 3}
-  m_PrefabInstance: {fileID: 1019459416}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1946649847 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1505525768489322101, guid: d6937139c632043c2b96f69e7a163f42, type: 3}

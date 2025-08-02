@@ -54,16 +54,19 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
         _pools = FindFirstObjectByType<PoolManager>();
         _pools.InitializePool("FrostSlamEffect", SkillEffectPrefab, 2, 5);
         _pools.InitializePool("VFX_Smoke", VfxSmokePrefab, 2, 5);
+        // _pools.InitializePool("Effects/FrostSlamEffect", 2, 5);
+        // _pools.InitializePool("Effects/VFX_Smoke", 2, 5);
     }
 
     public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
     {
-        SkillPoisition = skillPosition;
-
-        var skillEffectObject = _pools.Instantiate("FrostSlamEffect", skillPosition, Quaternion.identity);
-        skillEffectObject.transform.parent = _effectTransform;
-
-        var skillEffect = skillEffectObject.GetComponent<FrostSlamEffect>();
-        skillEffect.Initialize(this);
+        // SkillPoisition = skillPosition;
+        //
+        // // var skillEffectObject = _pools.Instantiate("FrostSlamEffect", skillPosition, Quaternion.identity);
+        // var skillEffectObject = _pools.Instantiate("Effects/FrostSlamEffect", skillPosition, Quaternion.identity);
+        // skillEffectObject.transform.parent = _effectTransform;
+        //
+        // var skillEffect = skillEffectObject.GetComponent<FrostSlamEffect>();
+        // skillEffect.Initialize(this);
     }
 }

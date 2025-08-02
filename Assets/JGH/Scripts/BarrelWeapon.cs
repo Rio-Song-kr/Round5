@@ -11,34 +11,38 @@ public class BarrelWeapon : BaseWeapon
     // 무기 발사
     public override void Attack(Transform firingPoint)
     {
+        if (!photonView.IsMine) return;
         if (isReloading || currentAmmo < ammoPerShot) return;
         if (!CanAttack()) return; // 공격 속도 체크
         
-        photonView.RPC(nameof(Shot), RpcTarget.All, firingPoint.position, firingPoint.rotation);
-    }
-
-    [PunRPC]
-    public void Shot(Vector3 firePos, Quaternion fireRot)
-    {
         float angleStep = spreadAngle / (pelletCount - 1);
         float startAngle = -spreadAngle / 2f;
+
+        double fireTime = PhotonNetwork.Time;
 
         for (int i = 0; i < pelletCount; i++)
         {
             float angle = startAngle + angleStep * i;
             
             // Quaternion spreadRotation = fireRot * Quaternion.Euler(0, 0, angle - 90);
-            Quaternion spreadRotation = fireRot * Quaternion.Euler(0, 0, angle);
-            Vector3 spawnPos = firePos + (fireRot * Vector3.up) * 0.2f;
+            Quaternion spreadRotation = firingPoint.rotation * Quaternion.Euler(0, 0, angle);
+            Vector3 spawnPos = firingPoint.position + (firingPoint.rotation * Vector3.up) * 0.2f;
         
             // PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
             GameObject bulletObj = PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
-            if (bulletObj.TryGetComponent(out Bullet bullet))
+            PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
+            if (bulletView != null)
             {
-                bullet.BulletMove(bulletSpeed);
-                bullet.StartCoroutine(bullet.DestroyAfterDelay(4f));
+                Vector3 direction = spreadRotation * Vector3.up;
+                bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
             }
+            // if (bulletObj.TryGetComponent(out Bullet bullet))
+            // {
+                // bullet.BulletMove(bulletSpeed);
+                // bullet.StartCoroutine(bullet.DestroyAfterDelay(4f));
+            // }
         }
+        
         currentAmmo -= ammoPerShot;
         lastAttackTime = Time.time;
         UpdateAmmoUI();
@@ -51,6 +55,11 @@ public class BarrelWeapon : BaseWeapon
 
         CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
     }
+    //
+    // [PunRPC]
+    // public void Shot(Vector3 firePos, Quaternion fireRot)
+    // {
+    // }
 
     public override WeaponType GetWeaponType()
     {

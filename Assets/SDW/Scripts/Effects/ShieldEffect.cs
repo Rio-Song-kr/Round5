@@ -1,22 +1,27 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShieldEffect : MonoBehaviour
+public class ShieldEffect : MonoBehaviourPun
 {
     [SerializeField] private Image _shieldImg;
     private float _shieldScaleMultiplier = 1.1f;
     private float _shieldScaleDuration = 0.2f;
     private Vector3 _originalScale;
     private Coroutine _coroutine;
+    private bool _isInitialized;
 
     /// <summary>
     /// Enable 시 Shield 크기 조절(반복) Coroutine 시작
     /// </summary>
     private void OnEnable()
     {
+        if (!_isInitialized) return;
+
         _coroutine = StartCoroutine(RoundTripScaleOverTime(Vector3.one * _shieldScaleMultiplier, _shieldScaleDuration));
     }
+
     /// <summary>
     /// Disable 시 Shield 효과 초기화 및 코루틴 중지
     /// </summary>
@@ -36,6 +41,7 @@ public class ShieldEffect : MonoBehaviour
         _shieldScaleMultiplier = targetScale;
         _shieldScaleDuration = duration;
         _originalScale = _shieldImg.transform.localScale;
+        _isInitialized = true;
     }
 
     /// <summary>
@@ -46,7 +52,8 @@ public class ShieldEffect : MonoBehaviour
     /// <returns>코루틴 객체</returns>
     private IEnumerator RoundTripScaleOverTime(Vector3 targetScale, float duration)
     {
-        var startScale = _shieldImg.transform.localScale;
+        Debug.Log($"{photonView.ViewID} - {_originalScale}");
+        var startScale = _originalScale;
         float timer = 0f;
         bool isReversed = false;
 
@@ -62,12 +69,12 @@ public class ShieldEffect : MonoBehaviour
             if (Mathf.Abs((targetScale - _shieldImg.transform.localScale).magnitude) < 0.01f)
             {
                 isReversed = !isReversed;
-                
+
                 //# 튜플을 이용한 Swap
                 (startScale, targetScale) = (targetScale, startScale);
                 timer = 0;
             }
-            
+
             yield return null;
         }
     }

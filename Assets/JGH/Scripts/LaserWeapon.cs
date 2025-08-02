@@ -1,93 +1,114 @@
-using System;
 using UnityEngine;
 using System.Collections;
 using Photon.Pun;
 
-public class RazorWeapon : BaseWeapon
+public class LaserWeapon : BaseWeapon
 {
     [SerializeField] private float laserDuration = 2f;
-    
+
+    private GameObject currentLaserInstance;
+    private Laser currentLaser;
+
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
-    
+   
 
     public override void Attack(Transform firingPoint)
     {
-        if (!photonView.IsMine || isFiring || isReloading || currentAmmo < 2) return;
-            photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, firingPoint.position, firingPoint.up);
+        if (!photonView.IsMine) return;
+        if (isFiring || isReloading || currentAmmo < 2) return;
+        currentAmmo -= 2;
+        
+       
+        
+        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
-
-
+    
     [PunRPC]
-    private void RPC_FireLaser(Vector3 origin, Vector3 direction)
+    private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-        
-        currentAmmo -= 2;
+        float lag = (float)(PhotonNetwork.Time - fireTime);
+        yield return new WaitForSeconds(lag); // 지연 보상 적용
         UpdateAmmoUI();
-        
+
         ammoDisplay.reloadIndicator.SetActive(false);
-        
-        // 위치 및 방향 지정
-        laser.transform.position = origin;
-        laser.transform.up = direction;
-        laser.ShootLaser(); // Laser.cs의 ShootLaser 메서드를 호출하여 레이저 발사
-        
+
+        // 0.1초 대기 - 위치 어긋남 방지
+        // yield return new WaitForSeconds(0.1f);
+
+        if (currentLaserInstance != null)
+        {
+            Destroy(currentLaserInstance);
+        }
+
+        // 1. 레이저 프리팹 생성
+        currentLaserInstance = Instantiate(laserPrefab);
+
+        // 2. muzzle에 붙임
+        currentLaserInstance.transform.SetParent(gunController.muzzle);
+
+        // 3. 위치와 방향 로컬 기준으로 맞춤
+        currentLaserInstance.transform.localPosition = Vector3.zero;
+        currentLaserInstance.transform.localRotation = Quaternion.identity;
+
+        // 4. Shoot
+        currentLaser = currentLaserInstance.GetComponent<Laser>();
+        currentLaser.Duration = laserDuration;
+        currentLaser.ShootLaser();
+
         StartCoroutine(FireLaserRoutine());
     }
 
-    // protected override void Update() 
-    // {
-    //     laser.transform.position = gunController.muzzle.position;
-    //     laser.transform.up = gunController.muzzle.up;
-    // }
-    
     private IEnumerator FireLaserRoutine()
     {
         isFiring = true;
         isReloading = false;
-        
-        laser.Duration = laserDuration;
-        
-        // laser.transform.position = gunController.muzzle.position;
-        // laser.transform.up = gunController.muzzle.up;
-        
-        // laser.ShootLaser(gunController.muzzle.position, gunController.muzzle.up);
-        
+
         yield return new WaitForSeconds(laserDuration);
-        
+
         isFiring = false;
-        
         StartAutoReload();
-        
+
+        // 레이저 정리
+        if (currentLaserInstance != null)
+        {
+            Destroy(currentLaserInstance);
+        }
+
+        currentLaserInstance = null;
+        currentLaser = null;
+
+        // 리로드 애니메이션 및 타이밍
         isReloading = true;
-        
         ammoDisplay.reloadIndicator.SetActive(true);
         
         // 애니메이션 트리거 실행
         animator?.SetTrigger("Reload");
-        yield return null; // 한 프레임 대기하여 클립이 로드되도록 함
-        // 애니메이션 클립 기반으로 리로드 속도 설정
+
+        yield return null;
         ReloadSpeedFromAnimator();
-        
-        yield return new WaitForSeconds(reloadTime); // 재장전 시간
-        
-        //탄 UI 회복, 리로드 UI OFF
+        yield return new WaitForSeconds(reloadTime);
+
         currentAmmo = maxAmmo;
-        UpdateAmmoUI(); // 탄창 갱신
+        UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
     }
-    
+
     public override WeaponType GetWeaponType()
     {
         return WeaponType.Laser;
     }
-    
+
     public override void OnDisable()
     {
         base.OnDisable();
         isFiring = false;
-    }
 
+        if (currentLaserInstance != null)
+        {
+            Destroy(currentLaserInstance);
+        }
+    }
 }

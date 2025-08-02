@@ -171,7 +171,8 @@ public class FrostSlamEffect : MonoBehaviour
         _isFading = false;
 
 
-        var smokeEffectObject = _skillData.Pools.Instantiate("VFX_Smoke", _skillData.SkillPoisition, Quaternion.identity);
+        // var smokeEffectObject = _skillData.Pools.Instantiate("VFX_Smoke", _skillData.SkillPoisition, Quaternion.identity);
+        var smokeEffectObject = _skillData.Pools.Instantiate("Effects/VFX_Smoke", _skillData.SkillPoisition, Quaternion.identity);
         var smokeEffect = smokeEffectObject.GetComponent<VfxSmokeEffect>();
         smokeEffect.Stop();
         smokeEffect.Initialize(_skillData.Pools);

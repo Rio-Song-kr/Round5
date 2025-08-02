@@ -7,7 +7,7 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
 {
     private Dictionary<string, IObjectPool<GameObject>> _pools = new Dictionary<string, IObjectPool<GameObject>>();
 
-    // private void Start() => PhotonNetwork.PrefabPool = this;
+    private void Start() => PhotonNetwork.PrefabPool = this;
 
     /// <summary>
     /// 풀 초기화 메서드를 통해 지정된 ID의 객체 풀을 생성하거나 설정
@@ -23,7 +23,7 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
             _pools[prefabId] = new ObjectPool<GameObject>(
                 () =>
                 {
-                    var newGameObject = Instantiate(prefab);
+                    var newGameObject = GameObject.Instantiate(prefab);
 
                     if (newGameObject.GetComponent<PhotonView>() == null)
                         newGameObject.AddComponent<PhotonView>();
@@ -32,7 +32,7 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
                 },
                 obj => obj.SetActive(true),
                 obj => obj.SetActive(false),
-                obj => Destroy(obj),
+                obj => GameObject.Destroy(obj),
                 true,
                 defaultCapacity,
                 maxSize
@@ -49,37 +49,20 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
     /// <returns>생성된 GameObject 인스턴스 또는 풀에서 객체를 찾지 못한 경우 null</returns>
     public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
     {
+        // int lastSlashIndex = prefabId.LastIndexOf('/');
+        // string poolId = lastSlashIndex >= 0 ? prefabId.Substring(lastSlashIndex + 1) : prefabId;
+
         if (!_pools.ContainsKey(prefabId))
         {
             Debug.LogError($"{prefabId}을 Pool에서 찾지 못했습니다.");
+            // InitializePool(poolId, 1, 2);
             return null;
         }
 
         var obj = _pools[prefabId].Get();
+        obj.SetActive(false);
         obj.transform.position = position;
         obj.transform.rotation = rotation;
-
-        //# PhotonView의 ViewID를 동적으로 할당하거나 확인
-        var photonView = obj.GetComponent<PhotonView>();
-
-        if (photonView != null)
-        {
-            //# ViewID가 0이거나 유효하지 않은 경우 새로 할당
-            if (photonView.ViewID == 0)
-            {
-                PhotonNetwork.AllocateViewID(photonView);
-            }
-            else
-            {
-                //# 기존 ViewID가 유효한지 확인
-                var existingView = PhotonNetwork.GetPhotonView(photonView.ViewID);
-
-                if (existingView == null || existingView.gameObject != obj)
-                {
-                    PhotonNetwork.AllocateViewID(photonView);
-                }
-            }
-        }
 
         return obj;
     }
@@ -96,18 +79,20 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
             return;
         }
 
-        if (!obj.activeSelf) return;
-
         //# (Clone) 접미사 제거
         string prefabId = obj.name.Replace("(Clone)", "").Trim();
+
         if (_pools.ContainsKey(prefabId))
         {
+            var photonView = obj.GetComponent<PhotonView>();
+
             _pools[prefabId].Release(obj);
         }
         else
         {
             Debug.LogWarning($"{prefabId}을 찾지 못했습니다.");
-            Destroy(obj);
+
+            GameObject.Destroy(obj);
         }
     }
 }
