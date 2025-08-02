@@ -3,9 +3,46 @@ using DG.Tweening.Core;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
+<<<<<<< .merge_file_bBKpLx
 namespace LHWtestScript
 {
     public class LHWFlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+=======
+public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+{
+    private bool isFlipped = false;
+    private bool isSelected = false;
+    private bool isHovered = false;
+
+    [Header("앞/뒷면 루트 오브젝트")]
+    public GameObject frontRoot;
+    public GameObject backRoot;
+
+    [Header("설정")]
+    public float flipDuration = 0.25f;
+    public float hoverScale = 1.1f;
+
+    private Vector3 originalScale;
+    private int cardIndex;
+    private CardSelectManager manager;
+
+    private bool isInteractable = true;
+
+    public void SetInteractable(bool value)
+    {
+        isInteractable = value;
+    }
+    public void SetManager(CardSelectManager mgr)
+    {
+        manager = mgr;
+    }
+
+    public void SetCardIndex(int index)
+    {
+        cardIndex = index;
+    }
+    private void Start()
+>>>>>>> .merge_file_sE85et
     {
         private bool isFlipped = false;
         public bool IsFlipped { get { return isFlipped; } }
@@ -59,12 +96,17 @@ namespace LHWtestScript
             transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
         }
 
+<<<<<<< .merge_file_bBKpLx
         public void OnPointerExit(PointerEventData eventData)
         {
             if (!isInteractable) return; // 상호작용 불가 시 무시
             isHovered = false;
             transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
         }
+=======
+            // RPC로 상대 클라이언트에게도 flip 애니메이션 동기화
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.Others, cardIndex);
+>>>>>>> .merge_file_sE85et
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -81,8 +123,15 @@ namespace LHWtestScript
             {
                 isFlipped = true;
 
+<<<<<<< .merge_file_bBKpLx
                 // 로컬 애니메이션 실행
                 PlayFlipAnimation();
+=======
+    public void PlayFlipAnimation()
+    {
+        // 현재 회전값 가져오기
+        Vector3 startEuler = transform.localEulerAngles;
+>>>>>>> .merge_file_sE85et
 
                 // RPC로 상대 클라이언트에게도 flip 애니메이션 동기화
                 PhotonView photonView = PhotonView.Get(this);

@@ -1,9 +1,8 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class CardSelectManager : MonoBehaviourPunCallbacks
 {
@@ -33,46 +32,55 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        
+
         cardSelectCheckManager.cardSelectPanelSpawn();
         cardSelectCheckManager.CardSelectPanelSpawn(PhotonNetwork.LocalPlayer);
-       // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
-        Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
+        // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
+        // Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            List<int> selectedMasterIndexes = GetRandomCardIndexes();
+            photonView.RPC(nameof(RPC_SpawnCardsWithIndexes), RpcTarget.All, selectedMasterIndexes.ToArray());
+        }
+        
     }
 
-   private void Awake()
-   {
-       PhotonNetwork.AutomaticallySyncScene = true;
-   }
+    private void Awake()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
 
     // 랜덤 카드 생성 및 화면에 출력
-    [PunRPC]
-    public void SpawnRandomCards1(bool canInteract)
+    public List<int> GetRandomCardIndexes()
     {
-        if (allCardPrefabs.Count < cardCountToShow)
-        {
-            Debug.LogError("카드 프리팹이 부족합니다.");
-            return;
-        }
-
-        List<int> selectedIndexes = new();
-        while (selectedIndexes.Count < cardCountToShow)
+        List<int> indexes = new();
+        while (indexes.Count < cardCountToShow)
         {
             int rand = Random.Range(0, allCardPrefabs.Count);
-            if (!selectedIndexes.Contains(rand))
-                selectedIndexes.Add(rand);
+            if (!indexes.Contains(rand))
+                indexes.Add(rand);
         }
+        return indexes;
+    }
 
-        float centerIndex = (cardCountToShow - 1) / 2f;
+    [PunRPC]
+    public void RPC_SpawnCardsWithIndexes(int[] indexes)
+    {
+        SpawnCardsFromIndexes(indexes, PhotonNetwork.IsMasterClient);
+    }
 
-        for (int i = 0; i < cardCountToShow; i++)
+    public void SpawnCardsFromIndexes(int[] indexes, bool canInteract)
+    {
+        Debug.Log("카드 생성 시작");
+        currentCards.Clear();
+
+        float centerIndex = (indexes.Length - 1) / 2f;
+
+        for (int i = 0; i < indexes.Length; i++)
         {
-            GameObject prefab = allCardPrefabs[selectedIndexes[i]];
-            string prefabName = prefab.name;
-
-            GameObject card = PhotonNetwork.Instantiate("CardPrefabs/" + prefabName, Vector3.zero, Quaternion.identity);
-            card.transform.SetParent(cardSpawnParent1, false); // 반드시 worldPositionStays = false
-
+            Debug.Log("포 문 안으로 들어왔음");
+            GameObject card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent1);
             RectTransform rt = card.GetComponent<RectTransform>();
             CanvasGroup cg = card.GetComponent<CanvasGroup>();
             if (cg == null) cg = card.AddComponent<CanvasGroup>();
@@ -97,76 +105,74 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             if (flip != null)
             {
                 flip.SetManager(this);
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    flip.SetInteractable(PhotonNetwork.IsMasterClient);
-                }
-                else
-                {
-                    flip.SetInteractable(!PhotonNetwork.IsMasterClient);
-                }
+                flip.SetCardIndex(i); // 인덱스 기반 동기화용
+                flip.SetInteractable(canInteract);
             }
 
             currentCards.Add(card);
         }
+
     }
 
-   //public void SpawnRandomCards2(bool canInteract)
-   //{
-   //    if (allCardPrefabs.Count < cardCountToShow)
-   //    {
-   //        Debug.LogError("카드 프리팹이 부족합니다.");
-   //        return;
-   //    }
-   //
-   //    List<int> selectedIndexes = new();
-   //    while (selectedIndexes.Count < cardCountToShow)
-   //    {
-   //        int rand = Random.Range(0, allCardPrefabs.Count);
-   //        if (!selectedIndexes.Contains(rand))
-   //            selectedIndexes.Add(rand);
-   //    }
-   //
-   //    float centerIndex = (cardCountToShow - 1) / 2f;
-   //
-   //    for (int i = 0; i < cardCountToShow; i++)
-   //    {
-   //        GameObject prefab = allCardPrefabs[selectedIndexes[i]];
-   //        string prefabName = prefab.name;
-   //
-   //        GameObject card = PhotonNetwork.Instantiate("CardPrefabs/" + prefabName, Vector3.zero, Quaternion.identity);
-   //        card.transform.SetParent(cardSpawnParent2, false); // 반드시 worldPositionStays = false
-   //
-   //        RectTransform rt = card.GetComponent<RectTransform>();
-   //        CanvasGroup cg = card.GetComponent<CanvasGroup>();
-   //        if (cg == null) cg = card.AddComponent<CanvasGroup>();
-   //
-   //        float offset = i - centerIndex;
-   //        float x = offset * xSpacing;
-   //        float y = -Mathf.Abs(offset) * curveHeight + curveHeight;
-   //        float rotZ = offset * 5f;
-   //
-   //        if (rt != null)
-   //        {
-   //            rt.anchoredPosition = new Vector2(x, appearYOffset);
-   //            rt.localRotation = Quaternion.Euler(0, 0, rotZ);
-   //            cg.alpha = 0f;
-   //
-   //            Sequence seq = DOTween.Sequence();
-   //            seq.Append(rt.DOAnchorPos(new Vector2(x, y), 0.6f).SetEase(Ease.OutCubic));
-   //            seq.Join(cg.DOFade(1f, 0.6f));
-   //        }
-   //
-   //        FlipCard flip = card.GetComponent<FlipCard>();
-   //        if (flip != null)
-   //        {
-   //            flip.SetManager(this);
-   //            flip.SetInteractable(!PhotonNetwork.IsMasterClient); // 마스터는 관전만
-   //        }
-   //
-   //        currentCards.Add(card);
-   //    }
-   //}
+    public void SpawnClientCardsFromIndexes(int[] indexes, bool canInteract)
+    {
+        Debug.Log("카드 생성 시작");
+        currentCards.Clear();
+
+        float centerIndex = (indexes.Length - 1) / 2f;
+
+        for (int i = 0; i < indexes.Length; i++)
+        {
+            Debug.Log("포 문 안으로 들어왔음");
+            GameObject card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent2);
+            RectTransform rt = card.GetComponent<RectTransform>();
+            CanvasGroup cg = card.GetComponent<CanvasGroup>();
+            if (cg == null) cg = card.AddComponent<CanvasGroup>();
+
+            float offset = i - centerIndex;
+            float x = offset * xSpacing;
+            float y = -Mathf.Abs(offset) * curveHeight + curveHeight;
+            float rotZ = offset * 5f;
+
+            if (rt != null)
+            {
+                rt.anchoredPosition = new Vector2(x, appearYOffset);
+                rt.localRotation = Quaternion.Euler(0, 0, rotZ);
+                cg.alpha = 0f;
+
+                Sequence seq = DOTween.Sequence();
+                seq.Append(rt.DOAnchorPos(new Vector2(x, y), 0.6f).SetEase(Ease.OutCubic));
+                seq.Join(cg.DOFade(1f, 0.6f));
+            }
+
+            FlipCard flip = card.GetComponent<FlipCard>();
+            if (flip != null)
+            {
+                flip.SetManager(this);
+                flip.SetCardIndex(i); // 인덱스 기반 동기화용
+                flip.SetInteractable(canInteract);
+            }
+
+            currentCards.Add(card);
+        }
+
+    }
+
+    public List<GameObject> GetCurrentCards() => currentCards;
+
+    [PunRPC]
+    public void RPC_FlipCardByIndex(int index)
+    {
+        if (index >= 0 && index < currentCards.Count)
+        {
+            FlipCard flip = currentCards[index].GetComponent<FlipCard>();
+            if (flip != null)
+            {
+                flip.PlayFlipAnimation();
+            }
+        }
+    }
+   
 
     // 카드 하나가 선택되었을 때 호출됨
     public void OnCardSelected(GameObject selected)
@@ -189,17 +195,17 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             panel.SelectCheck(PhotonNetwork.LocalPlayer);
         }
 
-      //  // 카드 효과 적용
-      //  CardEffect effect = selected.GetComponent<CardEffect>();
-      //  if ( effect != null)
-      //  {
-      //      Player player = GameObject.FindWithTag("Player");
-      //
-      //      if (player != null)
-      //      {
-      //          effect.ApplyEffect(player);
-      //      }
-      //  }
+        //  // 카드 효과 적용
+        //  CardEffect effect = selected.GetComponent<CardEffect>();
+        //  if ( effect != null)
+        //  {
+        //      Player player = GameObject.FindWithTag("Player");
+        //
+        //      if (player != null)
+        //      {
+        //          effect.ApplyEffect(player);
+        //      }
+        //  }
 
         foreach (GameObject card in currentCards)
         {
@@ -261,11 +267,12 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log(" 모든 플레이어 카드 선택 완료 → Game Scene 로드");
                 PhotonNetwork.LoadLevel("Game Scene");
+                // 씬 전환 필요한 부분
             }
         }
     }
 
-    
+
 
 
 }
