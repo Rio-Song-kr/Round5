@@ -18,20 +18,20 @@ MonoBehaviour:
   Status:
   - EffectType: 2
     EffectValue: -1
-    Duration: 5
-    RemainingTime: 5
+    Duration: 0.5
+    RemainingTime: 0.5
     IsPermanent: 0
     CanAddPlayer: 1
   - EffectType: 3
     EffectValue: -1
-    Duration: 5
-    RemainingTime: 5
+    Duration: 0.5
+    RemainingTime: 0.5
     IsPermanent: 0
     CanAddPlayer: 1
   - EffectType: 1
     EffectValue: -0.5
-    Duration: 15
-    RemainingTime: 15
+    Duration: 1.5
+    RemainingTime: 1.5
     IsPermanent: 0
     CanAddPlayer: 1
   SkillEffectPrefab: {fileID: 6383351256617116317, guid: e0c2eb55749c8924599fe7f70e6e7123, type: 3}
@@ -51,4 +51,4 @@ MonoBehaviour:
   FadeDuration: 0.3
   StopVelocityThreshold: 0.01
   VfxSmokePrefab: {fileID: 2664536468069338131, guid: 40ecf8d11bd84c246b9c11facb48177d, type: 3}
-  SkillPoisition: {x: 0.43259102, y: 3.216778, z: 0}
+  SkillPoisition: {x: -1.2183716, y: 3.067208, z: 0}

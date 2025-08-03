@@ -82,7 +82,6 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
             _circleFill.StartEffect = false;
             _collider.enabled = true;
         }
-
         //# 감소 모드 -> 증가 모드로 변경되었을 때 처리
         else if (_circleFill.StartEffect && _circleFill.CanIncrese)
         {
@@ -244,7 +243,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         //# 파티클 효과 중지 및 octagon 이펙트 비활성화
         StopVfx();
 
-        if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
+        if (_scalingCoroutine != null) return;
         _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one, SkillData.ScalingDuration));
 
         _octagonObject.SetActive(false);
@@ -317,40 +316,34 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
 
         if (targetDefenceSkill.SkillNames.Contains(DefenceSkills.AbyssalCountdown))
         {
-            if (!_status.HasStatusEffect(StatusEffectType.FreezePlayer))
-            {
-                _myPlayer.SetFreeze(true);
+            if (!_status.HasStatusEffect(StatusEffectType.ReduceSpeed))
                 photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
-            }
         }
 
         _targetViewId = other.GetComponent<PhotonView>().ViewID;
 
         float duration = SkillData.ActivateTime * _circleFill.CurrentFillAmount;
 
-
-        // 다른 클라이언트에 동기화
-        photonView.RPC(nameof(ApplyFreeze), RpcTarget.Others, _targetViewId, duration);
-        Debug.Log($"Enter - {_targetViewId}");
+        //# 다른 클라이언트에 동기화
+        photonView.RPC(nameof(ApplyReduceSpeed), RpcTarget.Others, _targetViewId, duration);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (photonView.IsMine && other.CompareTag("Player"))
         {
-            Debug.Log($"Exit - {_targetViewId}");
             _targetViewId = other.GetComponent<PhotonView>().ViewID;
+            photonView.RPC(nameof(RemoveReduceSpeed), RpcTarget.Others, _targetViewId);
+
             _targetPlayer = null;
-            photonView.RPC(nameof(RemoveFreeze), RpcTarget.Others, _targetViewId);
             _targetViewId = 0;
 
-            _myPlayer.SetFreeze(false);
             photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
         }
     }
 
     [PunRPC]
-    private void ApplyFreeze(int viewId, float duration)
+    private void ApplyReduceSpeed(int viewId, float duration)
     {
         var targetView = PhotonView.Find(viewId);
         var otherStatus = targetView.GetComponent<IStatusEffectable>();
@@ -364,22 +357,20 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     }
 
     [PunRPC]
-    private void RemoveFreeze(int viewId)
+    private void RemoveReduceSpeed(int viewId)
     {
         var targetView = PhotonView.Find(viewId);
         var otherStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
 
         if (otherStatus != null)
-            otherStatus.RemoveStatusEffect(StatusEffectType.FreezePlayer);
+            otherStatus.RemoveStatusEffect(StatusEffectType.ReduceSpeed);
     }
 
     [PunRPC]
     private void SyncTargetPosition(int viewId, Vector3 position)
     {
         var targetView = PhotonView.Find(viewId);
-        if (targetView != null)
-        {
-            targetView.transform.position = position;
-        }
+
+        if (targetView != null) targetView.transform.position = position;
     }
 }
