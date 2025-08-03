@@ -12,6 +12,7 @@ public class AttackCard : CardBase
     public float DamageMultiplier;
     public float ReloadTimeMultiplier;
     public float ReloadTimeAddition;
+    public float AttackSpeedMultiplier;
     public int AmmoIncrease;
     [Header("무기 정보")]
     // 0은 스텟 관련 카드, 1 = Laser, 2 = Explosive, 3 = Barrage

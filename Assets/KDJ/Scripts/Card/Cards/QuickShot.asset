@@ -10,20 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e466fad337d5e04ab401b77d18b3624, type: 3}
-  m_Name: ExplosiveBullet
+  m_Name: QuickShot
   m_EditorClassIdentifier: 
-  CardName: EXPLOSIVE BULLET
-  CardDescription: 'Bullet explodes on impact
-
-    <color=red>-50%</color> ATKSPD
+  CardName: QUICK SHOT
+  CardDescription: '<color=green>+150%</color> Bullet Speed
 
     <color=red>+0.25s</color>
     Reload Time'
   CardImage: {fileID: 0}
-  BulletSpeedMultiplier: 0
+  BulletSpeedMultiplier: 2.5
   DamageMultiplier: 0
   ReloadTimeMultiplier: 0
-  ReloadTimeAddition: 0.25
-  AttackSpeedMultiplier: 2
+  ReloadTimeAddition: 0
+  AttackSpeedMultiplier: 0
   AmmoIncrease: 0
-  WeaponIndex: 2
+  WeaponIndex: 0

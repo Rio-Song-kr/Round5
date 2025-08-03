@@ -34,6 +34,8 @@ public class CardManager : MonoBehaviour
         float BulletSpeedMultiplierSum = 1;
         float DamageMultiplierSum = 1;
         float ReloadTimeMultiplierSum = 1;
+        float BulletSpeedMultiplier = 1;
+        float AttackSpeedMultiplier = 1;
         float ReloadTimeAdditionSum = 0;
         int AmmoIncreaseSum = 0;
 
@@ -50,6 +52,8 @@ public class CardManager : MonoBehaviour
                 BulletSpeedMultiplierSum *= attackCard.BulletSpeedMultiplier;
                 DamageMultiplierSum *= attackCard.DamageMultiplier;
                 ReloadTimeMultiplierSum *= attackCard.ReloadTimeMultiplier;
+                BulletSpeedMultiplier *= attackCard.BulletSpeedMultiplier;
+                AttackSpeedMultiplier *= attackCard.AttackSpeedMultiplier;
                 ReloadTimeAdditionSum += attackCard.ReloadTimeAddition;
                 AmmoIncreaseSum += attackCard.AmmoIncrease;
             }
@@ -58,6 +62,8 @@ public class CardManager : MonoBehaviour
         PlayerStatusDataSO playerStats = ScriptableObject.CreateInstance<PlayerStatusDataSO>();
         playerStats.DefaultDamage = _pStatus.DefaultDamage * (DamageMultiplierSum != 0 ? DamageMultiplierSum : 1);
         playerStats.DefaultReloadSpeed = (_pStatus.DefaultReloadSpeed + ReloadTimeAdditionSum) * (ReloadTimeMultiplierSum != 0 ? ReloadTimeMultiplierSum : 1);
+        playerStats.DefaultAttackSpeed = _pStatus.DefaultAttackSpeed * (AttackSpeedMultiplier != 0 ? AttackSpeedMultiplier : 1);
+        playerStats.DefaultBulletSpeed = _pStatus.DefaultBulletSpeed * (BulletSpeedMultiplierSum != 0 ? BulletSpeedMultiplierSum : 1);
         playerStats.DefaultAmmo = _pStatus.DefaultAmmo + AmmoIncreaseSum;
 
         return playerStats;
