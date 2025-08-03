@@ -52,7 +52,6 @@ public class ShieldEffect : MonoBehaviourPun
     /// <returns>코루틴 객체</returns>
     private IEnumerator RoundTripScaleOverTime(Vector3 targetScale, float duration)
     {
-        Debug.Log($"{photonView.ViewID} - {_originalScale}");
         var startScale = _originalScale;
         float timer = 0f;
         bool isReversed = false;

@@ -20,17 +20,31 @@ public class VfxArcEffect : MonoBehaviourPun
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
+
+        Stop();
     }
 
     /// <summary>
     /// 초기화 메서드를 통해 필요한 리소스와 설정값을 할당
     /// </summary>
     /// <param name="pools">파티클 효과 풀 관리 객체</param>
-    public void Initialize(PoolManager pools) => _pools = pools;
+    public void Initialize()
+    {
+        Stop();
+        if (!photonView.IsMine) return;
+        photonView.RPC(nameof(InitializeArcEffect), RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void InitializeArcEffect()
+    {
+        _pools = FindFirstObjectByType<PoolManager>();
+    }
 
     /// <summary>
     /// 파티클 재생
     /// </summary>
+    // [PunRPC]
     public void Play()
     {
         Stop();
@@ -38,6 +52,7 @@ public class VfxArcEffect : MonoBehaviourPun
         _coroutine = StartCoroutine(ReturnPool());
     }
 
+    // [PunRPC]
     public void Stop()
     {
         _hitParticle.Stop();
@@ -51,7 +66,7 @@ public class VfxArcEffect : MonoBehaviourPun
     {
         yield return new WaitForSeconds(_hitParticle.main.duration);
         _coroutine = null;
-        // _pools.Destroy(gameObject);
+
         PhotonNetwork.Destroy(gameObject);
     }
 }

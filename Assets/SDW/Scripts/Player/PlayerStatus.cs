@@ -21,11 +21,13 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
 
     private bool _isInvincibility;
     private bool _canAttack;
+    private bool _freezePlayer;
 
     public Action<float, float> OnPlayerSpeedValueChanged;
     public Action<bool> OnInvincibilityValueChanged;
     public Action<bool> OnPlayerCanAttackValueChanged;
     // public Action<float> OnAttackSpeedValueChanged;
+    public Action<bool> OnPlayerFreezeValueChanged;
 
     /// <summary>
     /// 초기화
@@ -59,6 +61,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         _currentAirSpeed = _playerData.DefaultAirSpeed;
         _isInvincibility = false;
         _canAttack = true;
+        _freezePlayer = false;
         // _currentAttackSpeed = _playerData.DefaultAttackSpeed;
 
         //# 초기화 후 Action을 통해 전달
@@ -66,6 +69,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         OnInvincibilityValueChanged?.Invoke(_isInvincibility);
         OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
         // OnAttackSpeedValueChanged?.Invoke(_calculatedAttackSpeed);
+        OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
     }
 
     private void UpdateStatusEffects()
@@ -87,22 +91,28 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         float prevSpeed = _calculatedGroundSpeed;
         bool prevInvincibility = _isInvincibility;
         bool prevCanAttack = _canAttack;
+        bool prevPlayerFreeze = _freezePlayer;
         // float prevAttackSpeed = _calculatedAttackSpeed;
 
         _calculatedGroundSpeed = _playerData.DefaultGroundSpeed;
         _isInvincibility = false;
         _canAttack = true;
+        _freezePlayer = false;
         // _calculatedAttackSpeed = _playerData.DefaultAttackSpeed;
 
         foreach (var effect in _activeEffect)
         {
             switch (effect.EffectType)
             {
+                //todo ReduceSpeed와 Freeze가 겹칠 때 어떻게 처리?
                 case StatusEffectType.ReduceSpeed:
-                case StatusEffectType.FreezePlayer:
                     _calculatedGroundSpeed = _calculatedGroundSpeed * (1f + effect.EffectValue);
                     _calculatedAirSpeed = _calculatedAirSpeed * (1f + effect.EffectValue);
                     Debug.Log($"Move Speed Changed : {_calculatedGroundSpeed}");
+                    break;
+                case StatusEffectType.FreezePlayer:
+                    _freezePlayer = true;
+                    Debug.Log($"Freeze Player Changed : {_freezePlayer}");
                     break;
                 case StatusEffectType.UnableToAttack:
                     _canAttack = false;
@@ -126,6 +136,9 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
 
         if (prevCanAttack != _canAttack)
             OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
+
+        if (prevPlayerFreeze != _freezePlayer)
+            OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
 
         // if (Mathf.Abs(prevAttackSpeed - _calculatedAttackSpeed) > 0.1f)
         //     OnAttackSpeedValueChanged?.Invoke(_calculatedAttackSpeed);

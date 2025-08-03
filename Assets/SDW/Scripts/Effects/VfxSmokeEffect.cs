@@ -1,7 +1,8 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
-public class VfxSmokeEffect : MonoBehaviour
+public class VfxSmokeEffect : MonoBehaviourPun
 {
     private Coroutine _coroutine;
     private ParticleSystem[] _frostSlamParticles;
@@ -62,6 +63,6 @@ public class VfxSmokeEffect : MonoBehaviour
     {
         yield return _wait;
         _coroutine = null;
-        _pools.Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 }

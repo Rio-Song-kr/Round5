@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 using Photon.Pun;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Splines.ExtrusionShapes;
 
 /// <summary>
 /// 원형 카운트다운 이펙트를 제어하는 컨트롤러
@@ -57,17 +54,6 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     {
         if (_vfxObject != null)
             PhotonNetwork.Destroy(_vfxObject);
-    }
-
-    /// <summary>
-    /// 카운트다운 이펙트 초기화 메서드
-    /// </summary>
-    private void Start()
-    {
-        if (_particle == null) return;
-        //# 파티클을 중지하고 기존 파티클들을 제거
-        _particle.Stop();
-        _particle.Clear();
     }
 
     /// <summary>
@@ -130,8 +116,9 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 5f);
-            _vfxObject.transform.position = Vector3.Lerp(_vfxObject.transform.position, _networkPosition, Time.deltaTime * 5f);
+            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
+            _vfxObject.transform.position =
+                Vector3.Lerp(_vfxObject.transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
         }
     }
 
@@ -170,7 +157,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         _playerTransform = playerTransform;
         _myPlayer = _playerTransform.GetComponent<TestPlayerMove>();
 
-        var effect = playerTransform.GetComponent<AbyssalCountdownEffect>();
+        var effect = GetComponent<AbyssalCountdownEffect>();
 
         if (SkillData == null)
             SkillData = effect.SkillData;
@@ -255,7 +242,6 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     public void EndEffect()
     {
         //# 파티클 효과 중지 및 octagon 이펙트 비활성화
-        // photonView.RPC(nameof(StopVfx), RpcTarget.All);
         StopVfx();
 
         if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
@@ -264,7 +250,6 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         _octagonObject.SetActive(false);
     }
 
-    //todo Coroutine 대신에 TimeDeltaTime으로 처리해야할 듯
     //# 플레이어의 이동이 있을 때는 사용 시간이 깍히는 시간이 20% 증가해야 함
     //# 이동 시 -> Time.deltaTime * 1.2, 정지 시 -> Time.deltaTime
     private void UseShieldEffect()
@@ -368,10 +353,11 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     private void ApplyFreeze(int viewId, float duration)
     {
         var targetView = PhotonView.Find(viewId);
-        var otherStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
+        var otherStatus = targetView.GetComponent<IStatusEffectable>();
+
+        //# Abyssal Countdown의 끌려가는 효과에 의해 이속이 2배가 되어야 이동이 가능해짐
         otherStatus.ApplyStatusEffect(
-            StatusEffectType.FreezePlayer,
-            // -0.1f,
+            StatusEffectType.ReduceSpeed,
             1f,
             duration
         );

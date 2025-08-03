@@ -33,7 +33,7 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
     private PoolManager _pools;
     public PoolManager Pools => _pools;
 
-    public override void Initialize(Transform effectsTransform)
+    public override void Initialize()
     {
         _pools = FindFirstObjectByType<PoolManager>();
         _pools.InitializePool(SkillEffectPrefab.name, SkillEffectPrefab, 2, 5);

@@ -108,7 +108,7 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         _skillNames.Add(skillName);
 
-        skill.Initialize(_effectsObject.transform);
+        skill.Initialize();
 
         switch (skillName)
         {
@@ -147,13 +147,12 @@ public class DefenceSkillManager : MonoBehaviourPun
     public void UseActiveSkills(Vector3 skillPosition)
     {
         if (_coroutine != null) return;
-        // Debug.Log($"Skill Count : {_skills.Count}");
 
         foreach (var skill in _skills)
         {
             if (skill.IsPassive) continue;
 
-            skill.Activate(skillPosition);
+            skill.Activate(skillPosition, transform);
 
             if (_coolDown == null) _coolDown = new WaitForSeconds(skill.CoolDown);
         }

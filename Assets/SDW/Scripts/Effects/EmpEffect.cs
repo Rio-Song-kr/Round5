@@ -8,7 +8,8 @@ using UnityEngine;
 public class EmpEffect : MonoBehaviourPun
 {
     //# Emp Effect Skill Data
-    private EmpEffectSkillDataSO _skillData;
+    public EmpEffectSkillDataSO SkillData;
+    private int _playerViewId;
 
     /// <summary>
     /// _skillData 초기화 및 Arc Effect 실행
@@ -16,10 +17,13 @@ public class EmpEffect : MonoBehaviourPun
     /// <param name="skillData">EmpEffectSkillDataSO 인스턴스</param>
     public void Initialize(EmpEffectSkillDataSO skillData)
     {
-        _skillData = skillData;
+        SkillData = skillData;
+
+        if (!photonView.IsMine) return;
+
+        RunArcEffect();
 
         //# 모든 클라이언트에서 실행하되, 소유권은 개별 Arc에서 처리
-        RunArcEffect();
     }
 
     /// <summary>
@@ -29,10 +33,10 @@ public class EmpEffect : MonoBehaviourPun
     /// </summary>
     private void RunArcEffect()
     {
-        for (int i = 0; i < _skillData.ArcCount; i++)
+        for (int i = 0; i < SkillData.ArcCount; i++)
         {
             //# Arc가 확장될 방향과 초기 회전값을 계산
-            float angle = i * 2f * Mathf.PI / _skillData.ArcCount;
+            float angle = i * 2f * Mathf.PI / SkillData.ArcCount;
 
             //# 방향 계산
             Vector3 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
@@ -40,36 +44,29 @@ public class EmpEffect : MonoBehaviourPun
 
 
             //# Pool에서 Arc를 Get
-            // var arcControllerObject = _skillData.Pools.Instantiate(
-            //     // "Arc",
-            //     "Effects/Arc",
-            //     _skillData.SkillPosition + direction * _skillData.InitialialRadius,
-            //     rotation
-            // );
             var arcControllerObject = PhotonNetwork.Instantiate(
                 "Arc",
-                _skillData.SkillPosition + direction * _skillData.InitialialRadius,
+                SkillData.SkillPosition + direction * SkillData.InitialialRadius,
                 rotation
             );
 
             var arcController = arcControllerObject.GetComponent<ArcController>();
 
+            int viewId = gameObject.GetComponent<PhotonView>().ViewID;
+
             //# 기존 매개변수로 초기화
             arcController.Initialize(
-                _skillData.Pools,
-                _skillData,
-                transform.position,
+                SkillData,
+                viewId,
                 direction,
-                _skillData.InitialExpansionSpeed,
-                _skillData.MinExpansionSpeed,
-                _skillData.FastExpansionRadius,
-                _skillData.DecelerationDuration
+                SkillData.InitialExpansionSpeed,
+                SkillData.MinExpansionSpeed,
+                SkillData.FastExpansionRadius,
+                SkillData.DecelerationDuration
             );
         }
 
-
         //# Pool에 EmpEffect 반환
-        // _skillData.Pools.Destroy(gameObject);
         PhotonNetwork.Destroy(gameObject);
     }
 }

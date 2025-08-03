@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 /// <summary>
 /// 특정 환경이나 게임 내에서 얼음과 관련된 슬램 효과를 관리하고 구현하는 데 사용
 /// </summary>
-public class FrostSlamEffect : MonoBehaviour
+public class FrostSlamEffect : MonoBehaviourPun
 {
     //# Frost Slam Skill Data
-    private FrostSlamSkillDataSO _skillData;
+    public FrostSlamSkillDataSO SkillData;
     //# Collider를 자유롭게 수정할 수 있도록 PolygonCollider 사용
     private PolygonCollider2D _polyCollider;
     //# Circle의 포인트
@@ -47,49 +48,49 @@ public class FrostSlamEffect : MonoBehaviour
     {
         if (!_isInitialized || _isFading) return;
 
-        bool expansionCompleted = _currentRadius >= _skillData.MaxRadius;
+        bool expansionCompleted = _currentRadius >= SkillData.MaxRadius;
         if (!expansionCompleted)
         {
-            float progress = Mathf.Clamp01((_currentRadius - _skillData.InitialRadius) /
-                                           (_skillData.MaxRadius - _skillData.InitialRadius));
+            float progress = Mathf.Clamp01((_currentRadius - SkillData.InitialRadius) /
+                                           (SkillData.MaxRadius - SkillData.InitialRadius));
             float speedMultiplier = Mathf.Cos(progress * Mathf.PI * 0.5f);
-            _currentRadius += _skillData.ExpansionSpeed * speedMultiplier * Time.deltaTime;
-            if (_currentRadius >= _skillData.MaxRadius)
+            _currentRadius += SkillData.ExpansionSpeed * speedMultiplier * Time.deltaTime;
+            if (_currentRadius >= SkillData.MaxRadius)
             {
-                _currentRadius = _skillData.MaxRadius;
+                _currentRadius = SkillData.MaxRadius;
                 expansionCompleted = true;
             }
         }
 
-        for (int i = 0; i < _skillData.PointCount; i++)
+        for (int i = 0; i < SkillData.PointCount; i++)
         {
             if (_isFixed[i]) continue;
 
-            var direction = new Vector2(Mathf.Cos(i * 2f * Mathf.PI / _skillData.PointCount),
-                Mathf.Sin(i * 2f * Mathf.PI / _skillData.PointCount));
+            var direction = new Vector2(Mathf.Cos(i * 2f * Mathf.PI / SkillData.PointCount),
+                Mathf.Sin(i * 2f * Mathf.PI / SkillData.PointCount));
 
             if (expansionCompleted)
             {
-                _points[i] = direction * _skillData.MaxRadius;
+                _points[i] = direction * SkillData.MaxRadius;
                 _isFixed[i] = true;
             }
             else
             {
                 float targetDistance = _currentRadius;
-                var targetPosition = (Vector2)transform.position + direction * (targetDistance + _skillData.DetectOffset);
-                var collider = Physics2D.OverlapCircle(targetPosition, _skillData.CircleRadius, _skillData.TargetLayer);
+                var targetPosition = (Vector2)transform.position + direction * (targetDistance + SkillData.DetectOffset);
+                var collider = Physics2D.OverlapCircle(targetPosition, SkillData.CircleRadius, SkillData.TargetLayer);
 
                 if (collider != null)
                 {
-                    float minDistance = _skillData.InitialRadius;
-                    float maxDistance = targetDistance + _skillData.DetectOffset;
+                    float minDistance = SkillData.InitialRadius;
+                    float maxDistance = targetDistance + SkillData.DetectOffset;
                     float stopDistance = minDistance;
 
                     for (int j = 0; j < 5; j++)
                     {
                         float testDistance = (minDistance + maxDistance) * 0.5f;
                         var testPosition = (Vector2)transform.position + direction * testDistance;
-                        if (Physics2D.OverlapCircle(testPosition, _skillData.CircleRadius, _skillData.TargetLayer) != null)
+                        if (Physics2D.OverlapCircle(testPosition, SkillData.CircleRadius, SkillData.TargetLayer) != null)
                         {
                             maxDistance = testDistance;
                         }
@@ -99,7 +100,7 @@ public class FrostSlamEffect : MonoBehaviour
                             stopDistance = testDistance;
                         }
                     }
-                    stopDistance = Mathf.Max(stopDistance - _skillData.DetectOffset, _skillData.InitialRadius);
+                    stopDistance = Mathf.Max(stopDistance - SkillData.DetectOffset, SkillData.InitialRadius);
                     _points[i] = direction * stopDistance;
                     _isFixed[i] = true;
                 }
@@ -111,6 +112,8 @@ public class FrostSlamEffect : MonoBehaviour
         }
 
         ProcessFixedSegments();
+
+        if (photonView.IsMine) _polyCollider.enabled = true;
         _polyCollider.SetPath(0, _points);
         UpdateLineRenderer();
 
@@ -121,7 +124,7 @@ public class FrostSlamEffect : MonoBehaviour
         }
 
         //# 다음 프레임의 속도 계산을 위해 현재 포인트 위치를 기록
-        for (int i = 0; i < _skillData.PointCount; i++)
+        for (int i = 0; i < SkillData.PointCount; i++)
         {
             _lastFramePoints[i] = _points[i];
         }
@@ -131,52 +134,65 @@ public class FrostSlamEffect : MonoBehaviour
     /// FrostSlamEffect 컴포넌트 초기화 과정에서 필요한 데이터와 컴포넌트 설정을 수행
     /// </summary>
     /// <param name="skillData">슬롯에 로드된 FrostSlamSkillDataSO 인스턴스</param>
-    public void Initialize(FrostSlamSkillDataSO skillData)
+    public void Initialize(FrostSlamSkillDataSO skillData, int viewId)
     {
-        _skillData = skillData;
+        SkillData = skillData;
 
-        _points = new List<Vector2>(_skillData.PointCount);
-        _lastFramePoints = new List<Vector2>(_skillData.PointCount);
-        _isFixed = new List<bool>(_skillData.PointCount);
-
-        Activate();
-        _isInitialized = true;
+        if (!photonView.IsMine) return;
+        // Activate();
+        photonView.RPC(nameof(ActivateFrostSlamEffect), RpcTarget.All, viewId);
     }
 
     /// <summary>
     /// 초기 활성화 및 설정 프로세싱을 수행
     /// 스킬 데이터를 기반으로 효과의 초기 상태를 구성하고 시각적 요소들을 초기화
     /// </summary>
-    private void Activate()
+    [PunRPC]
+    private void ActivateFrostSlamEffect(int viewId)
     {
-        _currentRadius = _skillData.InitialRadius;
+        var targetView = PhotonView.Find(viewId);
+
+        _points = new List<Vector2>(SkillData.PointCount);
+        _lastFramePoints = new List<Vector2>(SkillData.PointCount);
+        _isFixed = new List<bool>(SkillData.PointCount);
+        _polyCollider.enabled = false;
+
+        _currentRadius = SkillData.InitialRadius;
         _points.Clear();
         _lastFramePoints.Clear();
         _isFixed.Clear();
 
         InitializeLineRenderer();
 
-        for (int i = 0; i < _skillData.PointCount; i++)
+        for (int i = 0; i < SkillData.PointCount; i++)
         {
-            float angle = i * 2f * Mathf.PI / _skillData.PointCount;
+            float angle = i * 2f * Mathf.PI / SkillData.PointCount;
             var point = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _currentRadius;
             _points.Add(point);
             _lastFramePoints.Add(point);
             _isFixed.Add(false);
         }
 
+        var smokeEffectObject = PhotonNetwork.Instantiate("VFX_Smoke", targetView.transform.position, Quaternion.identity);
+        var smokeEffect = smokeEffectObject.GetComponent<VfxSmokeEffect>();
+        smokeEffect.Stop();
+        smokeEffect.Initialize(SkillData.Pools);
+        smokeEffect.Play();
+
+        photonView.RPC(nameof(UpdateFirstLine), RpcTarget.All, transform.position);
+    }
+
+    [PunRPC]
+    private void UpdateFirstLine(Vector3 position)
+    {
+        transform.position = position;
+
         _polyCollider.SetPath(0, _points);
         UpdateLineRenderer();
 
         _isFading = false;
 
-
-        // var smokeEffectObject = _skillData.Pools.Instantiate("VFX_Smoke", _skillData.SkillPoisition, Quaternion.identity);
-        var smokeEffectObject = _skillData.Pools.Instantiate("Effects/VFX_Smoke", _skillData.SkillPoisition, Quaternion.identity);
-        var smokeEffect = smokeEffectObject.GetComponent<VfxSmokeEffect>();
-        smokeEffect.Stop();
-        smokeEffect.Initialize(_skillData.Pools);
-        smokeEffect.Play();
+        _isInitialized = true;
     }
 
     /// <summary>
@@ -184,9 +200,9 @@ public class FrostSlamEffect : MonoBehaviour
     /// </summary>
     private void InitializeLineRenderer()
     {
-        _lineRenderer.material = _skillData.LineMaterial;
-        _lineRenderer.startWidth = _skillData.LineWidth;
-        _lineRenderer.endWidth = _skillData.LineWidth;
+        _lineRenderer.material = SkillData.LineMaterial;
+        _lineRenderer.startWidth = SkillData.LineWidth;
+        _lineRenderer.endWidth = SkillData.LineWidth;
         _lineRenderer.loop = true;
         _lineRenderer.useWorldSpace = false;
         _lineRenderer.startColor = Color.white;
@@ -200,11 +216,11 @@ public class FrostSlamEffect : MonoBehaviour
     {
         if (Time.deltaTime <= 0) return false;
 
-        for (int i = 0; i < _skillData.PointCount; i++)
+        for (int i = 0; i < SkillData.PointCount; i++)
         {
             float distance = Vector2.Distance(_points[i], _lastFramePoints[i]);
             float velocity = distance / Time.deltaTime;
-            if (velocity > _skillData.StopVelocityThreshold)
+            if (velocity > SkillData.StopVelocityThreshold)
             {
                 return false;
             }
@@ -221,10 +237,10 @@ public class FrostSlamEffect : MonoBehaviour
         bool inFixedSegment = false;
         var interpolationRanges = new List<Tuple<int, int>>();
 
-        for (int i = 0; i < _skillData.PointCount * 2; i++)
+        for (int i = 0; i < SkillData.PointCount * 2; i++)
         {
-            int currentIndex = i % _skillData.PointCount;
-            int prevIndex = (currentIndex - 1 + _skillData.PointCount) % _skillData.PointCount;
+            int currentIndex = i % SkillData.PointCount;
+            int prevIndex = (currentIndex - 1 + SkillData.PointCount) % SkillData.PointCount;
 
             if (_isFixed[currentIndex])
             {
@@ -237,7 +253,7 @@ public class FrostSlamEffect : MonoBehaviour
                 if (inFixedSegment && currentIndex != currentFixedSegmentStart)
                 {
                     var vec1 = _points[currentIndex] - _points[prevIndex];
-                    int nextPotentialIndex = (currentIndex + 1) % _skillData.PointCount;
+                    int nextPotentialIndex = (currentIndex + 1) % SkillData.PointCount;
                     var vec2 = Vector2.zero;
 
                     if (_isFixed[nextPotentialIndex])
@@ -246,7 +262,7 @@ public class FrostSlamEffect : MonoBehaviour
                     if (vec1.sqrMagnitude > 0.0001f && vec2.sqrMagnitude > 0.0001f)
                     {
                         float angle = Vector2.Angle(vec1, vec2);
-                        if (angle < 180f - _skillData.AngleThresholdForStraighten)
+                        if (angle < 180f - SkillData.AngleThresholdForStraighten)
                         {
                             interpolationRanges.Add(new Tuple<int, int>(currentFixedSegmentStart, prevIndex));
                             currentFixedSegmentStart = currentIndex;
@@ -267,7 +283,7 @@ public class FrostSlamEffect : MonoBehaviour
 
         if (inFixedSegment && currentFixedSegmentStart != -1)
         {
-            interpolationRanges.Add(new Tuple<int, int>(currentFixedSegmentStart, _skillData.PointCount - 1));
+            interpolationRanges.Add(new Tuple<int, int>(currentFixedSegmentStart, SkillData.PointCount - 1));
         }
 
         foreach (var range in interpolationRanges)
@@ -285,11 +301,11 @@ public class FrostSlamEffect : MonoBehaviour
 
         var startPoint = _points[segStartIdx];
         var endPoint = _points[segEndIdx];
-        int count = segEndIdx >= segStartIdx ? segEndIdx - segStartIdx + 1 : _skillData.PointCount - segStartIdx + segEndIdx + 1;
+        int count = segEndIdx >= segStartIdx ? segEndIdx - segStartIdx + 1 : SkillData.PointCount - segStartIdx + segEndIdx + 1;
 
         for (int i = 0; i < count; i++)
         {
-            int pointIndex = (segStartIdx + i) % _skillData.PointCount;
+            int pointIndex = (segStartIdx + i) % SkillData.PointCount;
             float t = (float)i / (count - 1);
             _points[pointIndex] = Vector2.Lerp(startPoint, endPoint, t);
         }
@@ -314,21 +330,50 @@ public class FrostSlamEffect : MonoBehaviour
     /// </summary>
     private IEnumerator FadeOutAndInactive()
     {
-        yield return new WaitForSeconds(_skillData.FadeDelay);
+        yield return new WaitForSeconds(SkillData.FadeDelay);
 
         float elapsedTime = 0f;
         var startColor = _lineRenderer.startColor;
 
-        while (elapsedTime < _skillData.FadeDuration)
+        while (elapsedTime < SkillData.FadeDuration)
         {
             elapsedTime += Time.deltaTime;
-            float alpha = Mathf.Lerp(startColor.a, 0f, elapsedTime / _skillData.FadeDuration);
+            float alpha = Mathf.Lerp(startColor.a, 0f, elapsedTime / SkillData.FadeDuration);
             var newColor = new Color(startColor.r, startColor.g, startColor.b, alpha);
             _lineRenderer.startColor = newColor;
             _lineRenderer.endColor = newColor;
             yield return null;
         }
 
-        _skillData.Pools.Destroy(gameObject);
+        SkillData.Pools.Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!photonView.IsMine) return;
+
+        var targetView = other.GetComponent<PhotonView>();
+
+        if (!other.CompareTag("Player") || targetView.IsMine) return;
+
+
+        Debug.Log("Apply FrostSlamEffect");
+        photonView.RPC(nameof(ApplyFrostSlamEffect), RpcTarget.All, targetView.ViewID);
+    }
+
+    [PunRPC]
+    private void ApplyFrostSlamEffect(int viewId)
+    {
+        var targetView = PhotonView.Find(viewId);
+        var otherStatus = targetView.GetComponent<IStatusEffectable>();
+
+        foreach (var status in SkillData.Status)
+        {
+            otherStatus.ApplyStatusEffect(
+                status.EffectType,
+                status.EffectValue,
+                status.Duration
+            );
+        }
     }
 }

@@ -7,8 +7,6 @@ using UnityEngine;
 public class ArcController : MonoBehaviourPun
 {
     [Header("Collision Settings")]
-    //# 충돌 시 대상에게 입힐 데미지
-    [SerializeField] private int _damage = 10;
     //# 충돌 시 생성될 이펙트 프리팹
     [SerializeField] private GameObject _hitEffectPrefab;
     //# 충돌을 감지할 대상의 레이어
@@ -25,19 +23,20 @@ public class ArcController : MonoBehaviourPun
     private float _currentSpeed;
     private float _decelerationTimer;
     private Camera _mainCamera;
-    private PoolManager _pools;
 
     private GameObject _hitEffectObject;
     private VfxArcEffect _hitEffect;
     private bool _isReleased;
 
-    private EmpEffectSkillDataSO _skillData;
+    public EmpEffectSkillDataSO SkillData;
 
     /// <summary>
     /// 매 프레임마다 자신의 상태를 판단하여 속도를 결정하고 이동하며, 화면 밖으로 나가면 Pool에 반환
     /// </summary>
     private void Update()
     {
+        if (!photonView.IsMine) return;
+
         //# 속도 결정 로직
         float distanceFromCenter = Vector3.Distance(transform.position, _centerPoint);
 
@@ -66,8 +65,6 @@ public class ArcController : MonoBehaviourPun
         if (IsOffScreen())
         {
             if (_isReleased) return;
-            // _pools.Destroy(_hitEffectObject);
-            // _pools.Destroy(gameObject);
             PhotonNetwork.Destroy(_hitEffectObject);
             PhotonNetwork.Destroy(gameObject);
         }
@@ -77,19 +74,47 @@ public class ArcController : MonoBehaviourPun
     /// EMPEffect에 의해 호출되어 Arc의 모든 동작 설정을 초기화
     /// </summary>
     public void Initialize(
-        PoolManager pool,
         EmpEffectSkillDataSO skillData,
-        Vector3 centerPoint,
+        int viewId,
         Vector3 direction,
         float initialSpeed,
         float minSpeed,
         float fastRadius,
         float decelerationDuration)
     {
-        _pools = pool;
-        _skillData = skillData;
+        if (!photonView.IsMine) return;
 
-        _centerPoint = centerPoint;
+        SkillData = skillData;
+
+
+        photonView.RPC(
+            nameof(InitializeArc),
+            RpcTarget.All,
+            viewId,
+            direction,
+            initialSpeed,
+            minSpeed,
+            fastRadius,
+            decelerationDuration);
+    }
+
+    [PunRPC]
+    private void InitializeArc(
+        int viewId,
+        Vector3 direction,
+        float initialSpeed,
+        float minSpeed,
+        float fastRadius,
+        float decelerationDuration)
+    {
+        var empTransform = PhotonView.Find(viewId).transform;
+
+        var effect = empTransform.GetComponent<EmpEffect>();
+
+        if (SkillData == null)
+            SkillData = effect.SkillData;
+
+        _centerPoint = empTransform.position;
         _direction = direction;
         _initialExpansionSpeed = initialSpeed;
         _minExpansionSpeed = minSpeed;
@@ -103,12 +128,10 @@ public class ArcController : MonoBehaviourPun
         _isReleased = false;
 
         //# Pool에서 VFX_Arc를 꺼냄
-        // _hitEffectObject = _pools.Instantiate("VFX_Arc", transform.position, transform.rotation);
-        // _hitEffectObject = _pools.Instantiate("Effects/VFX_Arc", transform.position, transform.rotation);
         _hitEffectObject = PhotonNetwork.Instantiate("VFX_Arc", transform.position, transform.rotation);
         _hitEffect = _hitEffectObject.GetComponent<VfxArcEffect>();
         _hitEffect.Stop();
-        _hitEffect.Initialize(_pools);
+        _hitEffect.Initialize();
     }
 
     /// <summary>
@@ -117,26 +140,53 @@ public class ArcController : MonoBehaviourPun
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (_isReleased || !photonView.IsMine || photonView == null) return;
-        // if (_isReleased) return;
-        if (_skillData == null) return;
+        if (SkillData == null)
+        {
+            Debug.Log("_skillData = null");
+            return;
+        }
 
         //# 충돌한 오브젝트가 지정된 타겟 레이어에 속하는지 확인함
-        if ((_skillData.TargetMask.value & 1 << other.gameObject.layer) > 0)
+        if ((SkillData.TargetMask.value & 1 << other.gameObject.layer) > 0)
         {
+            if (other.gameObject.CompareTag("Player"))
+            {
+                int targetViewId = other.GetComponent<PhotonView>().ViewID;
+                photonView.RPC(nameof(ApplyReduceEffect), RpcTarget.All, targetViewId);
+            }
+
             _hitEffectObject.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
-            PlayHitEffect(transform.position, transform.rotation);
+            photonView.RPC(nameof(PlayHitEffect), RpcTarget.All, transform.position, transform.rotation);
 
             //# Pool에 ArcController 반환
-            // _pools.Destroy(gameObject);
             PhotonNetwork.Destroy(gameObject);
             _isReleased = true;
+        }
+    }
+
+    [PunRPC]
+    private void ApplyReduceEffect(int viewId)
+    {
+        var targetView = PhotonView.Find(viewId);
+        var targetStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
+
+        foreach (var status in SkillData.Status)
+        {
+            if (status.EffectType != StatusEffectType.ReduceSpeed) continue;
+
+            targetStatus.ApplyStatusEffect(
+                status.EffectType,
+                status.EffectValue,
+                status.Duration
+            );
         }
     }
 
     /// <summary>
     /// Hit Effect 재생 RPC
     /// </summary>
+    [PunRPC]
     private void PlayHitEffect(Vector3 position, Quaternion rotation)
     {
         if (_hitEffectObject != null && _hitEffect != null || photonView != null || !_isReleased)

@@ -9,6 +9,7 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
     private PlayerStatus _status;
 
     private float _moveSpeed = 5f;
+    public float MoveSpeed => _moveSpeed;
     private float _airSpeed = 0.2f;
     private bool _isFreeze = false;
 
@@ -16,6 +17,7 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
 
     private bool _isPlayerMoved;
     private bool _prevPlayerMoveState;
+    private bool _isInvincibility;
 
     private void Awake()
     {
@@ -25,6 +27,9 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
     private void Start()
     {
         _status.OnPlayerSpeedValueChanged += SetMoveSpeed;
+        _status.OnPlayerFreezeValueChanged += SetFreeze;
+        //# 무적
+        _status.OnInvincibilityValueChanged += SetInvincibility;
     }
 
     private void Update()
@@ -44,28 +49,6 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
             transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 100f);
         }
     }
-
-    // 무기 컨트롤러에서 조절
-    // private void ShotCycle()
-    // {
-    //     _shotTimer += Time.deltaTime;
-    //     if (_shotTimer >= _shotInterval && Input.GetMouseButton(0) && photonView.IsMine)
-    //     {
-    //         photonView.RPC("Shot", RpcTarget.All);
-    //         _shotTimer = 0f;
-    //     }
-    // }
-    //
-    // [PunRPC]
-    // private void Shot()
-    // {
-    //     // 240706 수정
-    //     // GameObject bullet = Instantiate(_bulletPrefab, _muzzle.position, _muzzle.rotation);
-    //     if (!photonView.IsMine) return; 
-    //     GameObject bullet = PhotonNetwork.Instantiate("Bullets/Bullet", _muzzle.position, _muzzle.rotation);
-    //     
-    //     CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
-    // }
 
     private void LookAtMouse()
     {
@@ -134,8 +117,7 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
         _airSpeed = airSpeed;
     }
 
-    public void SetFreeze(bool value)
-    {
-        _isFreeze = value;
-    }
+    public void SetFreeze(bool value) => _isFreeze = value;
+
+    private void SetInvincibility(bool value) => _isInvincibility = value;
 }

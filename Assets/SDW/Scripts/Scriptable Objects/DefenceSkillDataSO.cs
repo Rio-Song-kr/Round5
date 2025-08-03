@@ -20,7 +20,7 @@ public abstract class DefenceSkillDataSO : ScriptableObject
     /// Player의 자식으로 생성
     /// </summary>
     /// <param name="effectsTransform">Player와 함께 움직이면 안되는 Effects들의 부모 오브젝트의 Transform</param>
-    public abstract void Initialize(Transform effectsTransform);
+    public abstract void Initialize();
 
     /// <summary>
     /// 스킬 활성화
