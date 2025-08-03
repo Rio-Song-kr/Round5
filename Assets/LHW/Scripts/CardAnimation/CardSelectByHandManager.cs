@@ -1,20 +1,21 @@
-using LHWtestScript;
 using UnityEngine;
 
 public class CardSelectByHandManager : MonoBehaviour
 {
     [SerializeField] GameObject[] cards;
     [SerializeField] CardSceneArmController armController;
-
+    
+   
     private int selectedIndex = -1;
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.D))
         {
             SelectRightCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<LHWFlipCard>().PlayFlipAnimation();
+                cards[selectedIndex].GetComponent<FlipCard>().RPC_Flip();
                 armController.SelectCard(selectedIndex);
                 CardAnimaitonPlay();
             }
@@ -24,9 +25,9 @@ public class CardSelectByHandManager : MonoBehaviour
             SelectLeftCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<LHWFlipCard>().PlayFlipAnimation();
+                cards[selectedIndex].GetComponent<FlipCard>().RPC_Flip();
                 armController.SelectCard(selectedIndex);
-                if (cards[selectedIndex].GetComponent<LHWFlipCard>().IsFlipped)
+                if (cards[selectedIndex].GetComponent<FlipCard>().IsFlipped)
                 {
                     CardAnimaitonPlay();
                 }
@@ -57,10 +58,11 @@ public class CardSelectByHandManager : MonoBehaviour
                 cards[selectedIndex].GetComponentInChildren<CardAnimator>().RestartAnimation();
                 continue;
             }
-            else if (cards[i].GetComponent<LHWFlipCard>().IsFlipped)
+            else if (cards[i].GetComponent<FlipCard>().IsFlipped)
             {
                 cards[i].GetComponentInChildren<CardAnimator>().StopAnimation();
             }
         }
     }
+   
 }

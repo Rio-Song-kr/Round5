@@ -50,11 +50,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 4718549699714053276, guid: 655d787c752092a4889f82377f3734a0, type: 3}
   laserPrefab: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
+  fragmentPrefab: {fileID: 2555893828798284621, guid: e576444c17967495385a31832d112356, type: 3}
+  explosivePrefab: {fileID: 2555893828798284621, guid: a9a46c890467040abba6f181bfe29654, type: 3}
   maxAmmo: 2
   currentAmmo: 2
   reloadTime: 3
-  isBigBullet: 0
-  isExplosiveBullet: 0
+  isBigBullet: 1
+  isExplosiveBullet: 1
   animator: {fileID: 0}
   isReloading: 1
   idleReloadDelay: 4
@@ -101,6 +103,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _laserSoot: {fileID: 63926126280430481, guid: d8581ee95c56d884b90da9f234f5b3e8, type: 3}
   _particleDelay: 0.01
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 0
   Duration: 2
   LaserScale: 1
 --- !u!73398921 &5235703630447416284

@@ -1,141 +1,137 @@
 using DG.Tweening;
-using DG.Tweening.Core;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
-namespace LHWtestScript
+public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    public class LHWFlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    private bool isFlipped = false;
+    public bool IsFlipped { get { return isFlipped; } }
+    private bool isSelected = false;
+    private bool isHovered = false;
+
+    [Header("ï¿½ï¿½/ï¿½Þ¸ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")]
+    public GameObject frontRoot;
+    public GameObject backRoot;
+
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
+    public float flipDuration = 0.25f;
+    public float hoverScale = 1.1f;
+
+    private Vector3 originalScale;
+    private CardSelectManager manager;
+
+    private bool isInteractable = true;
+
+    public void SetInteractable(bool value)
     {
-        private bool isFlipped = false;
-        public bool IsFlipped { get { return isFlipped; } }
-        private bool isSelected = false;
-        private bool isHovered = false;
+        isInteractable = value;
+    }
+    public void SetManager(CardSelectManager mgr)
+    {
+        manager = mgr;
+    }
 
-        [Header("¾Õ/µÞ¸é ·çÆ® ¿ÀºêÁ§Æ®")]
-        public GameObject frontRoot;
-        public GameObject backRoot;
+    private void Start()
+    {
+        isFlipped = false;
+        isSelected = false;
+        isHovered = false;
 
-        [Header("¼³Á¤")]
-        public float flipDuration = 0.25f;
-        public float hoverScale = 1.1f;
+        originalScale = transform.localScale;
 
-        private Vector3 originalScale;
-        private CardSelectManager manager;
+        // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ Yï¿½ï¿½ 180ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        Vector3 rot = transform.localEulerAngles;
+        rot.y = 180f;
+        transform.localRotation = Quaternion.Euler(rot);
 
-        private bool isInteractable = true;
+        if (frontRoot != null) frontRoot.SetActive(false);
+        if (backRoot != null) backRoot.SetActive(true);
+    }
 
-        public void SetInteractable(bool value)
-        {
-            isInteractable = value;
-        }
-        public void SetManager(CardSelectManager mgr)
-        {
-            manager = mgr;
-        }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        private void Start()
-        {
-            isFlipped = false;
-            isSelected = false;
-            isHovered = false;
+        isHovered = true;
+        transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
+    }
 
-            originalScale = transform.localScale;
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        isHovered = false;
+        transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
+    }
 
-            // ÇöÀç È¸ÀüÀ» À¯ÁöÇÏ°í Y¸¸ 180µµ·Î º¯°æ
-            Vector3 rot = transform.localEulerAngles;
-            rot.y = 180f;
-            transform.localRotation = Quaternion.Euler(rot);
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!isInteractable || !isHovered) return; //Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            if (frontRoot != null) frontRoot.SetActive(false);
-            if (backRoot != null) backRoot.SetActive(true);
-        }
+        OnClickCard(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ È£ï¿½ï¿½
+    }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
+    public void OnClickCard()
+    {
+        if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            isHovered = true;
-            transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
-            isHovered = false;
-            transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (!isInteractable || !isHovered) return; //Å¬¸¯ Á¦ÇÑ Æ÷ÇÔ
-
-            OnClickCard(); // ±âÁ¸ ·ÎÁ÷ ±×´ë·Î È£Ãâ
-        }
-
-        public void OnClickCard()
-        {
-            if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
-
-            if (!isFlipped)
-            {
-                isFlipped = true;
-
-                // ·ÎÄÃ ¾Ö´Ï¸ÞÀÌ¼Ç ½ÇÇà
-                PlayFlipAnimation();
-
-                // RPC·Î »ó´ë Å¬¶óÀÌ¾ðÆ®¿¡°Ôµµ flip ¾Ö´Ï¸ÞÀÌ¼Ç µ¿±âÈ­
-                PhotonView photonView = PhotonView.Get(this);
-                photonView.RPC(nameof(RPC_Flip), RpcTarget.Others);
-
-
-            }
-            else if (!isSelected)
-            {
-                isSelected = true;
-                manager?.OnCardSelected(gameObject);
-            }
-        }
-
-        [PunRPC]
-        public void RPC_Flip()
+        if (!isFlipped)
         {
             isFlipped = true;
+
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
             PlayFlipAnimation();
-        }
 
-        public void PlayFlipAnimation()
+            // RPCï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½Ôµï¿½ flip ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½È­
+            PhotonView photonView = PhotonView.Get(this);
+            photonView.RPC(nameof(RPC_Flip), RpcTarget.Others);
+
+
+        }
+        else if (!isSelected)
         {
-            if (isFlipped) return;
-
-            // ÇöÀç È¸Àü°ª °¡Á®¿À±â
-            Vector3 startEuler = transform.localEulerAngles;
-
-            // ZÃà º¸Á¤ (360µµ ÀÌ»ó °ªÀÌ¸é -360 º¸Á¤ ÈÄ ºÎÈ£ ¹ÝÀü)
-            float z = startEuler.z;
-            if (z > 180f) z -= 360f;
-            float flippedZ = -z;
-
-            // Y = 0 À¸·Î È¸ÀüÇÏ¸é¼­ Z´Â ¹ÝÀüÇØ¼­ ºÎÃ¤²Ã °¢µµ À¯Áö
-            Vector3 targetEuler = new Vector3(0f, 0f, flippedZ);
-
-            transform.DORotate(targetEuler, flipDuration)
-                .SetEase(Ease.InOutSine)
-                .OnUpdate(() =>
-                {
-                    float yRot = transform.localEulerAngles.y;
-                    if (yRot > 180f) yRot -= 360f;
-                    bool showFront = Mathf.Abs(yRot) <= 90f;
-
-                    if (frontRoot != null) frontRoot.SetActive(showFront);
-                    if (backRoot != null) backRoot.SetActive(!showFront);
-                })
-                .OnComplete(() =>
-                {
-                    if (frontRoot != null) frontRoot.SetActive(true);
-                    if (backRoot != null) backRoot.SetActive(false);
-                });
-            isFlipped = true;
+            isSelected = true;
+            manager?.OnCardSelected(gameObject);
         }
+    }
+
+    [PunRPC]
+    public void RPC_Flip()
+    {
+        isFlipped = true;
+        PlayFlipAnimation();
+    }
+
+    void PlayFlipAnimation()
+    {
+        if (isFlipped) return;
+
+        // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        Vector3 startEuler = transform.localEulerAngles;
+
+        // Zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (360ï¿½ï¿½ ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ -360 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½)
+        float z = startEuler.z;
+        if (z > 180f) z -= 360f;
+        float flippedZ = -z;
+
+        // Y = 0 ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï¸é¼­ Zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        Vector3 targetEuler = new Vector3(0f, 0f, flippedZ);
+
+        transform.DORotate(targetEuler, flipDuration)
+            .SetEase(Ease.InOutSine)
+            .OnUpdate(() =>
+            {
+                float yRot = transform.localEulerAngles.y;
+                if (yRot > 180f) yRot -= 360f;
+                bool showFront = Mathf.Abs(yRot) <= 90f;
+
+                if (frontRoot != null) frontRoot.SetActive(showFront);
+                if (backRoot != null) backRoot.SetActive(!showFront);
+            })
+            .OnComplete(() =>
+            {
+                if (frontRoot != null) frontRoot.SetActive(true);
+                if (backRoot != null) backRoot.SetActive(false);
+            });
+        isFlipped = true;
     }
 }

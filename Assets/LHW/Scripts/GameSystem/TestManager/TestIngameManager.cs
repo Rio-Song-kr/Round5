@@ -27,10 +27,14 @@ public class TestIngameManager : MonoBehaviour
 
     #endregion
 
+    public static event Action onCardSelectEnd;
     public static event Action OnRoundOver;
     public static event Action OnGameSetOver;
     public static event Action OnGameOver;
     public static event Action OnSkillObtained;
+
+    private bool isCardSelectTime = false;
+    public bool IsCardSelectTime { get {  return isCardSelectTime; } } 
 
     private bool isRoundOver = false;
     private bool isGameSetOver = false;
@@ -42,6 +46,11 @@ public class TestIngameManager : MonoBehaviour
     private Dictionary<string, int> playerGameScore = new Dictionary<string, int>();
     private string currentWinner;
 
+    private int roundMaxWin = 2;
+    private int GameMaxWin = 2;
+    private int currentGameRound = 0;
+    public int CurrentGameRound { get { return currentGameRound; } }
+
     // 테스트용
     private List<string> leftPlayerSkill = new List<string>();
     private List<string> rightPlayerSkill = new List<string>();
@@ -52,10 +61,17 @@ public class TestIngameManager : MonoBehaviour
         playerRoundScore.Add("Right", 0);
         playerGameScore.Add("Left", 0);
         playerGameScore.Add("Right", 0);
+        GameStart();
     }
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            CardSelectEnd();
+            RoundStart();
+        }
+
         // 테스트용 코드
         if(Input.GetKeyDown(KeyCode.R))
         {
@@ -91,6 +107,7 @@ public class TestIngameManager : MonoBehaviour
 
     public void GameStart()
     {
+        isCardSelectTime = true;
         isRoundOver = false;
         isGameSetOver = false;
         isGameOver = false;
@@ -98,6 +115,13 @@ public class TestIngameManager : MonoBehaviour
         playerRoundScore["Right"] = 0;
         playerGameScore["Left"] = 0;
         playerGameScore["Right"] = 0;
+        currentGameRound = 0;
+    }
+
+    public void CardSelectEnd()
+    {
+        isCardSelectTime = false;
+        onCardSelectEnd?.Invoke();
     }
 
     public void RoundStart()
@@ -111,15 +135,16 @@ public class TestIngameManager : MonoBehaviour
         playerRoundScore[winner] += 1;
         currentWinner = winner;
 
-        if(playerRoundScore["Right"] >=2)
+        if(playerRoundScore["Right"] >= roundMaxWin)
         {
             GameSetOver("Right");
+            currentGameRound++;
         }
-        else if (playerRoundScore["Left"] >= 2)
+        else if (playerRoundScore["Left"] >= roundMaxWin)
         {
             GameSetOver("Left");
+            currentGameRound++;
         }
-        Debug.Log(winner);
         OnRoundOver?.Invoke();
     }
 
@@ -127,21 +152,21 @@ public class TestIngameManager : MonoBehaviour
     {
         isGameSetOver = false;
 
-        if (playerRoundScore["Right"] >= 2 || playerRoundScore["Left"] >= 2)
+        if (playerRoundScore["Right"] >= roundMaxWin || playerRoundScore["Left"] >= roundMaxWin)
         {
             playerRoundScore["Left"] = 0;
             playerRoundScore["Right"] = 0;
-        }
+        }        
     }
 
     private void GameSetOver(string winner)
     {
         isGameSetOver = true;
-        playerGameScore[winner] += 1;        
+        isCardSelectTime = true;
+        playerGameScore[winner] += 1;
         currentWinner = winner;
-
         OnGameSetOver?.Invoke();
-        if (playerGameScore["Left"] >= 3 || playerGameScore["Right"] >= 3)
+        if (playerGameScore["Left"] >= 2 || playerGameScore["Right"] >= 2)
         {
             GameOver();
         }
@@ -151,12 +176,6 @@ public class TestIngameManager : MonoBehaviour
     {
         isGameOver = true;
         OnGameOver?.Invoke();        
-    }
-
-    public void SceneChange()
-    {
-        // TODO : 카드 선택 씬으로 전환
-        Debug.Log("Scene Change");
     }
 
     #region TestCode - Card
