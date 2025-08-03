@@ -12,6 +12,9 @@ public class DefenceSkillManager : MonoBehaviourPun
     private List<DefenceSkillDataSO> _skills;
     public List<DefenceSkillDataSO> Skills => _skills;
 
+    private List<DefenceSkills> _skillNames;
+    public List<DefenceSkills> SkillNames => _skillNames;
+
     private Coroutine _coroutine;
     private WaitForSeconds _coolDown;
 
@@ -36,6 +39,8 @@ public class DefenceSkillManager : MonoBehaviourPun
         _skills = new List<DefenceSkillDataSO>();
         _skillDatabase.Initialize();
 
+        _skillNames = new List<DefenceSkills>();
+
         //# 테스트용 - Skill 추가, 추후 카드 선택 시 AddSkill을 추가하여 사용
         AddSkill(DefenceSkills.AbyssalCountdown);
         AddSkill(DefenceSkills.Emp);
@@ -47,7 +52,7 @@ public class DefenceSkillManager : MonoBehaviourPun
     //# 테스트를 위한 Update
     private void Update()
     {
-        if (_isAllJoined && _photonView.IsMine)
+        if (_isAllJoined)
         {
             StartCoroutine(DelayedTime());
             _isAllJoined = false;
@@ -56,7 +61,7 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         if (!Input.GetMouseButtonDown(1) || !_isStarted) return;
 
-        if (_photonView.IsMine) _photonView.RPC(nameof(UseActiveSkills), RpcTarget.All, transform.position);
+        if (_photonView.IsMine) UseActiveSkills(transform.position);
     }
 
     /// <summary>
@@ -65,7 +70,6 @@ public class DefenceSkillManager : MonoBehaviourPun
     private IEnumerator WaitForAllPlayerJoin()
     {
         //# 싱글일 때는 MaxPlayers가 1, 멀티일 때는 2가 되어야 함
-        // int maxPlayers = PhotonNetwork.CurrentRoom?.MaxPlayers ?? 1;
         int maxPlayers = 2;
 
         if (maxPlayers == 1 || PhotonNetwork.PlayerList.Length >= maxPlayers) _isAllJoined = true;
@@ -87,9 +91,10 @@ public class DefenceSkillManager : MonoBehaviourPun
     private IEnumerator DelayedTime()
     {
         //# 추후 게임이 시작된 것인지 체크
-        yield return null;
+        yield return new WaitForSeconds(0.1f);
 
-        _photonView.RPC(nameof(UsePassiveSkills), RpcTarget.All, _photonView.ViewID);
+        if (_photonView.IsMine)
+            UsePassiveSkills();
     }
 
     /// <summary>
@@ -100,6 +105,8 @@ public class DefenceSkillManager : MonoBehaviourPun
     {
         var skill = _skillDatabase.SkillDatabase[skillName];
         _skills.Add(skill);
+
+        _skillNames.Add(skillName);
 
         skill.Initialize(_effectsObject.transform);
 
@@ -124,28 +131,23 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// 활성화할 패시브 스킬을 지정된 ViewID의 객체에 적용
     /// </summary>
     /// <param name="viewID">패시브 스킬을 적용할 플레이어의 Photon View ID</param>
-    [PunRPC]
-    public void UsePassiveSkills(int viewID)
+    public void UsePassiveSkills()
     {
-        var targetView = PhotonView.Find(viewID);
-
-        Debug.Log($"{viewID} - {targetView.transform.position}");
-
         foreach (var skill in _skills)
         {
             if (!skill.IsPassive) continue;
 
-            skill.Activate(targetView.transform.position, targetView.transform);
+            skill.Activate(transform.position, transform);
         }
     }
 
     /// <summary>
     /// 마우스 우클릭 시 Defence Skill들을 실행
     /// </summary>
-    [PunRPC]
     public void UseActiveSkills(Vector3 skillPosition)
     {
         if (_coroutine != null) return;
+        // Debug.Log($"Skill Count : {_skills.Count}");
 
         foreach (var skill in _skills)
         {

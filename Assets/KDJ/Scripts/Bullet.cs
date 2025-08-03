@@ -116,10 +116,15 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     public void BulletMove(float speed)
     {
         // if (!photonView.IsMine) return;
-        _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
+        // _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
         // _rb.velocity = transform.up * speed;
         //     // Destroy(gameObject, 4f);
-        StartCoroutine(DestroyAfterDelay(4f));
+        // GetComponent<Rigidbody2D>().velocity = transform.up * speed;
+        if (_rb == null) return;
+
+        _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
+        // _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
+        // StartCoroutine(DestroyAfterDelay(4f));
     }
 
     
@@ -127,16 +132,19 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     {
         yield return new WaitForSeconds(delay);
 
-        if (PhotonView.Get(this).IsMine)
+        if (photonView.IsMine)
         {
             PhotonNetwork.Destroy(gameObject);
         }
     }
     
     [PunRPC]
-    public void InitBullet(float speed)
+    public void InitBullet(float bulletSpeed, double fireTime)
     {
-        _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
+        float lag = (float)(PhotonNetwork.Time - fireTime);
+        transform.position += transform.up * bulletSpeed * lag * Time.fixedDeltaTime;
+
+        BulletMove(bulletSpeed);
         StartCoroutine(DestroyAfterDelay(4f));
     }
 

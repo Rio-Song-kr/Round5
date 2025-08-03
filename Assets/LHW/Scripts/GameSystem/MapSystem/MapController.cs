@@ -1,6 +1,6 @@
-using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// 생성된 랜덤 3개의 맵이 한 게임 종료 후 이동하게 하는 스크립트
@@ -10,6 +10,8 @@ public class MapController : MonoBehaviour
     [Header("Offset")]
     [Tooltip("맵 전환 시작 딜레이")]
     [SerializeField] private float mapChangeDelay = 0.8f;
+
+    [SerializeField] private GameObject[] rounds;
     public float MapChangeDelay { get { return mapChangeDelay; } }
 
     private Coroutine moveCoroutine;
@@ -17,11 +19,13 @@ public class MapController : MonoBehaviour
     private void OnEnable()
     {
         TestIngameManager.OnRoundOver += GoToNextStage;
+        TestIngameManager.onCardSelectEnd += MapMove;
     }
 
     private void OnDisable()
     {
         TestIngameManager.OnRoundOver -= GoToNextStage;
+        TestIngameManager.onCardSelectEnd -= MapMove;
     }
 
     public void GoToNextStage()
@@ -43,14 +47,21 @@ public class MapController : MonoBehaviour
     /// </summary>
     private void MapMove()
     {
-        moveCoroutine = StartCoroutine(MovementCoroutine());
+        Debug.Log("실행");
+        if (!TestIngameManager.Instance.IsCardSelectTime)
+        {
+            moveCoroutine = StartCoroutine(MovementCoroutine());
+        }
     }
 
     IEnumerator MovementCoroutine()
     {
         WaitForSeconds delay = new WaitForSeconds(mapChangeDelay);
 
-        MapDynamicMovement[] movements = GetComponentsInChildren<MapDynamicMovement>();
+        MapDynamicMovement[] movements = rounds[TestIngameManager.Instance.CurrentGameRound].GetComponentsInChildren<MapDynamicMovement>();
+
+        Debug.Log(movements);
+
         for (int i = 0; i < movements.Length; i++)
         {
             if (movements[i] != null)
@@ -59,6 +70,7 @@ public class MapController : MonoBehaviour
                 yield return delay;
             }
         }
+
         moveCoroutine = null;
     }
 }

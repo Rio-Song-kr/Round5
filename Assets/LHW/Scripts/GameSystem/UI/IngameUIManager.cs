@@ -6,7 +6,11 @@ using UnityEngine;
 /// </summary>
 public class IngameUIManager : MonoBehaviour
 {
+    [Header("Reference")]
+    [SerializeField] RandomMapPresetCreator creator;
+
     [Header("Panels")]
+    [SerializeField] GameObject cardSelectPanel;
     [SerializeField] GameObject roundOverPanel;
     [SerializeField] GameObject gameRestartPanel;
 
@@ -24,12 +28,14 @@ public class IngameUIManager : MonoBehaviour
     {
         TestIngameManager.OnRoundOver += RoundOverPanelShow;
         TestIngameManager.OnGameOver += RestartPanelShow;
+        TestIngameManager.onCardSelectEnd += HideCardSelectPanel;
     }
 
     private void OnDisable()
     {
         TestIngameManager.OnRoundOver -= RoundOverPanelShow;
         TestIngameManager.OnGameOver -= RestartPanelShow;
+        TestIngameManager.onCardSelectEnd -= HideCardSelectPanel;
     }
 
     private void RoundOverPanelShow()
@@ -52,6 +58,11 @@ public class IngameUIManager : MonoBehaviour
         gameRestartPanel.SetActive(false);
     }
 
+    private void HideCardSelectPanel()
+    {
+        cardSelectPanel.SetActive(false);
+    }
+
     /// <summary>
     /// 라운드 종료 패널을 활성화하고 지속시간만큼 유지한 다음 다시 비활성화하는 코루틴
     /// </summary>
@@ -66,7 +77,13 @@ public class IngameUIManager : MonoBehaviour
         TestIngameManager.Instance.RoundStart();
         if (TestIngameManager.Instance.IsGameSetOver)
         {
+            Debug.Log("새 세트 시작");
+            creator.MapUpdate(TestIngameManager.Instance.CurrentGameRound);
             TestIngameManager.Instance.GameSetStart();
+            if (!TestIngameManager.Instance.IsGameOver)
+            {
+                cardSelectPanel.SetActive(true);
+            }
         }
 
         ROPanelCoroutine = null;

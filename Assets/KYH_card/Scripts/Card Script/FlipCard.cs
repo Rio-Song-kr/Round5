@@ -1,11 +1,11 @@
 using DG.Tweening;
-using DG.Tweening.Core;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private bool isFlipped = false;
+    public bool IsFlipped { get { return isFlipped; } }
     private bool isSelected = false;
     private bool isHovered = false;
 
@@ -107,6 +107,8 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
     public void PlayFlipAnimation()
     {
+        if (isFlipped) return;
+
         // 현재 회전값 가져오기
         Vector3 startEuler = transform.localEulerAngles;
 
@@ -134,5 +136,6 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
                 if (frontRoot != null) frontRoot.SetActive(true);
                 if (backRoot != null) backRoot.SetActive(false);
             });
+        isFlipped = true;
     }
 }

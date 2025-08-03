@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,7 @@ public class RoundOverPanelController : MonoBehaviour
     [SerializeField] private Transform[] leftImageWinSpot;
     [SerializeField] private Transform[] rightImageWinSpot;
     [SerializeField] private Transform losePosition;
+    [SerializeField] private Transform sceneChangeInitTransform;
 
     [Header("Offset")]
     [Tooltip("매 라운드마다 나타난 승리 횟수 이미지가 줄어드는 데 걸리는 시간")]
@@ -44,6 +46,8 @@ public class RoundOverPanelController : MonoBehaviour
     Color textColor;
     string leftTextColor = "#FF8400";
     string rightTextColor = "#009EFF";
+
+    Coroutine sceneChangeCoroutine;
 
     private void OnEnable()
     {
@@ -70,21 +74,21 @@ public class RoundOverPanelController : MonoBehaviour
     }
 
     /// <summary>
-    /// 승자를 표시함(텍스트
+    /// 승자를 표시함(텍스트)
     /// </summary>
     /// <param name="winner"></param>
     /// <param name="left"></param>
     /// <param name="right"></param>
     private void TextInit(string winner, int left, int right)
     {
-        if(winner == "Left")
+        if (winner == "Left")
         {
             if (ColorUtility.TryParseHtmlString(leftTextColor, out textColor))
             {
                 winnerText.color = textColor;
             }
 
-            if(left == 1)
+            if (left == 1)
             {
                 winnerText.text = "Half Orange";
             }
@@ -118,22 +122,22 @@ public class RoundOverPanelController : MonoBehaviour
     /// <param name="right"></param>
     private void ImageInit(int left, int right)
     {
-        if(left == 0) leftFillImage.fillAmount = 0;
+        if (left == 0) leftFillImage.fillAmount = 0;
         else leftFillImage.fillAmount = (float)left / 2;
-        
-        if(right == 0) rightFillImage.fillAmount = 0;
+
+        if (right == 0) rightFillImage.fillAmount = 0;
         else rightFillImage.fillAmount = (float)right / 2;
-    
-        if(left == 2)
+
+        if (left == 2)
         {
-            sceneChangePanel.transform.DOMove(transform.position, 1f).SetDelay(1f);
             AddScoreAnimation(leftImage);
+            SceneChange();
             return;
         }
-        else if(right == 2)
+        else if (right == 2)
         {
-            sceneChangePanel.transform.DOMove(transform.position, 1f).SetDelay(1f);
-            AddScoreAnimation(rightImage);
+            AddScoreAnimation(leftImage);
+            SceneChange();
             return;
         }
 
@@ -148,7 +152,6 @@ public class RoundOverPanelController : MonoBehaviour
     private void AddScoreAnimation(Image winnerImage)
     {
         string currentWinner = TestIngameManager.Instance.ReadRoundScore(out int leftScore, out int rightScore);
-        Debug.Log(leftScore);
         if (currentWinner == "Left")
         {
             leftImage.transform.DOScale(new Vector3(0.13f, 0.13f, 0.13f), winImageShrinkDuration).SetDelay(winImageShrinkDelay);
@@ -193,5 +196,23 @@ public class RoundOverPanelController : MonoBehaviour
             leftImage.transform.DOMove(losePosition.position, winImageShrinkDuration).SetDelay(winnerImageMoveTime);
             leftImage.transform.DOScale(new Vector3(loseImageExpansionScale, loseImageExpansionScale, loseImageExpansionScale), winImageShrinkDuration).SetDelay(winnerImageMoveTime + 0.3f);
         }
+    }
+
+    private void SceneChange()
+    {
+        sceneChangeCoroutine = StartCoroutine(SceneChangeCoroutine());
+    }
+
+    IEnumerator SceneChangeCoroutine()
+    {
+        WaitForSeconds delay = new WaitForSeconds(3f);
+
+        sceneChangePanel.transform.DOMove(transform.position, 1f).SetDelay(1f);
+        yield return delay;
+        if (!TestIngameManager.Instance.IsGameOver)
+        {
+            sceneChangePanel.transform.position = sceneChangeInitTransform.position;
+        }
+        sceneChangeCoroutine = null;
     }
 }

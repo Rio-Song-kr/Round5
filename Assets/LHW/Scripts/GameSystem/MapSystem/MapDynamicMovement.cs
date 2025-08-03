@@ -15,7 +15,7 @@ public class MapDynamicMovement : MonoBehaviour
     [SerializeField] float moveDelay = 1f;
     // 각 플랫폼이 이동하기 시작하는 간격
     [SerializeField] float moveDurationOffset = 0.2f;
-
+    
     private void Start()
     {
         mapController = GetComponentInParent<MapController>();

@@ -16,11 +16,13 @@ public class RopeFreeze : MonoBehaviour
     private void OnEnable()
     {
         TestIngameManager.OnRoundOver += FreezeRope;
+        TestIngameManager.onCardSelectEnd += FreezeRope;
     }
 
     private void OnDisable()
     {
         TestIngameManager.OnRoundOver -= FreezeRope;
+        TestIngameManager.onCardSelectEnd -= FreezeRope;
     }
 
     private void FreezeRope()

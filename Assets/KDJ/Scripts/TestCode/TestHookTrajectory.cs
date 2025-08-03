@@ -8,9 +8,11 @@ public class TestHookTrajectory : MonoBehaviour
     [SerializeField] private GameObject _hookCrosshair;
     [SerializeField] private LineRenderer _hookLineRenderer;
     [SerializeField] private GameObject _hookHitEffect;
+    [SerializeField] private GameObject _hookObject;
 
     private RaycastHit2D[] _hits = new RaycastHit2D[10];
     private LineRenderer _lineRenderer;
+    private GameObject _hook;
     private bool _isRayHit;
 
     private void Awake()
@@ -19,6 +21,8 @@ public class TestHookTrajectory : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
         _lineRenderer.SetPosition(0, transform.position); // 위치 초기화
         _lineRenderer.SetPosition(1, transform.position);
+        _hook = Instantiate(_hookObject, transform.position, Quaternion.identity); // 훅 오브젝트 생성
+        _hook.SetActive(false); // 훅 오브젝트는 초기에는 비활성
     }
 
 
@@ -72,6 +76,9 @@ public class TestHookTrajectory : MonoBehaviour
         _hookLineRenderer.SetPosition(1, _hits[0].point); // 끝점 설정
         GameObject effect = Instantiate(_hookHitEffect, _hits[0].point, Quaternion.identity); // 충돌 이펙트 생성
         effect.transform.LookAt(_hits[0].point + _hits[0].normal); // 충돌 지점의 법선 방향으로 회전
+        _hook.transform.position = _hits[0].point; // 훅 오브젝트 위치 설정
+        _hook.SetActive(true); // 훅 오브젝트 활성화
+        _hook.transform.up = (_hits[0].point - new Vector2(transform.position.x, transform.position.y)).normalized; // 훅 오브젝트의 방향을 충돌 지점으로 설정
     }
 
     /// <summary>
