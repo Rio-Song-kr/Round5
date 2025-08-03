@@ -15,6 +15,7 @@ public class PlayerStatusDataSO : ScriptableObject
     public float DefaultReloadSpeed = 2f;
     // 250803 추가
     public float DefaultBulletSpeed = 10f;
+    public float DefaultAttackDelay = 10f;
 
     [Header("Default Defence Settings")]
     public float DefaultInvincibilityCoolTime = 2f;
