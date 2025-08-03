@@ -12,14 +12,12 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     
     // private PhotonView photonView;
     protected GunControll gunController;
-    protected Bullet bullet; 
     
     [Header("탄환 정보")]
-    [SerializeField] protected int maxAmmo; // 최대 탄약 수
-    [SerializeField] protected int currentAmmo; // 남아 있는 탄약 수
-    [SerializeField] protected float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
-    [SerializeField] public bool isBigBullet = false; // 큰 탄환 여부
-    [SerializeField] public bool isExplosiveBullet = false; // 폭발성 탄환 여부
+    public int maxAmmo; // 최대 탄약 수
+    public int currentAmmo; // 남아 있는 탄약 수
+    public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
+    public int useAmmo; // 공격 시 소모되는 탄약 수
     
     [Header("재장전 관련")]
     [SerializeField] protected Animator animator; // 재장전 애니메이션용 애니메이터
@@ -33,9 +31,9 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     
     [Header("공격 정보")]
     public float bulletSpeed;
-    [SerializeField] protected int attackDamage; // 
+    public int attackDamage; // 
 
-    [SerializeField] protected float attackSpeed; // 
+    public float attackSpeed; // 
     [SerializeField] protected float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
 
     
@@ -56,7 +54,6 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         
         
         gunController = GetComponentInParent<GunControll>();
-        bullet = GetComponent<Bullet>();
         Initialize();
         StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
     }

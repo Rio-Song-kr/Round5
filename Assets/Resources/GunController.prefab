@@ -86,6 +86,8 @@ MonoBehaviour:
   bulletWeaponObject: {fileID: 8556937525478883264}
   LaserWeaponObject: {fileID: 7254323180950547275}
   barrelWeaponObject: {fileID: 7331540530853936494}
+  _isBigBullet: 0
+  _isExplosiveBullet: 0
 --- !u!114 &727642386440468707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,6 +522,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 8272402196766608130}
     m_Modifications:
     - target: {fileID: -6399808413141404025, guid: df9c5927702af9f4f8639850164a474a, type: 3}
+      propertyPath: useAmmo
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -6399808413141404025, guid: df9c5927702af9f4f8639850164a474a, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 4171816750809336435}
@@ -606,6 +612,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
+      propertyPath: useAmmo
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 4171816750809336435}
@@ -620,6 +630,10 @@ PrefabInstance:
     - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
       propertyPath: bulletSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
+      propertyPath: pelletCount
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
       propertyPath: bulletPrefab
@@ -730,6 +744,10 @@ PrefabInstance:
     - target: {fileID: 2528079052184358046, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
       propertyPath: m_Name
       value: BulletWeapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734121969791136909, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
+      propertyPath: useAmmo
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4734121969791136909, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
       propertyPath: animator

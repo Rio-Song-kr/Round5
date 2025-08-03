@@ -1,39 +1,18 @@
-using System;
-using UnityEngine;
-using UnityEngine.Serialization;
+using Photon.Pun;
 
-public class WeaponManager : BaseWeapon 
+public class AttackSkillManager : MonoBehaviourPun
 {
-    public static WeaponManager Instance { get; private set; }
-    public BarrelWeapon barrelWeapon;
+    private BarrelWeapon barrelWeapon;
+    private GunControll gunController;
+    private BaseWeapon baseWeapon;
 
-    private Bullet _bullet;
+    private BarrageStable _barrageStable;
     
-    private void Awake()
-    {
-        // 중복 인스턴스 제거
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-    
-        Instance = this;
-        DontDestroyOnLoad(gameObject); // 씬 전환 시에도 유지
-    }
-
     private void Start()
     {
-        _bullet = FindObjectOfType<Bullet>();
-    }
-
-    public override void Attack(Transform firingPoint)
-    {
-    }
-
-    public override WeaponType GetWeaponType()
-    {
-        return WeaponType.Manager;
+        gunController = GetComponentInParent<GunControll>();
+        baseWeapon = GetComponent<BaseWeapon>();
+        barrelWeapon = GetComponent<BarrelWeapon>();
     }
 
     /// <summary>
@@ -42,17 +21,16 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void SetIsBulletBig(bool value)
     {
-        isBigBullet = value;
+        gunController._isBigBullet = value;
     }
     
     /// <summary>
     /// 큰 탄알 여부 함수
     /// </summary>
-    /// <param name="value"></param>
     /// <returns></returns>
-    public bool GetIsBulletBig(bool value)
+    public bool GetIsBulletBig()
     {
-        return isBigBullet;
+        return gunController._isBigBullet;
     }
     
     
@@ -62,7 +40,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void SetIsBulletExplosive(bool value)
     {
-        isExplosiveBullet = value;
+        gunController._isExplosiveBullet = value;
     }
     
     /// <summary>
@@ -71,7 +49,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public bool GetIsBulletExplosive()
     {
-        return isExplosiveBullet;
+        return gunController._isExplosiveBullet;
     }
 
     /// <summary>
@@ -80,8 +58,8 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void SetBullet(int value)
     {
-        maxAmmo = value;
-        currentAmmo = value;
+        baseWeapon.maxAmmo = value;
+        baseWeapon.currentAmmo = value;
     }
     
     /// <summary>
@@ -90,7 +68,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void GetCurrectBullet(int value)
     {
-        currentAmmo = value;
+        baseWeapon.currentAmmo = value;
     }
     
     /// <summary>
@@ -99,7 +77,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void GetMaxBullet(int value)
     {
-        maxAmmo = value;
+        baseWeapon.maxAmmo = value;
     }
     
     /// <summary>
@@ -108,7 +86,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void SetBarrelWeapon(int value)
     {
-        barrelWeapon.ammoPerShot = value;
+        barrelWeapon.useAmmo= value;
     }
     
     /// <summary>
@@ -117,7 +95,7 @@ public class WeaponManager : BaseWeapon
     /// <returns></returns>
     public int GetBarrelWeapon()
     {
-        return barrelWeapon.ammoPerShot;
+        return barrelWeapon.useAmmo;
     }
     
     /// <summary>
@@ -126,7 +104,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void SetAttackDamage(int value)
     {
-        attackDamage = value;
+        baseWeapon.attackDamage = value;
     }
     
     /// <summary>
@@ -136,7 +114,7 @@ public class WeaponManager : BaseWeapon
     /// <returns></returns>
     public int GetAttackDamage()
     {
-        return attackDamage;
+        return baseWeapon.attackDamage;
     }
 
     /// <summary>
@@ -145,7 +123,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void SetReloadTime(int value)
     {
-        reloadTime = value;
+        baseWeapon.reloadTime = value;
     }
     
     /// <summary>
@@ -155,7 +133,7 @@ public class WeaponManager : BaseWeapon
     /// <returns></returns>
     public float GetReloadTime()
     {
-        return reloadTime;
+        return baseWeapon.reloadTime;
     }
     
     /// <summary>
@@ -164,7 +142,7 @@ public class WeaponManager : BaseWeapon
     /// <param name="value"></param>
     public void SetAttackSpeedTime(int value)
     {
-        attackSpeed = value;
+        baseWeapon.attackSpeed = value;
     }
     
     /// <summary>
@@ -173,6 +151,6 @@ public class WeaponManager : BaseWeapon
     /// <returns></returns>
     public float GetAttackSpeedTime()
     {
-        return attackSpeed;
+        return baseWeapon.attackSpeed;
     }
 }
