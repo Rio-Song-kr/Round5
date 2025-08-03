@@ -16,10 +16,10 @@ public class CardSelectByHandManager : MonoBehaviourPun
             SelectRightCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                Debug.Log("¿òÁ÷ÀÓ");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
                 cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
 
-                // RPC·Î ÆÈ ¿òÁ÷ÀÓ ¸í·É Àü¼Û
+                // RPCï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
 
                 CardAnimaitonPlay();
@@ -30,7 +30,7 @@ public class CardSelectByHandManager : MonoBehaviourPun
             SelectLeftCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                Debug.Log("¿òÁ÷ÀÓ");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
                 cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
 
                 photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
@@ -43,7 +43,7 @@ public class CardSelectByHandManager : MonoBehaviourPun
         }
     }
 
-    // ÆÈ µ¿±âÈ­¸¦ À§ÇÑ RPC
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ RPC
     [PunRPC]
     void RPC_SelectCardArm(int cardIndex)
     {
