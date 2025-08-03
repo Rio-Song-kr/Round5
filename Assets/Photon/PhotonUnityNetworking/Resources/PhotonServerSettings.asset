@@ -64,6 +64,24 @@ MonoBehaviour:
   - RPC_SyncClientCanvas
   - RPC_PlayCardSelectionAnimation
   - InitBullet
+  - ApplyFreeze
+  - DisableShieldEffect
+  - EndEffect
+  - InitializeComponent
+  - OnTriggerEnter2D
+  - RemoveFreeze
+  - ReturnToPool
+  - SetFillAmount
+  - SetPoolRPC
+  - Shoot
+  - StartEffect
+  - SyncTargetPosition
+  - RPC_MoveLeftArm
+  - RPC_MoveRightArm
+  - RPC_SelectCardArm
+  - RPC_PlayShrinkAnimation
+  - RPC_HighlightCardByIndex
+  - RPC_UnhighlightCardByIndex
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

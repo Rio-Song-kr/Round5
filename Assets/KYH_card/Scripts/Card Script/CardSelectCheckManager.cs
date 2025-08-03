@@ -7,7 +7,8 @@ using UnityEngine;
 public class CardSelectCheckManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject cardSelectPanelPrefabs;
-    [SerializeField] private Transform cardSelectPanelContent;
+    [SerializeField] private Transform cardSelectPanelContent1;
+    [SerializeField] private Transform cardSelectPanelContent2;
 
     public Dictionary<int, CardSelectPanelItem> cardSelectPanels = new Dictionary<int, CardSelectPanelItem>();
 
@@ -28,7 +29,7 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.AutomaticallySyncScene = true;
         GameObject obj = Instantiate(cardSelectPanelPrefabs);
-        obj.transform.SetParent(cardSelectPanelContent);
+        obj.transform.SetParent(cardSelectPanelContent1);
         CardSelectPanelItem Panel = obj.GetComponent<CardSelectPanelItem>();
         // 초기화
         Panel.Init(player);
@@ -44,7 +45,7 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             GameObject obj = Instantiate(cardSelectPanelPrefabs);
-            obj.transform.SetParent(cardSelectPanelContent);
+            obj.transform.SetParent(cardSelectPanelContent1);
             CardSelectPanelItem Panel = obj.GetComponent<CardSelectPanelItem>();
             // 초기화
             Panel.Init(player);

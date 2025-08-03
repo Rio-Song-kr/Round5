@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    
     private bool isFlipped = false;
     public bool IsFlipped { get { return isFlipped; } }
     private bool isSelected = false;
@@ -15,7 +16,7 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
     [Header("설정")]
     public float flipDuration = 0.25f;
-    public float hoverScale = 1.1f;
+    public float hoverScale = 1.3f;
 
     private Vector3 originalScale;
     private int cardIndex;
@@ -57,15 +58,24 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
     {
         if (!isInteractable) return; // 상호작용 불가 시 무시
 
-        isHovered = true;
-        transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
+        if (!isFlipped)
+        {
+            OnClickCard(); // 자동 뒤집기
+        }
+        else
+        {
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_SelectCardArm), RpcTarget.All, cardIndex);
+        }
+
+            isHovered = true;
+        manager.photonView.RPC(nameof(CardSelectManager.RPC_HighlightCardByIndex), RpcTarget.All, cardIndex);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (!isInteractable) return; // 상호작용 불가 시 무시
-        isHovered = false;
-        transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
+   public void OnPointerExit(PointerEventData eventData)
+   {
+       if (!isInteractable) return; // 상호작용 불가 시 무시
+       isHovered = false;
+        manager.photonView.RPC(nameof(CardSelectManager.RPC_UnhighlightCardByIndex), RpcTarget.All, cardIndex);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -81,13 +91,16 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
         if (!isFlipped)
         {
-            isFlipped = true;
-
+            
+            Debug.Log($"[FlipCard] 카드 클릭됨 index = {cardIndex}");
             // 로컬 애니메이션 실행
             PlayFlipAnimation();
 
             // RPC로 상대 클라이언트에게도 flip 애니메이션 동기화
-            manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.Others, cardIndex);
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.All, cardIndex);
+
+            // 팔 동기화 RPC 호출
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_SelectCardArm), RpcTarget.All, cardIndex);
 
 
         }
@@ -109,6 +122,7 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
     {
         if (isFlipped) return;
 
+        Debug.Log("카드 뒤집힘");
         // 현재 회전값 가져오기
         Vector3 startEuler = transform.localEulerAngles;
 
@@ -137,5 +151,15 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
                 if (backRoot != null) backRoot.SetActive(false);
             });
         isFlipped = true;
+    }
+
+    public void PlayHighlight()
+    {
+        transform.DOScale(originalScale * hoverScale, 0.15f).SetEase(Ease.OutBack);
+    }
+
+    public void PlayUnhighlight()
+    {
+        transform.DOScale(originalScale, 0.15f).SetEase(Ease.InBack);
     }
 }

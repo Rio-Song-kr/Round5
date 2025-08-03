@@ -26,11 +26,17 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     public float maxAngle = 60f; // 회전 시각 연출
     public float appearYOffset = -600f;
 
+    [Header("팔 컨트롤러")]
+    [SerializeField] private CardSceneArmController armController;
+
+    [Header("케릭터 크기 조절")]
+    [SerializeField] private CharacterShrinkEffect shrinkEffect;
+
 
     private List<GameObject> currentCards = new(); // 현재 화면에 표시 중인 카드 목록
     [SerializeField] private bool hasSelect = false; // 플레이어가 카드를 선택했는지 여부
 
-    
+
     void Start()
     {
 
@@ -39,18 +45,30 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
         // Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
 
-       // if (PhotonNetwork.IsMasterClient)
-       // {
-       //     List<int> selectedMasterIndexes = GetRandomCardIndexes();
-       //     photonView.RPC(nameof(RPC_SpawnCardsWithIndexes), RpcTarget.All, selectedMasterIndexes.ToArray());
-       // }
-        
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        //     List<int> selectedMasterIndexes = GetRandomCardIndexes();
+        //     photonView.RPC(nameof(RPC_SpawnCardsWithIndexes), RpcTarget.All, selectedMasterIndexes.ToArray());
+        // }
+
     }
 
-   // private void Awake()
-   // {
-   //     PhotonNetwork.AutomaticallySyncScene = true;
-   // }
+    // private void Awake()
+    // {
+    //     PhotonNetwork.AutomaticallySyncScene = true;
+    // }
+
+    public CardSceneArmController GetArmController()
+    {
+        return armController;
+    }
+
+    [PunRPC]
+    public void RPC_SelectCardArm(int index)
+    {
+        Debug.Log($"[CardSelectManager] 셀렉트 카드 암 index = {index} 호출됨");
+        armController.SelectCard(index);
+    }
 
     // 랜덤 카드 생성 및 화면에 출력
     public List<int> GetRandomCardIndexes()
@@ -169,9 +187,38 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             FlipCard flip = currentCards[index].GetComponent<FlipCard>();
             if (flip != null)
             {
+                Debug.Log("카드 뒤집힘 애니메이션 실행");
                 flip.PlayFlipAnimation();
             }
         }
+    }
+
+    [PunRPC]
+    public void RPC_HighlightCardByIndex(int index)
+    {
+        if (index < 0 || index >= currentCards.Count) return;
+
+        GameObject card = currentCards[index];
+        if (card == null) return;
+
+        FlipCard flip = card.GetComponent<FlipCard>();
+        if (flip == null) return;
+
+        flip.PlayHighlight(); // 확장된 연출용 메서드
+    }
+
+    [PunRPC]
+    public void RPC_UnhighlightCardByIndex(int index)
+    {
+        if (index < 0 || index >= currentCards.Count) return;
+
+        GameObject card = currentCards[index];
+        if (card == null) return;
+
+        FlipCard flip = card.GetComponent<FlipCard>();
+        if (flip == null) return;
+
+        flip.PlayUnhighlight();
     }
 
 
@@ -251,13 +298,15 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
                 Vector2 targetPos = rt.anchoredPosition + direction * 400f;
 
                 Sequence seq = DOTween.Sequence();
-                seq.Join(rt.DOAnchorPos(targetPos, 2f).SetEase(Ease.InCubic));
-                seq.Join(rt.DOScale(0.1f, 2f).SetEase(Ease.InCubic));
-                seq.Join(cg.DOFade(0f, 2f));
-                seq.Join(rt.DOLocalRotate(new Vector3(180f, 180f, angleZ), 2f, RotateMode.FastBeyond360));
+                seq.Join(rt.DOAnchorPos(targetPos, 1f).SetEase(Ease.InCubic));
+                seq.Join(rt.DOScale(0.1f, 1f).SetEase(Ease.InCubic));
+                seq.Join(cg.DOFade(0f, 1f));
+                seq.Join(rt.DOLocalRotate(new Vector3(180f, 180f, angleZ), 1f, RotateMode.FastBeyond360));
                 seq.OnComplete(() => Destroy(card));
             }
         }
+
+        shrinkEffect.RequestShrinkEffect();
     }
 
     public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable propertiesThatChanged)
@@ -273,7 +322,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             {
                 Debug.Log("모든 플레이어 카드 선택 완료 → Game Scene 로드");
 
-                DOVirtual.DelayedCall(2f, () =>
+                DOVirtual.DelayedCall(1.5f, () =>
                 {
                     PhotonNetwork.LoadLevel("Game Scene");
                 });

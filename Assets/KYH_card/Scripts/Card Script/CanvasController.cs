@@ -110,7 +110,7 @@ public class CanvasController : MonoBehaviourPun
     [PunRPC]
     public void RPC_SyncClientCanvas(int[] indexes)
     {
-        
+
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(true);
         Debug.Log("참가자 카드 선택지 생성");

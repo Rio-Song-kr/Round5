@@ -1,23 +1,27 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class CardSelectByHandManager : MonoBehaviour
+public class CardSelectByHandManager : MonoBehaviourPun
 {
     [SerializeField] GameObject[] cards;
     [SerializeField] CardSceneArmController armController;
     
-    // 스크립트 충돌 문제로 임시 주석처리했습니다. 용호님의 플립카드 스크립트와 연결 필요
-    /*
+    
+   
     private int selectedIndex = -1;
     private void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.D))
         {
             SelectRightCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<LHWFlipCard>().PlayFlipAnimation();
-                armController.SelectCard(selectedIndex);
+                Debug.Log("움직임");
+                cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
+
+                // RPC로 팔 움직임 명령 전송
+                photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
+
                 CardAnimaitonPlay();
             }
         }
@@ -26,14 +30,24 @@ public class CardSelectByHandManager : MonoBehaviour
             SelectLeftCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<LHWFlipCard>().PlayFlipAnimation();
-                armController.SelectCard(selectedIndex);
-                if (cards[selectedIndex].GetComponent<LHWFlipCard>().IsFlipped)
+                Debug.Log("움직임");
+                cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
+
+                photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
+
+                if (cards[selectedIndex].GetComponent<FlipCard>().IsFlipped)
                 {
                     CardAnimaitonPlay();
                 }
             }
         }
+    }
+
+    // 팔 동기화를 위한 RPC
+    [PunRPC]
+    void RPC_SelectCardArm(int cardIndex)
+    {
+        armController.SelectCard(cardIndex);
     }
 
     private void SelectRightCard()
@@ -59,11 +73,11 @@ public class CardSelectByHandManager : MonoBehaviour
                 cards[selectedIndex].GetComponentInChildren<CardAnimator>().RestartAnimation();
                 continue;
             }
-            else if (cards[i].GetComponent<LHWFlipCard>().IsFlipped)
+            else if (cards[i].GetComponent<FlipCard>().IsFlipped)
             {
                 cards[i].GetComponentInChildren<CardAnimator>().StopAnimation();
             }
         }
     }
-    */
+    
 }
