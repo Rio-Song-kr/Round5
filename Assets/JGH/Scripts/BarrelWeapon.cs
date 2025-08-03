@@ -37,8 +37,9 @@ public class BarrelWeapon : BaseWeapon
             PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
             if (bulletView != null)
             {
-                Vector3 direction = spreadRotation * Vector3.up;
-                bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
+                // Vector3 direction = spreadRotation * Vector3.up;
+                bulletView.RPC("InitBullet", RpcTarget.All, playerStatusDataSO.DefaultReloadSpeed, fireTime);
+                // bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
             }
             // if (bulletObj.TryGetComponent(out Bullet bullet))
             // {

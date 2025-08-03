@@ -87,9 +87,11 @@ public class LaserWeapon : BaseWeapon
 
         yield return null;
         ReloadSpeedFromAnimator();
-        yield return new WaitForSeconds(reloadTime);
+        // yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(playerStatusDataSO.DefaultReloadSpeed);
 
-        currentAmmo = maxAmmo;
+        // currentAmmo = maxAmmo;
+        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
         UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);

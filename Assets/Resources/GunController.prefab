@@ -537,6 +537,10 @@ PrefabInstance:
       propertyPath: laserPrefab
       value: 
       objectReference: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
+    - target: {fileID: -6399808413141404025, guid: df9c5927702af9f4f8639850164a474a, type: 3}
+      propertyPath: playerStatusDataSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 12567d8223af0b44bb34205ca0e80396, type: 2}
     - target: {fileID: 2456755947761413157, guid: df9c5927702af9f4f8639850164a474a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.665
@@ -639,6 +643,10 @@ PrefabInstance:
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 4718549699714053276, guid: 655d787c752092a4889f82377f3734a0, type: 3}
+    - target: {fileID: 3747081692612568736, guid: 3927b53249c634ba9810959a0504633b, type: 3}
+      propertyPath: playerStatusDataSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 12567d8223af0b44bb34205ca0e80396, type: 2}
     - target: {fileID: 4294100252120459521, guid: 3927b53249c634ba9810959a0504633b, type: 3}
       propertyPath: ObservedComponents.Array.size
       value: 1
@@ -769,6 +777,10 @@ PrefabInstance:
       propertyPath: bulletPrefab
       value: 
       objectReference: {fileID: 4718549699714053276, guid: 655d787c752092a4889f82377f3734a0, type: 3}
+    - target: {fileID: 4734121969791136909, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
+      propertyPath: playerStatusDataSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 12567d8223af0b44bb34205ca0e80396, type: 2}
     - target: {fileID: 5886468128929232924, guid: 4adfa43c5b4804cc29e544599c26cfdf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.7179963

@@ -14,26 +14,26 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected GunControll gunController;
     
     [Header("탄환 정보")]
-    public int maxAmmo; // 최대 탄약 수
+    // public int maxAmmo; // 최대 탄약 수
     public int currentAmmo; // 남아 있는 탄약 수
-    public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
+    // public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
     public int useAmmo; // 공격 시 소모되는 탄약 수
     
     [Header("재장전 관련")]
     [SerializeField] protected Animator animator; // 재장전 애니메이션용 애니메이터
     [SerializeField] protected bool isReloading; // 재장전 여부
-    [SerializeField] protected float idleReloadDelay; // 공격하지 않았을 때 자동 재장전까지의 대기 시간
+    // [SerializeField] protected float idleReloadDelay; // 공격하지 않았을 때 자동 재장전까지의 대기 시간
     [SerializeField] protected Coroutine idleCheckCoroutine; // 자동 재장전 감지를 위한 코루틴 핸들
-    [SerializeField] protected Coroutine autoReloadCoroutine; // 리로드 애니메이션과 함께 실행되는 자동 재장전 코루틴 핸들
+    // [SerializeField] protected Coroutine autoReloadCoroutine; // 리로드 애니메이션과 함께 실행되는 자동 재장전 코루틴 핸들
     
     [Header("참조")]
     [SerializeField] protected AmmoDisplay ammoDisplay; // 탄약 UI를 표시하는 컴포넌트
     
     [Header("공격 정보")]
-    public float bulletSpeed;
-    public int attackDamage; // 
+    // public float bulletSpeed;
+    // public int attackDamage; // 
 
-    public float attackSpeed; // 
+    // public float attackSpeed; // 
     [SerializeField] protected float lastAttackTime; // 마지막으로 공격한 시간 (탄창 남아있는데 공격하지 않았을 때 자동 재장전 감지용)
 
     
@@ -41,6 +41,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     private Quaternion _networkRotation;
     
     protected PoolManager _poolManager;
+    [SerializeField] public PlayerStatusDataSO playerStatusDataSO;
 
     protected virtual void Start()
     {
@@ -64,13 +65,14 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     /// <returns></returns>
     protected bool CanAttack()
     {
-        return Time.time - lastAttackTime >= 1f / attackSpeed;
+        // return Time.time - lastAttackTime >= 1f / attackSpeed;
+        return Time.time - lastAttackTime >= 1f / playerStatusDataSO.DefaultAttackSpeed;
     }
 
     public override void OnEnable()
     {
         base.OnEnable();
-        Initialize();
+        // Initialize();
         StartCoroutine(DelayedReloadSpeed());
     }
     
@@ -94,7 +96,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     /// </summary>
     protected void ReloadSpeedFromAnimator()
     {
-        float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
+        // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
+        float speed = 2f / playerStatusDataSO.DefaultReloadSpeed / 2; // 애니메이션 속도 계산
         
         photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
     }
@@ -144,13 +147,15 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         }
 
         // 리로드 시간 후 자동 완료 호출
-        Invoke(nameof(FinishReload), reloadTime);
+        // Invoke(nameof(FinishReload), reloadTime);
+        Invoke(nameof(FinishReload), playerStatusDataSO.DefaultReloadSpeed);
     }
 
     [PunRPC]
     protected void RPC_FinishReload()
     {
-        currentAmmo = maxAmmo;
+        // currentAmmo = maxAmmo;
+        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
         isReloading = false;
         UpdateAmmoUI();
         ammoDisplay?.SetReloading(false);
@@ -170,11 +175,15 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
-            if (!isReloading && currentAmmo < maxAmmo && Time.time - lastAttackTime >= idleReloadDelay)
+            // if (!isReloading && currentAmmo < maxAmmo && Time.time - lastAttackTime >= idleReloadDelay)
+            // if (!isReloading && currentAmmo < playerStatusDataSO.DefaultAmmo && Time.time - lastAttackTime >= idleReloadDelay)
+            if (!isReloading && currentAmmo < playerStatusDataSO.DefaultAmmo && Time.time - lastAttackTime >= playerStatusDataSO.DefaultReloadSpeed)
             {
-                currentAmmo = maxAmmo;
+                currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
+                // currentAmmo = maxAmmo;
                 isReloading = false;
-                ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
+                ammoDisplay?.UpdateAmmoIcons((int)currentAmmo, (int)playerStatusDataSO.DefaultAmmo);
+                // ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
                 lastAttackTime = Time.time;
             }
         }
@@ -182,12 +191,14 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void UpdateAmmoUI()
     {
-        ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
+        // ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
+        ammoDisplay?.UpdateAmmoIcons(currentAmmo, (int)playerStatusDataSO.DefaultAmmo);
     }
     
     public virtual void Initialize()
     {
-        currentAmmo = maxAmmo;
+        // currentAmmo = maxAmmo;
+        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
         isReloading = false;
         UpdateAmmoUI();
         NowIdleCheck();

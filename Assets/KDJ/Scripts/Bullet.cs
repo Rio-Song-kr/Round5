@@ -16,6 +16,8 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     [SerializeField] private GameObject _hitEffect;          // 일반 충돌 이펙트
     [SerializeField] private bool _isBigBullet;              // 큰 총알 여부
     [SerializeField] private bool _isExplosiveBullet;        // 폭발 총알 여부
+
+    [SerializeField] private PlayerStatusDataSO playerStatusDataSo;
     
     // 250726 추가
     private Vector3 _networkPosition;
@@ -178,7 +180,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     /// </summary>
     public void Attack(PlayerHitTest playerHitTest)
     {
-        playerHitTest.TakeDamage(1);
+        playerHitTest.TakeDamage((int)playerStatusDataSo.DefaultDamage);
     }
 
 

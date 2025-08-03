@@ -27,7 +27,8 @@ public class BulletWeapon : BaseWeapon
         PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
         if (bulletView != null)
         {
-            bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, PhotonNetwork.Time);
+            // bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, PhotonNetwork.Time);
+            bulletView.RPC("InitBullet", RpcTarget.All, playerStatusDataSO.DefaultBulletSpeed, PhotonNetwork.Time);
         }
         
         // if (photonView.IsMine)
