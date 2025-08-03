@@ -19,8 +19,6 @@ public class LaserWeapon : BaseWeapon
         if (isFiring || isReloading || currentAmmo < 2) return;
         currentAmmo -= 2;
         
-       
-        
         photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
     
@@ -31,6 +29,7 @@ public class LaserWeapon : BaseWeapon
         float lag = (float)(PhotonNetwork.Time - fireTime);
         yield return new WaitForSeconds(lag); // 지연 보상 적용
         UpdateAmmoUI();
+        
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
@@ -43,7 +42,7 @@ public class LaserWeapon : BaseWeapon
         }
 
         // 1. 레이저 프리팹 생성
-        currentLaserInstance = Instantiate(laserPrefab);
+        currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
 
         // 2. muzzle에 붙임
         currentLaserInstance.transform.SetParent(gunController.muzzle);

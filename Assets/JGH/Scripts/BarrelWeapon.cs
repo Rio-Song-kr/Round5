@@ -29,7 +29,7 @@ public class BarrelWeapon : BaseWeapon
             Vector3 spawnPos = firingPoint.position + (firingPoint.rotation * Vector3.up) * 0.2f;
         
             // PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
-            GameObject bulletObj = PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
+            GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", spawnPos, spreadRotation);
             PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
             if (bulletView != null)
             {
