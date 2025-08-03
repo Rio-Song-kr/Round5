@@ -30,6 +30,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     private List<GameObject> currentCards = new(); // 현재 화면에 표시 중인 카드 목록
     [SerializeField] private bool hasSelect = false; // 플레이어가 카드를 선택했는지 여부
 
+    
     void Start()
     {
 
@@ -38,18 +39,18 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
         // Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            List<int> selectedMasterIndexes = GetRandomCardIndexes();
-            photonView.RPC(nameof(RPC_SpawnCardsWithIndexes), RpcTarget.All, selectedMasterIndexes.ToArray());
-        }
+       // if (PhotonNetwork.IsMasterClient)
+       // {
+       //     List<int> selectedMasterIndexes = GetRandomCardIndexes();
+       //     photonView.RPC(nameof(RPC_SpawnCardsWithIndexes), RpcTarget.All, selectedMasterIndexes.ToArray());
+       // }
         
     }
 
-    private void Awake()
-    {
-        PhotonNetwork.AutomaticallySyncScene = true;
-    }
+   // private void Awake()
+   // {
+   //     PhotonNetwork.AutomaticallySyncScene = true;
+   // }
 
     // 랜덤 카드 생성 및 화면에 출력
     public List<int> GetRandomCardIndexes()
@@ -172,87 +173,91 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             }
         }
     }
-   
+
 
     // 카드 하나가 선택되었을 때 호출됨
     public void OnCardSelected(GameObject selected)
     {
-
-        if (hasSelect == true)
-        {
-            return;
-        }
-
-
+        if (hasSelect) return;
         hasSelect = true;
 
         Debug.Log("내 카드 선택 완료됨");
 
+        PhotonNetwork.AutomaticallySyncScene = true;
+
         if (cardSelectCheckManager.cardSelectPanels.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out CardSelectPanelItem panel))
         {
             panel.OnCardSelected();
-
             panel.SelectCheck(PhotonNetwork.LocalPlayer);
         }
 
-        //  // 카드 효과 적용
-        //  CardEffect effect = selected.GetComponent<CardEffect>();
-        //  if ( effect != null)
-        //  {
-        //      Player player = GameObject.FindWithTag("Player");
-        //
-        //      if (player != null)
-        //      {
-        //          effect.ApplyEffect(player);
-        //      }
-        //  }
-
-        foreach (GameObject card in currentCards)
+        // 카드 효과 적용
+        CardEffect effect = selected.GetComponent<CardEffect>();
+        if (effect != null)
         {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+            {
+                PlayerStats playerStats = playerObj.GetComponent<PlayerStats>();
+                if (playerStats != null)
+                {
+                    effect.ApplyShotEffect(playerStats);
+                    effect.ApplyStatusEffect(playerStats);
+                    Debug.Log($"[카드 적용] {effect.cardName} 효과가 적용되었습니다.");
+                }
+            }
+        }
+
+        // 선택된 카드 인덱스를 구해서 RPC 호출
+        int selectedIndex = currentCards.IndexOf(selected);
+        photonView.RPC(nameof(RPC_PlayCardSelectionAnimation), RpcTarget.All, selectedIndex);
+
+        Debug.Log("선택된 카드: " + selected.name);
+        Debug.Log("게임 씬으로 넘어가기 위해 로딩 진행");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            DOVirtual.DelayedCall(2f, () =>
+            {
+                canvasController.photonView.RPC("RPC_SwitchToClientCanvas", RpcTarget.All);
+            });
+        }
+    }
+
+    [PunRPC]
+    public void RPC_PlayCardSelectionAnimation(int selectedIndex)
+    {
+        for (int i = 0; i < currentCards.Count; i++)
+        {
+            GameObject card = currentCards[i];
             if (card == null) continue;
 
-            if (card == selected)
-            {
-                // 선택된 카드 → 페이드아웃
-                CanvasGroup cg = card.GetComponent<CanvasGroup>();
-                if (cg == null) cg = card.AddComponent<CanvasGroup>();
+            RectTransform rt = card.GetComponent<RectTransform>();
+            CanvasGroup cg = card.GetComponent<CanvasGroup>();
+            if (cg == null) cg = card.AddComponent<CanvasGroup>();
 
+            if (i == selectedIndex)
+            {
+                // 선택된 카드 → 페이드아웃 후 삭제
                 cg.DOFade(0f, 0.5f)
                   .SetEase(Ease.InOutSine)
-                  .OnComplete(() => Destroy(card)); // 애니메이션 끝나면 삭제
+                  .OnComplete(() => Destroy(card));
             }
             else
             {
-                // 선택되지 않은 카드 → 회전 방향으로 이동 + 축소 + 페이드아웃
-                RectTransform rt = card.GetComponent<RectTransform>();
-                CanvasGroup cg = card.GetComponent<CanvasGroup>();
-                if (cg == null) cg = card.AddComponent<CanvasGroup>();
-
-                float angleZ = rt.localEulerAngles.z; // rotZ
-                Vector2 direction = Quaternion.Euler(0, 0, angleZ) * Vector2.up; // 회전 방향 기준 위쪽
+                // 나머지 카드 → 멀어지면서 축소 후 삭제
+                float angleZ = rt.localEulerAngles.z;
+                Vector2 direction = Quaternion.Euler(0, 0, angleZ) * Vector2.up;
                 Vector2 targetPos = rt.anchoredPosition + direction * 400f;
 
                 Sequence seq = DOTween.Sequence();
-                seq.Join(rt.DOAnchorPos(targetPos, 2f).SetEase(Ease.InCubic)); // 날아가듯 이동
-                seq.Join(rt.DOScale(0.1f, 2f).SetEase(Ease.InCubic));           // 작아지기
+                seq.Join(rt.DOAnchorPos(targetPos, 2f).SetEase(Ease.InCubic));
+                seq.Join(rt.DOScale(0.1f, 2f).SetEase(Ease.InCubic));
                 seq.Join(cg.DOFade(0f, 2f));
                 seq.Join(rt.DOLocalRotate(new Vector3(180f, 180f, angleZ), 2f, RotateMode.FastBeyond360));
                 seq.OnComplete(() => Destroy(card));
             }
         }
-
-        Debug.Log("선택된 카드: " + selected.name);
-        Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            canvasController.photonView.RPC("RPC_SwitchToClientCanvas", RpcTarget.All);
-        }
-
-
-
-        // DOVirtual.DelayedCall(2f, () => SceneLoadingManager.Instance.AllowSceneActivation());
-        // DOVirtual.DelayedCall(2f, () => PhotonNetwork.LoadLevel("Game Scene"));
     }
 
     public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable propertiesThatChanged)
@@ -263,11 +268,15 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         {
             cardSelectCheckManager.cardSelectPanels[target.ActorNumber].SelectCheck(target);
 
-            if (PhotonNetwork.IsMasterClient && cardSelectCheckManager.AllPlayerCardSelectCheck() == true)
+            // 모든 플레이어 카드 선택 완료 → 게임 씬 전환 (2초 후)
+            if (PhotonNetwork.IsMasterClient && cardSelectCheckManager.AllPlayerCardSelectCheck())
             {
-                Debug.Log(" 모든 플레이어 카드 선택 완료 → Game Scene 로드");
-                PhotonNetwork.LoadLevel("Game Scene");
-                // 씬 전환 필요한 부분
+                Debug.Log("모든 플레이어 카드 선택 완료 → Game Scene 로드");
+
+                DOVirtual.DelayedCall(2f, () =>
+                {
+                    PhotonNetwork.LoadLevel("Game Scene");
+                });
             }
         }
     }

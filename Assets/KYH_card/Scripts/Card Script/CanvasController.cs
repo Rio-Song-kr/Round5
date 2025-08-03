@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Photon.Pun;
 using UnityEngine;
 
@@ -7,26 +8,65 @@ public class CanvasController : MonoBehaviourPun
     [SerializeField] private Canvas ClientCanvas;
     [SerializeField] private CardSelectManager cardSelectManager;
 
-    void Start()
+    void OnEnable()
     {
         MasterCanvas.gameObject.SetActive(true);
         ClientCanvas.gameObject.SetActive(false);
 
+        Debug.Log("온 인에이블 실행됨");
         //  if (PhotonNetwork.IsMasterClient)
         //  { // 카드 생성
         //      cardSelectManager.SpawnRandomCards1(photonView.IsMine); // 마스터만 상호작용 가능
         //  }
 
         // RPC로 참가자에게 동기화
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        //     
+        //     Debug.Log("마스터 카드 선택지 생성");
+        //     int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
+        //     photonView.RPC(nameof(RPC_SyncMasterCanvas), RpcTarget.All, selectedIndexes);
+        //
+        // }
+
         if (PhotonNetwork.IsMasterClient)
         {
-            
-            Debug.Log("마스터 카드 선택지 생성");
-            int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
-            photonView.RPC(nameof(RPC_SyncMasterCanvas), RpcTarget.All);
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isWinner", out object isWinnerObj))
+            {
+                bool isWinner = (bool)isWinnerObj;
 
+                if (isWinner)
+                {
+                    Debug.Log("마스터가 승자 → 카드 선택 건너뜀");
+
+                    ExitGames.Client.Photon.Hashtable props = new();
+                    props["Select"] = true;
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+                    DOVirtual.DelayedCall(2f, () =>
+                    {
+                        // 여기서 RPC_SwitchToClientCanvas 실행 → 클라이언트에게만 선택 기회 줘야 함
+                        photonView.RPC(nameof(RPC_SwitchToClientCanvas), RpcTarget.All);
+                    });
+
+                    return;
+                }
+
+                // 마스터가 패자 → 카드 선택 진행
+                Debug.Log("마스터 카드 선택지 생성 (패자)");
+            }
+            else
+            {
+                // 첫 진입 → 선택 가능
+                Debug.Log("첫 카드 선택 → 카드 선택 진행");
+            }
+
+            int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
+            photonView.RPC(nameof(RPC_SyncMasterCanvas), RpcTarget.All, selectedIndexes);
         }
     }
+
+
 
     [PunRPC]
     void RPC_SyncMasterCanvas(int[] indexes)
@@ -42,20 +82,25 @@ public class CanvasController : MonoBehaviourPun
     public void RPC_SwitchToClientCanvas()
     {
         Debug.Log("캔버스 스위칭 시작");
+
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(true);
 
-        // if (PhotonNetwork.IsMasterClient)
-        // {
-        //     cardSelectManager.SpawnRandomCards1(false); // 마스터는 관전
-        // }
-        // else
-        // {
-        //     cardSelectManager.SpawnRandomCards1(true); // 참가자는 상호작용 가능
-        // }
-
-        if (PhotonNetwork.IsMasterClient == false) // 참가자만 인덱스 생성자
+        if (!PhotonNetwork.IsMasterClient)
         {
+            // 클라이언트가 승자인 경우 → 선택 금지
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isWinner", out object isWinnerObj)
+                && (bool)isWinnerObj == true)
+            {
+                Debug.Log("클라이언트가 승자 → 카드 선택 생략");
+
+                ExitGames.Client.Photon.Hashtable props = new();
+                props["Select"] = true;
+                PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+                return; // 선택 패널 생성하지 않음
+            }
+
+            // 클라이언트가 패자 → 선택 가능
             Debug.Log("참가자 카드 선택지 생성");
             int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
             photonView.RPC(nameof(RPC_SyncClientCanvas), RpcTarget.All, selectedIndexes);
@@ -65,6 +110,7 @@ public class CanvasController : MonoBehaviourPun
     [PunRPC]
     public void RPC_SyncClientCanvas(int[] indexes)
     {
+        
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(true);
         Debug.Log("참가자 카드 선택지 생성");
