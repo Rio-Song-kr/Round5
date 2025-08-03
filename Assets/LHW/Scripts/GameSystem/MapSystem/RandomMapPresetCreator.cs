@@ -59,14 +59,6 @@ public class RandomMapPresetCreator : MonoBehaviour
         }
     }
 
-    // RPC ¸Þ¼­µå
-    [PunRPC]
-    void SetParentToRound(int viewID, int round)
-    {
-        Transform roundParent = FindObjectOfType<RandomMapPresetCreator>().GetRoundTransform(round);
-        transform.SetParent(roundParent);
-    }
-
     public Transform GetRoundTransform(int round)
     {
         return mapListTransform[round];
