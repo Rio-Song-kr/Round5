@@ -1222,7 +1222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &471775423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1235,6 +1235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc365f2e76d9c114dbf254d6cb1db53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  creator: {fileID: 1416241614}
 --- !u!4 &471775424
 Transform:
   m_ObjectHideFlags: 0
@@ -2771,7 +2772,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1416241614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3575,7 +3576,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1713404349}
-  - component: {fileID: 1713404348}
+  - component: {fileID: 1713404350}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -3583,20 +3584,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1713404348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1713404347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7953680f835d7884494f482a8927d8d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _PlayerPrefab: {fileID: 7030079410466946597, guid: 99aecaddd73bfbf4ea7f85eecf501510, type: 3}
-  _camera: {fileID: 1688422400}
 --- !u!4 &1713404349
 Transform:
   m_ObjectHideFlags: 0
@@ -3612,6 +3599,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1713404350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713404347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c29a66fc0b5a240a3992c3b67cfd5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPrefab: {fileID: 7030079410466946597, guid: 99aecaddd73bfbf4ea7f85eecf501510, type: 3}
+  _laserPrefab: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
+  _camera: {fileID: 1688422400}
+  _pools: {fileID: 184912393}
 --- !u!1 &1756198262
 GameObject:
   m_ObjectHideFlags: 0

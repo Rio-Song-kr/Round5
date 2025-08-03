@@ -1,5 +1,6 @@
-using UnityEngine;
+using Cinemachine;
 using Photon.Pun;
+using UnityEngine;
 
 public class RandomMapPresetCreator : MonoBehaviour
 {
@@ -17,12 +18,15 @@ public class RandomMapPresetCreator : MonoBehaviour
 
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
-    private void Awake()
+    private void OnEnable()
     {
-        for (int i = 0; i < mapListTransform.Length; i++)
+        if (PhotonNetwork.IsMasterClient)
         {
-            RandomInit();
-            RandomMapSelect(i);
+            for (int i = 0; i < mapListTransform.Length; i++)
+            {
+                RandomInit();
+                RandomMapSelect(i);
+            }
         }
     }
 
@@ -31,7 +35,7 @@ public class RandomMapPresetCreator : MonoBehaviour
     /// </summary>
     private void RandomInit()
     {
-        for(int i = 0; i < mapResources.Length; i++)
+        for (int i = 0; i < mapResources.Length; i++)
         {
             mapWeightedRandom.Add(mapResources[i], 1);
         }
@@ -42,14 +46,30 @@ public class RandomMapPresetCreator : MonoBehaviour
     /// </summary>
     private void RandomMapSelect(int round)
     {
-        for(int i = 0; i < gameCycleNum; i++)
+        for (int i = 0; i < gameCycleNum; i++)
         {
             GameObject selectedMap = mapWeightedRandom.GetRandomItemBySub();
             Vector3 selectedMapPosition = new Vector3((i + 1) * mapTransformOffset, 0, 5);
-            //GameObject map =  PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
-            GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
+            GameObject map = PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
+            //GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
             map.transform.SetParent(mapListTransform[round]);
+
+            PhotonView mapView = map.GetComponent<PhotonView>();
+            mapView.RPC("SetParentToRound", RpcTarget.OthersBuffered, round);
         }
+    }
+
+    // RPC ¸Þ¼­µå
+    [PunRPC]
+    void SetParentToRound(int viewID, int round)
+    {
+        Transform roundParent = FindObjectOfType<RandomMapPresetCreator>().GetRoundTransform(round);
+        transform.SetParent(roundParent);
+    }
+
+    public Transform GetRoundTransform(int round)
+    {
+        return mapListTransform[round];
     }
 
     public void MapUpdate(int round)
