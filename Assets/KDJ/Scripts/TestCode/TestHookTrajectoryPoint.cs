@@ -46,6 +46,13 @@ public class TestHookTrajectoryPoint : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             DrawHook();
+            SoundManager.Instance.PlaySFX("HookHit"); // 훅이 충돌했을 때 SFX 재생
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // 테스트용 음원 재상
+            SoundManager.Instance.PlayBGM("TestBGM");
         }
     }
 
