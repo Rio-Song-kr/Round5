@@ -5,8 +5,7 @@ public class CardSelectByHandManager : MonoBehaviour
     [SerializeField] GameObject[] cards;
     [SerializeField] CardSceneArmController armController;
     
-    // 스크립트 충돌 문제로 임시 주석처리했습니다. 용호님의 플립카드 스크립트와 연결 필요
-    /*
+   
     private int selectedIndex = -1;
     private void Update()
     {
@@ -16,7 +15,7 @@ public class CardSelectByHandManager : MonoBehaviour
             SelectRightCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<LHWFlipCard>().PlayFlipAnimation();
+                cards[selectedIndex].GetComponent<FlipCard>().RPC_Flip();
                 armController.SelectCard(selectedIndex);
                 CardAnimaitonPlay();
             }
@@ -26,9 +25,9 @@ public class CardSelectByHandManager : MonoBehaviour
             SelectLeftCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<LHWFlipCard>().PlayFlipAnimation();
+                cards[selectedIndex].GetComponent<FlipCard>().RPC_Flip();
                 armController.SelectCard(selectedIndex);
-                if (cards[selectedIndex].GetComponent<LHWFlipCard>().IsFlipped)
+                if (cards[selectedIndex].GetComponent<FlipCard>().IsFlipped)
                 {
                     CardAnimaitonPlay();
                 }
@@ -59,11 +58,11 @@ public class CardSelectByHandManager : MonoBehaviour
                 cards[selectedIndex].GetComponentInChildren<CardAnimator>().RestartAnimation();
                 continue;
             }
-            else if (cards[i].GetComponent<LHWFlipCard>().IsFlipped)
+            else if (cards[i].GetComponent<FlipCard>().IsFlipped)
             {
                 cards[i].GetComponentInChildren<CardAnimator>().StopAnimation();
             }
         }
     }
-    */
+   
 }

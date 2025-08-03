@@ -9,11 +9,11 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private bool isSelected = false;
     private bool isHovered = false;
 
-    [Header("¾Õ/µÞ¸é ·çÆ® ¿ÀºêÁ§Æ®")]
+    [Header("ï¿½ï¿½/ï¿½Þ¸ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")]
     public GameObject frontRoot;
     public GameObject backRoot;
 
-    [Header("¼³Á¤")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     public float flipDuration = 0.25f;
     public float hoverScale = 1.1f;
 
@@ -39,7 +39,7 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         originalScale = transform.localScale;
 
-        // ÇöÀç È¸ÀüÀ» À¯ÁöÇÏ°í Y¸¸ 180µµ·Î º¯°æ
+        // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ Yï¿½ï¿½ 180ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector3 rot = transform.localEulerAngles;
         rot.y = 180f;
         transform.localRotation = Quaternion.Euler(rot);
@@ -50,7 +50,7 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
+        if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         isHovered = true;
         transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
@@ -58,30 +58,30 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
+        if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         isHovered = false;
         transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!isInteractable || !isHovered) return; //Å¬¸¯ Á¦ÇÑ Æ÷ÇÔ
+        if (!isInteractable || !isHovered) return; //Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        OnClickCard(); // ±âÁ¸ ·ÎÁ÷ ±×´ë·Î È£Ãâ
+        OnClickCard(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½ È£ï¿½ï¿½
     }
 
     public void OnClickCard()
     {
-        if (!isInteractable) return; // »óÈ£ÀÛ¿ë ºÒ°¡ ½Ã ¹«½Ã
+        if (!isInteractable) return; // ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½Ò°ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         if (!isFlipped)
         {
             isFlipped = true;
 
-            // ·ÎÄÃ ¾Ö´Ï¸ÞÀÌ¼Ç ½ÇÇà
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
             PlayFlipAnimation();
 
-            // RPC·Î »ó´ë Å¬¶óÀÌ¾ðÆ®¿¡°Ôµµ flip ¾Ö´Ï¸ÞÀÌ¼Ç µ¿±âÈ­
+            // RPCï¿½ï¿½ ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½Ôµï¿½ flip ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½È­
             PhotonView photonView = PhotonView.Get(this);
             photonView.RPC(nameof(RPC_Flip), RpcTarget.Others);
 
@@ -95,7 +95,7 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     [PunRPC]
-    void RPC_Flip()
+    public void RPC_Flip()
     {
         isFlipped = true;
         PlayFlipAnimation();
@@ -105,15 +105,15 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (isFlipped) return;
 
-        // ÇöÀç È¸Àü°ª °¡Á®¿À±â
+        // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Vector3 startEuler = transform.localEulerAngles;
 
-        // ZÃà º¸Á¤ (360µµ ÀÌ»ó °ªÀÌ¸é -360 º¸Á¤ ÈÄ ºÎÈ£ ¹ÝÀü)
+        // Zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (360ï¿½ï¿½ ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ -360 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½)
         float z = startEuler.z;
         if (z > 180f) z -= 360f;
         float flippedZ = -z;
 
-        // Y = 0 À¸·Î È¸ÀüÇÏ¸é¼­ Z´Â ¹ÝÀüÇØ¼­ ºÎÃ¤²Ã °¢µµ À¯Áö
+        // Y = 0 ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï¸é¼­ Zï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector3 targetEuler = new Vector3(0f, 0f, flippedZ);
 
         transform.DORotate(targetEuler, flipDuration)
