@@ -3,7 +3,8 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPun, IPunObservable
+public class Bullet : MonoBehaviourPun,IPunObservable
+    // , IPunObservable
 {
     // 무기에서 조절
    // [SerializeField] public float Speed;                     // 총알 속도
@@ -18,6 +19,8 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     
     // 250726 추가
     private Vector3 _networkPosition;
+    private Quaternion _networkRotation;
+    // private BaseWeapon _baseWeapon; // BaseWeapon 스크립트 참조
     
     private void Awake()
     {
@@ -76,19 +79,19 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     // {
     //     BulletMove(_baseWeapon.bulletSpeed);
     // }
-    //
+    
     
     // 탄알이 2개로 날아가는 문제가 있어 추가
-    private IEnumerator Start()
-    {
-        if (!photonView.IsMine)
-        {
-            // 다른 플레이어가 만든 총알이면, 파괴하지 말고 비활성화만
-            gameObject.SetActive(false);
-        }
-        // 4초 뒤 파괴
-        yield return new WaitForSeconds(4f);
-    }
+    // private IEnumerator Start()
+    // {
+    //     if (!photonView.IsMine)
+    //     {
+    //         // 다른 플레이어가 만든 총알이면, 파괴하지 말고 비활성화만
+    //         gameObject.SetActive(false);
+    //     }
+    //     // 4초 뒤 파괴
+    //     yield return new WaitForSeconds(4f);
+    // }
     
     private IEnumerator SafeDestroy()
     {
@@ -112,8 +115,9 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     
     public void BulletMove(float speed)
     {
-        if (!photonView.IsMine) return;
+        // if (!photonView.IsMine) return;
         _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
+        // _rb.velocity = transform.up * speed;
         //     // Destroy(gameObject, 4f);
         StartCoroutine(DestroyAfterDelay(4f));
     }
@@ -128,6 +132,13 @@ public class Bullet : MonoBehaviourPun, IPunObservable
             PhotonNetwork.Destroy(gameObject);
         }
     }
+    
+    [PunRPC]
+    public void InitBullet(float speed)
+    {
+        _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
+        StartCoroutine(DestroyAfterDelay(4f));
+    }
 
     /// <summary>
     /// 테스트용으로 매개변수를 테스트 플레이어로 설정
@@ -139,13 +150,15 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     }
 
 
-    private void Update()
-    {
-        if (!photonView.IsMine)
-        {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 10f);
-        }
-    }
+    // private void Update()
+    // {
+    //     if (!photonView.IsMine)
+    //     {
+    //         transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 3f);
+    //         transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 150f);
+    //     }
+    // }
+    
     
 
     [PunRPC]
@@ -180,10 +193,12 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
         }
         else
         {
             _networkPosition = (Vector3)stream.ReceiveNext();
+            _networkRotation = (Quaternion)stream.ReceiveNext();
         }
     }
 

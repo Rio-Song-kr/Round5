@@ -9,6 +9,9 @@ public abstract class DefenceSkillDataSO : ScriptableObject
     //# Passive Skill은 게임 시작 시 바로 활성화, Active Skill은 조작키에 따라 실행
     public bool IsPassive;
 
+    [Header("Status Effect Settings")]
+    public StatusEffect[] Status;
+
     [Header("Skill Prefab")]
     [SerializeField] protected GameObject SkillEffectPrefab;
 
