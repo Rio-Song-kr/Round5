@@ -107,7 +107,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     public void DefaultShot(Collision2D collision)
     {
         // 기본 이펙트 생성
-        GameObject effect = PhotonNetwork.Instantiate("Bullets/Fragment", transform.position, Quaternion.identity);
+        GameObject effect = PhotonNetwork.Instantiate("Fragment", transform.position, Quaternion.identity);
         // GameObject effect = Instantiate(_hitEffect.name, transform.position, Quaternion.identity);
         effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
         CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
@@ -172,7 +172,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void BigBulletShot()
     {
-        _bigBullet.transform.SetParent(null);
+        // _bigBullet.transform.SetParent(null);
         _bigBullet.GetComponent<ParticleSystem>().Stop();
         StartCoroutine(DestroyBigBulletAfterDelay(_bigBullet, 1f));
     }
@@ -193,7 +193,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void ExplosiveBulletShot()
     {
-        PhotonNetwork.Instantiate("Bullets/Explosive", transform.position, Quaternion.identity);
+        PhotonNetwork.Instantiate("Explosive", transform.position, Quaternion.identity);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

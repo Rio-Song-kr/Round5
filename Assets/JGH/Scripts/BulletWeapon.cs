@@ -11,6 +11,7 @@ public class BulletWeapon : BaseWeapon
         if (!photonView.IsMine) return;
         if (isReloading || currentAmmo <= 0) return;
         if (!CanAttack()) return; // 공격 속도 체크
+
         
         
         // PhotonNetwork.Instantiate("Bullets/Bullet", firingPoint.position, firingPoint.rotation);
@@ -22,7 +23,7 @@ public class BulletWeapon : BaseWeapon
         // }
         // bullet.StartCoroutine(bullet.DestroyAfterDelay(4f));
         
-        GameObject bulletObj = PhotonNetwork.Instantiate("Bullets/Bullet", firingPoint.position, firingPoint.rotation);
+        GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", firingPoint.position, firingPoint.rotation);
 
         PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
 

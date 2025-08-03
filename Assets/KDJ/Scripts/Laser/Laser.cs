@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -15,44 +16,55 @@ public class Laser : MonoBehaviourPun
     private RaycastHit2D[] _hits = new RaycastHit2D[10];
     private Coroutine _laserCoroutine;
     private bool _isLaserHit;
-    private PoolManager _laserSootPool;
+    private PoolManager _poolManager;
     [Header("레이저 세팅")]
     public float Duration;
     public float LaserScale = 1f;
 
     private bool _canShoot;
+    
 
     public bool CanShoot => _laserCoroutine == null; // 레이저가 활성화되어 있지 않으면 true
 
-    private void Start()
+    private void Awake()
     {
         _laserEffect = GetComponent<VisualEffect>();
         _laserEffect.enabled = false;
         transform.localScale = Vector3.one; // 레이저 오브젝트의 스케일을 초기화
+        
+        _poolManager = FindFirstObjectByType<PoolManager>();
+        _poolManager.InitializePool("LaserSoot", _laserSoot, 100, 200);
+    }
 
-        if (!photonView.IsMine) return;
-
+    private void Start()
+    {
         // _laserSootPool = new LaserSootPool<LaserSoot>();
         // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
-        _laserSootPool = FindFirstObjectByType<PoolManager>();
-        _laserSootPool.InitializePool(_laserSoot.name, _laserSoot, 100, 200);
+        _poolManager = FindFirstObjectByType<PoolManager>();
+        _poolManager.InitializePool("LaserSoot", _laserSoot, 100, 200);
     }
 
     // 레이저 발사시 중복 발사됨
-    private void Update()
-    {
+    // private void Update()
+    // {
         // if (!photonView.IsMine) return;
         //
         // if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
         // {
         //     photonView.RPC(nameof(Shoot), RpcTarget.All);
         // }
-    }
+    // }
 
     public void ShootLaser()
     {
         if (!photonView.IsMine) return;
-        photonView.RPC(nameof(Shoot), RpcTarget.All);
+        // photonView.RPC(nameof(Shoot), RpcTarget.All);
+        _canShoot = true;
+
+        if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
+        {
+            _laserCoroutine = StartCoroutine(LaserCoroutine());
+        }
     }
 
     [PunRPC]
@@ -73,7 +85,8 @@ public class Laser : MonoBehaviourPun
     {
         CameraShake.Instance.ShakeCaller(0.15f, 0.02f); // 카메라 흔들기 효과
         _laserEffect.SetVector3("StartPos", transform.position); // 레이저 시작 위치 설정
-        if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f, ~_layerMask) > 0)
+        // if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f, ~_layerMask) > 0)
+        if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f) > 0)
         {
             Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
             _laserEffect.SetVector3("EndPos", _hits[0].point); // 레이저가 충돌한 위치로 끝 위치 설정
@@ -120,17 +133,21 @@ public class Laser : MonoBehaviourPun
                     //         transform.position,
                     //         transform.rotation)
                     //     .GetComponent<LaserSoot>();
+                    // var soot = PhotonNetwork.Instantiate(
+                            // "LaserSoot",
+                            // transform.position,
+                            // transform.rotation)
+                        // .GetComponent<LaserSoot>();
                     var soot = PhotonNetwork.Instantiate(
-                            _laserSoot.name,
-                            transform.position,
+                            "LaserSoot",
+                            _hits[0].point,
                             transform.rotation)
                         .GetComponent<LaserSoot>();
-
                     if (soot != null)
                     {
                         soot.SetPool();
-                        soot.transform.position = _hits[0].point;
-                        // soot.gameObject.transform.SetParent(_hits[0].transform);
+                        // soot.transform.position = _hits[0].point;
+                        soot.gameObject.transform.SetParent(_hits[0].transform);
                         var rb = _hits[0].transform.GetComponent<Rigidbody2D>();
                         if (rb != null)
                         {
