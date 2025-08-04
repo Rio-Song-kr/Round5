@@ -23,6 +23,10 @@ public class Laser : MonoBehaviourPun
 
     private bool _canShoot;
     
+    
+    // 데미지
+    private float _baseDamage = 6f;
+    private float _damageMultiplier = 0.3f;
 
     public bool CanShoot => _laserCoroutine == null; // 레이저가 활성화되어 있지 않으면 true
 
@@ -154,6 +158,18 @@ public class Laser : MonoBehaviourPun
                             rb.AddForce((_hits[0].point - new Vector2(transform.position.x, transform.position.y)).normalized
                                         * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 넉백 적용
                         }
+                        
+                        // 틱 데미지 적용 (이펙트와 동시에)
+                        if (photonView.IsMine)
+                        {
+                            var targetView = _hits[0].collider.GetComponent<PhotonView>();
+                            if (targetView != null)
+                            {
+                                float damage = _baseDamage * _damageMultiplier; // 6 * (1 - 0.7) 데미지 6에서 -70% = 6 * 0.3 = 1.8
+                                targetView.RPC("TakeDamage", RpcTarget.All, damage);
+                            }
+                        }
+    
                         particleTimer = 0f;
                     }
                 }
