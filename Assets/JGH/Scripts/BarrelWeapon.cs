@@ -38,7 +38,7 @@ public class BarrelWeapon : BaseWeapon
             if (bulletView != null)
             {
                 // Vector3 direction = spreadRotation * Vector3.up;
-                bulletView.RPC("InitBullet", RpcTarget.All, CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed, fireTime);
+                bulletView.RPC("InitBullet", RpcTarget.All, CardManager.Instance.GetCaculateCardStats().DefaultBulletSpeed, fireTime);
                 // bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
             }
             // if (bulletObj.TryGetComponent(out Bullet bullet))
@@ -60,7 +60,7 @@ public class BarrelWeapon : BaseWeapon
 
         CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
     }
-    //
+    
     // [PunRPC]
     // public void Shot(Vector3 firePos, Quaternion fireRot)
     // {
