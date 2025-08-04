@@ -52,11 +52,9 @@ MonoBehaviour:
   laserPrefab: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
   fragmentPrefab: {fileID: 2555893828798284621, guid: e576444c17967495385a31832d112356, type: 3}
   explosivePrefab: {fileID: 2555893828798284621, guid: a9a46c890467040abba6f181bfe29654, type: 3}
-  maxAmmo: 2
-  currentAmmo: 2
+  maxAmmo: 6
+  currentAmmo: 6
   reloadTime: 3
-  isBigBullet: 1
-  isExplosiveBullet: 1
   animator: {fileID: 0}
   isReloading: 1
   idleReloadDelay: 4

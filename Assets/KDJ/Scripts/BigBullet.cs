@@ -13,7 +13,7 @@ public class BigBullet : MonoBehaviour
         _particleSystem = GetComponent<ParticleSystem>();
     }
 
-    [PunRPC]
+    // [PunRPC]
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 8)

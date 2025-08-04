@@ -8,7 +8,7 @@ public class LaserWeapon : BaseWeapon
 
     private GameObject currentLaserInstance;
     private Laser currentLaser;
-
+    
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
    
@@ -16,8 +16,8 @@ public class LaserWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isFiring || isReloading || currentAmmo < 2) return;
-        currentAmmo -= 2;
+        if (isFiring || isReloading || currentAmmo < useAmmo) return;
+        currentAmmo -= useAmmo;
         
         photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
@@ -87,9 +87,11 @@ public class LaserWeapon : BaseWeapon
 
         yield return null;
         ReloadSpeedFromAnimator();
-        yield return new WaitForSeconds(reloadTime);
+        // yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(playerStatusDataSO.DefaultReloadSpeed);
 
-        currentAmmo = maxAmmo;
+        // currentAmmo = maxAmmo;
+        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
         UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
