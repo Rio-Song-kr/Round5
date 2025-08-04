@@ -15,15 +15,21 @@ public class TestCardPlayer : MonoBehaviour
     private float _defenseSkillCooldown;
     private float _damage;
     private float _reloadSpeed;
+    private float _bulletSpeed;
     private float _ammoCapacity;
+    private float _ammoConsumption;
+    private PlayerStatusDataSO stats;
 
     private void Start()
     {
-        _hp = _playerStatusData.DefaultHp;
-        _defenseSkillCooldown = _playerStatusData.DefaultInvincibilityCoolTime;
-        _damage = _playerStatusData.DefaultDamage;
-        _reloadSpeed = _playerStatusData.DefaultReloadSpeed;
-        _ammoCapacity = _playerStatusData.DefaultAmmo;
+        stats = CardManager.Instance.GetCaculateCardStats();
+        _damage = stats.DefaultDamage;
+        _reloadSpeed = stats.DefaultReloadSpeed;
+        _ammoCapacity = stats.DefaultAmmo;
+        _hp = stats.DefaultHp;
+        _defenseSkillCooldown = stats.DefaultInvincibilityCoolTime;
+        _bulletSpeed = stats.DefaultBulletSpeed;
+        _ammoConsumption = stats.AmmoConsumption;
         SetHUD();
     }
 
@@ -42,7 +48,7 @@ public class TestCardPlayer : MonoBehaviour
     private void GetCard(CardBase card)
     {
         CardManager.Instance.AddCard(card);
-        PlayerStatusDataSO stats = CardManager.Instance.GetCaculateCardStats();
+        stats = CardManager.Instance.GetCaculateCardStats();
 
         if (stats != null)
         {
@@ -51,6 +57,8 @@ public class TestCardPlayer : MonoBehaviour
             _damage = stats.DefaultDamage;
             _reloadSpeed = stats.DefaultReloadSpeed;
             _ammoCapacity = stats.DefaultAmmo;
+            _bulletSpeed = stats.DefaultBulletSpeed;
+            _ammoConsumption = stats.AmmoConsumption;
         }
         
         SetHUD();
@@ -58,7 +66,7 @@ public class TestCardPlayer : MonoBehaviour
 
     private void SetHUD()
     {
-        _statusText.text = $"HP: {_hp}\nDefense Cooldown: {_defenseSkillCooldown}\nDamage: {_damage}\nReload Speed: {_reloadSpeed}\nAmmo Capacity: {_ammoCapacity}";
+        _statusText.text = $"HP: {_hp}\nDefense Cooldown: {_defenseSkillCooldown}\nDamage: {_damage}\nReload Speed: {_reloadSpeed}\nAmmo Capacity: {_ammoCapacity}\nBullet Speed: {_bulletSpeed}\nAmmo Consumption: {_ammoConsumption}";
         _cardListText.text = "";
 
         List<CardBase> cards = null;
