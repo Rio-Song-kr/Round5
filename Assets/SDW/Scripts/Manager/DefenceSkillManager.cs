@@ -6,8 +6,7 @@ using UnityEngine;
 public class DefenceSkillManager : MonoBehaviourPun
 {
     [SerializeField] private DefenceSkillDatabaseSO _skillDatabase;
-    [SerializeField] private GameObject _effectsObject;
-    private IStatusEffectable _status;
+    private PlayerStatus _status;
 
     private List<DefenceSkillDataSO> _skills;
     public List<DefenceSkillDataSO> Skills => _skills;
@@ -15,8 +14,8 @@ public class DefenceSkillManager : MonoBehaviourPun
     private List<DefenceSkills> _skillNames;
     public List<DefenceSkills> SkillNames => _skillNames;
 
-    private Coroutine _coroutine;
-    private WaitForSeconds _coolDown;
+    private Dictionary<DefenceSkills, Coroutine> _coroutines = new Dictionary<DefenceSkills, Coroutine>();
+    private Dictionary<DefenceSkills, WaitForSeconds> _cooldowns = new Dictionary<DefenceSkills, WaitForSeconds>();
 
     private PhotonView _photonView;
 
@@ -33,7 +32,6 @@ public class DefenceSkillManager : MonoBehaviourPun
     {
         _photonView = GetComponent<PhotonView>();
 
-        _effectsObject = GameObject.FindGameObjectWithTag("Effects");
         _status = GetComponent<PlayerStatus>();
 
         _skills = new List<DefenceSkillDataSO>();
@@ -42,6 +40,8 @@ public class DefenceSkillManager : MonoBehaviourPun
         _skillNames = new List<DefenceSkills>();
 
         //# 테스트용 - Skill 추가, 추후 카드 선택 시 AddSkill을 추가하여 사용
+        //# Shield 스킬 기본 스킬
+        AddSkill(DefenceSkills.Shield);
         AddSkill(DefenceSkills.AbyssalCountdown);
         AddSkill(DefenceSkills.Emp);
         AddSkill(DefenceSkills.FrostSlam);
@@ -49,7 +49,10 @@ public class DefenceSkillManager : MonoBehaviourPun
         StartCoroutine(WaitForAllPlayerJoin());
     }
 
-    //# 테스트를 위한 Update
+    /// <summary>
+    /// 주기적으로 업데이트를 실행하여 게임 내 스킬 상태를 관리하고, 플레이어가 마우스 우클릭 시 활성 스킬을 적용
+    /// 모든 플레이어가 연결된 후 지연 시간 후 패시브 스킬을 초기화
+    /// </summary>
     private void Update()
     {
         if (_isAllJoined)
@@ -87,7 +90,7 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// <summary>
     /// 지연 시간 기반 스킬 활성화 코루틴 함수
     /// </summary>
-    /// <returns>코루틴 실행 중 해당 작업을 관리하는 IEnumerator 객체를 반환합니다.</returns>
+    /// <returns>코루틴 실행 중 해당 작업을 관리하는 IEnumerator 객체를 반환</returns>
     private IEnumerator DelayedTime()
     {
         //# 추후 게임이 시작된 것인지 체크
@@ -107,6 +110,12 @@ public class DefenceSkillManager : MonoBehaviourPun
         _skills.Add(skill);
 
         _skillNames.Add(skillName);
+
+        if (!skill.IsPassive)
+        {
+            _coroutines[skill.SkillName] = null;
+            _cooldowns[skill.SkillName] = null;
+        }
 
         skill.Initialize();
 
@@ -131,7 +140,7 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// 활성화할 패시브 스킬을 지정된 ViewID의 객체에 적용
     /// </summary>
     /// <param name="viewID">패시브 스킬을 적용할 플레이어의 Photon View ID</param>
-    public void UsePassiveSkills()
+    private void UsePassiveSkills()
     {
         foreach (var skill in _skills)
         {
@@ -144,30 +153,34 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// <summary>
     /// 마우스 우클릭 시 Defence Skill들을 실행
     /// </summary>
-    public void UseActiveSkills(Vector3 skillPosition)
+    private void UseActiveSkills(Vector3 skillPosition)
     {
-        if (_coroutine != null) return;
-
         foreach (var skill in _skills)
         {
             if (skill.IsPassive) continue;
 
+            if (_coroutines[skill.SkillName] != null) continue;
+
             skill.Activate(skillPosition, transform);
 
-            if (_coolDown == null) _coolDown = new WaitForSeconds(skill.CoolDown);
-        }
+            if (skill.SkillName == DefenceSkills.Shield)
+                _cooldowns[skill.SkillName] = new WaitForSeconds(_status.InvincibilityCooldown);
+            else
+                _cooldowns[skill.SkillName] = new WaitForSeconds(skill.Cooldown);
 
-        _coroutine = StartCoroutine(SKillCoolDown());
+            _coroutines[skill.SkillName] = StartCoroutine(SKillCoolDown(skill.SkillName));
+        }
     }
 
     /// <summary>
     /// CoolDown 체크
     /// </summary>
     /// <returns></returns>
-    private IEnumerator SKillCoolDown()
+    private IEnumerator SKillCoolDown(DefenceSkills skillName)
     {
-        yield return _coolDown;
+        yield return _cooldowns[skillName];
 
-        _coroutine = null;
+        _coroutines[skillName] = null;
+        _cooldowns[skillName] = null;
     }
 }

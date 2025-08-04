@@ -41,9 +41,7 @@ public class ArcController : MonoBehaviourPun
         float distanceFromCenter = Vector3.Distance(transform.position, _centerPoint);
 
         if (distanceFromCenter < _fastExpansionRadius)
-        {
             _currentSpeed = _initialExpansionSpeed;
-        }
         else
         {
             if (_decelerationTimer < _decelerationDuration)
@@ -53,9 +51,7 @@ public class ArcController : MonoBehaviourPun
                     _decelerationTimer / _decelerationDuration);
             }
             else
-            {
                 _currentSpeed = _minExpansionSpeed;
-            }
         }
 
         //# 이동 로직 (저장된 방향 사용)
@@ -65,7 +61,7 @@ public class ArcController : MonoBehaviourPun
         if (IsOffScreen())
         {
             if (_isReleased) return;
-            PhotonNetwork.Destroy(_hitEffectObject);
+
             PhotonNetwork.Destroy(gameObject);
         }
     }
@@ -98,6 +94,15 @@ public class ArcController : MonoBehaviourPun
             decelerationDuration);
     }
 
+    /// <summary>
+    /// 초기화 매개변수를 통해 Arc 오브젝트의 동작 설정을 원격으로 수행
+    /// </summary>
+    /// <param name="viewId">Arc 오브젝트의 Photon View ID</param>
+    /// <param name="direction">Arc 오브젝트의 초기 이동 방향</param>
+    /// <param name="initialSpeed">초기 확장 속도</param>
+    /// <param name="minSpeed">최소 유지 속도</param>
+    /// <param name="fastRadius">빠른 확장 반경 조건</param>
+    /// <param name="decelerationDuration">감속 시간</param>
     [PunRPC]
     private void InitializeArc(
         int viewId,
@@ -126,12 +131,6 @@ public class ArcController : MonoBehaviourPun
 
         _decelerationTimer = 0f;
         _isReleased = false;
-
-        //# Pool에서 VFX_Arc를 꺼냄
-        _hitEffectObject = PhotonNetwork.Instantiate("VFX_Arc", transform.position, transform.rotation);
-        _hitEffect = _hitEffectObject.GetComponent<VfxArcEffect>();
-        _hitEffect.Stop();
-        _hitEffect.Initialize();
     }
 
     /// <summary>
@@ -155,16 +154,24 @@ public class ArcController : MonoBehaviourPun
                 photonView.RPC(nameof(ApplyReduceEffect), RpcTarget.All, targetViewId);
             }
 
+            //# Pool에서 VFX_Arc를 꺼냄
+            _hitEffectObject = PhotonNetwork.Instantiate("VFX_Arc", transform.position, transform.rotation);
+            _hitEffect = _hitEffectObject.GetComponent<VfxArcEffect>();
+            _hitEffect.Stop();
+            _hitEffect.Initialize();
+
             _hitEffectObject.transform.SetPositionAndRotation(transform.position, transform.rotation);
 
             photonView.RPC(nameof(PlayHitEffect), RpcTarget.All, transform.position, transform.rotation);
-
-            //# Pool에 ArcController 반환
-            PhotonNetwork.Destroy(gameObject);
             _isReleased = true;
         }
     }
 
+    /// <summary>
+    /// 적용된 방어 효과를 감소시키는 원격 호출 메서드
+    /// 특정 뷰 ID의 대상 오브젝트에 속도 감소 효과를 적용
+    /// </summary>
+    /// <param name="viewId">효과를 적용할 대상 오브젝트의 Photon View ID</param>
     [PunRPC]
     private void ApplyReduceEffect(int viewId)
     {
@@ -184,16 +191,26 @@ public class ArcController : MonoBehaviourPun
     }
 
     /// <summary>
-    /// Hit Effect 재생 RPC
+    /// 개별 Arc 오브젝트의 상태를 업데이트하여 화면 내에서 움직이도록 제어
+    /// 화면 밖으로 나가면 Pool 시스템에 반환하는 함수
     /// </summary>
+    /// <param name="position">Arc 오브젝트의 새로운 위치 벡터</param>
+    /// <param name="rotation">Arc 오브젝트의 새로운 회전 쿼터니언</param>
     [PunRPC]
     private void PlayHitEffect(Vector3 position, Quaternion rotation)
     {
         if (_hitEffectObject != null && _hitEffect != null || photonView != null || !_isReleased)
         {
-            _hitEffectObject.transform.SetPositionAndRotation(position, rotation);
-            _hitEffect.Play();
+            if (photonView.IsMine)
+            {
+                _hitEffectObject?.transform.SetPositionAndRotation(position, rotation);
+                _hitEffect?.Play();
+            }
         }
+
+        //# Pool에 ArcController 반환
+        if (photonView.IsMine)
+            PhotonNetwork.Destroy(gameObject);
     }
 
     /// <summary>

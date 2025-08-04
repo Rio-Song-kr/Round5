@@ -3,6 +3,7 @@
 /// </summary>
 public enum DefenceSkills
 {
+    Shield,
     AbyssalCountdown,
     Emp,
     FrostSlam

@@ -29,7 +29,6 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
     public PoolManager Pools => _pools;
 
     public Vector3 SkillPosition;
-    private Transform _effectTransform;
 
     public override void Initialize()
     {

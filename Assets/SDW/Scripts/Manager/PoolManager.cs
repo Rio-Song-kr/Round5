@@ -83,11 +83,7 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
         string prefabId = obj.name.Replace("(Clone)", "").Trim();
 
         if (_pools.ContainsKey(prefabId))
-        {
-            var photonView = obj.GetComponent<PhotonView>();
-
             _pools[prefabId].Release(obj);
-        }
         else
         {
             Debug.LogWarning($"{prefabId}을 찾지 못했습니다.");

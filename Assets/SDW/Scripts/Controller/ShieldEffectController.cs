@@ -28,7 +28,9 @@ public class ShieldEffectController : MonoBehaviourPun
     private void OnDisable()
     {
         _shieldImg.transform.localScale = _originalScale;
-        StopCoroutine(_coroutine);
+
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
     }
 
     /// <summary>
@@ -49,7 +51,6 @@ public class ShieldEffectController : MonoBehaviourPun
     /// </summary>
     /// <param name="targetScale">목표 스케일 값</param>
     /// <param name="duration">스케일 변화 지속 시간</param>
-    /// <returns>코루틴 객체</returns>
     private IEnumerator RoundTripScaleOverTime(Vector3 targetScale, float duration)
     {
         var startScale = _originalScale;

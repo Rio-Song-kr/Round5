@@ -5,7 +5,7 @@ public abstract class DefenceSkillDataSO : ScriptableObject
     [Header("Skill Settings")]
     public DefenceSkills SkillName;
     //# 스킬 사용 후 재사용 시간
-    public float CoolDown;
+    public float Cooldown;
     //# Passive Skill은 게임 시작 시 바로 활성화, Active Skill은 조작키에 따라 실행
     public bool IsPassive;
 

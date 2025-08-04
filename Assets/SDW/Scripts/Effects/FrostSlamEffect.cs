@@ -182,6 +182,10 @@ public class FrostSlamEffect : MonoBehaviourPun
         photonView.RPC(nameof(UpdateFirstLine), RpcTarget.All, transform.position);
     }
 
+    /// <summary>
+    /// 얼음 슬램 효과의 초기 라인 업데이트를 수행
+    /// </summary>
+    /// <param name="position">효과를 업데이트할 새로운 위치 벡터</param>
     [PunRPC]
     private void UpdateFirstLine(Vector3 position)
     {
@@ -250,7 +254,7 @@ public class FrostSlamEffect : MonoBehaviourPun
                     inFixedSegment = true;
                 }
 
-                if (inFixedSegment && currentIndex != currentFixedSegmentStart)
+                if (currentIndex != currentFixedSegmentStart)
                 {
                     var vec1 = _points[currentIndex] - _points[prevIndex];
                     int nextPotentialIndex = (currentIndex + 1) % SkillData.PointCount;
@@ -345,9 +349,14 @@ public class FrostSlamEffect : MonoBehaviourPun
             yield return null;
         }
 
-        SkillData.Pools.Destroy(gameObject);
+        if (photonView.IsMine)
+            PhotonNetwork.Destroy(gameObject);
     }
 
+    /// <summary>
+    /// 2D 콜라이더와의 충돌 감지 시 얼음 슬램 효과 적용 로직 시작
+    /// </summary>
+    /// <param name="other">충돌한 Collider2D 컴포넌트</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!photonView.IsMine) return;
@@ -356,11 +365,13 @@ public class FrostSlamEffect : MonoBehaviourPun
 
         if (!other.CompareTag("Player") || targetView.IsMine) return;
 
-
-        Debug.Log("Apply FrostSlamEffect");
         photonView.RPC(nameof(ApplyFrostSlamEffect), RpcTarget.All, targetView.ViewID);
     }
 
+    /// <summary>
+    /// 얼음 관련 슬램 효과를 타겟 뷰에 적용하는 원격 호출 메서드
+    /// </summary>
+    /// <param name="viewId">효과를 적용받을 플레이어의 Photon View ID</param>
     [PunRPC]
     private void ApplyFrostSlamEffect(int viewId)
     {

@@ -63,6 +63,8 @@ public class VfxSmokeEffect : MonoBehaviourPun
     {
         yield return _wait;
         _coroutine = null;
-        PhotonNetwork.Destroy(gameObject);
+
+        if (photonView.IsMine)
+            PhotonNetwork.Destroy(gameObject);
     }
 }

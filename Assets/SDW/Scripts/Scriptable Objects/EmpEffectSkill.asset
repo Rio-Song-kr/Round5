@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e2484c9ac188747a2f4240d4d5da4d, type: 3}
   m_Name: EmpEffectSkill
   m_EditorClassIdentifier: 
-  SkillName: 1
-  CoolDown: 5
+  SkillName: 2
+  Cooldown: 5
   IsPassive: 0
   Status:
   - EffectType: 5
@@ -44,6 +44,6 @@ MonoBehaviour:
   VfxArcPrefab: {fileID: 4176774620949802689, guid: 7041c0922d827984581b9bf153f337cf, type: 3}
   TargetMask:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 1344
   ArcCount: 30
-  SkillPosition: {x: -2.9222386, y: 3.5953727, z: 0}
+  SkillPosition: {x: -2.9900963, y: 3.6653664, z: 0}

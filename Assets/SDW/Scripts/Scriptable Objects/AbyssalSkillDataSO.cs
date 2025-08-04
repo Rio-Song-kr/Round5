@@ -17,9 +17,6 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
     public float TargetScaleMultiplier = 1.2f;
 
     [Header("Shield Effect Settings")]
-    public GameObject ShieldPrefab;
-    //# Abyssal Skill 활성화 시 Shield가 유지되는 시간
-    // public float ShieldEffectActiveTime = 2f;
     //# Abyssal SKill 활성화/비활성화 시 무적 Shield의 Scale이 증가/감소 하는데 소요되는 시간
     public float ShieldScaleDuration = 0.2f;
     //# Abyssal SKill 활성화/비활성화 시 무적 Shield의 Scale
@@ -27,8 +24,6 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
 
     [Header("Particle Effect Settings")]
     public GameObject VfxCorePullPrefab;
-
-    private AbyssalCountdownEffect _skillEffect;
 
     private PoolManager _pools;
     public PoolManager Pools => _pools;
@@ -38,7 +33,6 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
         _pools = FindFirstObjectByType<PoolManager>();
         _pools.InitializePool(SkillEffectPrefab.name, SkillEffectPrefab, 2, 5);
         _pools.InitializePool(VfxCorePullPrefab.name, VfxCorePullPrefab, 2, 5);
-        _pools.InitializePool(ShieldPrefab.name, ShieldPrefab, 2, 5);
     }
 
     public override void Activate(Vector3 skillPosition, Transform playerTransform)

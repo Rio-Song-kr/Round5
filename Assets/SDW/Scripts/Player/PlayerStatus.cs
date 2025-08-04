@@ -18,6 +18,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     private float _calculatedGroundSpeed;
     private float _calculatedAirSpeed;
     private float _calculatedInvincibilityCooldown;
+    public float InvincibilityCooldown => _calculatedInvincibilityCooldown;
 
     private bool _isInvincibility;
     private bool _canAttack;
@@ -28,7 +29,6 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     public Action<bool> OnPlayerFreezeValueChanged;
     public Action<bool> OnPlayerCanAttackValueChanged;
     public Action<bool> OnInvincibilityValueChanged;
-    public Action<float> OnInvincibilityCooldownChanged;
 
     /// <summary>
     /// 초기화
@@ -46,10 +46,12 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         _calculatedGroundSpeed = _playerData.DefaultGroundSpeed;
         _calculatedInvincibilityCooldown = _playerData.DefaultInvincibilityCoolTime;
 
-
         _canAttack = true;
     }
 
+    /// <summary>
+    /// 게임 오브젝트의 상태를 업데이트하고 활성화된 상태 효과를 관리
+    /// </summary>
     private void Update() => UpdateStatusEffects();
 
     /// <summary>
@@ -66,16 +68,17 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         _freezePlayer = false;
         _currentInvincibilityCooldown = _calculatedInvincibilityCooldown;
 
-
         //# 초기화 후 Action을 통해 전달
         OnPlayerHpValueChanged?.Invoke(_currentHp, _currentMaxHp);
         OnPlayerSpeedValueChanged?.Invoke(_currentGroundSpeed, _currentAirSpeed);
         OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
         OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
         OnInvincibilityValueChanged?.Invoke(_isInvincibility);
-        OnInvincibilityCooldownChanged?.Invoke(_currentInvincibilityCooldown);
     }
 
+    /// <summary>
+    /// 활성화된 상태 효과들을 업데이트
+    /// </summary>
     private void UpdateStatusEffects()
     {
         for (int i = 0; i < _activeEffect.Count; i++)
@@ -90,6 +93,9 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         CalculateStatus();
     }
 
+    /// <summary>
+    /// 상태 효과를 계산하고 플레이어의 상태 변수를 업데이트
+    /// </summary>
     private void CalculateStatus()
     {
         float prevSpeed = _calculatedGroundSpeed;
@@ -106,7 +112,6 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         {
             switch (effect.EffectType)
             {
-                //todo ReduceSpeed와 Freeze가 겹칠 때 어떻게 처리?
                 case StatusEffectType.ReduceSpeed:
                     _calculatedGroundSpeed *= 1f + effect.EffectValue;
                     _calculatedAirSpeed *= 1f + effect.EffectValue;
@@ -150,6 +155,10 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         }
     }
 
+    /// <summary>
+    /// 영구적인 상태 효과를 계산하고 적용
+    /// </summary>
+    /// <param name="effect">적용할 상태 효과</param>
     private void CalculatePermanentEffects(StatusEffect effect)
     {
         float prevMaxHp = _calculatedMaxHp;
@@ -174,11 +183,12 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     }
 
     /// <summary>
-    /// 상태 효과를 적용
+    /// 플레이어에게 상태 효과를 적용
     /// </summary>
-    /// <param name="type">적용할 상태 효과의 종류</param>
-    /// <param name="effectValue">효과의 강도 또는 값 (예: 감소 속도의 경우 감소 비율)</param>
-    /// <param name="duration">효과 지속 시간</param>
+    /// <param name="type">적용할 상태 효과의 유형</param>
+    /// <param name="effectValue">상태 효과의 강도 값</param>
+    /// <param name="duration">상태 효과의 지속 시간 (초)</param>
+    /// <param name="isPermanent">상태 효과가 영구적인지 여부(기본값: false)</param>
     public void ApplyStatusEffect(StatusEffectType type, float effectValue, float duration, bool isPermanent = false)
     {
         var existingEffect = GetStatusEffect(type);
@@ -192,7 +202,12 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
             if (isPermanent) CalculatePermanentEffects(effect);
         }
         //# 동일한 효과가 있을 경우, 시간 갱신
-        else existingEffect.RemainingTime = duration;
+        else
+        {
+            if (Mathf.Abs(effectValue) > Mathf.Abs(existingEffect.EffectValue))
+                existingEffect.EffectValue = effectValue;
+            existingEffect.RemainingTime = duration;
+        }
     }
 
     /// <summary>

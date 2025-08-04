@@ -65,6 +65,7 @@ public class EmpEffect : MonoBehaviourPun
         }
 
         //# Pool에 EmpEffect 반환
-        PhotonNetwork.Destroy(gameObject);
+        if (photonView.IsMine)
+            PhotonNetwork.Destroy(gameObject);
     }
 }
