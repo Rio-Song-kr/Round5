@@ -11,7 +11,7 @@ public class BarrelWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isReloading || currentAmmo < useAmmo) return;
+        if (isReloading || currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption) return;
         if (!CanAttack()) return; // 공격 속도 체크
         
         float angleStep = spreadAngle / (pelletCount - 1);
@@ -38,7 +38,7 @@ public class BarrelWeapon : BaseWeapon
             if (bulletView != null)
             {
                 // Vector3 direction = spreadRotation * Vector3.up;
-                bulletView.RPC("InitBullet", RpcTarget.All, CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed, fireTime);
+                bulletView.RPC("InitBullet", RpcTarget.All, CardManager.Instance.GetCaculateCardStats().DefaultBulletSpeed, fireTime);
                 // bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
             }
             // if (bulletObj.TryGetComponent(out Bullet bullet))
@@ -48,11 +48,11 @@ public class BarrelWeapon : BaseWeapon
             // }
         }
         
-        currentAmmo -= useAmmo;
+        currentAmmo -= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
         lastAttackTime = Time.time;
         UpdateAmmoUI();
         
-        if (currentAmmo < useAmmo)
+        if (currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption)
         {
             ReloadSpeedFromAnimator();
             StartAutoReload();
@@ -60,7 +60,7 @@ public class BarrelWeapon : BaseWeapon
 
         CameraShake.Instance.ShakeCaller(0.3f, 0.05f);
     }
-    //
+    
     // [PunRPC]
     // public void Shot(Vector3 firePos, Quaternion fireRot)
     // {

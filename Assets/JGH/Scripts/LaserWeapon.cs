@@ -16,18 +16,29 @@ public class LaserWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isFiring || isReloading || currentAmmo < useAmmo) return;
-        currentAmmo -= useAmmo;
+        if (isFiring || isReloading || currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption) return;
+        currentAmmo -= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
         
-        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
+        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time, firingPoint.position, firingPoint.rotation);
     }
     
     [PunRPC]
-    private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
+    private IEnumerator RPC_FireLaser(double fireTime, Vector3 position, Quaternion rotation, PhotonMessageInfo info)
     {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
         float lag = (float)(PhotonNetwork.Time - fireTime);
         yield return new WaitForSeconds(lag); // 지연 보상 적용
+        
+        if (gunController == null)
+        {
+            gunController = GetComponentInParent<GunControll>();
+            if (gunController == null || gunController.muzzle == null)
+            {
+                Debug.LogError("[LaserWeapon] gunController 또는 muzzle이 null입니다.");
+                yield break;
+            }
+        }
+        
         UpdateAmmoUI();
         
 
@@ -40,6 +51,7 @@ public class LaserWeapon : BaseWeapon
 
         // 1. 레이저 프리팹 생성
         currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
+        // currentLaserInstance = PhotonNetwork.Instantiate("Laser", position, rotation);
 
         // 2. muzzle에 붙임
         currentLaserInstance.transform.SetParent(gunController.muzzle);
@@ -53,7 +65,11 @@ public class LaserWeapon : BaseWeapon
         currentLaser.Duration = laserDuration;
         currentLaser.ShootLaser();
 
-        StartCoroutine(FireLaserRoutine());
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(FireLaserRoutine());
+        }
+
     }
 
     private IEnumerator FireLaserRoutine()
