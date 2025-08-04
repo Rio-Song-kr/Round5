@@ -12,22 +12,23 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     private float _currentMaxHp;
     private float _currentGroundSpeed;
     private float _currentAirSpeed;
-    // private float _currentAttackSpeed;
+    private float _currentInvincibilityCooldown;
 
     private float _calculatedMaxHp;
     private float _calculatedGroundSpeed;
     private float _calculatedAirSpeed;
-    // private float _calculatedAttackSpeed;
+    private float _calculatedInvincibilityCooldown;
 
     private bool _isInvincibility;
     private bool _canAttack;
     private bool _freezePlayer;
 
+    public Action<float, float> OnPlayerHpValueChanged;
     public Action<float, float> OnPlayerSpeedValueChanged;
-    public Action<bool> OnInvincibilityValueChanged;
-    public Action<bool> OnPlayerCanAttackValueChanged;
-    // public Action<float> OnAttackSpeedValueChanged;
     public Action<bool> OnPlayerFreezeValueChanged;
+    public Action<bool> OnPlayerCanAttackValueChanged;
+    public Action<bool> OnInvincibilityValueChanged;
+    public Action<float> OnInvincibilityCooldownChanged;
 
     /// <summary>
     /// 초기화
@@ -38,12 +39,13 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         _currentMaxHp = _playerData.DefaultHp;
         _currentGroundSpeed = _playerData.DefaultGroundSpeed;
         _currentAirSpeed = _playerData.DefaultAirSpeed;
-        // _currentAttackSpeed = _playerData.DefaultAttackSpeed;
+        _currentInvincibilityCooldown = _playerData.DefaultInvincibilityCoolTime;
 
         //# 초기에는 기본값과 동일
         _calculatedMaxHp = _playerData.DefaultHp;
         _calculatedGroundSpeed = _playerData.DefaultGroundSpeed;
-        // _calculatedAttackSpeed = _playerData.DefaultAttackSpeed;
+        _calculatedInvincibilityCooldown = _playerData.DefaultInvincibilityCoolTime;
+
 
         _canAttack = true;
     }
@@ -62,14 +64,16 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         _isInvincibility = false;
         _canAttack = true;
         _freezePlayer = false;
-        // _currentAttackSpeed = _playerData.DefaultAttackSpeed;
+        _currentInvincibilityCooldown = _calculatedInvincibilityCooldown;
+
 
         //# 초기화 후 Action을 통해 전달
-        OnPlayerSpeedValueChanged?.Invoke(_calculatedGroundSpeed, _calculatedAirSpeed);
-        OnInvincibilityValueChanged?.Invoke(_isInvincibility);
-        OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
-        // OnAttackSpeedValueChanged?.Invoke(_calculatedAttackSpeed);
+        OnPlayerHpValueChanged?.Invoke(_currentHp, _currentMaxHp);
+        OnPlayerSpeedValueChanged?.Invoke(_currentGroundSpeed, _currentAirSpeed);
         OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
+        OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
+        OnInvincibilityValueChanged?.Invoke(_isInvincibility);
+        OnInvincibilityCooldownChanged?.Invoke(_currentInvincibilityCooldown);
     }
 
     private void UpdateStatusEffects()
@@ -92,13 +96,11 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         bool prevInvincibility = _isInvincibility;
         bool prevCanAttack = _canAttack;
         bool prevPlayerFreeze = _freezePlayer;
-        // float prevAttackSpeed = _calculatedAttackSpeed;
 
         _calculatedGroundSpeed = _playerData.DefaultGroundSpeed;
         _isInvincibility = false;
         _canAttack = true;
         _freezePlayer = false;
-        // _calculatedAttackSpeed = _playerData.DefaultAttackSpeed;
 
         foreach (var effect in _activeEffect)
         {
@@ -106,59 +108,69 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
             {
                 //todo ReduceSpeed와 Freeze가 겹칠 때 어떻게 처리?
                 case StatusEffectType.ReduceSpeed:
-                    _calculatedGroundSpeed = _calculatedGroundSpeed * (1f + effect.EffectValue);
-                    _calculatedAirSpeed = _calculatedAirSpeed * (1f + effect.EffectValue);
-                    Debug.Log($"Move Speed Changed : {_calculatedGroundSpeed}");
+                    _calculatedGroundSpeed *= 1f + effect.EffectValue;
+                    _calculatedAirSpeed *= 1f + effect.EffectValue;
                     break;
                 case StatusEffectType.FreezePlayer:
                     _freezePlayer = true;
-                    Debug.Log($"Freeze Player Changed : {_freezePlayer}");
                     break;
                 case StatusEffectType.UnableToAttack:
                     _canAttack = false;
-                    Debug.Log($"Can Attack Changed : {_canAttack}");
-                    // _calculatedAttackSpeed = _calculatedAttackSpeed * (1f + effect.EffectValue);
                     break;
                 //# 무적인 상태에서 총알이 맞으면, 시간이 연장되어야 함
                 case StatusEffectType.Invincibility:
                     _isInvincibility = true;
-                    Debug.Log($"Is Invincibility Changed : {_isInvincibility}");
                     break;
             }
         }
 
         //# 값이 변경된 경우에만 Invoke
         if (Mathf.Abs(prevSpeed - _calculatedGroundSpeed) > 0.05f)
+        {
             OnPlayerSpeedValueChanged?.Invoke(_calculatedGroundSpeed, _calculatedAirSpeed);
-
-        if (prevInvincibility != _isInvincibility)
-            OnInvincibilityValueChanged?.Invoke(_isInvincibility);
+            Debug.Log($"Move Speed Changed : {_calculatedGroundSpeed}");
+        }
 
         if (prevCanAttack != _canAttack)
+        {
             OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
+            Debug.Log($"Can Attack Changed : {_canAttack}");
+        }
+
+        if (prevInvincibility != _isInvincibility)
+        {
+            OnInvincibilityValueChanged?.Invoke(_isInvincibility);
+            Debug.Log($"Is Invincibility Changed : {_isInvincibility}");
+        }
 
         if (prevPlayerFreeze != _freezePlayer)
+        {
             OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
-
-        // if (Mathf.Abs(prevAttackSpeed - _calculatedAttackSpeed) > 0.1f)
-        //     OnAttackSpeedValueChanged?.Invoke(_calculatedAttackSpeed);
+            Debug.Log($"Freeze Player Changed : {_freezePlayer}");
+        }
     }
 
-    private void CalculatePermanentEffects()
+    private void CalculatePermanentEffects(StatusEffect effect)
     {
-        foreach (var effect in _activeEffect)
+        float prevMaxHp = _calculatedMaxHp;
+        float prevInvincibilityCoolTime = _calculatedInvincibilityCooldown;
+
+        switch (effect.EffectType)
         {
-            switch (effect.EffectType)
-            {
-                case StatusEffectType.IncreaseMaxHp:
-                    _calculatedMaxHp = _calculatedMaxHp * (1 + effect.EffectValue);
-                    Debug.Log($"Max Hp Changed : {_calculatedMaxHp}");
-                    break;
-            }
+            case StatusEffectType.IncreaseMaxHp:
+                _calculatedMaxHp *= 1 + effect.EffectValue;
+                Debug.Log($"Max Hp Changed : {_calculatedMaxHp}");
+                break;
+            case StatusEffectType.IncreaseCooldown:
+                _calculatedInvincibilityCooldown *= 1 + effect.EffectValue;
+                Debug.Log($"Shield CoolTime Changed : {_calculatedInvincibilityCooldown}");
+                break;
         }
 
         //# 영구 적용 효과는 바로 적용
-        InitializeStatus();
+        if (Mathf.Abs(prevMaxHp - _calculatedMaxHp) > 0.05f ||
+            Mathf.Abs(prevInvincibilityCoolTime - _calculatedInvincibilityCooldown) > 0.05f)
+            InitializeStatus();
     }
 
     /// <summary>
@@ -174,9 +186,10 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         //# 동일한 효과가 없다면 추가
         if (existingEffect == null)
         {
-            _activeEffect.Add(new StatusEffect(type, effectValue, duration, isPermanent));
+            var effect = new StatusEffect(type, effectValue, duration, isPermanent);
+            _activeEffect.Add(effect);
 
-            if (isPermanent) CalculatePermanentEffects();
+            if (isPermanent) CalculatePermanentEffects(effect);
         }
         //# 동일한 효과가 있을 경우, 시간 갱신
         else existingEffect.RemainingTime = duration;

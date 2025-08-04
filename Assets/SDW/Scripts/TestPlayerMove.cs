@@ -10,13 +10,19 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
 
     private float _moveSpeed = 5f;
     public float MoveSpeed => _moveSpeed;
+
     private float _airSpeed = 0.2f;
+
     private bool _isFreeze = false;
 
     public Action<bool> OnPlayerMoveStateChanged;
 
+    private float _currentHp;
+    private float _maxHp;
+
     private bool _isPlayerMoved;
     private bool _prevPlayerMoveState;
+    private bool _canAttack;
     private bool _isInvincibility;
 
     private void Awake()
@@ -30,6 +36,8 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
         _status.OnPlayerFreezeValueChanged += SetFreeze;
         //# 무적
         _status.OnInvincibilityValueChanged += SetInvincibility;
+        _status.OnPlayerCanAttackValueChanged += SetCanAttack;
+        _status.OnPlayerHpValueChanged += SetHp;
     }
 
     private void Update()
@@ -110,6 +118,12 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
         }
     }
 
+    private void SetHp(float currentHp, float maxHp)
+    {
+        _currentHp = currentHp;
+        _maxHp = maxHp;
+    }
+
     private void SetMoveSpeed(float moveSpeed, float airSpeed)
     {
         if (moveSpeed != 0) _isFreeze = false;
@@ -120,4 +134,6 @@ public class TestPlayerMove : MonoBehaviourPun, IPunObservable
     public void SetFreeze(bool value) => _isFreeze = value;
 
     private void SetInvincibility(bool value) => _isInvincibility = value;
+
+    private void SetCanAttack(bool value) => _canAttack = value;
 }
