@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bf657e509d03a34a92896899888176e, type: 3}
   m_Name: AbyssalCountdownSkill
   m_EditorClassIdentifier: 
-  SkillName: 0
-  CoolDown: -1
+  SkillName: 1
+  Cooldown: 0
   IsPassive: 1
   Status:
   - EffectType: 4
@@ -39,7 +39,6 @@ MonoBehaviour:
   ActivateTime: 5
   ScalingDuration: 0.05
   TargetScaleMultiplier: 1.2
-  ShieldPrefab: {fileID: 3452656125990451006, guid: 2d2057109c8a09c4f9a25b886bffe55c, type: 3}
   ShieldScaleDuration: 0.2
   ShieldScaleMultiplier: 1.1
   VfxCorePullPrefab: {fileID: 8649048491170718868, guid: a5093d56b2094b34d92a0fce5fe1aa21, type: 3}

@@ -159,7 +159,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillDatabase: {fileID: 11400000, guid: c8fb113fd3f2876458a1288ae51ab551, type: 2}
-  _effectsObject: {fileID: 0}
 --- !u!58 &1030415930519204042
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -229,7 +228,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555179124097370419}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

@@ -8,6 +8,9 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private Camera _camera;
     [SerializeField] private PoolManager _pools;
 
+    /// <summary>
+    /// 초기화 루틴을 실행하여 필요한 리소스 풀을 설정하고 초기화
+    /// </summary>
     private void Awake()
     {
         _pools = FindFirstObjectByType<PoolManager>();
@@ -15,6 +18,9 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
         _pools.InitializePool(_laserPrefab.name, _laserPrefab, 1, 2);
     }
 
+    /// <summary>
+    /// 사용자가 게임 방에 참여했을 때 호출되는 메서드로, 참여한 방에 대한 초기 설정 및 객체 생성을 수행
+    /// </summary>
     public override void OnJoinedRoom()
     {
         Debug.Log("방에 참가하셨습니다.");
