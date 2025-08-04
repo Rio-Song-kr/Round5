@@ -5,14 +5,13 @@ public class BarrelWeapon : BaseWeapon
 {
     public int pelletCount = 6; // 퍼지는 총알 개수
     public float spreadAngle = 30f; // 퍼지는 각도
-    public int ammoPerShot = 4; // 발사 시 소비 탄약 수
     public WeaponType weaponType = WeaponType.Shotgun;
     
     // 무기 발사
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isReloading || currentAmmo < ammoPerShot) return;
+        if (isReloading || currentAmmo < useAmmo) return;
         if (!CanAttack()) return; // 공격 속도 체크
         
         float angleStep = spreadAngle / (pelletCount - 1);
@@ -30,11 +29,17 @@ public class BarrelWeapon : BaseWeapon
         
             // PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
             GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", spawnPos, spreadRotation);
+            
+            // gunController._isBigBullet = true;
+            // gunController._isExplosiveBullet= true;
+            bulletObj.GetComponent<PhotonView>()?.RPC( "RPC_SetBulletType", RpcTarget.AllViaServer, gunController._isBigBullet, gunController._isExplosiveBullet );
+        
             PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
             if (bulletView != null)
             {
-                Vector3 direction = spreadRotation * Vector3.up;
-                bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
+                // Vector3 direction = spreadRotation * Vector3.up;
+                bulletView.RPC("InitBullet", RpcTarget.All, CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed, fireTime);
+                // bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, fireTime);
             }
             // if (bulletObj.TryGetComponent(out Bullet bullet))
             // {
@@ -43,11 +48,11 @@ public class BarrelWeapon : BaseWeapon
             // }
         }
         
-        currentAmmo -= ammoPerShot;
+        currentAmmo -= useAmmo;
         lastAttackTime = Time.time;
         UpdateAmmoUI();
         
-        if (currentAmmo < ammoPerShot)
+        if (currentAmmo < useAmmo)
         {
             ReloadSpeedFromAnimator();
             StartAutoReload();

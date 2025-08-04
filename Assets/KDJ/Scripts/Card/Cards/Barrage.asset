@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e466fad337d5e04ab401b77d18b3624, type: 3}
+  m_Name: Barrage
+  m_EditorClassIdentifier: 
+  CardName: BARRAGE
+  CardDescription: 'Fire many bullets at the same time
+
+    <color=green>+4</color>
+    Bullets
+
+    <color=green>+5</color> Ammo
+
+    <color=red>-70%</color> Damage
+
+    <color=red>+0.25s</color>
+    ReloadTime'
+  CardImage: {fileID: 0}
+  BulletSpeedMultiplier: 0
+  DamageMultiplier: 0.3
+  ReloadTimeMultiplier: 0
+  ReloadTimeAddition: 0.25
+  AttackSpeedMultiplier: 0
+  AmmoIncrease: 5
+  AmmoConsumption: 4
+  WeaponIndex: 3

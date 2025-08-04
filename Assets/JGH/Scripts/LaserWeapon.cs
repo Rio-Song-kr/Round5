@@ -8,7 +8,7 @@ public class LaserWeapon : BaseWeapon
 
     private GameObject currentLaserInstance;
     private Laser currentLaser;
-
+    
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
    
@@ -16,8 +16,8 @@ public class LaserWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isFiring || isReloading || currentAmmo < 2) return;
-        currentAmmo -= 2;
+        if (isFiring || isReloading || currentAmmo < useAmmo) return;
+        currentAmmo -= useAmmo;
         
         photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
@@ -32,9 +32,6 @@ public class LaserWeapon : BaseWeapon
         
 
         ammoDisplay.reloadIndicator.SetActive(false);
-
-        // 0.1초 대기 - 위치 어긋남 방지
-        // yield return new WaitForSeconds(0.1f);
 
         if (currentLaserInstance != null)
         {
@@ -87,9 +84,11 @@ public class LaserWeapon : BaseWeapon
 
         yield return null;
         ReloadSpeedFromAnimator();
-        yield return new WaitForSeconds(reloadTime);
+        // yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
 
-        currentAmmo = maxAmmo;
+        // currentAmmo = maxAmmo;
+        currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
         UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
