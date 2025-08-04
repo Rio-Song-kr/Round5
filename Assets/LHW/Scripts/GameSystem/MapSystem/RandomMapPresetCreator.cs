@@ -1,4 +1,3 @@
-using Cinemachine;
 using Photon.Pun;
 using UnityEngine;
 
@@ -55,8 +54,9 @@ public class RandomMapPresetCreator : MonoBehaviour
             map.transform.SetParent(mapListTransform[round]);
 
             PhotonView mapView = map.GetComponent<PhotonView>();
-            mapView.RPC("SetParentToRound", RpcTarget.OthersBuffered, round);
+            mapView.RPC("SetParentToRound", RpcTarget.OthersBuffered, round);            
         }
+        MapUpdate(TestIngameManager.Instance.CurrentGameRound);
     }
 
     public Transform GetRoundTransform(int round)
@@ -67,7 +67,17 @@ public class RandomMapPresetCreator : MonoBehaviour
     public void MapUpdate(int round)
     {
         if (TestIngameManager.Instance.IsGameOver) return;
-        mapListTransform[round - 1].gameObject.SetActive(false);
-        mapListTransform[round].gameObject.SetActive(true);
+        for(int i =0; i < mapListTransform.Length; i++)
+        {
+            PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
+            if(round == i)
+            {
+                MapView.RPC("RoundActivate", RpcTarget.AllBuffered, true);
+            }
+            else
+            {
+                MapView.RPC("RoundActivate", RpcTarget.AllBuffered, false);
+            }
+        }
     }
 }
