@@ -13,6 +13,6 @@ public class TestManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("방에 참가하셨습니다.");
-        PhotonNetwork.Instantiate("TestPlayer", new Vector2(Random.Range(-8f, 0), Random.Range(-4f, 4f)), Quaternion.identity);
+        Instantiate(_PlayerPrefab, new Vector2(Random.Range(-8f, 0), Random.Range(-4f, 4f)), Quaternion.identity);
     }
 }
