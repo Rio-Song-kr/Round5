@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Photon.Pun;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 라운드 종료시 두 플레이어의 점수를 표시하고, 애니메이션 효과를 주는 스크립트
 /// </summary>
-public class RoundOverPanelController : MonoBehaviour
+public class RoundOverPanelController : MonoBehaviourPun
 {
     [Header("Reference")]
     [SerializeField] private IngameUIManager gameUIManager;
@@ -49,10 +50,15 @@ public class RoundOverPanelController : MonoBehaviour
 
     Coroutine sceneChangeCoroutine;
 
+    private void Awake()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void OnEnable()
     {
         Init();
-    }
+    }   
 
     private void Init()
     {
@@ -214,5 +220,11 @@ public class RoundOverPanelController : MonoBehaviour
             sceneChangePanel.transform.position = sceneChangeInitTransform.position;
         }
         sceneChangeCoroutine = null;
+    }
+
+    [PunRPC]
+    public void RoundOverPanelActivate(bool activation)
+    {
+        gameObject.SetActive(activation);
     }
 }

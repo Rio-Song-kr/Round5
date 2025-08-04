@@ -54,7 +54,7 @@ public class RandomMapPresetCreator : MonoBehaviour
             map.transform.SetParent(mapListTransform[round]);
 
             PhotonView mapView = map.GetComponent<PhotonView>();
-            mapView.RPC("SetParentToRound", RpcTarget.OthersBuffered, round);            
+            mapView.RPC(nameof(MapDynamicMovement.SetParentToRound), RpcTarget.OthersBuffered, round);
         }
         MapUpdate(TestIngameManager.Instance.CurrentGameRound);
     }
@@ -72,11 +72,11 @@ public class RandomMapPresetCreator : MonoBehaviour
             PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
             if(round == i)
             {
-                MapView.RPC("RoundActivate", RpcTarget.AllBuffered, true);
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, true);
             }
             else
             {
-                MapView.RPC("RoundActivate", RpcTarget.AllBuffered, false);
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, false);
             }
         }
     }

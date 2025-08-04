@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -70,10 +71,14 @@ public class IngameUIManager : MonoBehaviour
     IEnumerator RoundOverPanelCoroutine()
     {
         WaitForSeconds delay = new WaitForSeconds(roundOverPanelDuration);
-        roundOverPanel.SetActive(true);
+        //roundOverPanel.SetActive(true);
+        PhotonView roundOverPanelView = roundOverPanel.GetComponent<PhotonView>();
+        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.AllBuffered, true);
 
         yield return delay;
-        HideRoundOverPanel();
+        //HideRoundOverPanel();
+        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.AllBuffered, false);
+
         TestIngameManager.Instance.RoundStart();
         if (TestIngameManager.Instance.IsGameSetOver)
         {

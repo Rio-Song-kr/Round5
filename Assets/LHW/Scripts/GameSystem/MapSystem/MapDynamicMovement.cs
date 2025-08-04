@@ -38,7 +38,7 @@ public class MapDynamicMovement : MonoBehaviourPun, IPunObservable
     public void DynamicMove()
     {
         Debug.Log("ddd");
-        photonView.RPC("RPC_DynamicMove", RpcTarget.All);
+        photonView.RPC(nameof(RPC_DynamicMove), RpcTarget.All);
     }
 
     [PunRPC]
