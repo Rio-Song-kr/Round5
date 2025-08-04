@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: kr
+    FixedRegion: 
     Server: 
     Port: 0
     ProxyServer: 
@@ -64,8 +64,22 @@ MonoBehaviour:
   - EndEffect
   - InitializeComponent
   - StartEffect
-
+  - 
   - ApplyFreeze
+  - OnEmergencyReset
+  - OnForceJump
+  - OnHookAttached
+  - OnHookDetached
+  - OnHookEffect
+  - OnJumpStateChanged
+  - OnNormalJump
+  - OnSetPosition
+  - OnSpriteFlip
+  - OnStatusEffectApplied
+  - OnStatusEffectRemoved
+  - OnVisualEffectChanged
+  - OnWallJump
+  - OnWallStateChanged
   - RemoveFreeze
   - ReturnToPool
   - RPC_SetBulletType
@@ -73,7 +87,6 @@ MonoBehaviour:
   - SetPoolRPC
   - Shoot
   - SyncTargetPosition
-
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
-  DevRegionSetOnce: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0
