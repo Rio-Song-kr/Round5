@@ -36,7 +36,7 @@ public class CharacterShrinkEffect : MonoBehaviourPun
         seq.Append(characterTransform.DOScale(shrinkScale, 1f).SetEase(shrinkCurve));
 
         // 커브GrowFast로 0.2초간 복원
-        seq.Append(characterTransform.DOScale(originalScale, 0.2f).SetEase(growCurve));
+        seq.Append(characterTransform.DOScale(originalScale, 0.4f).SetEase(growCurve));
     }
 
     public void RequestShrinkEffect()

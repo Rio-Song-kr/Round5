@@ -9,6 +9,11 @@ public class CardSelectByHandManager : MonoBehaviourPun
     
    
     private int selectedIndex = -1;
+    private void Start()
+    {
+        // CardSelectManager에서 ArmController 가져오기
+        armController = FindObjectOfType<CardSelectManager>()?.GetArmController();
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.D))
