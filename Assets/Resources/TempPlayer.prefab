@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 8826141450744042093}
   - component: {fileID: 6527654916710172329}
   - component: {fileID: 5958319763988689920}
+  - component: {fileID: -6967930792878188186}
   m_Layer: 8
   m_Name: TempPlayer
   m_TagString: Untagged
@@ -295,3 +296,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ropeReleaseJumpBonus: 1.5
   ropeMovementMultiplier: 0.3
+--- !u!114 &-6967930792878188186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285512379662976336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2237cb81f0080e340b7ea15e2159018e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _leftArmSpline: {fileID: 4070293965878477884, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
+  _rightArmSpline: {fileID: 5445313185686569237, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
+  _gunPos: {fileID: 9158709318525055923, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
+  _gunAxis: {fileID: 1444281678518477746, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}

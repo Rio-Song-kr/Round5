@@ -1126,7 +1126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c29a66fc0b5a240a3992c3b67cfd5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 7030079410466946597, guid: 99aecaddd73bfbf4ea7f85eecf501510, type: 3}
+  _playerPrefab: {fileID: 3950458515790658121, guid: 445841f86250d4163b1d226f66a69f07, type: 3}
   _laserPrefab: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
   _camera: {fileID: 1156368901}
   _pools: {fileID: 545955793}
@@ -1673,6 +1673,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 102
       objectReference: {fileID: 0}
+    - target: {fileID: -7978547384211317408, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 38147764731381791, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 97
@@ -1717,6 +1721,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 96
       objectReference: {fileID: 0}
+    - target: {fileID: 1036697574720675066, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 106
+      objectReference: {fileID: 0}
     - target: {fileID: 1070510192667710494, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -4.207
@@ -1724,6 +1732,10 @@ PrefabInstance:
     - target: {fileID: 1070510192667710494, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.y
       value: -2.154
+      objectReference: {fileID: 0}
+    - target: {fileID: 1108667319340133216, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 105
       objectReference: {fileID: 0}
     - target: {fileID: 1122035096961710192, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -1764,6 +1776,10 @@ PrefabInstance:
     - target: {fileID: 1836332942654989360, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844260292129432819, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 104
       objectReference: {fileID: 0}
     - target: {fileID: 1914276215222423274, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.y
@@ -1876,6 +1892,10 @@ PrefabInstance:
     - target: {fileID: 2812301498712850461, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847974678563169540, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 107
       objectReference: {fileID: 0}
     - target: {fileID: 3019013510829851186, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -2183,7 +2203,7 @@ PrefabInstance:
       objectReference: {fileID: 999978788}
     - target: {fileID: 5974642699538512515, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_VersionIndex
-      value: 66
+      value: 69
       objectReference: {fileID: 0}
     - target: {fileID: 6000479747595124116, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -2259,7 +2279,7 @@ PrefabInstance:
       objectReference: {fileID: 192918697}
     - target: {fileID: 6650399592654345446, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_VersionIndex
-      value: 66
+      value: 69
       objectReference: {fileID: 0}
     - target: {fileID: 6685979260666799551, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
