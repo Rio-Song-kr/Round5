@@ -54,7 +54,7 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
         _pools.InitializePool("VFX_Smoke", VfxSmokePrefab, 2, 5);
     }
 
-    public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
+    public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
         SkillPoisition = skillPosition;
 

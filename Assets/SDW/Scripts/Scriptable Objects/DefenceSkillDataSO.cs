@@ -27,5 +27,5 @@ public abstract class DefenceSkillDataSO : ScriptableObject
     /// </summary>
     /// <param name="skillPosition">스킬 위치</param>
     /// <param name="playerTransform">Skill Effect의 부모 오브젝트인 플레이어</param>
-    public abstract void Activate(Vector3 skillPosition, Transform playerTransform = null);
+    public abstract void Activate(Vector3 skillPosition, Transform playerTransform);
 }

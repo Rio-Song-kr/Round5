@@ -39,7 +39,7 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
         _pools.InitializePool("VFX_Arc", VfxArcPrefab, 30, 70);
     }
 
-    public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
+    public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
         SkillPosition = skillPosition;
 

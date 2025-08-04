@@ -41,7 +41,7 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
         _pools.InitializePool(ShieldPrefab.name, ShieldPrefab, 2, 5);
     }
 
-    public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
+    public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
         var skillEffectObject = PhotonNetwork.Instantiate(SkillEffectPrefab.name, skillPosition, Quaternion.identity);
 
