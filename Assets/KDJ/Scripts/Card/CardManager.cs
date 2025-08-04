@@ -38,6 +38,8 @@ public class CardManager : MonoBehaviour
         float AttackSpeedMultiplier = 1;
         float ReloadTimeAdditionSum = 0;
         int AmmoIncreaseSum = 0;
+        int AmmoConsumptionSum = 0;
+        int count = 0;
 
         if (_cards == null || _cards.Count == 0)
         {
@@ -46,17 +48,20 @@ public class CardManager : MonoBehaviour
 
         foreach (var card in _cards)
         {
+            count++;
             if (card is AttackCard attackCard)
             {
                 // 공격 카드의 능력치 적용
-                BulletSpeedMultiplierSum *= attackCard.BulletSpeedMultiplier;
-                DamageMultiplierSum *= attackCard.DamageMultiplier;
-                ReloadTimeMultiplierSum *= attackCard.ReloadTimeMultiplier;
-                BulletSpeedMultiplier *= attackCard.BulletSpeedMultiplier;
-                AttackSpeedMultiplier *= attackCard.AttackSpeedMultiplier;
+                BulletSpeedMultiplierSum *= attackCard.BulletSpeedMultiplier != 0 ? attackCard.BulletSpeedMultiplier : 1;
+                DamageMultiplierSum *= attackCard.DamageMultiplier != 0 ? attackCard.DamageMultiplier : 1;
+                ReloadTimeMultiplierSum *= attackCard.ReloadTimeMultiplier != 0 ? attackCard.ReloadTimeMultiplier : 1;
+                BulletSpeedMultiplier *= attackCard.BulletSpeedMultiplier != 0 ? attackCard.BulletSpeedMultiplier : 1;
+                AttackSpeedMultiplier *= attackCard.AttackSpeedMultiplier != 0 ? attackCard.AttackSpeedMultiplier : 1;
                 ReloadTimeAdditionSum += attackCard.ReloadTimeAddition;
                 AmmoIncreaseSum += attackCard.AmmoIncrease;
+                AmmoConsumptionSum += attackCard.AmmoConsumption;
             }
+            Debug.Log($"{count}회차 연산 결과 - BulletSpeedMultiplierSum: {BulletSpeedMultiplierSum}, DamageMultiplierSum: {DamageMultiplierSum}, ReloadTimeMultiplierSum: {ReloadTimeMultiplierSum}, BulletSpeedMultiplier: {BulletSpeedMultiplier}, AttackSpeedMultiplier: {AttackSpeedMultiplier}, ReloadTimeAdditionSum: {ReloadTimeAdditionSum}, AmmoIncreaseSum: {AmmoIncreaseSum}, AmmoConsumptionSum: {AmmoConsumptionSum}");
         }
 
         PlayerStatusDataSO playerStats = ScriptableObject.CreateInstance<PlayerStatusDataSO>();
@@ -65,6 +70,7 @@ public class CardManager : MonoBehaviour
         playerStats.DefaultAttackSpeed = _pStatus.DefaultAttackSpeed * (AttackSpeedMultiplier != 0 ? AttackSpeedMultiplier : 1);
         playerStats.DefaultBulletSpeed = _pStatus.DefaultBulletSpeed * (BulletSpeedMultiplierSum != 0 ? BulletSpeedMultiplierSum : 1);
         playerStats.DefaultAmmo = _pStatus.DefaultAmmo + AmmoIncreaseSum;
+        playerStats.AmmoConsumption = _pStatus.AmmoConsumption + AmmoConsumptionSum;
 
         return playerStats;
     }
@@ -115,6 +121,14 @@ public class CardManager : MonoBehaviour
         {
             _cards.Add(card);
         }
+    }
+
+    /// <summary>
+    /// 카드 리스트를 비웁니다.
+    /// </summary>
+    public void ClearLists()
+    {
+        _cards.Clear();
     }
 
     /// <summary>

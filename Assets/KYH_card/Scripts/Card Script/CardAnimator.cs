@@ -15,7 +15,7 @@ public class CardAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private float timer = 0f;
 
     private bool isHovered = false;
-    private bool isPlaying = false;
+    private bool isPlaying = true;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -31,7 +31,7 @@ public class CardAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         isHovered = false;
         stage = 0;
         timer = 0f;
-        isPlaying = false;
+        isPlaying = true;
 
         if (clips != null && clips.Length > 0)
             card.sprite = clips[0]; // 초기 프레임으로 복원

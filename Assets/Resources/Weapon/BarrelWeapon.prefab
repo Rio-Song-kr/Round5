@@ -49,22 +49,14 @@ MonoBehaviour:
   laserPrefab: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
   fragmentPrefab: {fileID: 2555893828798284621, guid: e576444c17967495385a31832d112356, type: 3}
   explosivePrefab: {fileID: 2555893828798284621, guid: a9a46c890467040abba6f181bfe29654, type: 3}
-  maxAmmo: 8
   currentAmmo: 8
-  reloadTime: 3.25
-  isBigBullet: 0
-  isExplosiveBullet: 0
+  useAmmo: 4
   animator: {fileID: 0}
   isReloading: 0
-  idleReloadDelay: 3
   ammoDisplay: {fileID: 0}
-  bulletSpeed: 10
-  attackDamage: 5
-  attackSpeed: 0
   lastAttackTime: 0
   pelletCount: 5
   spreadAngle: 30
-  ammoPerShot: 4
   weaponType: 2
 --- !u!114 &4294100252120459521
 MonoBehaviour:

@@ -28,7 +28,7 @@ public class BulletWeapon : BaseWeapon
         if (bulletView != null)
         {
             // bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, PhotonNetwork.Time);
-            bulletView.RPC("InitBullet", RpcTarget.All, playerStatusDataSO.DefaultBulletSpeed, PhotonNetwork.Time);
+            bulletView.RPC("InitBullet", RpcTarget.All, CardManager.Instance.GetCaculateCardStats().DefaultBulletSpeed, PhotonNetwork.Time);
         }
         
         // if (photonView.IsMine)

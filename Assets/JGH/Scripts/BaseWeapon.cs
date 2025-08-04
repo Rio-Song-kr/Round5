@@ -41,11 +41,10 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     private Quaternion _networkRotation;
     
     protected PoolManager _poolManager;
-    [SerializeField] public PlayerStatusDataSO playerStatusDataSO;
+    // protected CardManager cardManager;
 
     protected virtual void Start()
     {
-        // ammoDisplay = FindObjectOfType<AmmoDisplay>();
         _poolManager = FindFirstObjectByType<PoolManager>();
         
         _poolManager.InitializePool("Bullet", bulletPrefab, 1, 1);
@@ -55,6 +54,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         
         
         gunController = GetComponentInParent<GunControll>();
+        // cardManager = FindFirstObjectByType<CardManager>();
         Initialize();
         StartCoroutine(DelayedReloadSpeed()); // 1프레임 후 clip 길이 확인
     }
@@ -66,7 +66,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected bool CanAttack()
     {
         // return Time.time - lastAttackTime >= 1f / attackSpeed;
-        return Time.time - lastAttackTime >= 1f / playerStatusDataSO.DefaultAttackSpeed;
+        // return Time.time - lastAttackTime >= 1f / playerStatusDataSO.DefaultAttackSpeed;
+        return Time.time - lastAttackTime >= CardManager.Instance.GetCaculateCardStats().DefaultAttackSpeed;
     }
 
     public override void OnEnable()
@@ -97,7 +98,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected void ReloadSpeedFromAnimator()
     {
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
-        float speed = 2f / playerStatusDataSO.DefaultReloadSpeed / 2; // 애니메이션 속도 계산
+        float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
         
         photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
     }
@@ -108,7 +109,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         if (animator != null)
         {
             animator.speed = speed;
-            Debug.Log($"[RPC_SetAnimatorSpeed] 애니메이터 속도 설정: {speed}");
+            // Debug.Log($"[RPC_SetAnimatorSpeed] 애니메이터 속도 설정: {speed}");
         }
     }
 
@@ -148,14 +149,14 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
         // 리로드 시간 후 자동 완료 호출
         // Invoke(nameof(FinishReload), reloadTime);
-        Invoke(nameof(FinishReload), playerStatusDataSO.DefaultReloadSpeed);
+        Invoke(nameof(FinishReload), CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
     }
 
     [PunRPC]
     protected void RPC_FinishReload()
     {
         // currentAmmo = maxAmmo;
-        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
+        currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
         isReloading = false;
         UpdateAmmoUI();
         ammoDisplay?.SetReloading(false);
@@ -177,12 +178,12 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
             yield return new WaitForSeconds(0.1f);
             // if (!isReloading && currentAmmo < maxAmmo && Time.time - lastAttackTime >= idleReloadDelay)
             // if (!isReloading && currentAmmo < playerStatusDataSO.DefaultAmmo && Time.time - lastAttackTime >= idleReloadDelay)
-            if (!isReloading && currentAmmo < playerStatusDataSO.DefaultAmmo && Time.time - lastAttackTime >= playerStatusDataSO.DefaultReloadSpeed)
+            if (!isReloading && currentAmmo < CardManager.Instance.GetCaculateCardStats().DefaultAmmo && Time.time - lastAttackTime >= CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed)
             {
-                currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
+                currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
                 // currentAmmo = maxAmmo;
                 isReloading = false;
-                ammoDisplay?.UpdateAmmoIcons((int)currentAmmo, (int)playerStatusDataSO.DefaultAmmo);
+                ammoDisplay?.UpdateAmmoIcons((int)currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
                 // ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
                 lastAttackTime = Time.time;
             }
@@ -192,13 +193,13 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected void UpdateAmmoUI()
     {
         // ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
-        ammoDisplay?.UpdateAmmoIcons(currentAmmo, (int)playerStatusDataSO.DefaultAmmo);
+        ammoDisplay?.UpdateAmmoIcons(currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
     }
     
     public virtual void Initialize()
     {
         // currentAmmo = maxAmmo;
-        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
+        currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
         isReloading = false;
         UpdateAmmoUI();
         NowIdleCheck();

@@ -1,22 +1,32 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class CardSelectByHandManager : MonoBehaviour
+public class CardSelectByHandManager : MonoBehaviourPun
 {
     [SerializeField] GameObject[] cards;
     [SerializeField] CardSceneArmController armController;
     
+    
    
     private int selectedIndex = -1;
+    private void Start()
+    {
+        // CardSelectManager에서 ArmController 가져오기
+        armController = FindObjectOfType<CardSelectManager>()?.GetArmController();
+    }
     private void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.D))
         {
             SelectRightCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<FlipCard>().RPC_Flip();
-                armController.SelectCard(selectedIndex);
+                Debug.Log("������");
+                cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
+
+                // RPC�� �� ������ ���� ����
+                photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
+
                 CardAnimaitonPlay();
             }
         }
@@ -25,14 +35,24 @@ public class CardSelectByHandManager : MonoBehaviour
             SelectLeftCard();
             if (selectedIndex >= 0 && selectedIndex < cards.Length)
             {
-                cards[selectedIndex].GetComponent<FlipCard>().RPC_Flip();
-                armController.SelectCard(selectedIndex);
+                Debug.Log("������");
+                cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
+
+                photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
+
                 if (cards[selectedIndex].GetComponent<FlipCard>().IsFlipped)
                 {
                     CardAnimaitonPlay();
                 }
             }
         }
+    }
+
+    // �� ����ȭ�� ���� RPC
+    [PunRPC]
+    void RPC_SelectCardArm(int cardIndex)
+    {
+        armController.SelectCard(cardIndex);
     }
 
     private void SelectRightCard()
@@ -64,5 +84,5 @@ public class CardSelectByHandManager : MonoBehaviour
             }
         }
     }
-   
+    
 }

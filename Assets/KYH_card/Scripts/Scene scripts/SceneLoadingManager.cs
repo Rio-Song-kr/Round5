@@ -1,11 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 /// <summary>
 /// 비동기 로딩 진행하는 매니저 스크립트
 /// </summary>
-public class SceneLoadingManager : MonoBehaviour
+public class SceneLoadingManager : MonoBehaviourPunCallbacks
 {
     public static SceneLoadingManager Instance;
 
@@ -57,6 +58,7 @@ public class SceneLoadingManager : MonoBehaviour
         /// }
 
         currentOperation = SceneManager.LoadSceneAsync(sceneName);
+
         currentOperation.allowSceneActivation = false;
 
         while (currentOperation.progress < 0.9f)

@@ -7,7 +7,8 @@ using UnityEngine;
 public class CardSelectCheckManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject cardSelectPanelPrefabs;
-    [SerializeField] private Transform cardSelectPanelContent;
+    [SerializeField] private Transform cardSelectPanelContent1;
+    [SerializeField] private Transform cardSelectPanelContent2;
 
     public Dictionary<int, CardSelectPanelItem> cardSelectPanels = new Dictionary<int, CardSelectPanelItem>();
 
@@ -28,9 +29,9 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.AutomaticallySyncScene = true;
         GameObject obj = Instantiate(cardSelectPanelPrefabs);
-        obj.transform.SetParent(cardSelectPanelContent);
+        obj.transform.SetParent(cardSelectPanelContent1);
         CardSelectPanelItem Panel = obj.GetComponent<CardSelectPanelItem>();
-        // ÃÊ±âÈ­
+        // ï¿½Ê±ï¿½È­
         Panel.Init(player);
         cardSelectPanels.Add(player.ActorNumber, Panel);
 
@@ -40,13 +41,13 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        // ³»°¡ »õ·Î ÀÔÀå ÇßÀ» ‹š È£Ãâ
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             GameObject obj = Instantiate(cardSelectPanelPrefabs);
-            obj.transform.SetParent(cardSelectPanelContent);
+            obj.transform.SetParent(cardSelectPanelContent1);
             CardSelectPanelItem Panel = obj.GetComponent<CardSelectPanelItem>();
-            // ÃÊ±âÈ­
+            // ï¿½Ê±ï¿½È­
             Panel.Init(player);
             cardSelectPanels.Add(player.ActorNumber, Panel);
         }
@@ -59,13 +60,13 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
     {
         foreach (Player player in PhotonNetwork.PlayerList)
         {
-            // ¼±ÅÃÇÏÁö ¾ÊÀº ÇÃ·¹ÀÌ¾î ¹ß°ß
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ß°ï¿½
             if (!player.CustomProperties.TryGetValue("Select", out object value) || !(bool)value)
             {
                 Player other = PhotonNetwork.PlayerList
                 .FirstOrDefault(p => p != PhotonNetwork.LocalPlayer);
 
-                Debug.Log($"¾ÆÁ÷ ¼±ÅÃ ¾È ÇÑ ÇÃ·¹ÀÌ¾î: {other.NickName}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½: {other.NickName}");
 
 
                 return false;
@@ -75,18 +76,6 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
         return true;
     }
 
-    // public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable propertiesThatChanged)
-    // {
-    //     base.OnPlayerPropertiesUpdate(target, propertiesThatChanged);
-    //
-    //     if (propertiesThatChanged.ContainsKey("Select"))
-    //     {
-    //         if (AllPlayerCardSelectCheck() == true)
-    //         {
-    //             Debug.Log(" ¸ðµç ÇÃ·¹ÀÌ¾î Ä«µå ¼±ÅÃ ¿Ï·á ¡æ Game Scene ·Îµå");
-    //             PhotonNetwork.LoadLevel("Game Scene");
-    //         }
-    //     }
-    // }
+   
 }
 

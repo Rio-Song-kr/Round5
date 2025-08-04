@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: kr
+    FixedRegion: 
     Server: 
     Port: 0
     ProxyServer: 
@@ -59,12 +59,49 @@ MonoBehaviour:
   - SpawnRandomCards1
   - UseActiveSkills
   - UsePassiveSkills
+  - RPC_FlipCardByIndex
+  - RPC_SpawnCardsWithIndexes
+  - RPC_SyncClientCanvas
+  - RPC_PlayCardSelectionAnimation
   - InitBullet
+  - ApplyFreeze
+  - DisableShieldEffect
+  - EndEffect
+  - InitializeComponent
+  - OnTriggerEnter2D
+  - RemoveFreeze
+  - ReturnToPool
+  - SetFillAmount
+  - SetPoolRPC
+  - Shoot
+  - StartEffect
+  - SyncTargetPosition
+  - RPC_MoveLeftArm
+  - RPC_MoveRightArm
+  - RPC_SelectCardArm
+  - RPC_PlayShrinkAnimation
+  - RPC_HighlightCardByIndex
+  - RPC_UnhighlightCardByIndex
   - DisableShieldEffect
   - EndEffect
   - InitializeComponent
   - StartEffect
+  - 
   - ApplyFreeze
+  - OnEmergencyReset
+  - OnForceJump
+  - OnHookAttached
+  - OnHookDetached
+  - OnHookEffect
+  - OnJumpStateChanged
+  - OnNormalJump
+  - OnSetPosition
+  - OnSpriteFlip
+  - OnStatusEffectApplied
+  - OnStatusEffectRemoved
+  - OnVisualEffectChanged
+  - OnWallJump
+  - OnWallStateChanged
   - RemoveFreeze
   - ReturnToPool
   - RPC_SetBulletType
@@ -73,5 +110,5 @@ MonoBehaviour:
   - Shoot
   - SyncTargetPosition
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
-  DevRegionSetOnce: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0

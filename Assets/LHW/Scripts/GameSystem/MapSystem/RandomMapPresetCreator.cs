@@ -1,5 +1,5 @@
-using UnityEngine;
 using Photon.Pun;
+using UnityEngine;
 
 public class RandomMapPresetCreator : MonoBehaviour
 {
@@ -17,12 +17,15 @@ public class RandomMapPresetCreator : MonoBehaviour
 
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
-    private void Awake()
+    private void OnEnable()
     {
-        for (int i = 0; i < mapListTransform.Length; i++)
+        if (PhotonNetwork.IsMasterClient)
         {
-            RandomInit();
-            RandomMapSelect(i);
+            for (int i = 0; i < mapListTransform.Length; i++)
+            {
+                RandomInit();
+                RandomMapSelect(i);
+            }
         }
     }
 
@@ -31,7 +34,7 @@ public class RandomMapPresetCreator : MonoBehaviour
     /// </summary>
     private void RandomInit()
     {
-        for(int i = 0; i < mapResources.Length; i++)
+        for (int i = 0; i < mapResources.Length; i++)
         {
             mapWeightedRandom.Add(mapResources[i], 1);
         }
@@ -42,20 +45,39 @@ public class RandomMapPresetCreator : MonoBehaviour
     /// </summary>
     private void RandomMapSelect(int round)
     {
-        for(int i = 0; i < gameCycleNum; i++)
+        for (int i = 0; i < gameCycleNum; i++)
         {
             GameObject selectedMap = mapWeightedRandom.GetRandomItemBySub();
             Vector3 selectedMapPosition = new Vector3((i + 1) * mapTransformOffset, 0, 5);
-            //GameObject map =  PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
-            GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
+            GameObject map = PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
+            //GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
             map.transform.SetParent(mapListTransform[round]);
+
+            PhotonView mapView = map.GetComponent<PhotonView>();
+            mapView.RPC(nameof(MapDynamicMovement.SetParentToRound), RpcTarget.OthersBuffered, round);
         }
+        MapUpdate(TestIngameManager.Instance.CurrentGameRound);
+    }
+
+    public Transform GetRoundTransform(int round)
+    {
+        return mapListTransform[round];
     }
 
     public void MapUpdate(int round)
     {
         if (TestIngameManager.Instance.IsGameOver) return;
-        mapListTransform[round - 1].gameObject.SetActive(false);
-        mapListTransform[round].gameObject.SetActive(true);
+        for(int i =0; i < mapListTransform.Length; i++)
+        {
+            PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
+            if(round == i)
+            {
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, true);
+            }
+            else
+            {
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, false);
+            }
+        }
     }
 }

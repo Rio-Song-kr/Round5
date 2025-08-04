@@ -4,5 +4,9 @@ using UnityEngine;
 
 public abstract class CardEffect : MonoBehaviour
 {
-    public abstract void ApplyEffect(GameObject player);
+    public string cardName;
+    public string description;
+    public abstract void ApplyShotEffect(PlayerStats playerStats);
+
+    public abstract void ApplyStatusEffect(PlayerStats playerStats);
 }
