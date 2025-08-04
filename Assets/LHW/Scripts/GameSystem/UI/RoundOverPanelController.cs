@@ -29,7 +29,6 @@ public class RoundOverPanelController : MonoBehaviourPun
     [SerializeField] private Transform[] leftImageWinSpot;
     [SerializeField] private Transform[] rightImageWinSpot;
     [SerializeField] private Transform losePosition;
-    [SerializeField] private Transform sceneChangeInitTransform;
 
     [Header("Offset")]
     [Tooltip("매 라운드마다 나타난 승리 횟수 이미지가 줄어드는 데 걸리는 시간")]
@@ -48,7 +47,7 @@ public class RoundOverPanelController : MonoBehaviourPun
     string leftTextColor = "#FF8400";
     string rightTextColor = "#009EFF";
 
-    Coroutine sceneChangeCoroutine;
+
 
     private void Awake()
     {
@@ -134,16 +133,10 @@ public class RoundOverPanelController : MonoBehaviourPun
         if (right == 0) rightFillImage.fillAmount = 0;
         else rightFillImage.fillAmount = (float)right / 2;
 
-        if (left == 2)
+        if (left == 2 || right == 2)
         {
-            AddScoreAnimation(leftImage);
-            SceneChange();
-            return;
-        }
-        else if (right == 2)
-        {
-            AddScoreAnimation(leftImage);
-            SceneChange();
+            AddScoreAnimation();
+            RoundChange();
             return;
         }
 
@@ -155,7 +148,7 @@ public class RoundOverPanelController : MonoBehaviourPun
     /// 한 라운드의 최종 승리자가 결정되었을 경우 애니메이션 효과를 줌
     /// </summary>
     /// <param name="winnerImage"></param>
-    private void AddScoreAnimation(Image winnerImage)
+    private void AddScoreAnimation()
     {
         string currentWinner = TestIngameManager.Instance.ReadRoundScore(out int leftScore, out int rightScore);
         if (currentWinner == "Left")
@@ -204,22 +197,10 @@ public class RoundOverPanelController : MonoBehaviourPun
         }
     }
 
-    private void SceneChange()
+    private void RoundChange()
     {
-        sceneChangeCoroutine = StartCoroutine(SceneChangeCoroutine());
-    }
-
-    IEnumerator SceneChangeCoroutine()
-    {
-        WaitForSeconds delay = new WaitForSeconds(3f);
-
-        sceneChangePanel.transform.DOMove(transform.position, 1f).SetDelay(1f);
-        yield return delay;
-        if (!TestIngameManager.Instance.IsGameOver)
-        {
-            sceneChangePanel.transform.position = sceneChangeInitTransform.position;
-        }
-        sceneChangeCoroutine = null;
+        PhotonView sceneChangeView = sceneChangePanel.GetComponent<PhotonView>();
+        sceneChangeView.RPC(nameof(SceneChangePanelController.RoundChange), RpcTarget.AllBuffered);
     }
 
     [PunRPC]

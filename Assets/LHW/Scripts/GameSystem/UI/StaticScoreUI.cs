@@ -84,7 +84,7 @@ public class StaticScoreUI : MonoBehaviour
         {
             PhotonView leftImgView = leftWinImages[leftWinNum-1].GetComponent<PhotonView>();
             leftImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
-            //leftWinImages[leftWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
+            
             if (rightRoundNum == 1 && rightWinImages[rightWinNum].activeSelf)
             {
                 PhotonView rightImgView = rightWinImages[rightWinNum].GetComponent<PhotonView>();
@@ -95,7 +95,7 @@ public class StaticScoreUI : MonoBehaviour
         {
             PhotonView rightImgView = rightWinImages[rightWinNum-1].GetComponent<PhotonView>();
             rightImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
-            //rightWinImages[rightWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
+            
             if (leftRoundNum == 1 && leftWinImages[leftWinNum].activeSelf)
             {
                 PhotonView leftImgView = leftWinImages[leftWinNum].GetComponent<PhotonView>();
