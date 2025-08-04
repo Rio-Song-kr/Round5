@@ -16,8 +16,8 @@ public class LaserWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isFiring || isReloading || currentAmmo < useAmmo) return;
-        currentAmmo -= useAmmo;
+        if (isFiring || isReloading || currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption) return;
+        currentAmmo -= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
         
         photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time, firingPoint.position, firingPoint.rotation);
     }

@@ -14,10 +14,10 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected GunControll gunController;
     
     [Header("탄환 정보")]
-    // public int maxAmmo; // 최대 탄약 수
+    public int maxAmmo; // 최대 탄약 수
     public int currentAmmo; // 남아 있는 탄약 수
     // public float reloadTime; // 재장전 애니메이션 및 동작에 걸리는 시간 (초)
-    public int useAmmo; // 공격 시 소모되는 탄약 수
+    // public int useAmmo; // 공격 시 소모되는 탄약 수
     
     [Header("재장전 관련")]
     [SerializeField] protected Animator animator; // 재장전 애니메이션용 애니메이터
@@ -42,11 +42,17 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     
     protected PoolManager _poolManager;
     // protected CardManager cardManager;
-
+    
+    
     protected virtual void Start()
     {
-        _poolManager = FindFirstObjectByType<PoolManager>();
+        if (photonView.IsMine)
+        {
+            maxAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
+        } 
         
+        _poolManager = FindFirstObjectByType<PoolManager>();
+
         _poolManager.InitializePool("Bullet", bulletPrefab, 1, 1);
         _poolManager.InitializePool("Fragment", fragmentPrefab, 1, 1);
         _poolManager.InitializePool("Laser", laserPrefab, 1, 1);
@@ -155,8 +161,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     [PunRPC]
     protected void RPC_FinishReload()
     {
-        // currentAmmo = maxAmmo;
-        currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
+        currentAmmo = maxAmmo;
+        // currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
         isReloading = false;
         UpdateAmmoUI();
         ammoDisplay?.SetReloading(false);
@@ -178,13 +184,14 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
             yield return new WaitForSeconds(0.1f);
             // if (!isReloading && currentAmmo < maxAmmo && Time.time - lastAttackTime >= idleReloadDelay)
             // if (!isReloading && currentAmmo < playerStatusDataSO.DefaultAmmo && Time.time - lastAttackTime >= idleReloadDelay)
-            if (!isReloading && currentAmmo < CardManager.Instance.GetCaculateCardStats().DefaultAmmo && Time.time - lastAttackTime >= CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed)
+            // if (!isReloading && currentAmmo < CardManager.Instance.GetCaculateCardStats().DefaultAmmo && Time.time - lastAttackTime >= CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed)
+            if (!isReloading && currentAmmo < maxAmmo && Time.time - lastAttackTime >= CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed)
             {
-                currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
-                // currentAmmo = maxAmmo;
+                // currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
+                currentAmmo = maxAmmo;
                 isReloading = false;
-                ammoDisplay?.UpdateAmmoIcons((int)currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
-                // ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
+                // ammoDisplay?.UpdateAmmoIcons((int)currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
+                ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
                 lastAttackTime = Time.time;
             }
         }
@@ -192,14 +199,14 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void UpdateAmmoUI()
     {
-        // ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
-        ammoDisplay?.UpdateAmmoIcons(currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
+        ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
+        // ammoDisplay?.UpdateAmmoIcons(currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
     }
     
     public virtual void Initialize()
     {
-        // currentAmmo = maxAmmo;
-        currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
+        currentAmmo = maxAmmo;
+        // currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
         isReloading = false;
         UpdateAmmoUI();
         NowIdleCheck();
@@ -214,19 +221,23 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         {
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
+            stream.SendNext(maxAmmo);
             stream.SendNext(currentAmmo);
         }
         else
         {
             Vector3 position = (Vector3)stream.ReceiveNext();
             Quaternion rotation = (Quaternion)stream.ReceiveNext();
+            maxAmmo = (int)stream.ReceiveNext();
             currentAmmo = (int)stream.ReceiveNext();
-        
-            transform.position = Vector3.Lerp(transform.position, position, Time.deltaTime * 10f);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
 
-            UpdateAmmoUI();
+            if (!photonView.IsMine)
+            {
+                transform.position = Vector3.Lerp(transform.position, position, Time.deltaTime * 10f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 10f);
+            }
             
+            UpdateAmmoUI();
         }
     }
 }

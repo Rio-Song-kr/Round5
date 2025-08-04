@@ -11,7 +11,7 @@ public class BarrelWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isReloading || currentAmmo < useAmmo) return;
+        if (isReloading || currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption) return;
         if (!CanAttack()) return; // 공격 속도 체크
         
         float angleStep = spreadAngle / (pelletCount - 1);
@@ -48,11 +48,11 @@ public class BarrelWeapon : BaseWeapon
             // }
         }
         
-        currentAmmo -= useAmmo;
+        currentAmmo -= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
         lastAttackTime = Time.time;
         UpdateAmmoUI();
         
-        if (currentAmmo < useAmmo)
+        if (currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption)
         {
             ReloadSpeedFromAnimator();
             StartAutoReload();
