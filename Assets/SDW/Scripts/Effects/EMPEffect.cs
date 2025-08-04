@@ -22,8 +22,6 @@ public class EmpEffect : MonoBehaviourPun
         if (!photonView.IsMine) return;
 
         RunArcEffect();
-
-        //# 모든 클라이언트에서 실행하되, 소유권은 개별 Arc에서 처리
     }
 
     /// <summary>
