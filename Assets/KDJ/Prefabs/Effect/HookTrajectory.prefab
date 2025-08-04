@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4943128544359215467
 Transform:
   m_ObjectHideFlags: 0
@@ -54,7 +54,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b6329e9bdeb623340b9e35afdcea659a, type: 2}
+  - {fileID: 2100000, guid: a6b606be06e4bb143a6cc0eb41d3af34, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -74,7 +74,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
@@ -152,3 +152,4 @@ MonoBehaviour:
   _hookCrosshair: {fileID: 0}
   _hookLineRenderer: {fileID: 0}
   _hookHitEffect: {fileID: 3310369482459089586, guid: ae5cb958901105144a0568b013aad026, type: 3}
+  _hookObject: {fileID: 581712458301378307, guid: a9edbd7fc7dad2d49b256d3ea40b7f9e, type: 3}

@@ -11,28 +11,29 @@ public class BulletWeapon : BaseWeapon
         if (!photonView.IsMine) return;
         if (isReloading || currentAmmo <= 0) return;
         if (!CanAttack()) return; // 공격 속도 체크
+
+        GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", gunController.muzzle.position, gunController.muzzle.rotation);
         
-        
-        // PhotonNetwork.Instantiate("Bullets/Bullet", firingPoint.position, firingPoint.rotation);
         // if (bulletObj.TryGetComponent(out Bullet bullet))
         // {
-        // bullet.BulletMove(bulletSpeed); // 여기서 바로 호출
-        // bullet.StartCoroutine(bullet.DestroyAfterDelay(4f));
-        //     // // bullet.GetComponent<Bullet>().BulletMove(bulletSpeed);
+        //     // 자기 자신에만 적용
+        //     // bullet.SetInitBulletType(gunController._isBigBullet, gunController._isExplosiveBullet);
+        //     // 모든 클라이언트에 동기화
         // }
-        // bullet.StartCoroutine(bullet.DestroyAfterDelay(4f));
+        // gunController._isBigBullet = true;
+        // gunController._isExplosiveBullet= true;
+        bulletObj.GetComponent<PhotonView>()?.RPC( "RPC_SetBulletType", RpcTarget.AllViaServer, gunController._isBigBullet, gunController._isExplosiveBullet );
         
-        GameObject bulletObj = PhotonNetwork.Instantiate("Bullets/Bullet", firingPoint.position, firingPoint.rotation);
-
         PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
-
         if (bulletView != null)
         {
-            bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, PhotonNetwork.Time);
+            // bulletView.RPC("InitBullet", RpcTarget.All, bulletSpeed, PhotonNetwork.Time);
+            bulletView.RPC("InitBullet", RpcTarget.All, playerStatusDataSO.DefaultBulletSpeed, PhotonNetwork.Time);
         }
+        
         // if (photonView.IsMine)
         // {
-            currentAmmo--;
+            currentAmmo-= useAmmo;
             lastAttackTime = Time.time;
 
             UpdateAmmoUI();

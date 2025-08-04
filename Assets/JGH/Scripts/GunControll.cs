@@ -11,10 +11,13 @@ public class GunControll : MonoBehaviourPun
     public GameObject barrelWeaponObject; // 샷건
     
     private GameObject currentWeaponObject;
-
+    
+    public bool _isBigBullet;              // 큰 총알 여부
+    public bool _isExplosiveBullet;        // 폭발 총알 여부
+    
     // 현재 무기
     public IWeapon currentWeapon;
-
+    
     /// <summary>
     /// 처음 시작 시 기본 무기 적용
     /// </summary>
@@ -79,6 +82,7 @@ public class GunControll : MonoBehaviourPun
         
         currentWeaponObject.SetActive(true);
         currentWeapon = currentWeaponObject.GetComponent<IWeapon>();
+        
         currentWeapon?.Initialize();
 
         // 내 무기 선택 시 상대에게 전달

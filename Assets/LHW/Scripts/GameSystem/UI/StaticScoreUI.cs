@@ -80,23 +80,18 @@ public class StaticScoreUI : MonoBehaviour
         if (currentWinner == "Left")
         {
             leftWinImages[leftWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
-            if (rightRoundNum == 1 && rightWinImages[rightRoundNum - 1].activeSelf)
+            if (rightRoundNum == 1 && rightWinImages[rightWinNum].activeSelf)
             {
-                rightWinImages[rightRoundNum - 1].SetActive(false);
+                rightWinImages[rightWinNum].SetActive(false);
             }
         }
         else if (currentWinner == "Right")
         {
             rightWinImages[rightWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
-            if (leftRoundNum == 1 && leftWinImages[leftWinNum - 1].activeSelf)
+            if (leftRoundNum == 1 && leftWinImages[leftWinNum].activeSelf)
             {
-                leftWinImages[leftWinNum - 1].SetActive(false);
+                leftWinImages[leftWinNum].SetActive(false);
             }
-        }
-
-        if (leftWinNum != 3 && rightWinNum != 3)
-        {
-            TestIngameManager.Instance.SceneChange();
         }
     }
 }

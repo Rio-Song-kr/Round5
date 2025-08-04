@@ -8,7 +8,7 @@ public class LaserWeapon : BaseWeapon
 
     private GameObject currentLaserInstance;
     private Laser currentLaser;
-
+    
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
    
@@ -16,10 +16,8 @@ public class LaserWeapon : BaseWeapon
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isFiring || isReloading || currentAmmo < 2) return;
-        currentAmmo -= 2;
-        
-       
+        if (isFiring || isReloading || currentAmmo < useAmmo) return;
+        currentAmmo -= useAmmo;
         
         photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
@@ -31,6 +29,7 @@ public class LaserWeapon : BaseWeapon
         float lag = (float)(PhotonNetwork.Time - fireTime);
         yield return new WaitForSeconds(lag); // 지연 보상 적용
         UpdateAmmoUI();
+        
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
@@ -43,7 +42,7 @@ public class LaserWeapon : BaseWeapon
         }
 
         // 1. 레이저 프리팹 생성
-        currentLaserInstance = Instantiate(laserPrefab);
+        currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
 
         // 2. muzzle에 붙임
         currentLaserInstance.transform.SetParent(gunController.muzzle);
@@ -88,9 +87,11 @@ public class LaserWeapon : BaseWeapon
 
         yield return null;
         ReloadSpeedFromAnimator();
-        yield return new WaitForSeconds(reloadTime);
+        // yield return new WaitForSeconds(reloadTime);
+        yield return new WaitForSeconds(playerStatusDataSO.DefaultReloadSpeed);
 
-        currentAmmo = maxAmmo;
+        // currentAmmo = maxAmmo;
+        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
         UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);

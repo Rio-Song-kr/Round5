@@ -217,8 +217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eda9c8a3eb079e4fabedaf9b5018532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _muzzle: {fileID: 0}
-  _bulletPrefab: {fileID: 0}
 --- !u!114 &4265872397972782931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,6 +278,14 @@ PrefabInstance:
     - target: {fileID: 1466236343909835023, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: m_Name
       value: GunController
+      objectReference: {fileID: 0}
+    - target: {fileID: 2172768708684117327, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.361
+      objectReference: {fileID: 0}
+    - target: {fileID: 2172768708684117327, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.003
       objectReference: {fileID: 0}
     - target: {fileID: 8272402196766608130, guid: b967f3c6dd2a24400b3bb715ffc59055, type: 3}
       propertyPath: m_LocalPosition.x
