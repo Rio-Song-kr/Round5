@@ -7,6 +7,9 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
 {
     [SerializeField] private PlayerStatusDataSO _playerData;
     [SerializeField] private List<StatusEffect> _activeEffect = new List<StatusEffect>();
+    // private Dictionary<DefenceSkills, StatusEffect> _statusEffects = new Dictionary<DefenceSkills, StatusEffect>();
+    private List<DefenceSkills> _defenceSkillList = new List<DefenceSkills>();
+    private List<StatusEffect> _statusEffectList = new List<StatusEffect>();
 
     private float _currentHp;
     private float _currentMaxHp;
@@ -164,14 +167,56 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         float prevMaxHp = _calculatedMaxHp;
         float prevInvincibilityCoolTime = _calculatedInvincibilityCooldown;
 
+        _calculatedMaxHp = _playerData.DefaultHp;
+        _calculatedInvincibilityCooldown = _playerData.DefaultInvincibilityCoolTime;
+
+        //# 이펙트 내에서 더하기 쿨다운을 모두 계산한 후 아래에서 곱하기
+        float multiplyCooldown = 1;
+        float additionalCooldown = 0;
+        float multiplyMaxHp = 0;
+
+        for (int i = 0; i < _defenceSkillList.Count; i++)
+        {
+            switch (_defenceSkillList[i])
+            {
+                case DefenceSkills.Emp:
+                    if (_statusEffectList[i].EffectType == StatusEffectType.IncreaseCooldown)
+                        additionalCooldown += _statusEffectList[i].EffectValue;
+                    else if (_statusEffectList[i].EffectType == StatusEffectType.IncreaseMaxHp)
+                        multiplyMaxHp += _statusEffectList[i].EffectValue;
+                    break;
+                case DefenceSkills.ShieldUp:
+                    if (_statusEffectList[i].EffectType == StatusEffectType.IncreaseCooldown)
+                        additionalCooldown += _statusEffectList[i].EffectValue;
+                    //todo 재장전
+                    break;
+                case DefenceSkills.Defender:
+                    if (_statusEffectList[i].EffectType == StatusEffectType.DecreaseCooldown)
+                        multiplyCooldown *= _statusEffectList[i].EffectValue;
+                    else if (_statusEffectList[i].EffectType == StatusEffectType.IncreaseMaxHp)
+                        multiplyMaxHp += _statusEffectList[i].EffectValue;
+                    break;
+                case DefenceSkills.Huge:
+                    if (_statusEffectList[i].EffectType == StatusEffectType.IncreaseMaxHp)
+                        multiplyMaxHp += _statusEffectList[i].EffectValue;
+                    break;
+            }
+        }
+        Debug.Log($"Multiply : {multiplyMaxHp}");
+
+        if (multiplyCooldown == 1f) multiplyCooldown = 0f;
+
+        //todo 체력에 대한 것도 추가 해야 함
+
         switch (effect.EffectType)
         {
             case StatusEffectType.IncreaseMaxHp:
-                _calculatedMaxHp *= 1 + effect.EffectValue;
+                _calculatedMaxHp *= 1 + multiplyMaxHp;
                 Debug.Log($"Max Hp Changed : {_calculatedMaxHp}");
                 break;
             case StatusEffectType.IncreaseCooldown:
-                _calculatedInvincibilityCooldown *= 1 + effect.EffectValue;
+                _calculatedInvincibilityCooldown =
+                    (_calculatedInvincibilityCooldown + additionalCooldown) * (1 + multiplyCooldown);
                 Debug.Log($"Shield CoolTime Changed : {_calculatedInvincibilityCooldown}");
                 break;
         }
@@ -189,17 +234,29 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     /// <param name="effectValue">상태 효과의 강도 값</param>
     /// <param name="duration">상태 효과의 지속 시간 (초)</param>
     /// <param name="isPermanent">상태 효과가 영구적인지 여부(기본값: false)</param>
-    public void ApplyStatusEffect(StatusEffectType type, float effectValue, float duration, bool isPermanent = false)
+    /// <param name="skill">스킬 이름 정보(영구 적용 효과에서만 사용</param>
+    public void ApplyStatusEffect(
+        StatusEffectType type,
+        float effectValue,
+        float duration,
+        bool isPermanent = false,
+        DefenceSkills skillName = DefenceSkills.None
+    )
     {
         var existingEffect = GetStatusEffect(type);
 
         //# 동일한 효과가 없다면 추가
-        if (existingEffect == null)
+        if (existingEffect == null || isPermanent)
         {
             var effect = new StatusEffect(type, effectValue, duration, isPermanent);
             _activeEffect.Add(effect);
 
-            if (isPermanent) CalculatePermanentEffects(effect);
+            if (isPermanent)
+            {
+                _defenceSkillList.Add(skillName);
+                _statusEffectList.Add(effect);
+                CalculatePermanentEffects(effect);
+            }
         }
         //# 동일한 효과가 있을 경우, 시간 갱신
         else

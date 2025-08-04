@@ -42,6 +42,11 @@ public class DefenceSkillManager : MonoBehaviourPun
         //# 테스트용 - Skill 추가, 추후 카드 선택 시 AddSkill을 추가하여 사용
         //# Shield 스킬 기본 스킬
         AddSkill(DefenceSkills.Shield);
+
+        AddSkill(DefenceSkills.ShieldUp);
+        AddSkill(DefenceSkills.Defender);
+        AddSkill(DefenceSkills.Huge);
+
         AddSkill(DefenceSkills.AbyssalCountdown);
         AddSkill(DefenceSkills.Emp);
         AddSkill(DefenceSkills.FrostSlam);
@@ -119,16 +124,27 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         skill.Initialize();
 
+        //todo Huge, Defender Effect도 카드 선택 시 추가가 되도록 수정해야 함
         switch (skillName)
         {
             // case DefenceSkills.AbyssalCountdown:
             //     break;
             case DefenceSkills.Emp:
+            case DefenceSkills.Defender:
+            case DefenceSkills.Huge:
+            case DefenceSkills.ShieldUp:
                 foreach (var status in skill.Status)
                 {
                     if (!status.IsPermanent || !status.CanAddPlayer) continue;
 
-                    _status.ApplyStatusEffect(status.EffectType, status.EffectValue, status.Duration, status.IsPermanent);
+                    //# Passive Skill의 경우, skillName도 같이 전달하여, EffectValue 처리시 + 또는 * 인지 구분
+                    _status.ApplyStatusEffect(
+                        status.EffectType,
+                        status.EffectValue,
+                        status.Duration,
+                        status.IsPermanent,
+                        skillName
+                    );
                 }
                 break;
             // case DefenceSkills.FrostSlam:

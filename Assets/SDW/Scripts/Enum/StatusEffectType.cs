@@ -17,5 +17,9 @@ public enum StatusEffectType
     MoveAcceleratesInvincibilityLoss,
     //# Abyssal Countdown(5s)
     PullOtherPlayer,
-    IncreaseCooldown
+    IncreaseCooldown,
+    DecreaseCooldown,
+
+    //# Reload
+    IncreaseReload
 }

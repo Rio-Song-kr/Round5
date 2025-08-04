@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using UnityEngine;
+using System.Collections;
 using Photon.Pun;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class ShieldEffect : MonoBehaviourPun, IPunObservable
+public class ShieldsUpEffect : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private GameObject _shieldObject;
 
-    public ShieldSkillDataSO SkillData;
+    public ShieldsUpDataSO SkillData;
     private PlayerStatus _status;
     private Transform _playerTransform;
     private TestPlayerMove _myPlayer;
@@ -15,8 +15,7 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
     private float _shieldActiveTime;
     private float _shieldTimeCount;
     private bool _shieldEffectActivated;
-
-    private bool _isStarted;
+    private int _viewId;
 
     private Vector3 _networkPosition;
 
@@ -29,53 +28,27 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
             _shieldTimeCount += Time.deltaTime;
 
             if (_shieldTimeCount >= _shieldActiveTime)
-                photonView.RPC(nameof(DisableShieldEffect), RpcTarget.All);
+                photonView.RPC(nameof(DisableShieldsUpEffect), RpcTarget.All);
         }
     }
 
-    /// <summary>
-    /// effect의 위치 동기화
-    /// </summary>
-    private void LateUpdate()
-    {
-        if (!_isStarted) return;
-
-        if (photonView.IsMine)
-        {
-            transform.position = _playerTransform.position;
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
-        }
-    }
-
-    /// <summary>
-    /// 효과 초기화 로직 수행
-    /// </summary>
-    /// <param name="skillData">사용할 쉴드 스킬 데이터</param>
-    /// <param name="viewId">플레이어의 Photon View ID</param>
-    public void Initialize(ShieldSkillDataSO skillData, int viewId)
+    public void Initialize(ShieldsUpDataSO skillData, int playerViewId)
     {
         SkillData = skillData;
-
-        if (!photonView.IsMine) return;
-
-        photonView.RPC(nameof(UseShieldEffect), RpcTarget.All, viewId);
     }
 
-    /// <summary>
-    /// Shield 효과 활성화 RPC 메서드
-    /// </summary>
-    /// <param name="viewId">활성화할 플레이어의 Photon View ID</param>
     [PunRPC]
-    private void UseShieldEffect(int viewId)
+    private void InitializeShieldsUpEffect(int playerViewId)
     {
-        _status = PhotonView.Find(viewId).GetComponent<PlayerStatus>();
+        _viewId = playerViewId;
+        _status = PhotonView.Find(_viewId).GetComponent<PlayerStatus>();
         _playerTransform = _status.transform;
         _myPlayer = _status.GetComponent<TestPlayerMove>();
-        _isStarted = true;
+    }
 
+    [PunRPC]
+    private void UseShieldsUpEffect()
+    {
         foreach (var status in SkillData.Status)
         {
             if (status.EffectType != StatusEffectType.Invincibility) continue;
@@ -93,7 +66,7 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
     /// Shield 효과 비활성화 RPC 메서드 호출
     /// </summary>
     [PunRPC]
-    private void DisableShieldEffect()
+    private void DisableShieldsUpEffect()
     {
         _status.RemoveStatusEffect(StatusEffectType.Invincibility);
         _shieldTimeCount = 0f;
@@ -128,7 +101,6 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
         _shieldObject.SetActive(false);
         shieldImage.color = originalColor;
 
-        _isStarted = false;
         PhotonNetwork.Destroy(gameObject);
     }
 
@@ -143,5 +115,13 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
             stream.SendNext(transform.position);
         else
             _networkPosition = (Vector3)stream.ReceiveNext();
+    }
+
+    //todo reload와 연결하여, reload 시작 시 호출되도록 해야 함
+    private void StartReload()
+    {
+        if (!photonView.IsMine) return;
+
+        photonView.RPC(nameof(UseShieldsUpEffect), RpcTarget.All);
     }
 }
