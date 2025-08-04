@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 using Photon.Pun;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Splines.ExtrusionShapes;
 
 /// <summary>
 /// 원형 카운트다운 이펙트를 제어하는 컨트롤러
@@ -47,27 +44,22 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     private GameObject _targetPlayer;
     private int _targetViewId;
 
+    /// <summary>
+    /// 스크립트 시작 시 초기 설정 및 Photon 네트워크 설정 조정을 수행
+    /// </summary>
     private void Awake()
     {
         PhotonNetwork.SendRate = 40;
         PhotonNetwork.SerializationRate = 20;
     }
 
+    /// <summary>
+    /// 게임 오브젝트 비활성화 시 진행 중인 이펙트 오브젝트 해제 및 리소스 해제 작업 수행
+    /// </summary>
     private void OnDisable()
     {
         if (_vfxObject != null)
             PhotonNetwork.Destroy(_vfxObject);
-    }
-
-    /// <summary>
-    /// 카운트다운 이펙트 초기화 메서드
-    /// </summary>
-    private void Start()
-    {
-        if (_particle == null) return;
-        //# 파티클을 중지하고 기존 파티클들을 제거
-        _particle.Stop();
-        _particle.Clear();
     }
 
     /// <summary>
@@ -83,7 +75,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
             if (Vector3.Distance(_playerTransform.position, _targetPlayer.transform.position) > 1.2f)
             {
                 Vector2 direction = (_playerTransform.position - _targetPlayer.transform.position).normalized;
-                var moveAmount = direction * _pullRate * Time.deltaTime;
+                var moveAmount = _pullRate * Time.deltaTime * direction;
                 _targetPlayer.transform.Translate(moveAmount, Space.World);
                 photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, _targetViewId, _targetPlayer.transform.position);
             }
@@ -96,7 +88,6 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
             _circleFill.StartEffect = false;
             _collider.enabled = true;
         }
-
         //# 감소 모드 -> 증가 모드로 변경되었을 때 처리
         else if (_circleFill.StartEffect && _circleFill.CanIncrese)
         {
@@ -112,7 +103,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
             else _shieldTimeCount += Time.deltaTime;
 
             if (_shieldTimeCount >= _shieldActiveTime)
-                photonView.RPC(nameof(DisableShieldEffect), RpcTarget.All);
+                photonView.RPC(nameof(DisableShieldObject), RpcTarget.All);
         }
     }
 
@@ -130,8 +121,9 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * 5f);
-            _vfxObject.transform.position = Vector3.Lerp(_vfxObject.transform.position, _networkPosition, Time.deltaTime * 5f);
+            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
+            _vfxObject.transform.position =
+                Vector3.Lerp(_vfxObject.transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
         }
     }
 
@@ -160,9 +152,14 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         //# 파티클을 중지하고 기존 파티클들을 제거
         photonView.RPC(nameof(InitializeComponent), RpcTarget.All, playerViewId, _vfxViewId);
 
-        _octagonObject.SetActive(true);
+        _octagonObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 초기 설정 및 구성 요소 활성화를 위한 콜백 메서드 호출
+    /// </summary>
+    /// <param name="playerViewId">플레이어의 Photon 뷰 ID</param>
+    /// <param name="vfxViewId">VFX 효과의 Photon 뷰 ID</param>
     [PunRPC]
     private void InitializeComponent(int playerViewId, int vfxViewId)
     {
@@ -170,7 +167,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         _playerTransform = playerTransform;
         _myPlayer = _playerTransform.GetComponent<TestPlayerMove>();
 
-        var effect = playerTransform.GetComponent<AbyssalCountdownEffect>();
+        var effect = GetComponent<AbyssalCountdownEffect>();
 
         if (SkillData == null)
             SkillData = effect.SkillData;
@@ -186,7 +183,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
                 _moveAcceleratesInvincibilityLossRate = effectStatus.EffectValue;
         }
 
-        ShieldObject.GetComponent<ShieldEffect>().Init(SkillData.ShieldScaleMultiplier, SkillData.ShieldScaleDuration);
+        ShieldObject.GetComponent<ShieldEffectController>().Init(SkillData.ShieldScaleMultiplier, SkillData.ShieldScaleDuration);
         ShieldObject.SetActive(false);
         _shieldTimeCount = 0f;
 
@@ -209,24 +206,19 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         _circleFill.gameObject.SetActive(true);
     }
 
-    private void StartVfx()
-    {
-        _particle.Play();
-    }
+    /// <summary>
+    /// 카운트다운 효과의 시작 시 파티클 효과를 활성화하고 스케일 조정을 시작하며 쉴드 이펙트를 활성화하는 메서드
+    /// </summary>
+    private void StartVfx() => _particle.Play();
 
+    /// <summary>
+    /// 카운트다운 효과의 비활성화를 위한 메서드
+    /// 생성된 시각 효과와 파티클 시스템을 중지시키고 리소스를 정리한다
+    /// </summary>
     private void StopVfx()
     {
         _particle.Stop();
         _particle.Clear();
-    }
-
-    [PunRPC]
-    private void DisableShieldEffect()
-    {
-        _status.RemoveStatusEffect(StatusEffectType.Invincibility);
-        ShieldObject.SetActive(false);
-        _shieldTimeCount = 0f;
-        _shieldEffectActivated = false;
     }
 
     /// <summary>
@@ -243,7 +235,8 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         _scalingCoroutine =
             StartCoroutine(ScaleOverTime(Vector3.one * SkillData.TargetScaleMultiplier, SkillData.ScalingDuration));
 
-        UseShieldEffect();
+        UseShieldObject();
+
         _octagonObject.SetActive(true);
         _shieldTimeCount = 0f;
     }
@@ -255,19 +248,18 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     public void EndEffect()
     {
         //# 파티클 효과 중지 및 octagon 이펙트 비활성화
-        // photonView.RPC(nameof(StopVfx), RpcTarget.All);
         StopVfx();
 
-        if (_scalingCoroutine != null) StopCoroutine(_scalingCoroutine);
+        if (_scalingCoroutine != null) return;
         _scalingCoroutine = StartCoroutine(ScaleOverTime(Vector3.one, SkillData.ScalingDuration));
 
         _octagonObject.SetActive(false);
     }
 
-    //todo Coroutine 대신에 TimeDeltaTime으로 처리해야할 듯
-    //# 플레이어의 이동이 있을 때는 사용 시간이 깍히는 시간이 20% 증가해야 함
-    //# 이동 시 -> Time.deltaTime * 1.2, 정지 시 -> Time.deltaTime
-    private void UseShieldEffect()
+    /// <summary>
+    /// 쉴드 오브젝트를 활성화하고 해당 스킬 데이터에 정의된 상태 효과를 적용
+    /// </summary>
+    private void UseShieldObject()
     {
         ShieldObject.SetActive(true);
 
@@ -287,6 +279,19 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
             _shieldEffectActivated = true;
         }
     }
+
+    /// <summary>
+    /// 플레이어의 방패 효과를 비활성화하는 원격 프로시저 콜 함수
+    /// </summary>
+    [PunRPC]
+    private void DisableShieldObject()
+    {
+        _status.RemoveStatusEffect(StatusEffectType.Invincibility);
+        ShieldObject.SetActive(false);
+        _shieldTimeCount = 0f;
+        _shieldEffectActivated = false;
+    }
+
     /// <summary>
     /// 카운트 다운 감소 시 확장/카운트 다운의 끝에 다시 축소를 제어하는 Coroutine
     /// </summary>
@@ -308,6 +313,11 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         _scalingCoroutine = null;
     }
 
+    /// <summary>
+    /// Photon 네트워크 뷰 동기화를 위해 뷰 데이터를 직렬화 및 역직렬화하는 메서드
+    /// </summary>
+    /// <param name="stream">데이터를 직렬화하거나 역직렬화할 PhotonStream 객체</param>
+    /// <param name="info">데이터 전송에 대한 정보를 담고 있는 PhotonMessageInfo 객체</param>
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -316,6 +326,10 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
             _networkPosition = (Vector3)stream.ReceiveNext();
     }
 
+    /// <summary>
+    /// 2D 충돌 감지 시 특정 조건 하의 플레이어에 대한 효과 처리를 수행
+    /// </summary>
+    /// <param name="other">충돌한 Collider2D 컴포넌트</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!photonView.IsMine || !other.gameObject.CompareTag("Player")) return;
@@ -332,68 +346,79 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
 
         if (targetDefenceSkill.SkillNames.Contains(DefenceSkills.AbyssalCountdown))
         {
-            if (!_status.HasStatusEffect(StatusEffectType.FreezePlayer))
-            {
-                _myPlayer.SetFreeze(true);
+            if (!_status.HasStatusEffect(StatusEffectType.ReduceSpeed))
                 photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
-            }
         }
 
         _targetViewId = other.GetComponent<PhotonView>().ViewID;
 
         float duration = SkillData.ActivateTime * _circleFill.CurrentFillAmount;
 
-
-        // 다른 클라이언트에 동기화
-        photonView.RPC(nameof(ApplyFreeze), RpcTarget.Others, _targetViewId, duration);
-        Debug.Log($"Enter - {_targetViewId}");
+        //# 다른 클라이언트에 동기화
+        photonView.RPC(nameof(ApplyReduceSpeed), RpcTarget.Others, _targetViewId, duration);
     }
 
+    /// <summary>
+    /// 2D 충돌 감지에서 다른 객체와의 상호작용이 종료될 때 호출되는 메서드
+    /// </summary>
+    /// <param name="other">충돌 감지를 벗어난 Collider2D 객체</param>
     private void OnTriggerExit2D(Collider2D other)
     {
         if (photonView.IsMine && other.CompareTag("Player"))
         {
-            Debug.Log($"Exit - {_targetViewId}");
             _targetViewId = other.GetComponent<PhotonView>().ViewID;
+            photonView.RPC(nameof(RemoveReduceSpeed), RpcTarget.Others, _targetViewId);
+
             _targetPlayer = null;
-            photonView.RPC(nameof(RemoveFreeze), RpcTarget.Others, _targetViewId);
             _targetViewId = 0;
 
-            _myPlayer.SetFreeze(false);
             photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
         }
     }
 
+    /// <summary>
+    /// 지정된 플레이어의 이동 속도를 지정된 시간 동안 감소시킴
+    /// </summary>
+    /// <param name="viewId">감소시키려는 플레이어의 Photon View ID</param>
+    /// <param name="duration">속도 감소 효과가 지속되는 시간</param>
     [PunRPC]
-    private void ApplyFreeze(int viewId, float duration)
+    private void ApplyReduceSpeed(int viewId, float duration)
     {
         var targetView = PhotonView.Find(viewId);
-        var otherStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
+        var otherStatus = targetView.GetComponent<IStatusEffectable>();
+
+        //# Abyssal Countdown의 끌려가는 효과에 의해 이속이 2배가 되어야 이동이 가능해짐
         otherStatus.ApplyStatusEffect(
-            StatusEffectType.FreezePlayer,
-            // -0.1f,
+            StatusEffectType.ReduceSpeed,
             1f,
             duration
         );
     }
 
+    /// <summary>
+    /// 지정된 플레이어의 속도 감소 효과를 제거
+    /// </summary>
+    /// <param name="viewId">속도 감소 효과를 제거할 플레이어의 Photon View ID</param>
     [PunRPC]
-    private void RemoveFreeze(int viewId)
+    private void RemoveReduceSpeed(int viewId)
     {
         var targetView = PhotonView.Find(viewId);
         var otherStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
 
         if (otherStatus != null)
-            otherStatus.RemoveStatusEffect(StatusEffectType.FreezePlayer);
+            otherStatus.RemoveStatusEffect(StatusEffectType.ReduceSpeed);
     }
 
+    /// <summary>
+    /// 타겟 위치를 동기화하는 원격 프로시저 호출 메서드
+    /// </summary>
+    /// <param name="viewId">동기화할 Photon 뷰의 ID</param>
+    /// <param name="position">동기화할 위치 벡터</param>
     [PunRPC]
     private void SyncTargetPosition(int viewId, Vector3 position)
     {
         var targetView = PhotonView.Find(viewId);
-        if (targetView != null)
-        {
-            targetView.transform.position = position;
-        }
+
+        if (targetView != null) targetView.transform.position = position;
     }
 }

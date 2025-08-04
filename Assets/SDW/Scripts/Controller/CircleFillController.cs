@@ -27,12 +27,21 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
 
     public bool PlayerMoved;
 
+    /// <summary>
+    /// 초기화 설정을 수행하여 효과의 활성화 및 충전 시간을 설정
+    /// </summary>
+    /// <param name="activateTime">효과 활성화까지의 시간 설정(초)</param>
+    /// <param name="chargeTime">충전 시간 설정(초)</param>
     public void Initialize(float activateTime, float chargeTime)
     {
         _activateTime = activateTime;
         _chargeTime = chargeTime;
     }
 
+    /// <summary>
+    /// 게임 객체의 채움 효과를 업데이트하는 메서드.
+    /// 활성화 시간과 충전 시간을 고려하여 채움량을 조절하고, 플레이어의 움직임에 따라 채움 모드를 전환
+    /// </summary>
     private void Update()
     {
         //# 증가 중에 플레이어 이동 시 감소로 전환
@@ -43,7 +52,6 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
             if (photonView.IsMine)
                 photonView.RPC(nameof(SetFillAmount), RpcTarget.All, CurrentFillAmount);
         }
-        //todo 증가 -> 감소 변환 + 플레이어가 이동 X 일 때도 계속 적용되는 문제
         else if (!_applyEffect && !CanIncrese && !PlayerMoved)
         {
             CanIncrese = true;
@@ -95,7 +103,11 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
         _movingLineImg.transform.rotation = Quaternion.Euler(0f, 0f, -fillAmount * 360f);
     }
 
-    //# 테스트용
+    /// <summary>
+    /// Photon view 동기화를 위한 뷰 데이터 직렬화 처리 핸들러
+    /// </summary>
+    /// <param name="stream">데이터를 직렬화하거나 역직렬화하는 PhotonStream 객체</param>
+    /// <param name="info">현재 메시지의 정보를 담고 있는 PhotonMessageInfo 객체</param>
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -104,5 +116,9 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
             PlayerMoved = (bool)stream.ReceiveNext();
     }
 
+    /// <summary>
+    /// 플레이어 이동 상태 변경 이벤트를 처리하여 관련 로직을 업데이트
+    /// </summary>
+    /// <param name="value">플레이어 이동 상태 변경 여부</param>
     public void OnPlayerMoveChanged(bool value) => PlayerMoved = value;
 }

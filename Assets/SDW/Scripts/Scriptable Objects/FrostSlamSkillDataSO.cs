@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "FrostSlamSkill", menuName = "Skills/FrostSlamSkill")]
@@ -45,28 +46,23 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
     public PoolManager Pools => _pools;
 
     public Vector3 SkillPoisition;
-    private Transform _effectTransform;
 
-    public override void Initialize(Transform effectsTransform)
+    public override void Initialize()
     {
-        _effectTransform = effectsTransform;
-
         _pools = FindFirstObjectByType<PoolManager>();
         _pools.InitializePool("FrostSlamEffect", SkillEffectPrefab, 2, 5);
         _pools.InitializePool("VFX_Smoke", VfxSmokePrefab, 2, 5);
-        // _pools.InitializePool("Effects/FrostSlamEffect", 2, 5);
-        // _pools.InitializePool("Effects/VFX_Smoke", 2, 5);
     }
 
-    public override void Activate(Vector3 skillPosition, Transform playerTransform = null)
+    public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
-        // SkillPoisition = skillPosition;
-        //
-        // // var skillEffectObject = _pools.Instantiate("FrostSlamEffect", skillPosition, Quaternion.identity);
-        // var skillEffectObject = _pools.Instantiate("Effects/FrostSlamEffect", skillPosition, Quaternion.identity);
+        SkillPoisition = skillPosition;
+
+        var skillEffectObject = PhotonNetwork.Instantiate("FrostSlamEffect", SkillPoisition, Quaternion.identity);
         // skillEffectObject.transform.parent = _effectTransform;
-        //
-        // var skillEffect = skillEffectObject.GetComponent<FrostSlamEffect>();
-        // skillEffect.Initialize(this);
+
+        int playerViewId = playerTransform.gameObject.GetComponent<PhotonView>().ViewID;
+        var skillEffect = skillEffectObject.GetComponent<FrostSlamEffect>();
+        skillEffect.Initialize(this, playerViewId);
     }
 }
