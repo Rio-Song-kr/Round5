@@ -6,5 +6,7 @@ public enum DefenceSkills
     Shield,
     AbyssalCountdown,
     Emp,
-    FrostSlam
+    FrostSlam,
+    Defender,
+    Hude
 }
