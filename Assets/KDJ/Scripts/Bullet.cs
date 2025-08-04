@@ -3,11 +3,11 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPun,IPunObservable
-    // , IPunObservable
+public class Bullet : MonoBehaviourPun, IPunObservable
+// , IPunObservable
 {
     // 무기에서 조절
-   // [SerializeField] public float Speed;                     // 총알 속도
+    // [SerializeField] public float Speed;                     // 총알 속도
     [SerializeField] public float Damage;                    // 데미지 (현재 미사용)
     [SerializeField] private Rigidbody2D _rb;                // 물리 기반 이동
     [SerializeField] private GameObject _bigBullet;          // 큰 총알 이펙트
@@ -18,32 +18,32 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     [SerializeField] private bool _isExplosiveBullet;        // 폭발 총알 여부
 
     [SerializeField] private PlayerStatusDataSO playerStatusDataSo;
-    
+
     // 250726 추가
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
     // private BaseWeapon _baseWeapon; // BaseWeapon 스크립트 참조
     // private AttackSkillManager _attackSkillManager;
-    
+
     private void Awake()
     {
         //250726 추가
         // 탄환 유형에 따라 오브젝트 켜기/끄기
         // _bigBullet.SetActive(_isBigBullet);
         // _explosiveBullet.SetActive(_isExplosiveBullet);
-        
+
         // if (_attackSkillManager == null)
-            // _attackSkillManager = GetComponent<AttackSkillManager>();
+        // _attackSkillManager = GetComponent<AttackSkillManager>();
         //
         // if (_attackSkillManager != null)
         // {
-            // InitBulletType();
+        // InitBulletType();
         // }
         // else
         // {
         //     Debug.LogError("OnEnable에서도 AttackSkillManager를 못 찾았습니다", this);
         // }
-        
+
         // if (_isBigBullet)
         // {
         //     _bigBullet.SetActive(true);
@@ -66,11 +66,11 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     [PunRPC]
     public void RPC_SetBulletType(bool isBig, bool isEx)
     {
-        if(!photonView.IsMine) return;
-        
+        if (!photonView.IsMine) return;
+
         _isBigBullet = isBig;
         _bigBullet?.SetActive(_isBigBullet);
-        
+
         _isExplosiveBullet = isEx;
         _explosiveBullet?.SetActive(_isExplosiveBullet);
     }
@@ -89,10 +89,10 @@ public class Bullet : MonoBehaviourPun,IPunObservable
             DefaultShot(collision);
         }
 
-        PlayerHitTest playerHitTest = collision.collider.GetComponent<PlayerHitTest>();
-        if (playerHitTest != null)
+        if (collision.gameObject.layer == 8)
         {
-            Attack(playerHitTest); // 플레이어에게 공격
+            IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
+            Attack(damagable); // 플레이어에게 공격
         }
 
         // 약간의 시간 지연 후 안전하게 파괴
@@ -105,8 +105,8 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     // {
     //     BulletMove(_baseWeapon.bulletSpeed);
     // }
-    
-    
+
+
     // 탄알이 2개로 날아가는 문제가 있어 추가
     // private IEnumerator Start()
     // {
@@ -118,7 +118,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     //     // 4초 뒤 파괴
     //     yield return new WaitForSeconds(4f);
     // }
-    
+
     private IEnumerator SafeDestroy()
     {
         yield return new WaitForSeconds(0.05f);
@@ -128,7 +128,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
             PhotonNetwork.Destroy(gameObject);
         }
     }
-    
+
     [PunRPC]
     public void DefaultShot(Collision2D collision)
     {
@@ -138,7 +138,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
         effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
         CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
     }
-    
+
     public void BulletMove(float speed)
     {
         // if (!photonView.IsMine) return;
@@ -153,7 +153,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
         // StartCoroutine(DestroyAfterDelay(4f));
     }
 
-    
+
     public IEnumerator DestroyAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -163,7 +163,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
             PhotonNetwork.Destroy(gameObject);
         }
     }
-    
+
     [PunRPC]
     public void InitBullet(float bulletSpeed, double fireTime)
     {
@@ -175,12 +175,12 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     }
 
     /// <summary>
-    /// 테스트용으로 매개변수를 테스트 플레이어로 설정
-    /// 나중에 변경해야됨
+    /// IDamagable 인터페이스를 구현한 객체에게 공격을 수행합니다.
     /// </summary>
-    public void Attack(PlayerHitTest playerHitTest)
+    public void Attack(IDamagable damagable)
     {
-        playerHitTest.TakeDamage((int)playerStatusDataSo.DefaultDamage);
+        // 데미지 전달 부분은 임시데미지. 최종 데미지를 전달하도록 수정해야함.
+        damagable.TakeDamage(6f);
     }
 
 
@@ -192,8 +192,8 @@ public class Bullet : MonoBehaviourPun,IPunObservable
     //         transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 150f);
     //     }
     // }
-    
-    
+
+
 
     [PunRPC]
     public void BigBulletShot()
@@ -202,7 +202,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
         _bigBullet.GetComponent<ParticleSystem>().Stop();
         StartCoroutine(DestroyBigBulletAfterDelay(_bigBullet, 1f));
     }
-    
+
     /// <summary>
     /// 큰 탄알을 일정 시간 후에 파괴하는 코루틴
     /// </summary>
@@ -214,7 +214,7 @@ public class Bullet : MonoBehaviourPun,IPunObservable
         yield return new WaitForSeconds(delay);
         PhotonNetwork.Destroy(bullet);
     }
-    
+
 
     [PunRPC]
     public void ExplosiveBulletShot()

@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
 
@@ -16,7 +17,9 @@ public class GunControll : MonoBehaviourPun
     public bool _isExplosiveBullet;        // 폭발 총알 여부
     
     // 현재 무기
+    // private WeaponType? lastWeapon = null;
     public IWeapon currentWeapon;
+    private WeaponType? lastWeapon = null;
     
     /// <summary>
     /// 처음 시작 시 기본 무기 적용
@@ -45,39 +48,53 @@ public class GunControll : MonoBehaviourPun
             }
         }
         
-        // TODO: 테스트(숫자 키로 무기 변경)
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            EquipWeapon(WeaponType.Bullet);
-        }
+        OnApplyCards(out var weapons);
+    }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+    /// <summary>
+    /// 적용된 무기 카드를 확인 후 무기 변경을 담당하는 함수한테 전달하는 함수
+    /// </summary>
+    /// <param name="weapons"></param>
+    private void OnApplyCards(out bool[] weapons)
+    {
+        weapons = CardManager.Instance.GetWeaponCard();
+        if (weapons[0] && lastWeapon != WeaponType.Laser) // Laser
         {
             EquipWeapon(WeaponType.Laser);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            EquipWeapon(WeaponType.Shotgun);
+            lastWeapon = WeaponType.Laser;
         }
         
+        if (weapons[1] && lastWeapon != WeaponType.Bullet) // Explosive
+        {
+            _isExplosiveBullet = true;
+            EquipWeapon(WeaponType.Bullet); // 예: Explosive 타입이 Bullet 기반이라면
+            lastWeapon = WeaponType.Bullet;
+        }
+        
+        if (weapons[2] && lastWeapon != WeaponType.Shotgun) // Barrage
+        {
+            EquipWeapon(WeaponType.Shotgun); // Barrage는 샷건 계열일 경우
+            lastWeapon = WeaponType.Shotgun;
+        }
     }
-    
+
+    /// <summary>
+    /// 무기 변경을 담당하는 함수
+    /// </summary>
+    /// <param name="weaponType"></param>
     public void EquipWeapon(WeaponType weaponType)
     {
+        
         DisableAllWeapons();
 
         switch (weaponType)
         {
             case WeaponType.Bullet:
-                currentWeaponObject = bulletWeaponObject;
-                break;
+                currentWeaponObject = bulletWeaponObject; break;
             case WeaponType.Laser:
-                currentWeaponObject = LaserWeaponObject;
-                break;
+                currentWeaponObject = LaserWeaponObject; break;
             case WeaponType.Shotgun:
-                currentWeaponObject = barrelWeaponObject;
-                break;
+                currentWeaponObject = barrelWeaponObject; break;
         }
         
         currentWeaponObject.SetActive(true);

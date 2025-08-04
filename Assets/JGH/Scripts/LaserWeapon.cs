@@ -33,9 +33,6 @@ public class LaserWeapon : BaseWeapon
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
-        // 0.1초 대기 - 위치 어긋남 방지
-        // yield return new WaitForSeconds(0.1f);
-
         if (currentLaserInstance != null)
         {
             Destroy(currentLaserInstance);
@@ -88,10 +85,10 @@ public class LaserWeapon : BaseWeapon
         yield return null;
         ReloadSpeedFromAnimator();
         // yield return new WaitForSeconds(reloadTime);
-        yield return new WaitForSeconds(playerStatusDataSO.DefaultReloadSpeed);
+        yield return new WaitForSeconds(CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
 
         // currentAmmo = maxAmmo;
-        currentAmmo = (int)playerStatusDataSO.DefaultAmmo;
+        currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
         UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);

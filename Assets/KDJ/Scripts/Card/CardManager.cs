@@ -38,6 +38,7 @@ public class CardManager : MonoBehaviour
         float AttackSpeedMultiplier = 1;
         float ReloadTimeAdditionSum = 0;
         int AmmoIncreaseSum = 0;
+        int AmmoConsumptionSum = 0;
 
         if (_cards == null || _cards.Count == 0)
         {
@@ -56,6 +57,7 @@ public class CardManager : MonoBehaviour
                 AttackSpeedMultiplier *= attackCard.AttackSpeedMultiplier;
                 ReloadTimeAdditionSum += attackCard.ReloadTimeAddition;
                 AmmoIncreaseSum += attackCard.AmmoIncrease;
+                AmmoConsumptionSum += attackCard.AmmoConsumption;
             }
         }
 
@@ -65,6 +67,7 @@ public class CardManager : MonoBehaviour
         playerStats.DefaultAttackSpeed = _pStatus.DefaultAttackSpeed * (AttackSpeedMultiplier != 0 ? AttackSpeedMultiplier : 1);
         playerStats.DefaultBulletSpeed = _pStatus.DefaultBulletSpeed * (BulletSpeedMultiplierSum != 0 ? BulletSpeedMultiplierSum : 1);
         playerStats.DefaultAmmo = _pStatus.DefaultAmmo + AmmoIncreaseSum;
+        playerStats.AmmoConsumption = _pStatus.AmmoConsumption + AmmoConsumptionSum;
 
         return playerStats;
     }
