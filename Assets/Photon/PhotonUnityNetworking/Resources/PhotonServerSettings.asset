@@ -59,7 +59,29 @@ MonoBehaviour:
   - SpawnRandomCards1
   - UseActiveSkills
   - UsePassiveSkills
+  - RPC_FlipCardByIndex
+  - RPC_SpawnCardsWithIndexes
+  - RPC_SyncClientCanvas
+  - RPC_PlayCardSelectionAnimation
   - InitBullet
+  - ApplyFreeze
+  - DisableShieldEffect
+  - EndEffect
+  - InitializeComponent
+  - OnTriggerEnter2D
+  - RemoveFreeze
+  - ReturnToPool
+  - SetFillAmount
+  - SetPoolRPC
+  - Shoot
+  - StartEffect
+  - SyncTargetPosition
+  - RPC_MoveLeftArm
+  - RPC_MoveRightArm
+  - RPC_SelectCardArm
+  - RPC_PlayShrinkAnimation
+  - RPC_HighlightCardByIndex
+  - RPC_UnhighlightCardByIndex
   - DisableShieldEffect
   - EndEffect
   - InitializeComponent

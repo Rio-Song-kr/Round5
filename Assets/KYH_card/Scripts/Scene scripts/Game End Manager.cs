@@ -7,12 +7,14 @@ using ExitGames.Client.Photon;
 
 public class GameEndManager : MonoBehaviourPunCallbacks
 {
+
     void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
     }
     void Update()
     {
+        // 게임이 끝나는 상황을 임의로 출력함.
         if (Input.GetKeyDown(KeyCode.Space))
         {
             // 마스터가 true, 다른 애는 false

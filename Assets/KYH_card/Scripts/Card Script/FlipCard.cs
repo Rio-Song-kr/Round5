@@ -2,8 +2,9 @@ using DG.Tweening;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    
     private bool isFlipped = false;
     public bool IsFlipped { get { return isFlipped; } }
     private bool isSelected = false;
@@ -15,9 +16,10 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     [Header("����")]
     public float flipDuration = 0.25f;
-    public float hoverScale = 1.1f;
+    public float hoverScale = 1.3f;
 
     private Vector3 originalScale;
+    private int cardIndex;
     private CardSelectManager manager;
 
     private bool isInteractable = true;
@@ -31,6 +33,10 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         manager = mgr;
     }
 
+    public void SetCardIndex(int index)
+    {
+        cardIndex = index;
+    }
     private void Start()
     {
         isFlipped = false;
@@ -52,15 +58,24 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
 
-        isHovered = true;
-        transform.DOScale(originalScale * hoverScale, 0.4f).SetEase(Ease.OutBack);
+        if (!isFlipped)
+        {
+            OnClickCard(); // �ڵ� ������
+        }
+        else
+        {
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_SelectCardArm), RpcTarget.All, cardIndex);
+        }
+
+            isHovered = true;
+        manager.photonView.RPC(nameof(CardSelectManager.RPC_HighlightCardByIndex), RpcTarget.All, cardIndex);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
-        isHovered = false;
-        transform.DOScale(originalScale, 0.4f).SetEase(Ease.InBack);
+   public void OnPointerExit(PointerEventData eventData)
+   {
+       if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
+       isHovered = false;
+        manager.photonView.RPC(nameof(CardSelectManager.RPC_UnhighlightCardByIndex), RpcTarget.All, cardIndex);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -76,14 +91,16 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
         if (!isFlipped)
         {
-            isFlipped = true;
-
+            
+            Debug.Log($"[FlipCard] ī�� Ŭ���� index = {cardIndex}");
             // ���� �ִϸ��̼� ����
             PlayFlipAnimation();
 
             // RPC�� ��� Ŭ���̾�Ʈ���Ե� flip �ִϸ��̼� ����ȭ
-            PhotonView photonView = PhotonView.Get(this);
-            photonView.RPC(nameof(RPC_Flip), RpcTarget.Others);
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.All, cardIndex);
+
+            // �� ����ȭ RPC ȣ��
+            manager.photonView.RPC(nameof(CardSelectManager.RPC_SelectCardArm), RpcTarget.All, cardIndex);
 
 
         }
@@ -101,10 +118,11 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         PlayFlipAnimation();
     }
 
-    void PlayFlipAnimation()
+    public void PlayFlipAnimation()
     {
         if (isFlipped) return;
 
+        Debug.Log("ī�� ������");
         // ���� ȸ���� ��������
         Vector3 startEuler = transform.localEulerAngles;
 
@@ -133,5 +151,15 @@ public class FlipCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
                 if (backRoot != null) backRoot.SetActive(false);
             });
         isFlipped = true;
+    }
+
+    public void PlayHighlight()
+    {
+        transform.DOScale(originalScale * hoverScale, 0.15f).SetEase(Ease.OutBack);
+    }
+
+    public void PlayUnhighlight()
+    {
+        transform.DOScale(originalScale, 0.15f).SetEase(Ease.InBack);
     }
 }

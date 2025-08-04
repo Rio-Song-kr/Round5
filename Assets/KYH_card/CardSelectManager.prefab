@@ -45,25 +45,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3563f4612c3694683e6b8072d6285d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardSelectPanelItem: {fileID: 7875981488174302824, guid: 58902ddaa28c24545af9cd2baa9ec1c3, type: 3}
+  canvasController: {fileID: 0}
   cardSelectCheckManager: {fileID: 2433171380355075596, guid: 840f28ac299747f43b8724d1ce1773ae, type: 3}
   allCardPrefabs:
   - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  - {fileID: 3777309921307386761, guid: 2849e90ff2983ca4abf26bb99d5d2fc3, type: 3}
-  cardSpawnParent: {fileID: 0}
+  - {fileID: 3777309921307386761, guid: 45a2dd5df0901104eb3807be84533bee, type: 3}
+  - {fileID: 3777309921307386761, guid: 4ed359628965b2045bbfa7b83af2ad36, type: 3}
+  - {fileID: 3777309921307386761, guid: 8725300365dde444a95549689e08d4a6, type: 3}
+  - {fileID: 3777309921307386761, guid: 201760b466ead71408057cb164d51dcf, type: 3}
+  - {fileID: 3777309921307386761, guid: ecd1901553ee70d4d93a5a8cae432a52, type: 3}
+  - {fileID: 3777309921307386761, guid: e002c2c65fef60846a8cfd9d49510b74, type: 3}
+  - {fileID: 3777309921307386761, guid: 7f318460398f1214eb8421241693f55e, type: 3}
+  - {fileID: 3777309921307386761, guid: e9706d652232aac4d82366f3b655e6b0, type: 3}
+  - {fileID: 3777309921307386761, guid: 26d27552a746d5d429b2bd818708f861, type: 3}
+  cardSpawnParent1: {fileID: 0}
+  cardSpawnParent2: {fileID: 0}
   cardCountToShow: 3
   xSpacing: 400
   curveHeight: 150
   maxAngle: 160
   appearYOffset: -600
+  hasSelect: 0
 --- !u!114 &4445778457257811218
 MonoBehaviour:
   m_ObjectHideFlags: 0
