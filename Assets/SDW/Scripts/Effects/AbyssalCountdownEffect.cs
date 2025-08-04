@@ -146,7 +146,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         //# 파티클을 중지하고 기존 파티클들을 제거
         photonView.RPC(nameof(InitializeComponent), RpcTarget.All, playerViewId, _vfxViewId);
 
-        _octagonObject.SetActive(true);
+        _octagonObject.SetActive(false);
     }
 
     [PunRPC]
