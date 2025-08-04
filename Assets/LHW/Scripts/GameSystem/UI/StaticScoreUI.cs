@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Photon.Pun;
 using UnityEngine;
 
 /// <summary>
@@ -48,7 +49,8 @@ public class StaticScoreUI : MonoBehaviour
                 if (leftWinImages[i].activeSelf) continue;
                 if (!leftWinImages[i].activeSelf)
                 {
-                    leftWinImages[i].SetActive(true);
+                    PhotonView leftImgView = leftWinImages[i].GetComponent<PhotonView>();
+                    leftImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, true);
 
                     break;
                 }
@@ -61,7 +63,8 @@ public class StaticScoreUI : MonoBehaviour
                 if (rightWinImages[i].activeSelf) continue;
                 if (!rightWinImages[i].activeSelf)
                 {
-                    rightWinImages[i].SetActive(true);
+                    PhotonView rightImgView = rightWinImages[i].GetComponent<PhotonView>();
+                    rightImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, true);
 
                     break;
                 }
@@ -79,18 +82,24 @@ public class StaticScoreUI : MonoBehaviour
 
         if (currentWinner == "Left")
         {
-            leftWinImages[leftWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
+            PhotonView leftImgView = leftWinImages[leftWinNum-1].GetComponent<PhotonView>();
+            leftImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
+            
             if (rightRoundNum == 1 && rightWinImages[rightWinNum].activeSelf)
             {
-                rightWinImages[rightWinNum].SetActive(false);
+                PhotonView rightImgView = rightWinImages[rightWinNum].GetComponent<PhotonView>();
+                rightImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, false);
             }
         }
         else if (currentWinner == "Right")
         {
-            rightWinImages[rightWinNum - 1].transform.DOScale(new Vector3(2.5f, 2.5f, 2.5f), 0.1f).SetDelay(scoreObtainDelay);
+            PhotonView rightImgView = rightWinImages[rightWinNum-1].GetComponent<PhotonView>();
+            rightImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
+            
             if (leftRoundNum == 1 && leftWinImages[leftWinNum].activeSelf)
             {
-                leftWinImages[leftWinNum].SetActive(false);
+                PhotonView leftImgView = leftWinImages[leftWinNum].GetComponent<PhotonView>();
+                leftImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, false);
             }
         }
     }

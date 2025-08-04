@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -47,7 +48,8 @@ public class MapController : MonoBehaviour
     /// </summary>
     private void MapMove()
     {
-        Debug.Log("½ÇÇà");
+        if (!PhotonNetwork.IsMasterClient) return;
+
         if (!TestIngameManager.Instance.IsCardSelectTime)
         {
             moveCoroutine = StartCoroutine(MovementCoroutine());
@@ -60,12 +62,11 @@ public class MapController : MonoBehaviour
 
         MapDynamicMovement[] movements = rounds[TestIngameManager.Instance.CurrentGameRound].GetComponentsInChildren<MapDynamicMovement>();
 
-        Debug.Log(movements);
-
         for (int i = 0; i < movements.Length; i++)
         {
             if (movements[i] != null)
             {
+
                 movements[i].DynamicMove();
                 yield return delay;
             }
