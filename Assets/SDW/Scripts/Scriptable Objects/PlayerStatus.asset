@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: PlayerStatus
   m_EditorClassIdentifier: 
   DefaultHp: 100
-  DefaultMoveSpeed: 5
+  DefaultGroundSpeed: 5
+  DefaultAirSpeed: 0.2
   DefaultAmmo: 3
-  DefaultAttackSpeed: 5
+  DefaultAttackSpeed: 0.5
   DefaultDamage: 10
   DefaultReloadSpeed: 2
+  DefaultBulletSpeed: 10
+  DefaultAttackDelay: 10
+  AmmoConsumption: 0
+  DefaultInvincibilityCoolTime: 2
