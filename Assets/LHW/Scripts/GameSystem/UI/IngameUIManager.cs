@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -60,7 +61,8 @@ public class IngameUIManager : MonoBehaviour
 
     private void HideCardSelectPanel()
     {
-        cardSelectPanel.SetActive(false);
+        PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
+        cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.AllBuffered, false);
     }
 
     /// <summary>
@@ -70,10 +72,12 @@ public class IngameUIManager : MonoBehaviour
     IEnumerator RoundOverPanelCoroutine()
     {
         WaitForSeconds delay = new WaitForSeconds(roundOverPanelDuration);
-        roundOverPanel.SetActive(true);
+        PhotonView roundOverPanelView = roundOverPanel.GetComponent<PhotonView>();
+        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.AllBuffered, true);
 
         yield return delay;
-        HideRoundOverPanel();
+        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.AllBuffered, false);
+
         TestIngameManager.Instance.RoundStart();
         if (TestIngameManager.Instance.IsGameSetOver)
         {
@@ -82,22 +86,21 @@ public class IngameUIManager : MonoBehaviour
             TestIngameManager.Instance.GameSetStart();
             if (!TestIngameManager.Instance.IsGameOver)
             {
-                cardSelectPanel.SetActive(true);
+                PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
+                cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.AllBuffered, true);
             }
         }
 
         ROPanelCoroutine = null;
     }
 
-    /// <summary>
-    /// 게임 재시작 패널을 딜레이 시간 이후에 활성화하는 코루틴
-    /// </summary>
-    /// <returns></returns>
     IEnumerator RestartPanelCoroutine()
     {
         yield return new WaitForSeconds(restartPanelShowDelay);
 
-        gameRestartPanel.SetActive(true);
+        PhotonView restartPanelView = gameRestartPanel.GetComponent<PhotonView>();
+        restartPanelView.RPC(nameof(GameRestartPanelController.GameRestartPanelActivate), RpcTarget.AllBuffered, true);
+
         restartPanelCoroutine = null;
     }
 }

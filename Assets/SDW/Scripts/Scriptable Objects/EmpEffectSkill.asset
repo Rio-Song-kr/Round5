@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e2484c9ac188747a2f4240d4d5da4d, type: 3}
   m_Name: EmpEffectSkill
   m_EditorClassIdentifier: 
-  SkillName: 1
-  CoolDown: 5
+  SkillName: 2
+  Cooldown: 5
   IsPassive: 0
   Status:
   - EffectType: 5
@@ -27,7 +27,7 @@ MonoBehaviour:
     Duration: -1
     RemainingTime: -1
     IsPermanent: 1
-    CanAddPlayer: 0
+    CanAddPlayer: 1
   - EffectType: 1
     EffectValue: -0.4
     Duration: 2
@@ -39,11 +39,11 @@ MonoBehaviour:
   MinExpansionSpeed: 0.7
   FastExpansionRadius: 1
   DecelerationDuration: 0.5
-  InitialialRadius: 0.3
+  InitialialRadius: 0.5
   ArcPrefab: {fileID: 1359725081062828864, guid: 1f74af41a3137bb4dad40b21116d591c, type: 3}
   VfxArcPrefab: {fileID: 4176774620949802689, guid: 7041c0922d827984581b9bf153f337cf, type: 3}
   TargetMask:
     serializedVersion: 2
     m_Bits: 1344
   ArcCount: 30
-  SkillPosition: {x: 0.5263142, y: 3.522344, z: 0}
+  SkillPosition: {x: -2.9900963, y: 3.6653664, z: 0}

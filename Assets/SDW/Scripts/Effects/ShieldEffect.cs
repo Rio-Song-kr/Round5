@@ -1,81 +1,148 @@
-using System.Collections;
-using Photon.Pun;
+﻿using System.Collections;
 using UnityEngine;
+using Photon.Pun;
 using UnityEngine.UI;
 
-public class ShieldEffect : MonoBehaviourPun
+public class ShieldEffect : MonoBehaviourPun, IPunObservable
 {
-    [SerializeField] private Image _shieldImg;
-    private float _shieldScaleMultiplier = 1.1f;
-    private float _shieldScaleDuration = 0.2f;
-    private Vector3 _originalScale;
-    private Coroutine _coroutine;
-    private bool _isInitialized;
+    [SerializeField] private GameObject _shieldObject;
 
-    /// <summary>
-    /// Enable 시 Shield 크기 조절(반복) Coroutine 시작
-    /// </summary>
-    private void OnEnable()
+    public ShieldSkillDataSO SkillData;
+    private PlayerStatus _status;
+    private Transform _playerTransform;
+    private TestPlayerMove _myPlayer;
+
+    private float _shieldActiveTime;
+    private float _shieldTimeCount;
+    private bool _shieldEffectActivated;
+
+    private bool _isStarted;
+
+    private Vector3 _networkPosition;
+
+    private void Update()
     {
-        if (!_isInitialized) return;
+        if (!photonView.IsMine) return;
 
-        _coroutine = StartCoroutine(RoundTripScaleOverTime(Vector3.one * _shieldScaleMultiplier, _shieldScaleDuration));
-    }
-
-    /// <summary>
-    /// Disable 시 Shield 효과 초기화 및 코루틴 중지
-    /// </summary>
-    private void OnDisable()
-    {
-        _shieldImg.transform.localScale = _originalScale;
-        StopCoroutine(_coroutine);
-    }
-
-    /// <summary>
-    /// 초기화 메서드로, 쉴드 효과의 초기 설정을 수행
-    /// </summary>
-    /// <param name="targetScale">목표 스케일 값(기본값: 1.1f)</param>
-    /// <param name="duration">스케일 변경 지속 시간(기본값: 0.22f)</param>
-    public void Init(float targetScale = 1.1f, float duration = 0.22f)
-    {
-        _shieldScaleMultiplier = targetScale;
-        _shieldScaleDuration = duration;
-        _originalScale = _shieldImg.transform.localScale;
-        _isInitialized = true;
-    }
-
-    /// <summary>
-    /// 반복적으로 쉴드의 크기를 목표 스케일 사이에서 왔다 갔다 조절하는 코루틴 실행 메서드
-    /// </summary>
-    /// <param name="targetScale">목표 스케일 값</param>
-    /// <param name="duration">스케일 변화 지속 시간</param>
-    /// <returns>코루틴 객체</returns>
-    private IEnumerator RoundTripScaleOverTime(Vector3 targetScale, float duration)
-    {
-        Debug.Log($"{photonView.ViewID} - {_originalScale}");
-        var startScale = _originalScale;
-        float timer = 0f;
-        bool isReversed = false;
-
-        while (true)
+        if (_shieldEffectActivated)
         {
-            if (!isReversed)
-                _shieldImg.transform.localScale = Vector3.Lerp(startScale, targetScale, timer / duration);
-            else
-                _shieldImg.transform.localScale = Vector3.Lerp(startScale, targetScale, timer / duration);
+            //# 플레이어가 움직일 경우, 사용 시간 감소
+            _shieldTimeCount += Time.deltaTime;
 
-            timer += Time.deltaTime;
+            if (_shieldTimeCount >= _shieldActiveTime)
+                photonView.RPC(nameof(DisableShieldEffect), RpcTarget.All);
+        }
+    }
 
-            if (Mathf.Abs((targetScale - _shieldImg.transform.localScale).magnitude) < 0.01f)
-            {
-                isReversed = !isReversed;
+    /// <summary>
+    /// effect의 위치 동기화
+    /// </summary>
+    private void LateUpdate()
+    {
+        if (!_isStarted) return;
 
-                //# 튜플을 이용한 Swap
-                (startScale, targetScale) = (targetScale, startScale);
-                timer = 0;
-            }
+        if (photonView.IsMine)
+        {
+            transform.position = _playerTransform.position;
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
+        }
+    }
 
+    /// <summary>
+    /// 효과 초기화 로직 수행
+    /// </summary>
+    /// <param name="skillData">사용할 쉴드 스킬 데이터</param>
+    /// <param name="viewId">플레이어의 Photon View ID</param>
+    public void Initialize(ShieldSkillDataSO skillData, int viewId)
+    {
+        SkillData = skillData;
+
+        if (!photonView.IsMine) return;
+
+        photonView.RPC(nameof(UseShieldEffect), RpcTarget.All, viewId);
+    }
+
+    /// <summary>
+    /// Shield 효과 활성화 RPC 메서드
+    /// </summary>
+    /// <param name="viewId">활성화할 플레이어의 Photon View ID</param>
+    [PunRPC]
+    private void UseShieldEffect(int viewId)
+    {
+        _status = PhotonView.Find(viewId).GetComponent<PlayerStatus>();
+        _playerTransform = _status.transform;
+        _myPlayer = _status.GetComponent<TestPlayerMove>();
+        _isStarted = true;
+
+        foreach (var status in SkillData.Status)
+        {
+            if (status.EffectType != StatusEffectType.Invincibility) continue;
+
+            _status.ApplyStatusEffect(status.EffectType, status.EffectValue, status.Duration);
+
+            _shieldActiveTime = status.Duration;
+            _shieldEffectActivated = true;
+        }
+        _shieldObject.GetComponent<ShieldEffectController>().Init(SkillData.ShieldScaleMultiplier, SkillData.ShieldScaleDuration);
+        _shieldObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Shield 효과 비활성화 RPC 메서드 호출
+    /// </summary>
+    [PunRPC]
+    private void DisableShieldEffect()
+    {
+        _status.RemoveStatusEffect(StatusEffectType.Invincibility);
+        _shieldTimeCount = 0f;
+        _shieldEffectActivated = false;
+
+        if (photonView.IsMine)
+        {
+            StartCoroutine(FadeOutAndInactive());
+        }
+    }
+
+    /// <summary>
+    /// 활성화된 방패 효과를 점차적으로 비활성화하고 비활성 상태로 전환하는 코루틴 메서드
+    /// </summary>
+    private IEnumerator FadeOutAndInactive()
+    {
+        yield return null;
+
+        float elapsedTime = 0f;
+        var shieldImage = _shieldObject.GetComponent<Image>();
+        var originalColor = shieldImage.color;
+
+        while (elapsedTime < SkillData.FadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(shieldImage.color.a, 0f, elapsedTime / SkillData.FadeDuration);
+            var newColor = new Color(shieldImage.color.r, shieldImage.color.g, shieldImage.color.b, alpha);
+            shieldImage.color = newColor;
             yield return null;
         }
+
+        _shieldObject.SetActive(false);
+        shieldImage.color = originalColor;
+
+        _isStarted = false;
+        PhotonNetwork.Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Photon 네트워크 뷰의 데이터 직렬화 및 전송 핸들러 메서드
+    /// </summary>
+    /// <param name="stream">데이터를 전송하거나 수신하기 위한 Photon 스트림</param>
+    /// <param name="info">메시지 정보</param>
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+            stream.SendNext(transform.position);
+        else
+            _networkPosition = (Vector3)stream.ReceiveNext();
     }
 }

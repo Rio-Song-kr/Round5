@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1941966226675402295}
   - component: {fileID: 8509414462543336408}
   - component: {fileID: 4641355394556904542}
+  - component: {fileID: 2006287856076158397}
   m_Layer: 15
   m_Name: FrostSlamEffect
   m_TagString: Untagged
@@ -63,7 +64,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -163,3 +164,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c1bac6de03d4d4585e945c54aea2ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SkillData: {fileID: 11400000, guid: 8c1f2bfa4e6e395459c8ba78d16fb320, type: 2}
+--- !u!114 &2006287856076158397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6383351256617116317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

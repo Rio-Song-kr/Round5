@@ -14,8 +14,12 @@ public class StatusEffect
     public bool IsPermanent;
     public bool CanAddPlayer;
 
+    /// <summary>
+    /// 플레이어의 상태 효과를 관리하고 적용하는 클래스
+    /// </summary>
     public StatusEffect(StatusEffectType type, float value, float duration, bool isPermanent = false, bool canAddPlayer = true)
     {
+        // 초기화
         EffectType = type;
         EffectValue = value;
         Duration = duration;
