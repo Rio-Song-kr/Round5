@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ShieldSkill", menuName = "Skills/ShieldSkill")]
-public class ShieldSkillDataSO : DefenceSkillDataSO
+[CreateAssetMenu(fileName = "ShieldUpSkill", menuName = "Skills/ShieldUpSkill")]
+public class ShieldsUpDataSO : DefenceSkillDataSO
 {
-    [Header("Shield Effect Settings")]
     //# Abyssal SKill 활성화/비활성화 시 무적 Shield의 Scale이 증가/감소 하는데 소요되는 시간
     public float ShieldScaleDuration = 0.2f;
     //# Abyssal SKill 활성화/비활성화 시 무적 Shield의 Scale
@@ -19,16 +16,17 @@ public class ShieldSkillDataSO : DefenceSkillDataSO
     public override void Initialize()
     {
         _pools = FindFirstObjectByType<PoolManager>();
-        _pools.InitializePool("ShieldEffect", SkillEffectPrefab, 1, 3);
+        _pools.InitializePool("ShieldsUpEffect", SkillEffectPrefab, 2, 5);
     }
 
     public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
-        var skillEffectObject = PhotonNetwork.Instantiate("ShieldEffect", skillPosition, Quaternion.identity);
+        var skillEffectObject =
+            PhotonNetwork.Instantiate("ShieldsUpEffect", skillPosition, Quaternion.identity);
 
-        var skillEffect = skillEffectObject.GetComponent<ShieldEffect>();
-
+        var skillEffect = skillEffectObject.GetComponent<ShieldsUpEffect>();
         int playerViewId = playerTransform.gameObject.GetComponent<PhotonView>().ViewID;
+
         skillEffect.Initialize(this, playerViewId);
     }
 }

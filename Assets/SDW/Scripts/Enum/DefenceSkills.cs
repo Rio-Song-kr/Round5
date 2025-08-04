@@ -8,5 +8,7 @@ public enum DefenceSkills
     Emp,
     FrostSlam,
     Defender,
-    Hude
+    Huge,
+    ShieldUp,
+    None
 }
