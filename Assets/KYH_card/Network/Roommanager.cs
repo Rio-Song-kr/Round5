@@ -66,9 +66,9 @@ public class Roommanager : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient && AllPlayerReadyCheck())
         {
-            Debug.Log("[GameStart] 마스터가 CardTest 씬 로딩 시작");
+            Debug.Log("[GameStart] 마스터가 CardSceneAnimationTest 씬 로딩 시작");
             isSceneLoading = true;
-            PhotonNetwork.LoadLevel("CardTest");
+            PhotonNetwork.LoadLevel("CardSceneAnimationTest");
         }
     }
 

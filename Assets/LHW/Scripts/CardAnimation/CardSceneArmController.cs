@@ -7,6 +7,7 @@ public class CardSceneArmController : MonoBehaviour
 
     public void SelectCard(int num)
     {
+        Debug.Log($"[ArmController] 팔 움직임 호출 index = {num}");
         right.SelectCard(num);
         left.SelectCard(num);
     }

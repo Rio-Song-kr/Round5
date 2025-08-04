@@ -37,9 +37,11 @@ public class CardSceneCharacterRightArm : MonoBehaviour
 
     public void SelectCard(int cardNum)
     {
+        Debug.Log($"[RightArm] 받은 카드 인덱스 = {cardNum}");
         if (cardNum == 2) targetCardNum = 0;
         else if (cardNum == 3) targetCardNum = 1;
         else if (cardNum == 4) targetCardNum = 2;
         else targetCardNum = 3;
+        Debug.Log($"[RightArm] 실제로 지정된 targetCardNum = {targetCardNum}");
     }
 }

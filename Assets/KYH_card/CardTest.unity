@@ -431,7 +431,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &277710212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -953,7 +953,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardSelectPanelPrefabs: {fileID: 7394512760585163232, guid: 58902ddaa28c24545af9cd2baa9ec1c3, type: 3}
-  cardSelectPanelContent: {fileID: 2079808252}
+  cardSelectPanelContent1: {fileID: 2079808252}
+  cardSelectPanelContent2: {fileID: 1993441661}
 --- !u!1001 &4537263586635206124
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1065,7 +1066,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649476480704233618, guid: 47b5c85b7bd38dc419ef08997f00214c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8771229195211778582, guid: 47b5c85b7bd38dc419ef08997f00214c, type: 3}
       propertyPath: m_LocalPosition.x
