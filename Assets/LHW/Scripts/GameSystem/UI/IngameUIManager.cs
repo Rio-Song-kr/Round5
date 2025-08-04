@@ -41,28 +41,43 @@ public class IngameUIManager : MonoBehaviour
 
     private void RoundOverPanelShow()
     {
-        ROPanelCoroutine = StartCoroutine(RoundOverPanelCoroutine());
+        if (PhotonNetwork.IsMasterClient)
+        {
+            ROPanelCoroutine = StartCoroutine(RoundOverPanelCoroutine());
+        }
     }
 
     public void HideRoundOverPanel()
     {
-        roundOverPanel.SetActive(false);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            roundOverPanel.SetActive(false);
+        }
     }
 
     public void RestartPanelShow()
     {
-        restartPanelCoroutine = StartCoroutine(RestartPanelCoroutine());
+        if (PhotonNetwork.IsMasterClient)
+        {
+            restartPanelCoroutine = StartCoroutine(RestartPanelCoroutine());
+        }
     }
 
     public void HideRestartPanel()
     {
-        gameRestartPanel.SetActive(false);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameRestartPanel.SetActive(false);
+        }
     }
 
     private void HideCardSelectPanel()
     {
-        PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
-        cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.AllBuffered, false);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
+            cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.AllBuffered, false);
+        }
     }
 
     /// <summary>
@@ -73,10 +88,10 @@ public class IngameUIManager : MonoBehaviour
     {
         WaitForSeconds delay = new WaitForSeconds(roundOverPanelDuration);
         PhotonView roundOverPanelView = roundOverPanel.GetComponent<PhotonView>();
-        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.AllBuffered, true);
+        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.All, true);
 
         yield return delay;
-        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.AllBuffered, false);
+        roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.All, false);
 
         TestIngameManager.Instance.RoundStart();
         if (TestIngameManager.Instance.IsGameSetOver)

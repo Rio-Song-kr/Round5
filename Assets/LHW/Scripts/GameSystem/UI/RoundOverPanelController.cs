@@ -1,6 +1,4 @@
-using DG.Tweening;
 using Photon.Pun;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,24 +45,38 @@ public class RoundOverPanelController : MonoBehaviourPun
     string leftTextColor = "#FF8400";
     string rightTextColor = "#009EFF";
 
+    PhotonView leftBackgroundImageView;
+    PhotonView rightBackgroundImageView;
 
+    PhotonView leftImageFillView;
+    PhotonView rightImageFillView;
 
     private void Awake()
     {
+        leftBackgroundImageView = leftImage.GetComponent<PhotonView>();
+        rightBackgroundImageView = rightImage.GetComponent<PhotonView>();
+
+        leftImageFillView = leftFillImage.GetComponent<PhotonView>();
+        rightImageFillView = rightFillImage.GetComponent<PhotonView>();
+
         gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
         Init();
-    }   
+    }
 
     private void Init()
     {
-        ImageInit();
-        string winner = TestIngameManager.Instance.ReadScore(out int left, out int right);
-        TextInit(winner, left, right);
-        ImageInit(left, right);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            ImageInit();
+            string winner = TestIngameManager.Instance.ReadScore(out int left, out int right);
+            Debug.Log("¿¨");
+            TextInit(winner, left, right);
+            ImageInit(left, right);
+        }
     }
 
     /// <summary>
@@ -72,10 +84,8 @@ public class RoundOverPanelController : MonoBehaviourPun
     /// </summary>
     private void ImageInit()
     {
-        leftImage.rectTransform.localScale = Vector3.one;
-        leftImage.rectTransform.position = leftInitTransform.position;
-        rightImage.rectTransform.localScale = Vector3.one;
-        rightImage.rectTransform.position = rightInitTransform.position;
+        leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageInit), RpcTarget.All);
+        rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageInit), RpcTarget.All);
     }
 
     /// <summary>
@@ -86,38 +96,8 @@ public class RoundOverPanelController : MonoBehaviourPun
     /// <param name="right"></param>
     private void TextInit(string winner, int left, int right)
     {
-        if (winner == "Left")
-        {
-            if (ColorUtility.TryParseHtmlString(leftTextColor, out textColor))
-            {
-                winnerText.color = textColor;
-            }
-
-            if (left == 1)
-            {
-                winnerText.text = "Half Orange";
-            }
-            else if (left == 2)
-            {
-                winnerText.text = "Round Orange";
-            }
-        }
-        else if (winner == "Right")
-        {
-            if (ColorUtility.TryParseHtmlString(rightTextColor, out textColor))
-            {
-                winnerText.color = textColor;
-            }
-
-            if (right == 1)
-            {
-                winnerText.text = "Half Blue";
-            }
-            else if (right == 2)
-            {
-                winnerText.text = "Round Blue";
-            }
-        }
+        PhotonView textView = winnerText.GetComponent<PhotonView>();
+        textView.RPC(nameof(WinnerTextController.RPC_TextInit), RpcTarget.All, winner, left, right);
     }
 
     /// <summary>
@@ -127,11 +107,23 @@ public class RoundOverPanelController : MonoBehaviourPun
     /// <param name="right"></param>
     private void ImageInit(int left, int right)
     {
-        if (left == 0) leftFillImage.fillAmount = 0;
-        else leftFillImage.fillAmount = (float)left / 2;
+        if (left == 0)
+        {
+            leftImageFillView.RPC(nameof(WinnerImageFillingUI.FillAmountInit), RpcTarget.All, 0f);
+        }
+        else
+        {
+            leftImageFillView.RPC(nameof(WinnerImageFillingUI.FillAmountInit), RpcTarget.All, (float)left / 2);
+        }
 
-        if (right == 0) rightFillImage.fillAmount = 0;
-        else rightFillImage.fillAmount = (float)right / 2;
+        if (right == 0)
+        {
+            rightImageFillView.RPC(nameof(WinnerImageFillingUI.FillAmountInit), RpcTarget.All, 0f);
+        }
+        else
+        {
+            rightImageFillView.RPC(nameof(WinnerImageFillingUI.FillAmountInit), RpcTarget.All, (float)right / 2); 
+        }
 
         if (left == 2 || right == 2)
         {
@@ -140,8 +132,8 @@ public class RoundOverPanelController : MonoBehaviourPun
             return;
         }
 
-        leftImage.rectTransform.DOScale(new Vector3(0, 0, 0), roundImageShrinkDuration).SetDelay(gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
-        rightImage.rectTransform.DOScale(new Vector3(0, 0, 0), roundImageShrinkDuration).SetDelay(gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
+        leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration, gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
+        rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration, gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
     }
 
     /// <summary>
@@ -153,47 +145,47 @@ public class RoundOverPanelController : MonoBehaviourPun
         string currentWinner = TestIngameManager.Instance.ReadRoundScore(out int leftScore, out int rightScore);
         if (currentWinner == "Left")
         {
-            leftImage.transform.DOScale(new Vector3(0.13f, 0.13f, 0.13f), winImageShrinkDuration).SetDelay(winImageShrinkDelay);
+            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f, winImageShrinkDuration, winImageShrinkDelay);
             float imageShrinkTime = winImageShrinkDuration + winImageShrinkDelay;
             switch (leftScore)
             {
                 case 1:
-                    leftImage.rectTransform.DOMove(leftImageWinSpot[0].position, winImageMoveDuration).SetDelay(imageShrinkTime);
+                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, leftImageWinSpot[0].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 2:
-                    leftImage.rectTransform.DOMove(leftImageWinSpot[1].position, winImageMoveDuration).SetDelay(imageShrinkTime);
+                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, leftImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 3:
-                    leftImage.rectTransform.DOMove(leftImageWinSpot[2].position, winImageMoveDuration).SetDelay(imageShrinkTime);
+                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, leftImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 default:
                     break;
             }
             float winnerImageMoveTime = imageShrinkTime + winImageMoveDuration;
-            rightImage.transform.DOMove(losePosition.position, winImageMoveDuration).SetDelay(winnerImageMoveTime);
-            rightImage.transform.DOScale(new Vector3(loseImageExpansionScale, loseImageExpansionScale, loseImageExpansionScale), winImageShrinkDuration).SetDelay(winnerImageMoveTime + 0.3f);
+            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, losePosition.position, winImageMoveDuration, winnerImageMoveTime);
+            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, loseImageExpansionScale, winImageShrinkDuration, winnerImageMoveTime + 0.3f);
         }
         else if (currentWinner == "Right")
         {
-            rightImage.transform.DOScale(new Vector3(0.13f, 0.13f, 0.13f), winImageShrinkDuration).SetDelay(winImageShrinkDelay);
+            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f, winImageShrinkDuration, winImageShrinkDelay);
             float imageShrinkTime = winImageShrinkDuration + winImageShrinkDelay;
             switch (rightScore)
             {
                 case 1:
-                    rightImage.rectTransform.DOMove(rightImageWinSpot[0].position, winImageMoveDuration).SetDelay(imageShrinkTime);
+                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, rightImageWinSpot[0].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 2:
-                    rightImage.rectTransform.DOMove(rightImageWinSpot[1].position, winImageMoveDuration).SetDelay(imageShrinkTime);
+                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, rightImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 3:
-                    rightImage.rectTransform.DOMove(rightImageWinSpot[2].position, winImageMoveDuration).SetDelay(imageShrinkTime);
+                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, rightImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 default:
                     break;
             }
             float winnerImageMoveTime = imageShrinkTime + winImageMoveDuration;
-            leftImage.transform.DOMove(losePosition.position, winImageShrinkDuration).SetDelay(winnerImageMoveTime);
-            leftImage.transform.DOScale(new Vector3(loseImageExpansionScale, loseImageExpansionScale, loseImageExpansionScale), winImageShrinkDuration).SetDelay(winnerImageMoveTime + 0.3f);
+            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, losePosition.position, winImageMoveDuration, winnerImageMoveTime);
+            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, loseImageExpansionScale, winImageShrinkDuration, winnerImageMoveTime + 0.3f);
         }
     }
 
