@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70b8de3227124064b545031142bf6eb2, type: 3}
+  m_Name: New Barrage
+  m_EditorClassIdentifier: 
+  description: "\uC5EC\uB7EC\uBC1C\uC758 \uCD1D\uC54C\uC744 \uB3D9\uC2DC\uC5D0 \uBC1C\uC0AC"
+  additionalProjectiles: 4
+  additionalAmmo: 5
+  damageMultiplier: 0.3
+  reloadTimeModifier: 0.25
+  blockCooldownModifier: 0
+  hpModifier: 0
+  bulletSpeedMultiplier: 1
+  specialNote: 
