@@ -172,7 +172,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
                 _moveAcceleratesInvincibilityLossRate = effectStatus.EffectValue;
         }
 
-        ShieldObject.GetComponent<ShieldEffect>().Init(SkillData.ShieldScaleMultiplier, SkillData.ShieldScaleDuration);
+        ShieldObject.GetComponent<ShieldEffectController>().Init(SkillData.ShieldScaleMultiplier, SkillData.ShieldScaleDuration);
         ShieldObject.SetActive(false);
         _shieldTimeCount = 0f;
 

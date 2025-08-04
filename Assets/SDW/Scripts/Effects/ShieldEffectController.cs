@@ -3,7 +3,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShieldEffect : MonoBehaviourPun
+public class ShieldEffectController : MonoBehaviourPun
 {
     [SerializeField] private Image _shieldImg;
     private float _shieldScaleMultiplier = 1.1f;
