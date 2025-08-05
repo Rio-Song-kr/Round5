@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// ¶ó¿îµå Á¾·á ÆÐ³Î°ú °ÔÀÓ Àç½ÃÀÛ ÆÐ³ÎÀ» °ü¸®ÇÔ
+/// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 public class IngameUIManager : MonoBehaviour
 {
@@ -16,10 +16,10 @@ public class IngameUIManager : MonoBehaviour
     [SerializeField] GameObject gameRestartPanel;
 
     [Header("Offset")]
-    [Tooltip("¶ó¿îµå Á¾·á ÆÐ³Î Áö¼Ó ½Ã°£")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½")]
     [SerializeField] private float roundOverPanelDuration = 3.5f;
     public float RoundOverPanelDuration { get { return roundOverPanelDuration; } }
-    [Tooltip("°ÔÀÓ Á¾·á ÈÄ Àç½ÃÀÛ ÆÐ³Î È°¼ºÈ­ µô·¹ÀÌ")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float restartPanelShowDelay = 3.5f;
 
     Coroutine ROPanelCoroutine;
@@ -27,16 +27,22 @@ public class IngameUIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        TestIngameManager.OnRoundOver += RoundOverPanelShow;
-        TestIngameManager.OnGameOver += RestartPanelShow;
-        TestIngameManager.onCardSelectEnd += HideCardSelectPanel;
+        InGameManager.OnRoundEnd += RoundOverPanelShow;
+        InGameManager.OnGameEnd += RestartPanelShow;
+        InGameManager.OnCardSelectEnd += HideCardSelectPanel;
+        InGameManager.OnMatchEnd += OnMatchEndHandler;
+        InGameManager.OnCardSelectStart += ShowCardSelectPanel;
+        
     }
 
     private void OnDisable()
     {
-        TestIngameManager.OnRoundOver -= RoundOverPanelShow;
-        TestIngameManager.OnGameOver -= RestartPanelShow;
-        TestIngameManager.onCardSelectEnd -= HideCardSelectPanel;
+        InGameManager.OnRoundEnd -= RoundOverPanelShow;
+        InGameManager.OnGameEnd -= RestartPanelShow;
+        InGameManager.OnCardSelectEnd -= HideCardSelectPanel;
+        InGameManager.OnMatchEnd -= OnMatchEndHandler;
+        InGameManager.OnCardSelectStart -= ShowCardSelectPanel;
+        
     }
 
     private void RoundOverPanelShow()
@@ -80,8 +86,25 @@ public class IngameUIManager : MonoBehaviour
         }
     }
 
+    private void ShowCardSelectPanel()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
+            cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate),RpcTarget.AllBuffered, true);
+        }
+    }
+
+    private void OnMatchEndHandler()
+    {
+        if (PhotonNetwork.IsMasterClient && creator != null)
+        {
+            creator.MapUpdate(InGameManager.Instance.CurrentMatch);
+        }
+    }
+
     /// <summary>
-    /// ¶ó¿îµå Á¾·á ÆÐ³ÎÀ» È°¼ºÈ­ÇÏ°í Áö¼Ó½Ã°£¸¸Å­ À¯ÁöÇÑ ´ÙÀ½ ´Ù½Ã ºñÈ°¼ºÈ­ÇÏ´Â ÄÚ·çÆ¾
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ó½Ã°ï¿½ï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ï¿½Ï´ï¿½ ï¿½Ú·ï¿½Æ¾
     /// </summary>
     /// <returns></returns>
     IEnumerator RoundOverPanelCoroutine()
@@ -92,20 +115,6 @@ public class IngameUIManager : MonoBehaviour
 
         yield return delay;
         roundOverPanelView.RPC(nameof(RoundOverPanelController.RoundOverPanelActivate), RpcTarget.All, false);
-
-        TestIngameManager.Instance.RoundStart();
-        if (TestIngameManager.Instance.IsGameSetOver)
-        {
-            Debug.Log("»õ ¼¼Æ® ½ÃÀÛ");
-            creator.MapUpdate(TestIngameManager.Instance.CurrentGameRound);
-            TestIngameManager.Instance.GameSetStart();
-            if (!TestIngameManager.Instance.IsGameOver)
-            {
-                PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
-                cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.AllBuffered, true);
-            }
-        }
-
         ROPanelCoroutine = null;
     }
 
