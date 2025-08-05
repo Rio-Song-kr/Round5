@@ -28,6 +28,8 @@ public class PlayerWallClimbing : MonoBehaviourPun
     private Collider2D col;
     private LayerMask groundLayerMask;
 
+    private Transform actualLeftSensor, actualRightSensor;
+
     // 벽 관련 변수
     private bool isWallClimbing;
     private bool isWallLeaning;
@@ -47,7 +49,6 @@ public class PlayerWallClimbing : MonoBehaviourPun
         Holding,
         Climbing
     }
-
 
     private void Update()
     {
@@ -69,7 +70,6 @@ public class PlayerWallClimbing : MonoBehaviourPun
     {
         UpdateWallCheckPositions();
     }
-
 
     #region RPCs
 
@@ -94,9 +94,9 @@ public class PlayerWallClimbing : MonoBehaviourPun
     [PunRPC]
     private void OnWallStateChanged(int newStateInt)
     {
-        WallState newState = (WallState)newStateInt;
+        var newState = (WallState)newStateInt;
 
-        
+
         // 추후 시각적 효과나 사운드 재생 등 
         string playerName = photonView.Owner != null ? photonView.Owner.NickName : "Local";
 
@@ -153,12 +153,10 @@ public class PlayerWallClimbing : MonoBehaviourPun
 
     #endregion
 
-
     private void HandleInput()
     {
         upInput = Input.GetKey(KeyCode.W);
     }
-
 
     #region 벽 감지 부분
 
@@ -194,7 +192,7 @@ public class PlayerWallClimbing : MonoBehaviourPun
 
         bool isFacingRight = IsFacingRight();
 
-        Transform actualLeftSensor, actualRightSensor;
+        // Transform actualLeftSensor, actualRightSensor;
 
         if (isFacingRight)
         {
@@ -207,8 +205,8 @@ public class PlayerWallClimbing : MonoBehaviourPun
             actualRightSensor = wallCheckLeft;
         }
 
-        Collider2D leftHit = Physics2D.OverlapBox(actualLeftSensor.position, wallCheckSize, 0f, groundLayerMask);
-        Collider2D rightHit = Physics2D.OverlapBox(actualRightSensor.position, wallCheckSize, 0f, groundLayerMask);
+        var leftHit = Physics2D.OverlapBox(actualLeftSensor.position, wallCheckSize, 0f, groundLayerMask);
+        var rightHit = Physics2D.OverlapBox(actualRightSensor.position, wallCheckSize, 0f, groundLayerMask);
 
         isOnLeftWall = leftHit != null;
         isOnRightWall = rightHit != null;
@@ -217,7 +215,7 @@ public class PlayerWallClimbing : MonoBehaviourPun
         {
             ResetWallState();
         }
-        else if ((isOnLeftWall && !prevLeftWall) || (isOnRightWall && !prevRightWall))
+        else if (isOnLeftWall && !prevLeftWall || isOnRightWall && !prevRightWall)
         {
             if (playerController != null)
             {
@@ -226,9 +224,28 @@ public class PlayerWallClimbing : MonoBehaviourPun
         }
     }
 
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        // 왼쪽 센서 기즈모 (빨간색)
+        if (actualLeftSensor != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(actualLeftSensor.position, new Vector3(wallCheckSize.x, wallCheckSize.y, 0f));
+        }
+
+        // 오른쪽 센서 기즈모 (초록색)
+        if (actualRightSensor != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(actualRightSensor.position, new Vector3(wallCheckSize.x, wallCheckSize.y, 0f));
+        }
+    }
+#endif
+
     public void ResetWallState()
     {
-        WallState prevState = currentWallState;
+        var prevState = currentWallState;
 
         currentWallState = WallState.None;
         isWallClimbing = false;
@@ -261,7 +278,7 @@ public class PlayerWallClimbing : MonoBehaviourPun
             return;
         }
 
-        WallState newWallState = DetermineWallState();
+        var newWallState = DetermineWallState();
         if (newWallState != currentWallState)
         {
             OnWallStateChanged(newWallState);
@@ -274,8 +291,8 @@ public class PlayerWallClimbing : MonoBehaviourPun
     {
         float moveInput = playerController != null ? playerController.GetMoveInput() : 0f;
 
-        bool pressingTowardsWall = (isOnLeftWall && moveInput < 0) || (isOnRightWall && moveInput > 0);
-        bool tryingToLeaveWall = (isOnLeftWall && moveInput > 0) || (isOnRightWall && moveInput < 0);
+        bool pressingTowardsWall = isOnLeftWall && moveInput < 0 || isOnRightWall && moveInput > 0;
+        bool tryingToLeaveWall = isOnLeftWall && moveInput > 0 || isOnRightWall && moveInput < 0;
 
         if (tryingToLeaveWall) return WallState.None;
         if (!pressingTowardsWall) return WallState.None;
@@ -291,7 +308,7 @@ public class PlayerWallClimbing : MonoBehaviourPun
 
     private void OnWallStateChanged(WallState newState)
     {
-        WallState prevState = currentWallState;
+        var prevState = currentWallState;
 
         isWallClimbing = false;
         isWallLeaning = false;
@@ -382,11 +399,11 @@ public class PlayerWallClimbing : MonoBehaviourPun
         }
     }
 
-    private System.Collections.IEnumerator DelayedWallJump(float jumpDirection, float jumpForce)
+    private IEnumerator DelayedWallJump(float jumpDirection, float jumpForce)
     {
         yield return new WaitForFixedUpdate();
 
-        Vector2 wallJumpForce = new Vector2(
+        var wallJumpForce = new Vector2(
             jumpDirection * jumpForce * wallJumpHorizontalForce,
             jumpForce * wallJumpVerticalForce
         );
