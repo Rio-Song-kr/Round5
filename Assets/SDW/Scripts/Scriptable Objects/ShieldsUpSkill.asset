@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a33a66d6ec16f49abd6d9d5d5c39a6, type: 3}
+  m_Name: ShieldsUpSkill
+  m_EditorClassIdentifier: 
+  SkillName: 6
+  Cooldown: 0
+  IsPassive: 1
+  Status:
+  - EffectType: 8
+    EffectValue: 0.5
+    Duration: 0
+    RemainingTime: 0
+    IsPermanent: 1
+    CanAddPlayer: 1
+  - EffectType: 10
+    EffectValue: 0.5
+    Duration: 0
+    RemainingTime: 0
+    IsPermanent: 0
+    CanAddPlayer: 1
+  SkillEffectPrefab: {fileID: 567960233459951963, guid: b8d6843f1e9b0b7439f6ac2991842644, type: 3}
+  ShieldScaleDuration: 0.2
+  ShieldScaleMultiplier: 1.1
+  FadeDuration: 0.2
