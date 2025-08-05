@@ -36,12 +36,12 @@ public class TestNetwork : MonoBehaviourPunCallbacks
             Debug.Log("마스터 클라이언트 입니다.");
         }
         // 이형원 - 테스트용 코드로 추가했습니다
-        creator.gameObject.SetActive(true);
+        //creator.gameObject.SetActive(true);
     }
 
     public override void OnJoinedRoom()
     {
         // 이형원 - 테스트용 코드로 추가했습니다
-        creator.gameObject.SetActive(true);
+        //creator.gameObject.SetActive(true);
     }
 }
