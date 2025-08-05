@@ -33,7 +33,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     private Coroutine _scalingCoroutine;
 
     private Transform _playerTransform;
-    private TestPlayerMove _myPlayer;
+    private PlayerController _myPlayer;
     private IStatusEffectable _status;
 
     private Vector3 _networkPosition;
@@ -114,17 +114,8 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     {
         if (!_isStarted) return;
 
-        if (photonView.IsMine)
-        {
-            transform.position = _playerTransform.position;
-            _vfxObject.transform.position = _playerTransform.position;
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
-            _vfxObject.transform.position =
-                Vector3.Lerp(_vfxObject.transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
-        }
+        transform.position = _playerTransform.position;
+        _vfxObject.transform.position = _playerTransform.position;
     }
 
     /// <summary>
@@ -165,7 +156,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     {
         var playerTransform = PhotonView.Find(playerViewId).transform;
         _playerTransform = playerTransform;
-        _myPlayer = _playerTransform.GetComponent<TestPlayerMove>();
+        _myPlayer = _playerTransform.GetComponent<PlayerController>();
 
         var effect = GetComponent<AbyssalCountdownEffect>();
 
@@ -314,19 +305,6 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     }
 
     /// <summary>
-    /// Photon 네트워크 뷰 동기화를 위해 뷰 데이터를 직렬화 및 역직렬화하는 메서드
-    /// </summary>
-    /// <param name="stream">데이터를 직렬화하거나 역직렬화할 PhotonStream 객체</param>
-    /// <param name="info">데이터 전송에 대한 정보를 담고 있는 PhotonMessageInfo 객체</param>
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-            stream.SendNext(transform.position);
-        else
-            _networkPosition = (Vector3)stream.ReceiveNext();
-    }
-
-    /// <summary>
     /// 2D 충돌 감지 시 특정 조건 하의 플레이어에 대한 효과 처리를 수행
     /// </summary>
     /// <param name="other">충돌한 Collider2D 컴포넌트</param>
@@ -387,6 +365,14 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         var targetView = PhotonView.Find(viewId);
         var otherStatus = targetView.GetComponent<IStatusEffectable>();
 
+        var targetRB = targetView.gameObject.GetComponent<Rigidbody2D>();
+        targetRB.gravityScale = 0f;
+        targetRB.velocity = Vector2.zero;
+
+        var targetPlayer = targetView.gameObject.GetComponent<PlayerController>();
+        targetPlayer.SetZeroToRemoteVelocity();
+
+
         //# Abyssal Countdown의 끌려가는 효과에 의해 이속이 2배가 되어야 이동이 가능해짐
         otherStatus.ApplyStatusEffect(
             StatusEffectType.ReduceSpeed,
@@ -405,6 +391,9 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         var targetView = PhotonView.Find(viewId);
         var otherStatus = targetView.gameObject.GetComponent<IStatusEffectable>();
 
+        var targetRB = targetView.gameObject.GetComponent<Rigidbody2D>();
+        targetRB.gravityScale = 1f;
+
         if (otherStatus != null)
             otherStatus.RemoveStatusEffect(StatusEffectType.ReduceSpeed);
     }
@@ -420,5 +409,22 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
         var targetView = PhotonView.Find(viewId);
 
         if (targetView != null) targetView.transform.position = position;
+    }
+
+    /// <summary>
+    /// Photon 네트워크 뷰 동기화를 위해 뷰 데이터를 직렬화 및 역직렬화하는 메서드
+    /// </summary>
+    /// <param name="stream">데이터를 직렬화하거나 역직렬화할 PhotonStream 객체</param>
+    /// <param name="info">데이터 전송에 대한 정보를 담고 있는 PhotonMessageInfo 객체</param>
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+        }
+        else
+        {
+            _networkPosition = (Vector3)stream.ReceiveNext();
+        }
     }
 }

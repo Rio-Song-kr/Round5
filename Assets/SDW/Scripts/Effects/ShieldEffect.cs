@@ -10,7 +10,7 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
     public ShieldSkillDataSO SkillData;
     private PlayerStatus _status;
     private Transform _playerTransform;
-    private TestPlayerMove _myPlayer;
+    private PlayerController _myPlayer;
 
     private float _shieldActiveTime;
     private float _shieldTimeCount;
@@ -40,14 +40,7 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
     {
         if (!_isStarted) return;
 
-        if (photonView.IsMine)
-        {
-            transform.position = _playerTransform.position;
-        }
-        else
-        {
-            transform.position = Vector3.Lerp(transform.position, _networkPosition, Time.deltaTime * _myPlayer.MoveSpeed);
-        }
+        transform.position = _playerTransform.position;
     }
 
     /// <summary>
@@ -73,7 +66,7 @@ public class ShieldEffect : MonoBehaviourPun, IPunObservable
     {
         _status = PhotonView.Find(viewId).GetComponent<PlayerStatus>();
         _playerTransform = _status.transform;
-        _myPlayer = _status.GetComponent<TestPlayerMove>();
+        _myPlayer = _status.GetComponent<PlayerController>();
         _isStarted = true;
 
         foreach (var status in SkillData.Status)

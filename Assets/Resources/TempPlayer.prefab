@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 6527654916710172329}
   - component: {fileID: 5958319763988689920}
   - component: {fileID: -6967930792878188186}
+  - component: {fileID: 8078386281571028159}
   m_Layer: 8
   m_Name: TempPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,7 +202,7 @@ MonoBehaviour:
   groundCheckSize: {x: 0.8, y: 0.1}
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1088
   positionLerpRate: 10
   rotationLerpRate: 15
   velocityLerpRate: 8
@@ -312,3 +313,16 @@ MonoBehaviour:
   _rightArmSpline: {fileID: 5445313185686569237, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
   _gunPos: {fileID: 9158709318525055923, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
   _gunAxis: {fileID: 1444281678518477746, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
+--- !u!114 &8078386281571028159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285512379662976336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47dae2d8dea58e549a81b4abcae2882b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillDatabase: {fileID: 11400000, guid: c8fb113fd3f2876458a1288ae51ab551, type: 2}
