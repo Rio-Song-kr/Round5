@@ -1,13 +1,13 @@
 using DG.Tweening;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
-using ExitGames.Client.Photon;
 public class CanvasController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Canvas MasterCanvas;
     [SerializeField] private Canvas ClientCanvas;
     [SerializeField] private CardSelectManager cardSelectManager;
-
+    FlipCard flipCard;
     private bool isMyTurn = false;
     private bool alreadyStarted = false;
     void Start()
@@ -30,21 +30,33 @@ public class CanvasController : MonoBehaviourPunCallbacks
         }
 
         // 마스터/클라이언트 구분 없이 초기화 시도
-        TryStartCardSelection();
+       // TryStartCardSelection();
     }
+
+
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
         if (propertiesThatChanged.ContainsKey("IsFirstSelector"))
         {
+            Debug.Log("온룸프로퍼티업데이트 실행");
             TryStartCardSelection();
         }
     }
 
-    private void TryStartCardSelection()
+    public void TryStartCardSelection()
     {
-        if (alreadyStarted) return;
+        Debug.Log($"[TryStartCardSelection] 호출됨 | alreadyStarted={alreadyStarted}");
 
+        alreadyStarted = false;
+
+        Debug.Log("카드 선택 과정의 시작 알림");
+
+        if (alreadyStarted)
+        {
+            Debug.LogWarning("[TryStartCardSelection] 이미 시작됨 → 중단");
+            return;
+        }
         if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("IsFirstSelector", out object selectorObj)) return;
 
         alreadyStarted = true;
@@ -98,11 +110,11 @@ public class CanvasController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SwitchTurnToOther()
     {
-      // if (cardSelectManager.HasSelected()) //  이미 선택한 사람은 턴 넘어가도 아무것도 하지 않음
-      // {
-      //     Debug.Log("이미 선택한 플레이어는 무시");
-      //     return;
-      // }
+        // if (cardSelectManager.HasSelected()) //  이미 선택한 사람은 턴 넘어가도 아무것도 하지 않음
+        // {
+        //     Debug.Log("이미 선택한 플레이어는 무시");
+        //     return;
+        // }
 
         Debug.Log("턴이 반대 플레이어로 전환됨");
 
@@ -110,7 +122,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
         ClientCanvas.gameObject.SetActive(true);
 
         // 턴 변경
-       // isMyTurn = !isMyTurn; //  현재 턴 주체 변경
+        // isMyTurn = !isMyTurn; //  현재 턴 주체 변경
 
         if (!isMyTurn)
         {
@@ -155,5 +167,29 @@ public class CanvasController : MonoBehaviourPunCallbacks
     public bool IsClientCanvasActive()
     {
         return ClientCanvas != null && ClientCanvas.gameObject.activeSelf;
+    }
+
+    public void ResetCardSelectionState()
+    {
+        Debug.Log("캔버스 컨트롤러의 정보 카드선택 초기화");
+        alreadyStarted = false;
+        isMyTurn = false;
+
+        MasterCanvas.gameObject.SetActive(false);
+        ClientCanvas.gameObject.SetActive(false);
+
+
+    }
+
+    public void DecideNextSelector()
+    {
+        Debug.Log("임시 테스트용 선,후 선택 순서 초기화");
+        int nextSelector = Random.Range(0, 2) == 0
+            ? PhotonNetwork.PlayerList[0].ActorNumber
+            : PhotonNetwork.PlayerList[1].ActorNumber;
+
+        ExitGames.Client.Photon.Hashtable props = new();
+        props["IsFirstSelector"] = nextSelector;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
 }

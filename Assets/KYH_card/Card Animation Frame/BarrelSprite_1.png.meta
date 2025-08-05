@@ -1,0 +1,6476 @@
+fileFormatVersion: 2
+guid: 037d3f8f6581ff948bb0d500f3f70e77
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BarrelSprite_1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 772db7723e6961346b1fbaf9586bc8c0
+      internalID: -1408476317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_1
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59af22e2548acf044a49a6236254fa74
+      internalID: 837193542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_2
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af7a8483a5520d5469198bd12f60a90e
+      internalID: 478427700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_3
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2be8e64c633bc1d489abd154f792a184
+      internalID: 1337300219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_4
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d19972c694b384c45964fb39989034bf
+      internalID: 14756136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_5
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2feb83f9a08cb074daa8b9b9ef9b3c43
+      internalID: -889705353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_6
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8cd6bde42cc2234885fe682e2b6ccdd
+      internalID: -1169677612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_7
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76b83229cbbfb184a96d5d5783e5db59
+      internalID: 179786741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_8
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18bbeb185749d0e4aa8a9a0a52f452bb
+      internalID: 1168496175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_9
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f17a715045213a4fbeb4f8c0ba63d1a
+      internalID: 1920904363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_10
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0d4b079e45419f4ebb991765062564d
+      internalID: 1126704580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_11
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 9338
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63399a950bb9d33418c46589e738f63d
+      internalID: -1422510027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26c661e6ea9c20141af1708980ccdc78
+      internalID: 1550335529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_13
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 120e705b605e7b041a985292cc739185
+      internalID: -1640104582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_14
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1379175bd2bd0e5469a1ebb72968a682
+      internalID: -996908836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_15
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7838fb9e9bf65a843b5a554b7cac6d27
+      internalID: -800147086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_16
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1efc179a8aa77cc4098c833a3848e4e6
+      internalID: 1834127454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_17
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a22d24d416d420f4da4b663dbd03b63a
+      internalID: -748032231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_18
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4d454b7e46818a4d96443074b6e72f3
+      internalID: -1959073095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_19
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f018aeabbab46b4bace0a525be2f97b
+      internalID: 1527250839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_20
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc1e10180d574434dafc3810cc03e5e9
+      internalID: 227488542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_21
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d46ef8a029d36084fb9f1248949799b3
+      internalID: 859456457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_22
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc0d49dae3a35a94fa5cb51b8a8d6aa8
+      internalID: -979492030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_23
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 8932
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 083a01f1a656a5742a2113c064ee6122
+      internalID: -66720506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54d8c3d4a175c3842ba826a1e3f5a4e7
+      internalID: -1814420425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_25
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 316e64076b8567b4cb9605bff2522fc7
+      internalID: -1260854894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_26
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deae2b03df576e04aa1ba1e84d3c53ff
+      internalID: 126612770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_27
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0aa34ea1d22c934ba833f8ba52c648c
+      internalID: 955357517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_28
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97c16fa90d6f6ab4ab6c20952fb0318a
+      internalID: 1284060477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_29
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d66931e83ef52c49a4478c67140f838
+      internalID: 1921660272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_30
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb6c3852d7c05904f87151580f339c49
+      internalID: -1472915680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_31
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e0f8feec9c5f084dbda2b4be521d89c
+      internalID: 566162985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_32
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7220319c96fc6e4aaab9bed56382e18
+      internalID: 44542224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_33
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6599a6fba1c4a3c41bdc0906f710b150
+      internalID: -759504130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_34
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c228796de9788143bd2dbfd0f0393fc
+      internalID: 1004487487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_35
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 8526
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ec4d393321bc6746acd3821b78cda38
+      internalID: 820236402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: febe8197de5e5ec4e98af1534ac5a390
+      internalID: 271682028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_37
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 600dbf6f433130247bfc80e909166946
+      internalID: -1404035119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_38
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a38f26ff47283ab4bb20af5b3fbe0da1
+      internalID: -1463655806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_39
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7810db8ce74ce14ab133afb13d73c89
+      internalID: -1415298819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_40
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd8795d50df82e245851272e3845f979
+      internalID: -638167370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_41
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f0aa9f4657cfb14185af4416bc7bf53
+      internalID: 478741418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_42
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0342a69b9bea5847a4e2ad15137af1f
+      internalID: -1848876730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_43
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee43223506c80a043b073009df559612
+      internalID: -770485356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_44
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b572dd571886514ea64dd7465bafb8a
+      internalID: -456759348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_45
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb29aa13df201c74e847172393c7cbcf
+      internalID: 717553085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_46
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1244efba987d0a84c82eb4e3d571f659
+      internalID: 1269185957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_47
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 8120
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aacd4907f178bf342a28d84727d2b2db
+      internalID: 1229512077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a6fe1b8bb7f71f4a965a46d3c5e0bb8
+      internalID: -439646910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_49
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9043b5d0fe0b7a4e8d464e03129b3d2
+      internalID: -1539066068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_50
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1d1c1ace8ae461498d3984285d97aad
+      internalID: -1036756551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_51
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2589e09979dabdd4aa9e01ce4fac6050
+      internalID: -1880796829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_52
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aad310f961004fd4a83eaf35b41eace6
+      internalID: -1160630115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_53
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca1dfa8060442f744b5c7505265bd0ae
+      internalID: 139827308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_54
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df810038a6c1c9f4e800ebc24092a31b
+      internalID: 207521089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_55
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39c45d8cb6f376543a50c21b60c2f91f
+      internalID: 1948021381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_56
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ba32891482a455449fc1c8ca9e0fe8b
+      internalID: -166067407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_57
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cec8bb8e74b1516409eee3aba95de194
+      internalID: -1607165767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_58
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b57beaf38b026bd4b992f82ab8e50427
+      internalID: -1104153237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_59
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 7714
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 934924365f9ffd74088cd147b1a49906
+      internalID: 1723228299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 123db7c81466b1e4cb3687ce852bbe7e
+      internalID: -1795327080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_61
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e8348b2f06abe64ea4dadf0bd9f28be
+      internalID: 768776550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_62
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 822b125c501cd5d4088dd0027a46ef5f
+      internalID: -31864910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_63
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3847ee923360d184eaff17d8b5c9132d
+      internalID: 1678396153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_64
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 605d0b515aa863d4a88ba1e5f20bdca2
+      internalID: -1775868146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_65
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3aea71e0b8828d4886a338be1db74a2
+      internalID: -862186710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_66
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77caa7c5711a5cb4b844eeaea63fa6e3
+      internalID: -1235738927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_67
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1fd662d29dc6964e8d594b61fd83b60
+      internalID: -1511071786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_68
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0f5dac4808569043a8a78aa1e9308a7
+      internalID: 165811232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_69
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6f5e82b28cf3a6419db0c1c25413b46
+      internalID: -1462628647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_70
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12f3391f7097e404e8f264bb33cc1fef
+      internalID: 1363248527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_71
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 7308
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 212854bcd9ef5f44a96419528216ee74
+      internalID: -274233739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_72
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71d99b085a2b6df4aaf2d0a456f1669d
+      internalID: -822116343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_73
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 285aff0383473bf49b5f8dfbe4feb334
+      internalID: 1180631145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_74
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ecfff97166ed614887ce7bc301c5de5
+      internalID: 1986994664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_75
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2131648fc542b584387dc4b315cd0505
+      internalID: 1038693448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_76
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ed7a5411e015904db5a64ce4ded2f27
+      internalID: -2003972103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_77
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60f1eafce68572744b59a3ee7c354425
+      internalID: -1404904253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_78
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc40cd2453fc65c4b8a29a917be6bd6b
+      internalID: -578632494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_79
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a71a2111fb403b34288ae7b0096317f1
+      internalID: 744885311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_80
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29f2236e035191944be98c24cf00c0e0
+      internalID: -935625966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_81
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 031027c2db8de7045a3dcbefd859af6b
+      internalID: 1627961681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_82
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efa2a773c1cc4c145a0d22852eb20552
+      internalID: -1202187703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_83
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 6902
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd78795533b7cf64290f5e5c556a8811
+      internalID: 1948962819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_84
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df6e6648e08bf9746b3afcc8079aad8c
+      internalID: -1243739575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_85
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ec6266ec8278854cb64ca963cb3ae91
+      internalID: -1673708915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_86
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ebe6a9b3ea516540809478fb44421cd
+      internalID: -583302317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_87
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25b3f7bc23d8d0c49a0d41ffcdffdc8c
+      internalID: -1501994239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_88
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b2e1fa301915554286241e8746e9c87
+      internalID: -828201923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_89
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0d514a9290506344afcfadc53708359
+      internalID: -2093897008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_90
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 518435941c5e66f4b9b21c9476add339
+      internalID: 687585256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_91
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc3211bc5da4e6845867f2e5596c7c31
+      internalID: 1170874789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_92
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5af41545eec24449879866d3a3b1fec
+      internalID: 329602261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_93
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8d11ab9e69b7834fb2660cab766a92c
+      internalID: 2073323530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_94
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79356200ee386d84b86e8f3ea1039020
+      internalID: 1837566104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_95
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 6496
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26724f9dd19c6fa489cd75f0a55cb937
+      internalID: -1855503203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_96
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6a58a8877f6cb747b6cb4a0cae37fc1
+      internalID: -929923262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_97
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cbb646aee7c5a549a548721c555527c
+      internalID: 234912112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_98
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6902c765c4c70074b900f422ba23f8de
+      internalID: -1873587626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_99
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d35aa6947d2419840909e0ba6a0ee34f
+      internalID: 1734871944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_100
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da5792d262f258f48a94a9d0a13feb06
+      internalID: 228891029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_101
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc53441fc76620945a2380795dd08e0b
+      internalID: -572245365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_102
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ebd3e41b5ac53b4db9746b308d79ecf
+      internalID: 221960028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_103
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af1546003cf02b541b56c3967ae94b2d
+      internalID: -1762297157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_104
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9fb0b61b29033d4e9ea4103c3afa61c
+      internalID: 693799192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_105
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44d7bfb969a0afa4db9566d840127582
+      internalID: -987388257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_106
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0c48d75ac3fdbc49b6b1f108a9bba82
+      internalID: 505794293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_107
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 6090
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d043ba94cf2565346a621886574748ed
+      internalID: 1310029182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_108
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ee1d44ee7ed3074ea84ba2a23a8b54e
+      internalID: 1343445742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_109
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4801c5785494d0347a010b801f75f7e5
+      internalID: 315380131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_110
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 317b76d36b0d3a041874d77c25c1eb70
+      internalID: -1758417906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_111
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d67c2158a923cc7438266f43093f4319
+      internalID: 1865886068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_112
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 912c770752be2c04c90b0021610d8faa
+      internalID: 1856596186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_113
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d7164fe903284347a46f9843377813c
+      internalID: 1714424019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_114
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d238e1a4adab7c46955065710435861
+      internalID: -1263279856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_115
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 530b09a5be2ea3a45b5eb5115b7c3578
+      internalID: 1954671182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_116
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 894971f1c43ebde41a2863533e0567de
+      internalID: 1035232610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_117
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0286f4fd62753d45bef62a67ea36c44
+      internalID: 372362852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_118
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40a71b0636ebec542ac6d9b5d1557e3c
+      internalID: 1133190184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_119
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 5684
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c639935902e696a488e0143a25a1b1a4
+      internalID: 2130263430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_120
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e96da22e0ce2b14bbab01db65b71f54
+      internalID: 34519711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_121
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf25c656734399f4eb20f23517ec17d9
+      internalID: -1880258180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_122
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: baadeeee1e8247c4795f44d30d8441af
+      internalID: 2066967357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_123
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b66ab5222412a643b8fd8ee6d7bab4a
+      internalID: 845948891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_124
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d63e2f878655a1b46a356602030d9f83
+      internalID: 141172479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_125
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c24ebaab05f77843b2441da6d4e1491
+      internalID: 248512469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_126
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 076820bcb7973274c82eaee5adca24a7
+      internalID: -443348675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_127
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43b9a407ad8dfba4992790b59b42e648
+      internalID: -224152630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_128
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2709195872f52b44a824e6acd1d554b7
+      internalID: -1712399942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_129
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b78661802d6d0f4aa4bdcf3dc7048f5
+      internalID: -110919481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_130
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4353a55671923904b82ff1aed3d9d0d1
+      internalID: -1402809519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_131
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 5278
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77a735e12bcd4e644951999f9d38ce44
+      internalID: 1802739556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_132
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79b354ebfb3d6db488911ae63b371e26
+      internalID: 741833519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_133
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a394e46de7fafe04a9f2bdce740b11ee
+      internalID: 1892340873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_134
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bccb014742dbe74aa8c49139cf4a286
+      internalID: -518978004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_135
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce305a9426ae04d4fb1a3260966eef51
+      internalID: 1892857484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_136
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d515a251680fb8647840ca0845aa96de
+      internalID: 1550815856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_137
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45c62a6e4557fa849861b3f57072a91b
+      internalID: 1376460802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_138
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1e5f171ca747fe44b87ac3e7359d5a6
+      internalID: 261483926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_139
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78c25a324e0adc74792545e9da2a2a10
+      internalID: 345892857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_140
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa87b6675fd8a974cb7eed30990302b1
+      internalID: -2076766941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_141
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c5e2147952567f448503b6eb202b3bc
+      internalID: -761205914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_142
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b92d06777d2fe254593fb9c392a6f33d
+      internalID: 142114032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_143
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 4872
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e375853c012599849a31f7c8317ade96
+      internalID: -1143040584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_144
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e66ddb6679d5aff4abc331fab1901b41
+      internalID: -242097584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_145
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4429e4b7bbe48474ca5187e681bf8fe8
+      internalID: -102463109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_146
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2fbdc1e10c973d448e72ad4c9ea2455
+      internalID: 1601355967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_147
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91d1d6e18f616a240b430c0442d6e954
+      internalID: 943429553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_148
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 047054b006eb1ae41bdeb74e0414fb51
+      internalID: -1865578723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_149
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a38804bb59918ec48a25c5cbf9196c5b
+      internalID: 472485864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_150
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57aa6808133f49946a8f95d0867fb0b3
+      internalID: 335745222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_151
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b4923ad7212b9143bb287692ef1e6bb
+      internalID: -1271226596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_152
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8aaa65ae265a0cb4684cd6b17a1392fe
+      internalID: 807853491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_153
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb0a2239860f001468b10cd68ecdb7b7
+      internalID: 341345441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_154
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb7d509fabc65de478f8801031440327
+      internalID: 1429931997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_155
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 4466
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c1141637470d2f4ca73cc824f6cb2a1
+      internalID: 1950997169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_156
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f467ccc742795248b2492a3747b3535
+      internalID: 1871940637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_157
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67220f6d346c1e84bb2761b44a37c32c
+      internalID: 1453075358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_158
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23097e7a2f2d8e0439e12d3fa5904923
+      internalID: -814344235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_159
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e23fb1087813b49458a002f4cf2f76a1
+      internalID: 1330923076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_160
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcf2311aa1fa45c42b6afcc26eea0311
+      internalID: 771556577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_161
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3eebd398ea2b63c4b8c16a0640f465f5
+      internalID: 432274434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_162
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f3cf10faa0d55c4f8caaddedd2c89c2
+      internalID: -367799961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_163
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 111a45cf0501cd046b474f29cf2dfb38
+      internalID: -717760657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_164
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96d7a196b63a0984e9abbab588704d5a
+      internalID: 1588964688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_165
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8982834634051374fa4a02184beee1c5
+      internalID: 2138261988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_166
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b17917dca9e378b45b93b0dbe69b8496
+      internalID: 1010221642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_167
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 4060
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5c4d955f9d56ca4a8d30c9b5cb5932a
+      internalID: 894280007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_168
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdfd981e57cab374d9c3866ff21dce80
+      internalID: -224078697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_169
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f506843de20c64940bedff5c7a75629e
+      internalID: -120313998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_170
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0177e80fbef790f4dae8638b31580493
+      internalID: 1178451897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_171
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51c8eaac9710a73458a5f31e32061030
+      internalID: 2143512906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_172
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90c9d534a4f25744c9cac2757010dd71
+      internalID: -218517404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_173
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7a1f5c276b54334c923cc49309fcc2e
+      internalID: -1612708073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_174
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e06abb2c6cfa3b24886604aec6e074f9
+      internalID: -1267066956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_175
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 501749044b5531443a30dffe28205974
+      internalID: 658284584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_176
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab2a14ce32808aa48abe471092fba5ef
+      internalID: -1636527848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_177
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19871072d455a7741afdfbb181e4f451
+      internalID: -16068955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_178
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b1dab9d62933f34494943d77457f2a2
+      internalID: 1540620734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_179
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 3654
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb66c8551e9eea04ea7e14faf1181793
+      internalID: 47282606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_180
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 815a934b91a90a14c8efb84482b4b07c
+      internalID: 1962847621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_181
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f44098ec95347ea44b24cea829f5caf8
+      internalID: 963779068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_182
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0ea21ced10d62a4bb712d29c93516eb
+      internalID: 1894495906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_183
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3305d66c3851b1c44a4b083d8e92e1cb
+      internalID: 22839624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_184
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c019fb319909ea34f8d49a8275c4d8ab
+      internalID: 1401753505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_185
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2ae78a6639972b41ae44052f9da5221
+      internalID: -513114242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_186
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ce719f363dfbd04a847d471e6f44a07
+      internalID: -134215841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_187
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cab66305823df3d4b996516c7297ced5
+      internalID: 358793012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_188
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fb3a952c8ca2614c9dfc0da4927e136
+      internalID: -1880362993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_189
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e6bb860f0dabce47804d7a331f5a914
+      internalID: -508950401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_190
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34ba9be691c403f4c97646c05ee2e1bf
+      internalID: -1610700841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_191
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 3248
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a15c495b6cc7674aa48f142c3ca1ed1
+      internalID: -1803617673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_192
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a9895c2de5ac434184f43666f058b5b
+      internalID: -1522504362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_193
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bde7659ea750b74496e632478130c8e
+      internalID: 1799920664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_194
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efdce361de170094a834f3af4ec4942f
+      internalID: -502185563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_195
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1cd58d0b850fe345aacc331bba03d6f
+      internalID: 1392645186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_196
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec902ba03b43a6f479afbcbe6404515a
+      internalID: -1272663720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_197
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10f1030b819ab284a8a2c2af9239c328
+      internalID: -407142026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_198
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d49ded34b4d846b458df7a353492d3cc
+      internalID: 799167728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_199
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac629db419d7c2546906c883dec288ba
+      internalID: -873663936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_200
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f66a6d0bf4ba4548a930c177344c1a6
+      internalID: -2037367224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_201
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a979d76de71bbb5479019ad75771ba51
+      internalID: -926037030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_202
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78cd529c956f8114cba6524f0f9dfeaf
+      internalID: 578470046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_203
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 2842
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 594c836d84da0ea4aadc2930830af60e
+      internalID: -627396517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_204
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 161670806660f6747b20eaaf331ac60c
+      internalID: 2121600107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_205
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4102ab359576ea94c9d2d64ae5c6a507
+      internalID: 617319615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_206
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92c46189b6246b34d93ff9aec2590bc4
+      internalID: -295435629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_207
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57054f790aa96874f8b41949d0241183
+      internalID: -1508094873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_208
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fd1fa3cb1671dc4d85bd3bebfd107b1
+      internalID: 2055320792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_209
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a4b6716179db1c42872fe7219652711
+      internalID: 1595139478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_210
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fece7bc2f0dfe9e468754cc138c3c1a1
+      internalID: -591230095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_211
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed62adb7a985afe4e9d8606331c7bebf
+      internalID: -876868071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_212
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6054b5cdd45a64b4495883a6f4c6ca04
+      internalID: 1270457688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_213
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5735e7bcda763714f937b8c1d927795a
+      internalID: -2004176374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_214
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51f16ce6d5078a645a2f8b90266678fe
+      internalID: -436209337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_215
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 2436
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 668fd90f6992ce243bd4e991b77f6c69
+      internalID: -282676716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_216
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2083f04bd72776042a9c2e4cf123928f
+      internalID: 1197395418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_217
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79ce3a90d16f1cb4c97cde1a633d3284
+      internalID: 2140281740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_218
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a38217c82ae34a4449d80787a1848c20
+      internalID: -1051890002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_219
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d00fe780ca2fd804a95b0a45b19e6a33
+      internalID: 556323204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_220
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4db3ad4b5b8289449bc900540e4e2904
+      internalID: -1620072876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_221
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f9a128107010d548a7e35acd7d05780
+      internalID: -274325072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_222
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c39ce1ea4dc79474ead22cf4158937c2
+      internalID: 2138022415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_223
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f63d675c38cfb447b991f3d38996a3e
+      internalID: 1737251338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_224
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7272ef9ff097b694daa1bac2fb5b543d
+      internalID: 667958666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_225
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cda3b2614c5acdd4eb74d0c75682a6c1
+      internalID: 538447003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_226
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 601a2b16bff965f43881f7fa8a6edb2c
+      internalID: 1192433698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_227
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 2030
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66608c3dec62ebe49a9feae68c1aa319
+      internalID: 1097460349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_228
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef6a7ca0afdcb4f4b9fb9bb5be4e99dd
+      internalID: 563109344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_229
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d9c1b21a93dd214b8ec82e0375d760d
+      internalID: -32779954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_230
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 707da742cc0e18d429fa06f7d5121436
+      internalID: -1535601096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_231
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc28afea5084a8748bad0148dca3b744
+      internalID: 880926164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_232
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fda744ed1dd528441bf4ad92901d56ec
+      internalID: 2124287526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_233
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef630bac86c42fa419b28dbd6c209a3c
+      internalID: 1173864509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_234
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adbf2231760f49c4491f2c3791d47254
+      internalID: -1431644360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_235
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df99dce97e762b943b31c38990c018f7
+      internalID: -773475432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_236
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 254dd582f42b82d4d9e60bbf3511d64f
+      internalID: 917551455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_237
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc3d6bd0192b6da4faa54de859af62b8
+      internalID: 153880091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_238
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 476d3d4a6d40eb34a8ab2a8afc6c9abc
+      internalID: -1011723569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_239
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 1624
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6090e3ff7118c249a6ccc4e0ddc3903
+      internalID: 312273169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_240
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0439553918547344781e78efeb9718f6
+      internalID: 2125886972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_241
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73ba0562532e99b4aa2a4fbb7f706a21
+      internalID: -2050624341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_242
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6326cf338dada548b7847539774500a
+      internalID: 1538944182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_243
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee14ccd97cce74849b4ec994dcc93572
+      internalID: -1313071975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_244
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 647ac1939886fb543a5e49614f023a3a
+      internalID: -2084609300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_245
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea1ba9bf751b59e4a9dc2c10f3dfefcc
+      internalID: -810413804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_246
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5011cfc061a3ab4da3ac0ff4d8986b9
+      internalID: -1552303450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_247
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1eff35fe2ae8ae44b1f557c6a3313fc
+      internalID: 1116368501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_248
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 263b242f52b125c4eb9fd67f77f501b1
+      internalID: 562257790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_249
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 595318499589fc34cba384f4d3464625
+      internalID: 1372787769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_250
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e16a70a37fdf1054a82061703e37757c
+      internalID: 871027240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_251
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 1218
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bba37a8e10fb9a445ab97565e699f5eb
+      internalID: -1170262903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_252
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a95d2def98d0365499b13c22ae1e148e
+      internalID: 867666468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_253
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd42d1b2339838043b17fbac73c85b2b
+      internalID: -658265833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_254
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7de1225a511b52548a95cf613aeb25ae
+      internalID: 1972923861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_255
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd461837ef3f17a41b16d80cb39c2e00
+      internalID: 40663193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_256
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3bbd8257a3e4e3448a0fa9146bb230b
+      internalID: -936306204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_257
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55587bcf75b31d84297e4430a284bfa6
+      internalID: 1917527942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_258
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60e56b4e7cddd1c48af297f2999ce042
+      internalID: 1562114592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_259
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84999bfae7157214c81d53a1e0624a30
+      internalID: 2141306404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_260
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4608f02aa1095b2429f8891765e76c35
+      internalID: -1721067390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_261
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a56baaa3e20eb94788a3002610b7509
+      internalID: -1194666197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_262
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dafd33fe38f95ca4d894c7aeb7ff2e22
+      internalID: -1169338760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_263
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 812
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19f8e74117ff0464594a7993e85bf9db
+      internalID: -16802789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_264
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88433298dafc17c4d93ef08736e974be
+      internalID: -1819142513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_265
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2243480ad23408e4ca5db9c2eef54223
+      internalID: -1958944075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_266
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c67557f5f0f33694192d7c9acd460851
+      internalID: -1602442030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_267
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14dd9db68dd88f34db82778204d014eb
+      internalID: -2059554436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_268
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf66ad764c397664d875bb665517f88b
+      internalID: -639848609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_269
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06aa2d59074aa8b4bbcb5d8087cd064a
+      internalID: -546078441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_270
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60eed1868380f9349883030c6708f898
+      internalID: -882622979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_271
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a89e0cd43c2357c43a74dca830343333
+      internalID: -1696891115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_272
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25b7270e3955aef4688580af50620fe7
+      internalID: 1937919106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_273
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73d1fdbe94cf28945a057c82ef47de40
+      internalID: -1718938163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_274
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1604a07f2f55db846a3fc5158519f138
+      internalID: 599193961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_275
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 406
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75e33da1e85fa2a41a6184877c86a867
+      internalID: 922788807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_276
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86c107c2d99868945a4e984051a3c61d
+      internalID: 90961521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_277
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f418beff48164684ea85b8cc47756255
+      internalID: -1148567035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_278
+      rect:
+        serializedVersion: 2
+        x: 1440
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55006ce632bd2e34c9ed6077a5ec21ee
+      internalID: 1214678660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_279
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d95c26402347b384d99ce12bc4db1b23
+      internalID: -983112730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_280
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33d568bc23391874ea39c85b8af50319
+      internalID: -718958677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_281
+      rect:
+        serializedVersion: 2
+        x: 3600
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 189491c9a9181724c9615036f89c97d7
+      internalID: -439455164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_282
+      rect:
+        serializedVersion: 2
+        x: 4320
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cd0f14ea6eee7d42a6faf96d7dc38bf
+      internalID: -1033512974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_283
+      rect:
+        serializedVersion: 2
+        x: 5040
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c64a8de135dddf44bb79c6e947528dfe
+      internalID: 70258700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_284
+      rect:
+        serializedVersion: 2
+        x: 5760
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5425d026f3a68264b8704aa1e7b8164c
+      internalID: -1228055753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_285
+      rect:
+        serializedVersion: 2
+        x: 6480
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21a5d647ffe067c41865ef94912943fe
+      internalID: 466487241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_286
+      rect:
+        serializedVersion: 2
+        x: 7200
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b4ef9e13b8d5fa42a214ee4071e53c3
+      internalID: 418649497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarrelSprite_1_287
+      rect:
+        serializedVersion: 2
+        x: 7920
+        y: 0
+        width: 720
+        height: 406
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ab552720cc971b4fb775946553be0c1
+      internalID: -1973659069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 1573a03b93aad1e4fbf104c37d7a2e80
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      BarrelSprite_1_0: -1408476317
+      BarrelSprite_1_1: 837193542
+      BarrelSprite_1_10: 1126704580
+      BarrelSprite_1_100: 228891029
+      BarrelSprite_1_101: -572245365
+      BarrelSprite_1_102: 221960028
+      BarrelSprite_1_103: -1762297157
+      BarrelSprite_1_104: 693799192
+      BarrelSprite_1_105: -987388257
+      BarrelSprite_1_106: 505794293
+      BarrelSprite_1_107: 1310029182
+      BarrelSprite_1_108: 1343445742
+      BarrelSprite_1_109: 315380131
+      BarrelSprite_1_11: -1422510027
+      BarrelSprite_1_110: -1758417906
+      BarrelSprite_1_111: 1865886068
+      BarrelSprite_1_112: 1856596186
+      BarrelSprite_1_113: 1714424019
+      BarrelSprite_1_114: -1263279856
+      BarrelSprite_1_115: 1954671182
+      BarrelSprite_1_116: 1035232610
+      BarrelSprite_1_117: 372362852
+      BarrelSprite_1_118: 1133190184
+      BarrelSprite_1_119: 2130263430
+      BarrelSprite_1_12: 1550335529
+      BarrelSprite_1_120: 34519711
+      BarrelSprite_1_121: -1880258180
+      BarrelSprite_1_122: 2066967357
+      BarrelSprite_1_123: 845948891
+      BarrelSprite_1_124: 141172479
+      BarrelSprite_1_125: 248512469
+      BarrelSprite_1_126: -443348675
+      BarrelSprite_1_127: -224152630
+      BarrelSprite_1_128: -1712399942
+      BarrelSprite_1_129: -110919481
+      BarrelSprite_1_13: -1640104582
+      BarrelSprite_1_130: -1402809519
+      BarrelSprite_1_131: 1802739556
+      BarrelSprite_1_132: 741833519
+      BarrelSprite_1_133: 1892340873
+      BarrelSprite_1_134: -518978004
+      BarrelSprite_1_135: 1892857484
+      BarrelSprite_1_136: 1550815856
+      BarrelSprite_1_137: 1376460802
+      BarrelSprite_1_138: 261483926
+      BarrelSprite_1_139: 345892857
+      BarrelSprite_1_14: -996908836
+      BarrelSprite_1_140: -2076766941
+      BarrelSprite_1_141: -761205914
+      BarrelSprite_1_142: 142114032
+      BarrelSprite_1_143: -1143040584
+      BarrelSprite_1_144: -242097584
+      BarrelSprite_1_145: -102463109
+      BarrelSprite_1_146: 1601355967
+      BarrelSprite_1_147: 943429553
+      BarrelSprite_1_148: -1865578723
+      BarrelSprite_1_149: 472485864
+      BarrelSprite_1_15: -800147086
+      BarrelSprite_1_150: 335745222
+      BarrelSprite_1_151: -1271226596
+      BarrelSprite_1_152: 807853491
+      BarrelSprite_1_153: 341345441
+      BarrelSprite_1_154: 1429931997
+      BarrelSprite_1_155: 1950997169
+      BarrelSprite_1_156: 1871940637
+      BarrelSprite_1_157: 1453075358
+      BarrelSprite_1_158: -814344235
+      BarrelSprite_1_159: 1330923076
+      BarrelSprite_1_16: 1834127454
+      BarrelSprite_1_160: 771556577
+      BarrelSprite_1_161: 432274434
+      BarrelSprite_1_162: -367799961
+      BarrelSprite_1_163: -717760657
+      BarrelSprite_1_164: 1588964688
+      BarrelSprite_1_165: 2138261988
+      BarrelSprite_1_166: 1010221642
+      BarrelSprite_1_167: 894280007
+      BarrelSprite_1_168: -224078697
+      BarrelSprite_1_169: -120313998
+      BarrelSprite_1_17: -748032231
+      BarrelSprite_1_170: 1178451897
+      BarrelSprite_1_171: 2143512906
+      BarrelSprite_1_172: -218517404
+      BarrelSprite_1_173: -1612708073
+      BarrelSprite_1_174: -1267066956
+      BarrelSprite_1_175: 658284584
+      BarrelSprite_1_176: -1636527848
+      BarrelSprite_1_177: -16068955
+      BarrelSprite_1_178: 1540620734
+      BarrelSprite_1_179: 47282606
+      BarrelSprite_1_18: -1959073095
+      BarrelSprite_1_180: 1962847621
+      BarrelSprite_1_181: 963779068
+      BarrelSprite_1_182: 1894495906
+      BarrelSprite_1_183: 22839624
+      BarrelSprite_1_184: 1401753505
+      BarrelSprite_1_185: -513114242
+      BarrelSprite_1_186: -134215841
+      BarrelSprite_1_187: 358793012
+      BarrelSprite_1_188: -1880362993
+      BarrelSprite_1_189: -508950401
+      BarrelSprite_1_19: 1527250839
+      BarrelSprite_1_190: -1610700841
+      BarrelSprite_1_191: -1803617673
+      BarrelSprite_1_192: -1522504362
+      BarrelSprite_1_193: 1799920664
+      BarrelSprite_1_194: -502185563
+      BarrelSprite_1_195: 1392645186
+      BarrelSprite_1_196: -1272663720
+      BarrelSprite_1_197: -407142026
+      BarrelSprite_1_198: 799167728
+      BarrelSprite_1_199: -873663936
+      BarrelSprite_1_2: 478427700
+      BarrelSprite_1_20: 227488542
+      BarrelSprite_1_200: -2037367224
+      BarrelSprite_1_201: -926037030
+      BarrelSprite_1_202: 578470046
+      BarrelSprite_1_203: -627396517
+      BarrelSprite_1_204: 2121600107
+      BarrelSprite_1_205: 617319615
+      BarrelSprite_1_206: -295435629
+      BarrelSprite_1_207: -1508094873
+      BarrelSprite_1_208: 2055320792
+      BarrelSprite_1_209: 1595139478
+      BarrelSprite_1_21: 859456457
+      BarrelSprite_1_210: -591230095
+      BarrelSprite_1_211: -876868071
+      BarrelSprite_1_212: 1270457688
+      BarrelSprite_1_213: -2004176374
+      BarrelSprite_1_214: -436209337
+      BarrelSprite_1_215: -282676716
+      BarrelSprite_1_216: 1197395418
+      BarrelSprite_1_217: 2140281740
+      BarrelSprite_1_218: -1051890002
+      BarrelSprite_1_219: 556323204
+      BarrelSprite_1_22: -979492030
+      BarrelSprite_1_220: -1620072876
+      BarrelSprite_1_221: -274325072
+      BarrelSprite_1_222: 2138022415
+      BarrelSprite_1_223: 1737251338
+      BarrelSprite_1_224: 667958666
+      BarrelSprite_1_225: 538447003
+      BarrelSprite_1_226: 1192433698
+      BarrelSprite_1_227: 1097460349
+      BarrelSprite_1_228: 563109344
+      BarrelSprite_1_229: -32779954
+      BarrelSprite_1_23: -66720506
+      BarrelSprite_1_230: -1535601096
+      BarrelSprite_1_231: 880926164
+      BarrelSprite_1_232: 2124287526
+      BarrelSprite_1_233: 1173864509
+      BarrelSprite_1_234: -1431644360
+      BarrelSprite_1_235: -773475432
+      BarrelSprite_1_236: 917551455
+      BarrelSprite_1_237: 153880091
+      BarrelSprite_1_238: -1011723569
+      BarrelSprite_1_239: 312273169
+      BarrelSprite_1_24: -1814420425
+      BarrelSprite_1_240: 2125886972
+      BarrelSprite_1_241: -2050624341
+      BarrelSprite_1_242: 1538944182
+      BarrelSprite_1_243: -1313071975
+      BarrelSprite_1_244: -2084609300
+      BarrelSprite_1_245: -810413804
+      BarrelSprite_1_246: -1552303450
+      BarrelSprite_1_247: 1116368501
+      BarrelSprite_1_248: 562257790
+      BarrelSprite_1_249: 1372787769
+      BarrelSprite_1_25: -1260854894
+      BarrelSprite_1_250: 871027240
+      BarrelSprite_1_251: -1170262903
+      BarrelSprite_1_252: 867666468
+      BarrelSprite_1_253: -658265833
+      BarrelSprite_1_254: 1972923861
+      BarrelSprite_1_255: 40663193
+      BarrelSprite_1_256: -936306204
+      BarrelSprite_1_257: 1917527942
+      BarrelSprite_1_258: 1562114592
+      BarrelSprite_1_259: 2141306404
+      BarrelSprite_1_26: 126612770
+      BarrelSprite_1_260: -1721067390
+      BarrelSprite_1_261: -1194666197
+      BarrelSprite_1_262: -1169338760
+      BarrelSprite_1_263: -16802789
+      BarrelSprite_1_264: -1819142513
+      BarrelSprite_1_265: -1958944075
+      BarrelSprite_1_266: -1602442030
+      BarrelSprite_1_267: -2059554436
+      BarrelSprite_1_268: -639848609
+      BarrelSprite_1_269: -546078441
+      BarrelSprite_1_27: 955357517
+      BarrelSprite_1_270: -882622979
+      BarrelSprite_1_271: -1696891115
+      BarrelSprite_1_272: 1937919106
+      BarrelSprite_1_273: -1718938163
+      BarrelSprite_1_274: 599193961
+      BarrelSprite_1_275: 922788807
+      BarrelSprite_1_276: 90961521
+      BarrelSprite_1_277: -1148567035
+      BarrelSprite_1_278: 1214678660
+      BarrelSprite_1_279: -983112730
+      BarrelSprite_1_28: 1284060477
+      BarrelSprite_1_280: -718958677
+      BarrelSprite_1_281: -439455164
+      BarrelSprite_1_282: -1033512974
+      BarrelSprite_1_283: 70258700
+      BarrelSprite_1_284: -1228055753
+      BarrelSprite_1_285: 466487241
+      BarrelSprite_1_286: 418649497
+      BarrelSprite_1_287: -1973659069
+      BarrelSprite_1_29: 1921660272
+      BarrelSprite_1_3: 1337300219
+      BarrelSprite_1_30: -1472915680
+      BarrelSprite_1_31: 566162985
+      BarrelSprite_1_32: 44542224
+      BarrelSprite_1_33: -759504130
+      BarrelSprite_1_34: 1004487487
+      BarrelSprite_1_35: 820236402
+      BarrelSprite_1_36: 271682028
+      BarrelSprite_1_37: -1404035119
+      BarrelSprite_1_38: -1463655806
+      BarrelSprite_1_39: -1415298819
+      BarrelSprite_1_4: 14756136
+      BarrelSprite_1_40: -638167370
+      BarrelSprite_1_41: 478741418
+      BarrelSprite_1_42: -1848876730
+      BarrelSprite_1_43: -770485356
+      BarrelSprite_1_44: -456759348
+      BarrelSprite_1_45: 717553085
+      BarrelSprite_1_46: 1269185957
+      BarrelSprite_1_47: 1229512077
+      BarrelSprite_1_48: -439646910
+      BarrelSprite_1_49: -1539066068
+      BarrelSprite_1_5: -889705353
+      BarrelSprite_1_50: -1036756551
+      BarrelSprite_1_51: -1880796829
+      BarrelSprite_1_52: -1160630115
+      BarrelSprite_1_53: 139827308
+      BarrelSprite_1_54: 207521089
+      BarrelSprite_1_55: 1948021381
+      BarrelSprite_1_56: -166067407
+      BarrelSprite_1_57: -1607165767
+      BarrelSprite_1_58: -1104153237
+      BarrelSprite_1_59: 1723228299
+      BarrelSprite_1_6: -1169677612
+      BarrelSprite_1_60: -1795327080
+      BarrelSprite_1_61: 768776550
+      BarrelSprite_1_62: -31864910
+      BarrelSprite_1_63: 1678396153
+      BarrelSprite_1_64: -1775868146
+      BarrelSprite_1_65: -862186710
+      BarrelSprite_1_66: -1235738927
+      BarrelSprite_1_67: -1511071786
+      BarrelSprite_1_68: 165811232
+      BarrelSprite_1_69: -1462628647
+      BarrelSprite_1_7: 179786741
+      BarrelSprite_1_70: 1363248527
+      BarrelSprite_1_71: -274233739
+      BarrelSprite_1_72: -822116343
+      BarrelSprite_1_73: 1180631145
+      BarrelSprite_1_74: 1986994664
+      BarrelSprite_1_75: 1038693448
+      BarrelSprite_1_76: -2003972103
+      BarrelSprite_1_77: -1404904253
+      BarrelSprite_1_78: -578632494
+      BarrelSprite_1_79: 744885311
+      BarrelSprite_1_8: 1168496175
+      BarrelSprite_1_80: -935625966
+      BarrelSprite_1_81: 1627961681
+      BarrelSprite_1_82: -1202187703
+      BarrelSprite_1_83: 1948962819
+      BarrelSprite_1_84: -1243739575
+      BarrelSprite_1_85: -1673708915
+      BarrelSprite_1_86: -583302317
+      BarrelSprite_1_87: -1501994239
+      BarrelSprite_1_88: -828201923
+      BarrelSprite_1_89: -2093897008
+      BarrelSprite_1_9: 1920904363
+      BarrelSprite_1_90: 687585256
+      BarrelSprite_1_91: 1170874789
+      BarrelSprite_1_92: 329602261
+      BarrelSprite_1_93: 2073323530
+      BarrelSprite_1_94: 1837566104
+      BarrelSprite_1_95: -1855503203
+      BarrelSprite_1_96: -929923262
+      BarrelSprite_1_97: 234912112
+      BarrelSprite_1_98: -1873587626
+      BarrelSprite_1_99: 1734871944
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
