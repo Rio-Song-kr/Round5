@@ -17,6 +17,19 @@ public class RandomMapPresetCreator : MonoBehaviour
 
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
+    private PoolManager pools;
+
+    public PoolManager Pools => pools;
+
+    private void Awake()
+    {
+        pools = FindObjectOfType<PoolManager>();
+        for (int i = 0; i < mapResources.Length; i++)
+        {
+            pools.InitializePool(mapResources[i].name, mapResources[i], 3, 9);
+        }
+    }
+
     private void OnEnable()
     {
         if (PhotonNetwork.IsMasterClient)
@@ -25,6 +38,8 @@ public class RandomMapPresetCreator : MonoBehaviour
             {
                 RandomInit();
                 RandomMapSelect(i);
+                mapWeightedRandom.ClearList();
+                Debug.Log("반복");
             }
         }
     }
@@ -55,6 +70,7 @@ public class RandomMapPresetCreator : MonoBehaviour
 
             PhotonView mapView = map.GetComponent<PhotonView>();
             mapView.RPC(nameof(MapDynamicMovement.SetParentToRound), RpcTarget.OthersBuffered, round);
+            Debug.Log("생성");
         }
         MapUpdate(TestIngameManager.Instance.CurrentGameRound);
     }
@@ -67,10 +83,10 @@ public class RandomMapPresetCreator : MonoBehaviour
     public void MapUpdate(int round)
     {
         if (TestIngameManager.Instance.IsGameOver) return;
-        for(int i =0; i < mapListTransform.Length; i++)
+        for (int i = 0; i < mapListTransform.Length; i++)
         {
             PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
-            if(round == i)
+            if (round == i)
             {
                 MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, true);
             }

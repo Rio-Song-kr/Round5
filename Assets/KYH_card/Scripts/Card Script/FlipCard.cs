@@ -7,7 +7,7 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
     
     private bool isFlipped = false;
     public bool IsFlipped { get { return isFlipped; } }
-    private bool isSelected = false;
+    [SerializeField] private bool isSelected = false;
     private bool isHovered = false;
 
     [Header("��/�޸� ��Ʈ ������Ʈ")]
@@ -52,10 +52,13 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
         if (frontRoot != null) frontRoot.SetActive(false);
         if (backRoot != null) backRoot.SetActive(true);
+
+        Debug.Log($"[FlipCard] Start() | isInteractable={isInteractable}");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log($"[FlipCard] OnPointerEnter()");
         if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
 
         if (!isFlipped)
@@ -80,6 +83,8 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log($"[FlipCard] OnPointerClick | isInteractable={isInteractable}, isHovered={isHovered}");
+
         if (!isInteractable || !isHovered) return; //Ŭ�� ���� ����
 
         OnClickCard(); // ���� ���� �״�� ȣ��
@@ -87,6 +92,8 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
     public void OnClickCard()
     {
+        Debug.Log($"[FlipCard] OnClickCard 호출됨 | isFlipped={isFlipped}, isSelected={isSelected}");
+
         if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
 
         if (!isFlipped)
@@ -161,5 +168,10 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
     public void PlayUnhighlight()
     {
         transform.DOScale(originalScale, 0.15f).SetEase(Ease.InBack);
+    }
+
+    public void ResetisSelect()
+    {
+        isSelected = false;
     }
 }

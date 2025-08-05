@@ -55,4 +55,9 @@ public class CardSelectPanelItem : MonoBehaviour
             currentSelect.color = (bool)value ? Color.green : Color.red;
         }
     }
+
+    public void ResethasSelected()
+    {
+        hasSelected = false;
+    }
 }

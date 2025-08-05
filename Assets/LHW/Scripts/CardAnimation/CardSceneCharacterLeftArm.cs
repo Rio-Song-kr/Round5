@@ -37,10 +37,10 @@ public class CardSceneCharacterLeftArm : MonoBehaviour
 
     public void SelectCard(int cardNum)
     {
-        Debug.Log($"[RightArm] 실제로 지정된 targetCardNum = {targetCardNum}");
+      //  Debug.Log($"[RightArm] 실제로 지정된 targetCardNum = {targetCardNum}");
         if (cardNum == 0) targetCardNum = 0;
         else if (cardNum == 1) targetCardNum = 1;
         else targetCardNum = 2;
-        Debug.Log($"[RightArm] 실제로 지정된 targetCardNum = {targetCardNum}");
+      //  Debug.Log($"[RightArm] 실제로 지정된 targetCardNum = {targetCardNum}");
     }
 }
