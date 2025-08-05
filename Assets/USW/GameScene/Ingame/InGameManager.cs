@@ -46,7 +46,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private int roundsToWinMatch = 2; 
     [SerializeField] private int matchesToWinGame = 2; 
     [SerializeField] private float roundStartDelay = 3f;
-    [SerializeField] private float cardSelectTime = 30f;
+  
 
     public enum GameState
     {
@@ -308,6 +308,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         StartCardSelect();
     }
 
+    
+    // 시작되었을때 IngameManager 에서 StartCardSelect 호출하고
+    // 카드 선택이 시작되었을때 Oncardselect Invoke 
+    // 그럼 여기에서 이제 CardSelectManager 에서 하나 만들어서 이벤트 핸들러에서 캔버스 활성화 시키고 
+    // 근데 여기에서 이미 각자 플레이어가 선택하는게 있지 패배한 플레이어만 셀렉되는거 메서드가요 ? 
+    // 그럼 모든플레이어가 선택완료가 되었을떄는 얘 onPlayerPropertiesUpdate 에서 감지하고 
+    // 캔버스 비활성화를 해야겠음. 
     private void StartCardSelect()
     {
         if (!PhotonNetwork.IsMasterClient) return;

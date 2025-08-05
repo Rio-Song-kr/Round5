@@ -12,14 +12,16 @@ public class CanvasController : MonoBehaviourPunCallbacks
     private bool alreadyStarted = false;
     void Start()
     {
+        
+        Debug.Log("CanvasController Start í˜¸ì¶œ");
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(false);
 
-        Debug.Log("½ÇÇàµÊ");
+        Debug.Log($"CanvasController PhotonNetwork.IsMasterClient = {PhotonNetwork.IsMasterClient}");
 
         if (PhotonNetwork.IsMasterClient)
         {
-            // ·£´ý ¼±ÅÃÀÚ °áÁ¤
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             int firstSelectorActorNum = Random.Range(0, 2) == 0
                 ? PhotonNetwork.PlayerList[0].ActorNumber
                 : PhotonNetwork.PlayerList[1].ActorNumber;
@@ -29,7 +31,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
 
-        // ¸¶½ºÅÍ/Å¬¶óÀÌ¾ðÆ® ±¸ºÐ ¾øÀÌ ÃÊ±âÈ­ ½Ãµµ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½Ãµï¿½
        // TryStartCardSelection();
     }
 
@@ -39,22 +41,22 @@ public class CanvasController : MonoBehaviourPunCallbacks
     {
         if (propertiesThatChanged.ContainsKey("IsFirstSelector"))
         {
-            Debug.Log("¿Â·ëÇÁ·ÎÆÛÆ¼¾÷µ¥ÀÌÆ® ½ÇÇà");
+            Debug.Log("ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½");
             TryStartCardSelection();
         }
     }
 
     public void TryStartCardSelection()
     {
-        Debug.Log($"[TryStartCardSelection] È£ÃâµÊ | alreadyStarted={alreadyStarted}");
+        Debug.Log($"[TryStartCardSelection] È£ï¿½ï¿½ï¿½ | alreadyStarted={alreadyStarted}");
 
         alreadyStarted = false;
 
-        Debug.Log("Ä«µå ¼±ÅÃ °úÁ¤ÀÇ ½ÃÀÛ ¾Ë¸²");
+        Debug.Log("Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½");
 
         if (alreadyStarted)
         {
-            Debug.LogWarning("[TryStartCardSelection] ÀÌ¹Ì ½ÃÀÛµÊ ¡æ Áß´Ü");
+            Debug.LogWarning("[TryStartCardSelection] ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½Ûµï¿½ ï¿½ï¿½ ï¿½ß´ï¿½");
             return;
         }
         if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("IsFirstSelector", out object selectorObj)) return;
@@ -67,12 +69,12 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
         if (isMyTurn)
         {
-            Debug.Log("³»°¡ ¸ÕÀú ¼±ÅÃÀÚ ¡æ Ä«µå ¼±ÅÃ ½ÃÀÛ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isWinner", out object isWinnerObj)
                 && (bool)isWinnerObj == true)
             {
-                Debug.Log("³ª´Â ½ÂÀÚ ¡æ Ä«µå ¼±ÅÃ »ý·«");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
                 ExitGames.Client.Photon.Hashtable props = new();
                 props["Select"] = true;
@@ -85,19 +87,20 @@ public class CanvasController : MonoBehaviourPunCallbacks
                 return;
             }
 
-            // ³»°¡ ¸ÕÀú ¼±ÅÃÇÏ´Â »ç¶÷ (ÆÐÀÚ or Ã¹ ¼±ÅÃ)
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ or Ã¹ ï¿½ï¿½ï¿½ï¿½)
             int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
             photonView.RPC(nameof(RPC_SyncMasterCanvas), RpcTarget.All, selectedIndexes);
         }
         else
         {
-            Debug.Log("»ó´ë¹æÀÌ ¸ÕÀú ¼±ÅÃÇÔ ¡æ °üÀü ´ë±â");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½");
         }
     }
 
     [PunRPC]
     public void RPC_SyncMasterCanvas(int[] indexes)
     {
+        Debug.Log("SyncMasterCanvas í˜¸ì¶œ");
         MasterCanvas.gameObject.SetActive(true);
         ClientCanvas.gameObject.SetActive(false);
         cardSelectManager.UpdateCharacterVisibility();
@@ -110,27 +113,27 @@ public class CanvasController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SwitchTurnToOther()
     {
-        // if (cardSelectManager.HasSelected()) //  ÀÌ¹Ì ¼±ÅÃÇÑ »ç¶÷Àº ÅÏ ³Ñ¾î°¡µµ ¾Æ¹«°Íµµ ÇÏÁö ¾ÊÀ½
+        // if (cardSelectManager.HasSelected()) //  ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         // {
-        //     Debug.Log("ÀÌ¹Ì ¼±ÅÃÇÑ ÇÃ·¹ÀÌ¾î´Â ¹«½Ã");
+        //     Debug.Log("ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         //     return;
         // }
 
-        Debug.Log("ÅÏÀÌ ¹Ý´ë ÇÃ·¹ÀÌ¾î·Î ÀüÈ¯µÊ");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ý´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½");
 
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(true);
 
-        // ÅÏ º¯°æ
-        // isMyTurn = !isMyTurn; //  ÇöÀç ÅÏ ÁÖÃ¼ º¯°æ
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // isMyTurn = !isMyTurn; //  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½
 
         if (!isMyTurn)
         {
-            // Áö±Ý ³» Â÷·Ê°¡ µÇ¾ú´Ù ¡æ ½ÂÆÐ ÆÇÁ¤
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ê°ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isWinner", out object isWinnerObj)
                 && (bool)isWinnerObj == true)
             {
-                Debug.Log("³ª´Â ½ÂÀÚ ¡æ Ä«µå ¼±ÅÃ »ý·«");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
                 ExitGames.Client.Photon.Hashtable props = new();
                 props["Select"] = true;
@@ -138,7 +141,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
                 return;
             }
 
-            // ³»°¡ ÆÐÀÚ°Å³ª Ã¹ ÅÏ ¡æ ¼±ÅÃ °¡´É
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú°Å³ï¿½ Ã¹ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
             photonView.RPC(nameof(RPC_SyncClientCanvas), RpcTarget.All, selectedIndexes);
         }
@@ -150,7 +153,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(true);
         cardSelectManager.UpdateCharacterVisibility();
-        bool canInteract = !isMyTurn; // µÎ ¹øÂ° Â÷·ÊÀÎ »ç¶÷¸¸ ¼±ÅÃ °¡´É
+        bool canInteract = !isMyTurn; // ï¿½ï¿½ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         cardSelectManager.SpawnClientCardsFromIndexes(indexes, canInteract);
     }
 
@@ -171,7 +174,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
     public void ResetCardSelectionState()
     {
-        Debug.Log("Äµ¹ö½º ÄÁÆ®·Ñ·¯ÀÇ Á¤º¸ Ä«µå¼±ÅÃ ÃÊ±âÈ­");
+        Debug.Log("Äµï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½å¼±ï¿½ï¿½ ï¿½Ê±ï¿½È­");
         alreadyStarted = false;
         isMyTurn = false;
 
@@ -183,7 +186,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
     public void DecideNextSelector()
     {
-        Debug.Log("ÀÓ½Ã Å×½ºÆ®¿ë ¼±,ÈÄ ¼±ÅÃ ¼ø¼­ ÃÊ±âÈ­");
+        Debug.Log("ï¿½Ó½ï¿½ ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½,ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­");
         int nextSelector = Random.Range(0, 2) == 0
             ? PhotonNetwork.PlayerList[0].ActorNumber
             : PhotonNetwork.PlayerList[1].ActorNumber;
