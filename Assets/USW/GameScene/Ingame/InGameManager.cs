@@ -46,7 +46,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private int roundsToWinMatch = 2; 
     [SerializeField] private int matchesToWinGame = 2; 
     [SerializeField] private float roundStartDelay = 3f;
-    [SerializeField] private float cardSelectTime = 30f;
+  
 
     public enum GameState
     {
