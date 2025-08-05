@@ -10,7 +10,7 @@ public class ShieldsUpEffect : MonoBehaviourPun, IPunObservable
     public ShieldsUpDataSO SkillData;
     private PlayerStatus _status;
     private Transform _playerTransform;
-    private TestPlayerMove _myPlayer;
+    private PlayerController _myPlayer;
 
     private float _shieldActiveTime;
     private float _shieldTimeCount;
@@ -35,6 +35,7 @@ public class ShieldsUpEffect : MonoBehaviourPun, IPunObservable
     public void Initialize(ShieldsUpDataSO skillData, int playerViewId)
     {
         SkillData = skillData;
+        photonView.RPC(nameof(InitializeShieldsUpEffect), RpcTarget.All, playerViewId);
     }
 
     [PunRPC]
@@ -43,7 +44,7 @@ public class ShieldsUpEffect : MonoBehaviourPun, IPunObservable
         _viewId = playerViewId;
         _status = PhotonView.Find(_viewId).GetComponent<PlayerStatus>();
         _playerTransform = _status.transform;
-        _myPlayer = _status.GetComponent<TestPlayerMove>();
+        _myPlayer = _status.GetComponent<PlayerController>();
     }
 
     [PunRPC]

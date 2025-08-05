@@ -5,8 +5,10 @@ using Photon.Pun;
 public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 {
     [Header("후크 세팅")] [SerializeField]
-    private GameObject hookCrosshair;
+    private GameObject hookCrosshairPrefab;
+    private GameObject crossHairObj;
 
+    [SerializeField] private GameObject hookTestObj;
     [SerializeField] private LineRenderer hookLineRenderer;
     [SerializeField] private GameObject hookHitEffect;
     [SerializeField] private GameObject hookObject;
@@ -27,11 +29,9 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     [SerializeField] private KeyCode ropeClimbUpKey = KeyCode.W;
     [SerializeField] private KeyCode ropeClimbDownKey = KeyCode.S;
 
-    
     private Rigidbody2D rb;
     private LineRenderer trajectoryRenderer;
 
-    
     private RaycastHit2D[] hits = new RaycastHit2D[10];
     private GameObject hookInstance;
     private Vector2 hookPoint;
@@ -44,7 +44,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     private Vector2 ropeDirection;
     private float ropeDistance;
 
-   // 입력관련
+    // 입력관련
     private bool hookInput;
     private bool hookInputDown;
     private bool hookInputUp;
@@ -54,7 +54,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     private bool climbDownInput;
     private float moveInput;
 
-    private void Awake()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         SetupComponents();
@@ -83,7 +83,6 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         }
     }
 
-
     #region RPCs
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -100,7 +99,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         {
             // 데이터 수신 (리모트 플레이어)
             bool networkIsHookAttached = (bool)stream.ReceiveNext();
-            Vector2 networkHookPoint = (Vector2)stream.ReceiveNext();
+            var networkHookPoint = (Vector2)stream.ReceiveNext();
             float networkRopeLength = (float)stream.ReceiveNext();
             bool networkIsSwinging = (bool)stream.ReceiveNext();
 
@@ -169,7 +168,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         // 이펙트 생성
         if (hookHitEffect != null)
         {
-            GameObject effect = Instantiate(hookHitEffect, effectPosition, Quaternion.identity);
+            var effect = Instantiate(hookHitEffect, effectPosition, Quaternion.identity);
             Destroy(effect, 2f);
         }
     }
@@ -180,10 +179,12 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void SetupComponents()
     {
+        hookLineRenderer = Instantiate(hookTestObj).GetComponent<LineRenderer>();
+
         // 궤적용 LineRenderer 설정 (로컬 플레이어만)
         if (photonView.IsMine && trajectoryRenderer == null)
         {
-            GameObject trajectoryObj = new GameObject("TrajectoryRenderer");
+            var trajectoryObj = new GameObject("TrajectoryRenderer");
             trajectoryObj.transform.parent = transform;
             trajectoryRenderer = trajectoryObj.AddComponent<LineRenderer>();
 
@@ -192,6 +193,9 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             trajectoryRenderer.endWidth = 0.02f;
             trajectoryRenderer.positionCount = 2;
             trajectoryRenderer.enabled = true;
+
+            crossHairObj = Instantiate(hookCrosshairPrefab);
+            crossHairObj.SetActive(true);
         }
 
         if (hookLineRenderer)
@@ -210,9 +214,9 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         }
 
         // 크로스헤어는 로컬 플레이어만
-        if (hookCrosshair != null && !photonView.IsMine)
+        if (hookCrosshairPrefab != null && !photonView.IsMine)
         {
-            hookCrosshair.SetActive(false);
+            hookCrosshairPrefab.SetActive(false);
         }
 
         // 초기 궤적 설정 (로컬 플레이어만)
@@ -251,14 +255,14 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
         if (!isHookAttached && hookInput)
         {
-            Vector2 aimDirection = GetAimDirection();
+            var aimDirection = GetAimDirection();
             Vector2 startPos = transform.position;
 
             int hitCount = Physics2D.RaycastNonAlloc(startPos, aimDirection, hits, maxHookDistance, hookableLayerMask);
 
             if (hitCount > 0)
             {
-                Vector2 hitPoint = hits[0].point;
+                var hitPoint = hits[0].point;
                 float distance = Vector2.Distance(startPos, hitPoint);
 
                 if (distance <= ropeMaxLength)
@@ -266,33 +270,33 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
                     trajectoryRenderer.SetPosition(0, startPos);
                     trajectoryRenderer.SetPosition(1, hitPoint);
 
-                    if (hookCrosshair != null)
+                    if (hookCrosshairPrefab != null)
                     {
-                        hookCrosshair.transform.position = hitPoint;
-                        hookCrosshair.SetActive(true);
+                        hookCrosshairPrefab.transform.position = hitPoint;
+                        hookCrosshairPrefab.SetActive(true);
                     }
                 }
                 else
                 {
-                    Vector2 maxPoint = startPos + aimDirection * ropeMaxLength;
+                    var maxPoint = startPos + aimDirection * ropeMaxLength;
                     trajectoryRenderer.SetPosition(0, startPos);
                     trajectoryRenderer.SetPosition(1, maxPoint);
 
-                    if (hookCrosshair != null)
+                    if (hookCrosshairPrefab != null)
                     {
-                        hookCrosshair.SetActive(false);
+                        hookCrosshairPrefab.SetActive(false);
                     }
                 }
             }
             else
             {
-                Vector2 endPoint = startPos + aimDirection * maxHookDistance;
+                var endPoint = startPos + aimDirection * maxHookDistance;
                 trajectoryRenderer.SetPosition(0, startPos);
                 trajectoryRenderer.SetPosition(1, endPoint);
 
-                if (hookCrosshair != null)
+                if (hookCrosshairPrefab != null)
                 {
-                    hookCrosshair.SetActive(false);
+                    hookCrosshairPrefab.SetActive(false);
                 }
             }
         }
@@ -301,16 +305,16 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             trajectoryRenderer.SetPosition(0, transform.position);
             trajectoryRenderer.SetPosition(1, transform.position);
 
-            if (hookCrosshair != null)
+            if (hookCrosshairPrefab != null)
             {
-                hookCrosshair.SetActive(false);
+                hookCrosshairPrefab.SetActive(false);
             }
         }
     }
 
     private Vector2 GetAimDirection()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
         return (mousePos - transform.position).normalized;
     }
@@ -336,14 +340,14 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void TryAttachHook()
     {
-        Vector2 aimDirection = GetAimDirection();
+        var aimDirection = GetAimDirection();
         Vector2 startPos = transform.position;
 
         int hitCount = Physics2D.RaycastNonAlloc(startPos, aimDirection, hits, maxHookDistance, hookableLayerMask);
 
         if (hitCount > 0)
         {
-            Vector2 hitPoint = hits[0].point;
+            var hitPoint = hits[0].point;
             float distance = Vector2.Distance(startPos, hitPoint);
 
             if (distance <= ropeMaxLength)
@@ -371,16 +375,21 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             hookInstance.transform.position = hitPoint;
             hookInstance.SetActive(true);
 
-            Vector2 hookDirection = (hitPoint - (Vector2)transform.position).normalized;
+            var hookDirection = (hitPoint - (Vector2)transform.position).normalized;
             float angle = Mathf.Atan2(hookDirection.y, hookDirection.x) * Mathf.Rad2Deg;
             hookInstance.transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
         }
 
+        // if (!photonView.IsMine) return;
         if (hookLineRenderer != null)
         {
             hookLineRenderer.enabled = true;
+            // photonView.RPC(nameof(SetDisplayHookLineRenderer), RpcTarget.All, true);
         }
     }
+
+    [PunRPC]
+    private void SetDisplayHookLineRenderer(bool value) => hookLineRenderer.enabled = value;
 
     private void ShowHookDetached()
     {
@@ -389,9 +398,11 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             hookInstance.SetActive(false);
         }
 
+        // if (!photonView.IsMine) return;
         if (hookLineRenderer != null)
         {
             hookLineRenderer.enabled = false;
+            // photonView.RPC(nameof(SetDisplayHookLineRenderer), RpcTarget.All, false);
         }
     }
 
@@ -436,13 +447,13 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
         if (moveInput != 0)
         {
-            Vector2 swingDirection = new Vector2(ropeDirection.y, -ropeDirection.x) * moveInput;
+            var swingDirection = new Vector2(ropeDirection.y, -ropeDirection.x) * moveInput;
             rb.AddForce(swingDirection * swingForce);
         }
 
         if (ropeDistance > currentRopeLength + 0.5f)
         {
-            Vector2 constrainedPosition = hookPoint - ropeDirection * currentRopeLength;
+            var constrainedPosition = hookPoint - ropeDirection * currentRopeLength;
             transform.position = constrainedPosition;
         }
     }
@@ -486,11 +497,11 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     private bool CanClimbUp(float targetRopeLength)
     {
         Vector2 currentPos = transform.position;
-        Vector2 targetDirection = (hookPoint - currentPos).normalized;
-        Vector2 targetPos = hookPoint - targetDirection * targetRopeLength;
+        var targetDirection = (hookPoint - currentPos).normalized;
+        var targetPos = hookPoint - targetDirection * targetRopeLength;
 
         float checkDistance = Vector2.Distance(currentPos, targetPos);
-        RaycastHit2D pathHit = Physics2D.CircleCast(
+        var pathHit = Physics2D.CircleCast(
             currentPos,
             GetPlayerRadius(),
             targetDirection,
@@ -503,7 +514,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             return false;
         }
 
-        Collider2D overlapHit = Physics2D.OverlapCircle(
+        var overlapHit = Physics2D.OverlapCircle(
             targetPos,
             GetPlayerRadius() * 1.1f,
             hookableLayerMask
@@ -519,7 +530,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private float GetPlayerRadius()
     {
-        CircleCollider2D circleCol = GetComponent<CircleCollider2D>();
+        var circleCol = GetComponent<CircleCollider2D>();
         if (circleCol != null)
         {
             return circleCol.radius * transform.localScale.x;
@@ -537,14 +548,13 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
             if (climbInput > 0)
             {
-                Vector2 pullDirection = ropeDirection;
+                var pullDirection = ropeDirection;
                 rb.AddForce(pullDirection * ropeClimbSpeed * 50f * Time.deltaTime);
             }
         }
     }
 
     #endregion
-
 
     private void UpdateRopeVisuals()
     {
@@ -554,7 +564,6 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             hookLineRenderer.SetPosition(1, hookPoint);
         }
     }
-
 
     #region 퍼블릭 메서드들
 

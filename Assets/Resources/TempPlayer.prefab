@@ -21,9 +21,10 @@ GameObject:
   - component: {fileID: 6527654916710172329}
   - component: {fileID: 5958319763988689920}
   - component: {fileID: -6967930792878188186}
+  - component: {fileID: 8078386281571028159}
   m_Layer: 8
   m_Name: TempPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38,7 +39,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -149,6 +150,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 3772562996717285912}
   - {fileID: 9191272727559089292}
+  - {fileID: -6967930792878188186}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -168,7 +170,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f279f0ce4e5b79646a5c8b7183a0df8d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -198,13 +200,16 @@ MonoBehaviour:
   jumpForce: 20
   jumpCutMultiplier: 0.5
   groundCheck: {fileID: 0}
-  groundCheckSize: {x: 0.8, y: 0.1}
+  groundCheckOffset: -0.2
+  groundCheckSize: {x: 0.5, y: 0.1}
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1088
   positionLerpRate: 10
   rotationLerpRate: 15
   velocityLerpRate: 8
+  _bounceMat: {fileID: 6200000, guid: f279f0ce4e5b79646a5c8b7183a0df8d, type: 2}
+  _unBounceMat: {fileID: 6200000, guid: 357895fbe146396468e011e2a3be4def, type: 2}
 --- !u!114 &9191272727559089292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,13 +222,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05035e31bc65c44ab1e4cad1efb5417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hookCrosshair: {fileID: 0}
+  hookCrosshairPrefab: {fileID: 104772317902610037, guid: 38ac3c464d0869f48bbe1d134eb6dca0, type: 3}
+  hookTestObj: {fileID: 332250030041233660, guid: a3b46dae3347b964c918dae1f69f3e87, type: 3}
   hookLineRenderer: {fileID: 0}
   hookHitEffect: {fileID: 3310369482459089586, guid: ae5cb958901105144a0568b013aad026, type: 3}
   hookObject: {fileID: 581712458301378307, guid: a9edbd7fc7dad2d49b256d3ea40b7f9e, type: 3}
   hookableLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1600
   maxHookDistance: 15
   ropeMaxLength: 20
   ropeSpringForce: 150
@@ -281,7 +287,7 @@ MonoBehaviour:
   wallJumpVerticalForce: 1.6
   wallCheckLeft: {fileID: 0}
   wallCheckRight: {fileID: 0}
-  wallCheckSize: {x: 0.1, y: 0.8}
+  wallCheckSize: {x: 0.1, y: 0.45}
 --- !u!114 &5958319763988689920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,3 +318,16 @@ MonoBehaviour:
   _rightArmSpline: {fileID: 5445313185686569237, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
   _gunPos: {fileID: 9158709318525055923, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
   _gunAxis: {fileID: 1444281678518477746, guid: 212853cfe71d54144b1a6f525768e3b9, type: 3}
+--- !u!114 &8078386281571028159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285512379662976336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47dae2d8dea58e549a81b4abcae2882b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillDatabase: {fileID: 11400000, guid: c8fb113fd3f2876458a1288ae51ab551, type: 2}

@@ -1287,7 +1287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1386317911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1645,7 +1645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pStatus: {fileID: 11400000, guid: 12567d8223af0b44bb34205ca0e80396, type: 2}
   _cards:
-  - {fileID: 11400000, guid: ea5f1264cb7eeae4394aaed03bf9de89, type: 2}
+  - {fileID: 11400000, guid: 95ad3d83e7da4e241a4d7b89a6af1abf, type: 2}
 --- !u!4 &1612451583
 Transform:
   m_ObjectHideFlags: 0
@@ -1905,6 +1905,10 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.y
       value: -2.66
       objectReference: {fileID: 0}
+    - target: {fileID: 3069933262033363130, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3084776585925099362, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 27
@@ -1997,6 +2001,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 98
       objectReference: {fileID: 0}
+    - target: {fileID: 4161612173512239491, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4184314440562093402, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -0.24666674
@@ -2008,6 +2016,10 @@ PrefabInstance:
     - target: {fileID: 4187588333165418258, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.y
       value: 1.0079999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4229489525965975350, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4237422270421977510, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -2141,6 +2153,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 5474989441619560626, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5483034212008212359, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -0.24666674
@@ -2183,7 +2199,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748573861688832862, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5806274224259511180, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -2255,7 +2271,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6446121725291923415, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6518079712153519292, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2319,7 +2335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7242730108110890994, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7449754923376042307, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -2396,6 +2412,10 @@ PrefabInstance:
     - target: {fileID: 8364910267984310076, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: 8378230243430395226, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8408498407312298233, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId

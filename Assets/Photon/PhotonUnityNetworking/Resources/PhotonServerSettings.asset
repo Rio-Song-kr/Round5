@@ -126,6 +126,11 @@ MonoBehaviour:
   - DisableShieldObject
   - DisableShieldsUpEffect
   - FillAmountInit
+  - CardSelectUIActivate
+  - DisableShieldObject
+  - DisableShieldsUpEffect
+  - FillAmountInit
+  - GameRestartPanelActivate
   - InitializeArc
   - InitializeArcEffect
   - InitializeShieldsUpEffect
@@ -133,6 +138,14 @@ MonoBehaviour:
   - PlayVfxArc
   - RemoveReduceSpeed
   - RPC_TextInit
+  - RoundActivate
+  - RoundChange
+  - RoundOverPanelActivate
+  - RoundWinImgAnimationActivate
+  - RPC_DynamicMove
+  - RPC_SwitchTurnToOther
+  - RPC_TextInit
+  - SetParentToRound
   - TakeDamage
   - UpdateFirstLine
   - UseShieldEffect
@@ -140,6 +153,24 @@ MonoBehaviour:
   - WinnerImageInit
   - WinnerImageMove
   - WinnerImageScaleChange
+  - WinImgUIActivate
+  - WinnerImageInit
+  - WinnerImageMove
+  - WinnerImageScaleChange
+  - RPC_EndCardSelect
+  - RPC_EndGame
+  - RPC_EndMatch
+  - RPC_EndRound
+  - RPC_PlayerDefeated
+  - RPC_RematchAccepted
+  - RPC_RematchDeclined
+  - RPC_StartCardSelect
+  - RPC_StartGame
+  - RPC_StartRematchWaiting
+  - RPC_StartRound
+  - RPC_VoteRematch
+  - AddPlayer
+  - SetDisplayHookLineRenderer
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
