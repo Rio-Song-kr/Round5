@@ -47,6 +47,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         //# 초기에는 기본값과 동일
         _calculatedMaxHp = _playerData.DefaultHp;
         _calculatedGroundSpeed = _playerData.DefaultGroundSpeed;
+        _calculatedAirSpeed = _playerData.DefaultAirSpeed;
         _calculatedInvincibilityCooldown = _playerData.DefaultInvincibilityCoolTime;
 
         _canAttack = true;
@@ -117,7 +118,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
             {
                 case StatusEffectType.ReduceSpeed:
                     _calculatedGroundSpeed *= 1f + effect.EffectValue;
-                    _calculatedAirSpeed *= 1f + effect.EffectValue;
+                    // _calculatedAirSpeed *= 1f + effect.EffectValue;
                     break;
                 case StatusEffectType.FreezePlayer:
                     _freezePlayer = true;
