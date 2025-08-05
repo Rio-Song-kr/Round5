@@ -21,8 +21,16 @@ public class StaticCardInfoUI : MonoBehaviour
     int leftPanelViewID;
     int rightPanelViewID;
 
+    private PoolManager pools;
+
+    public PoolManager Pools => pools;
+
     private void Awake()
     {
+        pools = FindObjectOfType<PoolManager>();
+        pools.InitializePool(UIImagePrefab.name, UIImagePrefab, 3, 9);
+        
+
         leftPanelView = leftPanelContent.GetComponent<PhotonView>();
         rightPanelView = rightPanelContent.GetComponent<PhotonView>();
 
@@ -49,8 +57,6 @@ public class StaticCardInfoUI : MonoBehaviour
         {
             for(int i = leftUIImage.Count; i < leftCardList.Length; i++)
             {
-                //GameObject skillInfo = Instantiate(UIImagePrefab);
-                //skillInfo.transform.SetParent(leftPanelContent);
                 GameObject skillInfo = PhotonNetwork.Instantiate(UIImagePrefab.name, transform.position, Quaternion.identity);
                 PhotonView skillInfoView = skillInfo.GetComponent<PhotonView>();
                 skillInfoView.RPC(nameof(SkillInfoUI.SetParentToPanel), RpcTarget.All, leftPanelViewID);
@@ -63,8 +69,6 @@ public class StaticCardInfoUI : MonoBehaviour
         {
             for (int i = rightUIImage.Count; i < rightCardList.Length; i++)
             {
-                //GameObject skillInfo = Instantiate(UIImagePrefab);
-                //skillInfo.transform.SetParent(rightPanelContent);
                 GameObject skillInfo = PhotonNetwork.Instantiate(UIImagePrefab.name, transform.position, Quaternion.identity);
                 PhotonView skillInfoView = skillInfo.GetComponent<PhotonView>();
                 skillInfoView.RPC(nameof(SkillInfoUI.SetParentToPanel), RpcTarget.All, rightPanelViewID);
