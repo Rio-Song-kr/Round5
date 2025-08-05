@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Photon.Pun;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
-    [Header("참조")] 
+    [Header("참조")]
     [SerializeField] private PlayerStatusDataSO playerData;
 
     [Header("이동 관련 변수")] [SerializeField]
@@ -56,7 +57,22 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool remoteIsGrounded;
     private double lastReceivedTime;
 
- 
+    //# --- 추가사항 ---
+    public float MoveSpeed => currentGroundSpeed;
+    public float RotationLerpRate => rotationLerpRate;
+    public float VelocityLerpRate => velocityLerpRate;
+    public double LastReceivedTime => lastReceivedTime;
+    public Vector2 RemoteVelocity => remoteVelocity;
+
+    private PlayerStatus _status;
+
+    private bool _isFreeze = false;
+    private bool _isPlayerMoved;
+    private bool _prevPlayerMoveState;
+
+    //# 플레이어 움직임 여부에 따라 Skill 사용 시간/Abyssal Countdown의 증감 여부를 위해 필요
+    public Action<bool> OnPlayerMoveStateChanged;
+    //# --- 추가사항 ---
 
     private void Awake()
     {
@@ -64,7 +80,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         col = GetComponent<Collider2D>();
         wallSystem = GetComponent<PlayerWallClimbing>();
         ropeSystem = GetComponent<RopeSystem>();
-        
+
+        //# --- 추가사항 ---
+        _status = GetComponent<PlayerStatus>();
+        //# --- 추가사항 ---
+
         remotePosition = transform.position;
         remoteRotation = transform.rotation;
         remoteVelocity = Vector2.zero;
@@ -76,10 +96,23 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         SetupSystemReferences();
     }
 
+    //# --- 추가사항 ---
+    private void Start()
+    {
+        _status.OnPlayerSpeedValueChanged += SetMoveSpeed;
+        _status.OnPlayerFreezeValueChanged += SetFreeze;
+        //# 무적, CanAttack, SetHp는 다른 스크립트에 추가
+    }
+    //# --- 추가사항 ---
+
     private void Update()
     {
         if (photonView.IsMine)
         {
+            //# --- 추가사항 ---
+            if (_isFreeze) return;
+            //# --- 추가사항 ---
+
             HandleInput();
             UpdateGroundCheck();
             HandleJump();
@@ -99,9 +132,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
-  
-
-    #region 네트워크 동기화 부분 
+    #region 네트워크 동기화 부분
 
     /// <summary>
     /// 원격 플레이어 위치 및 회전 보간과 지연 보상
@@ -113,7 +144,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (lag < 0) lag = 0;
 
         // 속도와 지연을 기반으로 위치 예측
-        Vector3 predictedPosition = remotePosition + (Vector3)(remoteVelocity * (float)lag);
+        var predictedPosition = remotePosition + (Vector3)(remoteVelocity * (float)lag);
 
         // 보간
         transform.position = Vector3.Lerp(transform.position, predictedPosition, Time.deltaTime * positionLerpRate);
@@ -144,7 +175,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             stream.SendNext(transform.rotation.w);
             stream.SendNext(rb.velocity.x);
             stream.SendNext(rb.velocity.y);
-            stream.SendNext(facingRight ? 1f : 0f); 
+            stream.SendNext(facingRight ? 1f : 0f);
             stream.SendNext(isGrounded ? 1f : 0f);
             stream.SendNext(canJump ? 1f : 0f);
             stream.SendNext(hasJumpedInAir ? 1f : 0f);
@@ -193,7 +224,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        ResetVelocityForJump(preserveHorizontal: true);
+        ResetVelocityForJump(true);
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         canJump = false;
 
@@ -310,7 +341,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (groundCheck == null)
         {
-            GameObject groundCheckObj = new GameObject("GroundCheck");
+            var groundCheckObj = new GameObject("GroundCheck");
             groundCheckObj.transform.parent = transform;
             groundCheckObj.transform.localPosition = new Vector3(0f, -col.bounds.extents.y, 0f);
             groundCheck = groundCheckObj.transform;
@@ -382,8 +413,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 일반 이동 처리
         float targetSpeed = moveInput * currentGroundSpeed;
         float speedDiff = targetSpeed - rb.velocity.x;
-        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? acceleration : deceleration;
+        float accelRate = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
         float movement = Mathf.Pow(Mathf.Abs(speedDiff) * accelRate, velocityPower) * Mathf.Sign(speedDiff);
+
+        if (Mathf.Abs(movement) < 0.01f) movement = 0;
 
         // 공중에서는 이동력 감소
         if (!isGrounded)
@@ -391,13 +424,32 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             movement *= currentAirSpeed;
         }
 
+        Debug.Log($"movement : {movement * Vector2.right}");
         rb.AddForce(movement * Vector2.right);
 
         // 스프라이트 방향 변경
         if (moveInput != 0)
         {
             HandleSpriteFlip();
+
+            //# --- 추가사항 ---
+            //# 이전에 움직이지 않았을 때만 Invoke
+            if (!_isPlayerMoved)
+            {
+                _isPlayerMoved = true;
+                OnPlayerMoveStateChanged?.Invoke(_isPlayerMoved);
+            }
         }
+        else
+        {
+            //# 이전에 움직였을 때만 Invoke
+            if (_isPlayerMoved)
+            {
+                _isPlayerMoved = false;
+                OnPlayerMoveStateChanged?.Invoke(_isPlayerMoved);
+            }
+        }
+        //# --- 추가사항 ---
     }
 
     private bool ShouldSkipMovement()
@@ -453,7 +505,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     #endregion
 
-    #region 점프 관련 부분 
+    #region 점프 관련 부분
 
     private void HandleJump()
     {
@@ -547,10 +599,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// 현재 이동 입력 값
     /// </summary>
-    public float GetMoveInput()
-    {
-        return moveInput;
-    }
+    public float GetMoveInput() => moveInput;
 
     /// <summary>
     /// 점프 입력 상태들
@@ -568,31 +617,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// 현재 지상 속도 가져오기
     /// </summary>
-    public float GetCurrentGroundSpeed()
-    {
-        return currentGroundSpeed;
-    }
+    public float GetCurrentGroundSpeed() => currentGroundSpeed;
 
     /// <summary>
     /// 현재 공중 속도 가져오기
     /// </summary>
-    public float GetCurrentAirSpeed()
-    {
-        return currentAirSpeed;
-    }
+    public float GetCurrentAirSpeed() => currentAirSpeed;
 
     #endregion
 
     #region Public Methods
-
-    /// <summary>
-    /// 이동 속도를 변경합니다 (상태 효과용)
-    /// </summary>
-    public void SetMoveSpeed(float newGroundSpeed, float newAirSpeed)
-    {
-        currentGroundSpeed = newGroundSpeed;
-        currentAirSpeed = newAirSpeed;
-    }
 
     /// <summary>
     /// 원래 속도로 되돌립니다
@@ -630,18 +664,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// 현재 플레이어가 땅에 있는지 확인
     /// </summary>
-    public bool IsGrounded()
-    {
-        return isGrounded;
-    }
+    public bool IsGrounded() => isGrounded;
 
     /// <summary>
     /// 현재 점프 가능 상태인지 확인
     /// </summary>
-    public bool CanJump()
-    {
-        return canJump;
-    }
+    public bool CanJump() => canJump;
 
     /// <summary>
     /// 점프 상태를 강제로 활성화
@@ -662,34 +690,46 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// 현재 플레이어가 점프 중인지 확인
     /// </summary>
-    public bool IsJumping()
-    {
-        return !isGrounded && rb.velocity.y > 0.1f;
-    }
+    public bool IsJumping() => !isGrounded && rb.velocity.y > 0.1f;
 
     /// <summary>
     /// 현재 이동 방향 확인
     /// </summary>
-    public float GetMoveDirection()
-    {
-        return moveInput;
-    }
+    public float GetMoveDirection() => moveInput;
 
     /// <summary>
     /// 현재 속도 확인
     /// </summary>
-    public Vector2 GetVelocity()
-    {
-        return rb.velocity;
-    }
+    public Vector2 GetVelocity() => rb.velocity;
 
     /// <summary>
     /// 플레이어가 바라보는 방향 확인
     /// </summary>
-    public bool IsFacingRight()
-    {
-        return facingRight;
-    }
-    
+    public bool IsFacingRight() => facingRight;
+
     #endregion
+
+    //# --- 추가사항 ---
+
+    #region Status Action 연결 사항
+
+    /// <summary>
+    /// 이동 속도를 변경합니다 (상태 효과용)
+    /// </summary>
+    public void SetMoveSpeed(float newGroundSpeed, float newAirSpeed)
+    {
+        currentGroundSpeed = newGroundSpeed;
+        currentAirSpeed = newAirSpeed;
+    }
+
+    /// <summary>
+    /// 플레이어의 동결 상태를 설정
+    /// </summary>
+    /// <param name="value">동결 상태를 설정ㅇ하며 true이면 동결 활성화, false면 동결 비활성화</param>
+    public void SetFreeze(bool value) => _isFreeze = value;
+
+    #endregion
+
+    public void SetZeroToRemoteVelocity() => remoteVelocity = Vector2.zero;
+    //# --- 추가사항 ---
 }
