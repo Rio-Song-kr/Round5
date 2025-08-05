@@ -19,6 +19,9 @@ public class PlayerWallClimbing : MonoBehaviourPun
     [Header("벽이 맞는지 확인 용도")] [SerializeField]
     private Transform wallCheckLeft;
 
+    [Header("이펙트")]
+    [SerializeField] private float _wallJumpOffset = 0.2f;
+
     [SerializeField] private Transform wallCheckRight;
     [SerializeField] private Vector2 wallCheckSize = new Vector2(0.1f, 0.8f);
 
@@ -77,6 +80,12 @@ public class PlayerWallClimbing : MonoBehaviourPun
     private void OnWallJump(float jumpDirection, float jumpForce)
     {
         if (!photonView.IsMine) return;
+
+        //# 방향에 따른 오프셋 적용
+        playerController.PlayJumpEffect(
+            Quaternion.Euler(0, 0, 30 * -jumpDirection),
+            new Vector3(_wallJumpOffset * -jumpDirection, 0, 0)
+        );
 
         // 벽 상태와 속도를 먼저 완전히 리셋
         ResetWallState();

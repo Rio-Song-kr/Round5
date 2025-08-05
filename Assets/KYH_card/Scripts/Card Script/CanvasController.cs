@@ -2,15 +2,16 @@ using DG.Tweening;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
+
 public class CanvasController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Canvas MasterCanvas;
     [SerializeField] private Canvas ClientCanvas;
     [SerializeField] private CardSelectManager cardSelectManager;
-    FlipCard flipCard;
+    private FlipCard flipCard;
     private bool isMyTurn = false;
     private bool alreadyStarted = false;
-    void Start()
+    private void Start()
     {
         
         Debug.Log("CanvasController Start 호출");
@@ -26,16 +27,15 @@ public class CanvasController : MonoBehaviourPunCallbacks
                 ? PhotonNetwork.PlayerList[0].ActorNumber
                 : PhotonNetwork.PlayerList[1].ActorNumber;
 
-            ExitGames.Client.Photon.Hashtable props = new();
+            Hashtable props = new Hashtable();
             props["IsFirstSelector"] = firstSelectorActorNum;
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
 
         // ������/Ŭ���̾�Ʈ ���� ���� �ʱ�ȭ �õ�
        // TryStartCardSelection();
+
     }
-
-
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
@@ -50,13 +50,15 @@ public class CanvasController : MonoBehaviourPunCallbacks
     {
         Debug.Log($"[TryStartCardSelection] ȣ��� | alreadyStarted={alreadyStarted}");
 
-        alreadyStarted = false;
 
         Debug.Log("ī�� ���� ������ ���� �˸�");
 
         if (alreadyStarted)
         {
+
             Debug.LogWarning("[TryStartCardSelection] �̹� ���۵� �� �ߴ�");
+            alreadyStarted = false;
+
             return;
         }
         if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("IsFirstSelector", out object selectorObj)) return;
@@ -65,7 +67,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
         int selectorActorNum = (int)selectorObj;
 
-        isMyTurn = (PhotonNetwork.LocalPlayer.ActorNumber == selectorActorNum);
+        isMyTurn = PhotonNetwork.LocalPlayer.ActorNumber == selectorActorNum;
 
         if (isMyTurn)
         {
@@ -76,14 +78,11 @@ public class CanvasController : MonoBehaviourPunCallbacks
             {
                 Debug.Log("���� ���� �� ī�� ���� ����");
 
-                ExitGames.Client.Photon.Hashtable props = new();
+                Hashtable props = new Hashtable();
                 props["Select"] = true;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
-                DOVirtual.DelayedCall(2f, () =>
-                {
-                    photonView.RPC(nameof(RPC_SwitchTurnToOther), RpcTarget.All);
-                });
+                DOVirtual.DelayedCall(2f, () => { photonView.RPC(nameof(RPC_SwitchTurnToOther), RpcTarget.All); });
                 return;
             }
 
@@ -135,7 +134,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
             {
                 Debug.Log("���� ���� �� ī�� ���� ����");
 
-                ExitGames.Client.Photon.Hashtable props = new();
+                Hashtable props = new Hashtable();
                 props["Select"] = true;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
                 return;
@@ -157,20 +156,11 @@ public class CanvasController : MonoBehaviourPunCallbacks
         cardSelectManager.SpawnClientCardsFromIndexes(indexes, canInteract);
     }
 
-    public bool IsMyTurn()
-    {
-        return isMyTurn;
-    }
+    public bool IsMyTurn() => isMyTurn;
 
-    public bool IsMasterCanvasActive()
-    {
-        return MasterCanvas != null && MasterCanvas.gameObject.activeSelf;
-    }
+    public bool IsMasterCanvasActive() => MasterCanvas != null && MasterCanvas.gameObject.activeSelf;
 
-    public bool IsClientCanvasActive()
-    {
-        return ClientCanvas != null && ClientCanvas.gameObject.activeSelf;
-    }
+    public bool IsClientCanvasActive() => ClientCanvas != null && ClientCanvas.gameObject.activeSelf;
 
     public void ResetCardSelectionState()
     {
@@ -180,18 +170,19 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(false);
-
-
     }
 
     public void DecideNextSelector()
     {
-        Debug.Log("�ӽ� �׽�Ʈ�� ��,�� ���� ���� �ʱ�ȭ");
-        int nextSelector = Random.Range(0, 2) == 0
-            ? PhotonNetwork.PlayerList[0].ActorNumber
-            : PhotonNetwork.PlayerList[1].ActorNumber;
 
-        ExitGames.Client.Photon.Hashtable props = new();
+        Debug.Log("�ӽ� �׽�Ʈ�� ��,�� ���� ���� �ʱ�ȭ");
+        // int nextSelector = Random.Range(0, 2) == 0
+        //     ? PhotonNetwork.PlayerList[0].ActorNumber
+        //     : PhotonNetwork.PlayerList[1].ActorNumber;
+        int nextSelector = PhotonNetwork.PlayerList[0].ActorNumber;
+
+
+        Hashtable props = new Hashtable();
         props["IsFirstSelector"] = nextSelector;
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }
