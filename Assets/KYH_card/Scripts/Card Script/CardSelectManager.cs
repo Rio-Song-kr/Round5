@@ -65,6 +65,29 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         // }
 
     }
+
+    void OnEnable()
+    {
+        InGameManager.OnCardSelectStart += InGameManagerOnOnCardSelectStart;
+    }
+
+    
+    // InGameManager에서 카드 선택이 시작될 때 호출하는거 
+    private void InGameManagerOnOnCardSelectStart()
+    {
+        canvasActivation.SetActive(true);
+        
+        canvasController.ResetCardSelectionState();
+
+        // 캔버스 컨트롤러 초기화 및 시작하는부분 
+       // DOVirtual.DelayedCall(0.2f, () =>
+       // {
+       //     canvasController.DecideNextSelector();
+       // });
+
+        // 캔버스 컨트롤러 
+    }
+
     public void UpdateCharacterVisibility()
     {
         bool isMaster = PhotonNetwork.IsMasterClient;
@@ -105,6 +128,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     }
       public void ActivateMasterCharacter()
       {
+          Debug.Log("ActivateMasterCharacter()");
           masterCharacter.SetActive(true);
           clientCharacter.SetActive(false);
     
@@ -114,6 +138,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     
       public void ActivateClientCharacter()
       {
+          Debug.Log("ActivateMasterCharacter()");
           masterCharacter.SetActive(false);
           clientCharacter.SetActive(true);
     
@@ -409,17 +434,22 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
                  {
                      Debug.Log("라운드 종료됨 → 다음 카드 선택 준비");
 
+                     Debug.Log("카드 선택 상태 비활성화");
+                     // 1. 카드 선택 상태 리셋 하는부분
                      ResetCardSelectionState();
 
                      
-
-                     // 1. CanvasController 상태 리셋
+                     Debug.Log("캔버스 비활성화");
+                     // 2. CanvasController 양쪽 캔버스 비활성화
                      canvasController.ResetCardSelectionState();
-
-                     DOVirtual.DelayedCall(0.2f, () => {
-                         canvasController.DecideNextSelector();
-                     });
-
+                     
+                     
+                     Debug.Log("종료시작");
+                     // 3. 카드 선택이 종료된걸 알려야함
+                     if (InGameManager.Instance)
+                     {
+                         InGameManager.Instance.EndCardSelect();
+                     }
 
                  });
              }
