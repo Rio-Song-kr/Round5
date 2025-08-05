@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using Photon.Pun;
-using UnityEngine;
 
 public class TutoHookCameraPlayer : MonoBehaviourPunCallbacks
 {

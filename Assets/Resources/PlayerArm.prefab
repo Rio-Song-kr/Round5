@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: -7131115378783608060}
   - component: {fileID: 5650949831171443985}
   - component: {fileID: 3651707907264113135}
+  - component: {fileID: -885227260125120314}
   m_Layer: 8
   m_Name: PlayerArm
   m_TagString: Untagged
@@ -405,6 +406,7 @@ MonoBehaviour:
   jumpForce: 20
   jumpCutMultiplier: 0.5
   groundCheck: {fileID: 0}
+  groundCheckOffset: -0.15
   groundCheckSize: {x: 0.8, y: 0.1}
   groundLayerMask:
     serializedVersion: 2
@@ -519,6 +521,18 @@ MonoBehaviour:
   _rightArmSpline: {fileID: 5445313185686569237}
   _gunPos: {fileID: 9158709318525055923}
   _gunAxis: {fileID: 1444281678518477746}
+--- !u!114 &-885227260125120314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3950458515790658121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08729ed3e25104d5cabccce27d96b09d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5605350703622307073
 GameObject:
   m_ObjectHideFlags: 0
