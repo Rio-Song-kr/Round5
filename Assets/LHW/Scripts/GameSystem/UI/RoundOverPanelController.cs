@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ¶ó¿îµå Á¾·á½Ã µÎ ÇÃ·¹ÀÌ¾îÀÇ Á¡¼ö¸¦ Ç¥½ÃÇÏ°í, ¾Ö´Ï¸ŞÀÌ¼Ç È¿°ú¸¦ ÁÖ´Â ½ºÅ©¸³Æ®
+/// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½Ï°ï¿½, ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®
 /// </summary>
 public class RoundOverPanelController : MonoBehaviourPun
 {
@@ -29,16 +29,16 @@ public class RoundOverPanelController : MonoBehaviourPun
     [SerializeField] private Transform losePosition;
 
     [Header("Offset")]
-    [Tooltip("¸Å ¶ó¿îµå¸¶´Ù ³ªÅ¸³­ ½Â¸® È½¼ö ÀÌ¹ÌÁö°¡ ÁÙ¾îµå´Â µ¥ °É¸®´Â ½Ã°£")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½ï¿½å¸¶ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½Â¸ï¿½ È½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½")]
     [SerializeField] private float roundImageShrinkDuration = 0.1f;
     [Space(15f)]
-    [Tooltip("ÇÑ ¶ó¿îµå°¡ ¿ÏÀüÈ÷ ³¡³µÀ» ¶§, ¾Ö´Ï¸ŞÀÌ¼Ç È¿°ú·Î ½Â¸®ÀÚ ÀÌ¹ÌÁö(¿ø)°¡ ÁÙ¾îµå´Âµ¥ °É¸®´Â ½Ã°£")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Â¸ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½(ï¿½ï¿½)ï¿½ï¿½ ï¿½Ù¾ï¿½ï¿½Âµï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½")]
     [SerializeField] private float winImageShrinkDuration = 0.1f;
-    [Tooltip("ÇÑ ¶ó¿îµå°¡ ¿ÏÀüÈ÷ ³¡³µÀ» ¶§, ½Â¸®ÀÚ¿¡ ´ëÇÑ ¾Ö´Ï¸ŞÀÌ¼Ç È¿°ú°¡ ½ÃÀÛµÇ±â Àü µô·¹ÀÌ")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½Â¸ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ÛµÇ±ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float winImageShrinkDelay = 1.6f;
-    [Tooltip("ÇÑ ¶ó¿îµå°¡ ¿ÏÀüÈ÷ ³¡³µÀ» ¶§, ¾Ö´Ï¸ŞÀÌ¼Ç È¿°ú·Î ½Â¸®ÀÚ ÀÌ¹ÌÁö(¿ø)ÀÌ ÀÌµ¿ÇÏ´Â µ¥ °É¸®´Â ½Ã°£")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Â¸ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½(ï¿½ï¿½)ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½")]
     [SerializeField] private float winImageMoveDuration = 0.3f;
-    [Tooltip("ÇÑ ¶ó¿îµå°¡ ¿ÏÀüÈ÷ ³¡³µÀ» ¶§, ÆĞ¹èÀÚÀÇ ÀÌ¹ÌÁö°¡ È­¸é Áß¾Ó ¹Ù´ÚÀ¸·Î ÀÌµ¿ÇÏ°í Ä¿Áö´Â Å©±â")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, ï¿½Ğ¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½ß¾ï¿½ ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½")]
     [SerializeField] private float loseImageExpansionScale = 3.5f;
 
     Color textColor;
@@ -72,15 +72,43 @@ public class RoundOverPanelController : MonoBehaviourPun
         if (PhotonNetwork.IsMasterClient)
         {
             ImageInit();
-            string winner = TestIngameManager.Instance.ReadScore(out int left, out int right);
-            Debug.Log("¿¨");
-            TextInit(winner, left, right);
+            ReadScore(out int left, out int right);
+            Debug.Log("ï¿½ï¿½");
+            string winner = InGameManager.Instance.LastRoundWinner;
+            string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+            string winnerSide = (!string.IsNullOrEmpty(winner) && winner == leftPlayerKey) ? "Left" : "Right";
+            TextInit(winnerSide, left, right);
             ImageInit(left, right);
         }
     }
+    /// <summary>
+    /// ë¼ìš´ë“œ ì ìˆ˜ ê°€ì ¸ì˜¤ëŠ” ë©”ì„œë“œ
+    /// </summary>
+    private void ReadScore(out int leftScore, out int rightScore)
+    {
+        
+        string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+        string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
+
+        leftScore = InGameManager.Instance.GetPlayerRoundScore(leftPlayerKey);
+        rightScore = InGameManager.Instance.GetPlayerRoundScore(rightPlayerKey);
+       
+    }
+    
+    /// <summary>
+    /// ë§¤ì¹˜ ì ìˆ˜ë¥¼ ì½ì–´ì˜¤ëŠ” ë©”ì„œë“œ 
+    /// </summary>
+    private void ReadRoundScore(out int leftScore, out int rightScore)
+    {
+        string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+        string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
+
+        leftScore = InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey);
+        rightScore = InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey);
+    }
 
     /// <summary>
-    /// ÀÌ¹ÌÁö Å©±â ¹× À§Ä¡ ÃÊ±âÈ­
+    /// ï¿½Ì¹ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ê±ï¿½È­
     /// </summary>
     private void ImageInit()
     {
@@ -89,7 +117,7 @@ public class RoundOverPanelController : MonoBehaviourPun
     }
 
     /// <summary>
-    /// ½ÂÀÚ¸¦ Ç¥½ÃÇÔ(ÅØ½ºÆ®)
+    /// ï¿½ï¿½ï¿½Ú¸ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½(ï¿½Ø½ï¿½Æ®)
     /// </summary>
     /// <param name="winner"></param>
     /// <param name="left"></param>
@@ -101,7 +129,7 @@ public class RoundOverPanelController : MonoBehaviourPun
     }
 
     /// <summary>
-    /// °¢ »óÈ²¿¡ µû¸¥ ÀÌ¹ÌÁö È¿°ú¸¦ ÁÜ
+    /// ï¿½ï¿½ ï¿½ï¿½È²ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     /// </summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
@@ -137,12 +165,16 @@ public class RoundOverPanelController : MonoBehaviourPun
     }
 
     /// <summary>
-    /// ÇÑ ¶ó¿îµåÀÇ ÃÖÁ¾ ½Â¸®ÀÚ°¡ °áÁ¤µÇ¾úÀ» °æ¿ì ¾Ö´Ï¸ŞÀÌ¼Ç È¿°ú¸¦ ÁÜ
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Â¸ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     /// </summary>
     /// <param name="winnerImage"></param>
     private void AddScoreAnimation()
     {
-        string currentWinner = TestIngameManager.Instance.ReadRoundScore(out int leftScore, out int rightScore);
+        ReadRoundScore(out int leftScore, out int rightScore);
+
+        string matchWinner = InGameManager.Instance.LastMatchWinner;
+        string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+        string currentWinner = (matchWinner == leftPlayerKey) ? "Left" : "Right";
         if (currentWinner == "Left")
         {
             leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f, winImageShrinkDuration, winImageShrinkDelay);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerStatus : MonoBehaviour, IStatusEffectable
+public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
 {
     [SerializeField] private PlayerStatusDataSO _playerData;
     [SerializeField] private List<StatusEffect> _activeEffect = new List<StatusEffect>();
@@ -26,6 +26,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     private bool _isInvincibility;
     private bool _canAttack;
     private bool _freezePlayer;
+    private bool _isDead = false;
 
     public Action<float, float> OnPlayerHpValueChanged;
     public Action<float, float> OnPlayerSpeedValueChanged;
@@ -33,6 +34,64 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     public Action<bool> OnPlayerCanAttackValueChanged;
     public Action<bool> OnInvincibilityValueChanged;
 
+    
+    #region IDamageable 부분
+    
+    public bool IsAlive => _currentHp > 0 && !_isDead;
+    public event Action OnDeath;
+    
+    public void TakeDamage(float amount)
+    {
+        if (_isInvincibility || _isDead || amount <= 0) 
+        {
+            return;
+        }
+
+        float previousHp = _currentHp;
+        _currentHp = Mathf.Max(0, _currentHp - amount);
+        
+        
+        // 기존 이벤트 발생 (추후 UI 업데이트용)
+        OnPlayerHpValueChanged?.Invoke(_currentHp, _currentMaxHp);
+        
+        if (_currentHp <= 0 && !_isDead)
+        {
+            HandleDeath();
+        }
+    }
+
+    /// <summary>
+    /// 사망 처리 - HP가 0이 되면 자동 호출됨
+    /// </summary>
+    private void HandleDeath()
+    {
+        if (_isDead) return;
+
+        _isDead = true;
+        _currentHp = 0;
+        
+        // IDamageable 이벤트 발생 (InGameManager에다가 사망한거 알림)
+        OnDeath?.Invoke();
+        
+        // 사망 시 모든 상태 초기화
+        _activeEffect.Clear();
+        _isInvincibility = false;
+        _canAttack = false;
+        _freezePlayer = false;
+        
+        // 기존 이벤트들 발생 (UI 업데이트)
+        OnInvincibilityValueChanged?.Invoke(_isInvincibility);
+        OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
+        OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
+        OnPlayerHpValueChanged?.Invoke(_currentHp, _currentMaxHp);
+    }
+
+    // 나중에 UI용 추가 
+    public float CurrentHp => _currentHp;
+    public float CurrentMaxHp => _currentMaxHp;
+
+    #endregion
+    
     /// <summary>
     /// 초기화
     /// </summary>
@@ -51,6 +110,31 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
         _calculatedInvincibilityCooldown = _playerData.DefaultInvincibilityCoolTime;
 
         _canAttack = true;
+        _isDead = false;
+    }
+
+    /// <summary>
+    /// InGameManager 연동 
+    /// </summary>
+    private void Start()
+    {
+        if (InGameManager.Instance != null)
+        {
+            string playerKey = PhotonNetwork.LocalPlayer.ActorNumber.ToString();
+            InGameManager.Instance.RegisterPlayerStatus(playerKey, this);
+        }
+    }
+    
+    /// <summary>
+    /// IngameManager 연동 해제
+    /// </summary>
+    private void OnDestroy()
+    {
+        if (InGameManager.Instance)
+        {
+            string playerKey = PhotonNetwork.LocalPlayer.ActorNumber.ToString();
+            InGameManager.Instance.UnregisterPlayerStatus(playerKey);
+        }
     }
 
     /// <summary>
@@ -64,6 +148,8 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable
     public void InitializeStatus()
     {
         _currentHp = _calculatedMaxHp;
+        _isDead = false;
+        
         _currentMaxHp = _calculatedMaxHp;
         _currentGroundSpeed = _playerData.DefaultGroundSpeed;
         _currentAirSpeed = _playerData.DefaultAirSpeed;

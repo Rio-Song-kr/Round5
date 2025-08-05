@@ -109,6 +109,51 @@ MonoBehaviour:
   - SetPoolRPC
   - Shoot
   - SyncTargetPosition
+  - ActivateFrostSlamEffect
+  - ApplyFrostSlamEffect
+  - ApplyReduceEffect
+  - ApplyReduceSpeed
+  - CardSelectUIActivate
+  - DisableShieldObject
+  - DisableShieldsUpEffect
+  - FillAmountInit
+  - GameRestartPanelActivate
+  - InitializeArc
+  - InitializeArcEffect
+  - InitializeShieldsUpEffect
+  - PlayHitEffect
+  - PlayVfxArc
+  - RemoveReduceSpeed
+  - RoundActivate
+  - RoundChange
+  - RoundOverPanelActivate
+  - RoundWinImgAnimationActivate
+  - RPC_DynamicMove
+  - RPC_SwitchTurnToOther
+  - RPC_TextInit
+  - SetParentToRound
+  - TakeDamage
+  - UpdateFirstLine
+  - UseShieldEffect
+  - UseShieldsUpEffect
+  - WinImgUIActivate
+  - WinnerImageInit
+  - WinnerImageMove
+  - WinnerImageScaleChange
+  - RPC_EndCardSelect
+  - RPC_EndGame
+  - RPC_EndMatch
+  - RPC_EndRound
+  - RPC_PlayerDefeated
+  - RPC_RematchAccepted
+  - RPC_RematchDeclined
+  - RPC_StartCardSelect
+  - RPC_StartGame
+  - RPC_StartRematchWaiting
+  - RPC_StartRound
+  - RPC_VoteRematch
+  - AddPlayer
+  - SetDisplayHookLineRenderer
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1

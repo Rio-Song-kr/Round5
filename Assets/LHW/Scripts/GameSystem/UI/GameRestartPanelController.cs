@@ -1,36 +1,80 @@
+using System;
 using Photon.Pun;
-using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/// <summary>
-/// °ÔÀÓ Àç½ÃÀÛ ÆĞ³Î Á¶ÀÛ
-/// </summary>
-public class GameRestartPanelController : MonoBehaviourPun
+public class GameRestartPanelController : MonoBehaviourPunCallbacks
 {
     [SerializeField] Button yesButton;
     [SerializeField] Button noButton;
 
-    Coroutine restartPanelCoroutine;
-
     private void Awake()
     {
-        yesButton.onClick.AddListener(RestartGame);
-        noButton.onClick.AddListener(EndGame);
+        yesButton.onClick.AddListener(() => VoteRematch(true));
+        noButton.onClick.AddListener(() => VoteRematch(false));
         gameObject.SetActive(false);
     }
 
-    private void RestartGame()
+    private void OnEnable()
     {
-        TestIngameManager.Instance.GameStart();
-        Debug.Log("°ÔÀÓ Àç½ÃÀÛ");
-        // TODO : Ä«µå ¼±ÅÃ È­¸éÀ¸·Î ÀÌµ¿
+        InGameManager.OnRematchRequest += OnRematchResult;
+        ResetButtonStates();
     }
 
+    private void OnDisable()
+    {
+        InGameManager.OnRematchRequest -= OnRematchResult;
+    }
+    
+    /// <summary>
+    /// ë¦¬ë§¤ì¹˜ íˆ¬í‘œ
+    /// </summary>
+    private void VoteRematch(bool vote)
+    {
+        if (InGameManager.Instance != null)
+        {
+            InGameManager.Instance.VoteRematch(vote);
+            yesButton.interactable = false;
+            noButton.interactable = false;
+        }
+    }
+    
+    /// <summary>
+    /// InGameManagerì—ì„œ ì „ë‹¬í•˜ëŠ” ë¦¬ë§¤ì¹˜ ê²°ê³¼ ì²˜ë¦¬
+    /// </summary>
+    private void OnRematchResult(bool accepted)
+    {
+        if (accepted)
+        {
+            Debug.Log("ë¦¬ë§¤ì¹˜ ìŠ¹ì¸");
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("ë¦¬ë§¤ì¹˜ ê±°ë¶€ë¨");
+            EndGame();
+        }
+    }
+    
     private void EndGame()
     {
-        Debug.Log("°ÔÀÓ Á¾·á");
-        // TODO : ¸ŞÀÎ È­¸éÀ¸·Î ÀÌµ¿
+        PhotonNetwork.LeaveRoom(); 
+        gameObject.SetActive(false);
+    }
+
+    public override void OnLeftRoom()
+    {
+        SceneManager.LoadScene("LobbyScene");
+    }
+    
+    /// <summary>
+    /// íŒ¨ë„ í™œì„±í™” ì‹œ ë²„íŠ¼ ìƒíƒœ ì´ˆê¸°í™”
+    /// </summary>
+    private void ResetButtonStates()
+    {
+        yesButton.interactable = true;
+        noButton.interactable = true;
     }
 
     [PunRPC]

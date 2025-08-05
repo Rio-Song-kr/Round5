@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
+
 
 public interface IDamagable
 {
     void TakeDamage(float amount);
+    bool IsAlive { get; }
+    event Action OnDeath;
 }
 
