@@ -38,7 +38,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -217,8 +217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05035e31bc65c44ab1e4cad1efb5417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hookCrosshair: {fileID: 0}
-  hookLineRenderer: {fileID: 0}
+  hookCrosshair: {fileID: 104772317902610037, guid: 38ac3c464d0869f48bbe1d134eb6dca0, type: 3}
+  hookLineRenderer: {fileID: 4779762942196342332, guid: a3b46dae3347b964c918dae1f69f3e87, type: 3}
   hookHitEffect: {fileID: 3310369482459089586, guid: ae5cb958901105144a0568b013aad026, type: 3}
   hookObject: {fileID: 581712458301378307, guid: a9edbd7fc7dad2d49b256d3ea40b7f9e, type: 3}
   hookableLayerMask:
