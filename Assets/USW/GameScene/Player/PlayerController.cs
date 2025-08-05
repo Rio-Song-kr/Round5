@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     [Header("땅 체크")] [SerializeField]
     private Transform groundCheck;
+    [SerializeField] private float groundCheckOffset = -0.15f;
 
     [SerializeField] private Vector2 groundCheckSize = new Vector2(0.8f, 0.1f);
     [SerializeField] private LayerMask groundLayerMask;
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     // 점프 변수들
     private bool isGrounded;
     private bool canJump;
+    private bool canSecondJump;
     private bool hasJumpedInAir;
 
     // 입력 변수들
@@ -226,7 +228,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         ResetVelocityForJump(true);
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        canJump = false;
+        if (canSecondJump)
+        {
+            canSecondJump = false;
+        }
+        else
+            canJump = false;
 
         if (!isGrounded)
         {
@@ -343,7 +350,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             var groundCheckObj = new GameObject("GroundCheck");
             groundCheckObj.transform.parent = transform;
-            groundCheckObj.transform.localPosition = new Vector3(0f, -col.bounds.extents.y, 0f);
+            groundCheckObj.transform.localPosition = new Vector3(0f, -col.bounds.extents.y + groundCheckOffset, 0f);
             groundCheck = groundCheckObj.transform;
         }
     }
@@ -391,12 +398,35 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (isGrounded && !wasGrounded)
         {
             canJump = true;
+            canSecondJump = true;
             hasJumpedInAir = false;
 
             // 점프 상태 변경을 다른 클라이언트에 알림
             photonView.RPC("OnJumpStateChanged", RpcTarget.Others, canJump, hasJumpedInAir);
         }
     }
+
+#if UNITY_EDITOR
+    // 기즈모를 그리기 위한 코드 추가
+    private void OnDrawGizmos()
+    {
+        if (groundCheck != null)
+        {
+            // 기본 색상 설정 (예: 파란색)
+            Gizmos.color = Color.blue;
+
+            // 로프에 매달려 있는지 여부에 따라 다른 크기의 박스 그리기
+            if (ropeSystem != null && ropeSystem.IsSwinging())
+            {
+                Gizmos.DrawWireCube(groundCheck.position, new Vector3(groundCheckSize.x * 0.8f, groundCheckSize.y * 0.8f, 0f));
+            }
+            else
+            {
+                Gizmos.DrawWireCube(groundCheck.position, new Vector3(groundCheckSize.x, groundCheckSize.y, 0f));
+            }
+        }
+    }
+#endif
 
     #endregion
 
@@ -424,7 +454,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             movement *= currentAirSpeed;
         }
 
-        Debug.Log($"movement : {movement * Vector2.right}");
+        // Debug.Log($"movement : {movement * Vector2.right}");
         rb.AddForce(movement * Vector2.right);
 
         // 스프라이트 방향 변경
@@ -518,17 +548,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             // 로프 시스템에서 점프 처리
             if (ropeSystem != null && ropeSystem.TryHandleJump())
             {
+                Debug.Log("로프 시스템 점프");
                 jumpHandled = true;
             }
             // 벽 시스템에서 점프 처리
             else if (wallSystem != null && wallSystem.TryHandleJump())
             {
+                Debug.Log("벽 시스템 점프");
                 jumpHandled = true;
             }
 
             // 아무도 처리하지 않았으면 일반 점프
             if (!jumpHandled)
             {
+                Debug.Log("일반 점프");
                 ExecuteNormalJump();
             }
         }

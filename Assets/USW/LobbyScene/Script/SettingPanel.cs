@@ -329,6 +329,7 @@ public class SettingPanels : MonoBehaviour
     private void OnBGMVolumeChanged(float value)
     {
         bgmVolume = value;
+        SoundManager.Instance.SetBGMVolume(bgmVolume);
         SaveAudioSettings();
     }
 
@@ -338,6 +339,7 @@ public class SettingPanels : MonoBehaviour
     private void OnSFXVolumeChanged(float value)
     {
         sfxVolume = value;
+        SoundManager.Instance.SetSFXVolume(sfxVolume);
         SaveAudioSettings();
     }
 

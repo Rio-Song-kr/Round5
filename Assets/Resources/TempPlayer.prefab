@@ -199,7 +199,8 @@ MonoBehaviour:
   jumpForce: 20
   jumpCutMultiplier: 0.5
   groundCheck: {fileID: 0}
-  groundCheckSize: {x: 0.8, y: 0.1}
+  groundCheckOffset: -0.2
+  groundCheckSize: {x: 0.5, y: 0.1}
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 1088
@@ -282,7 +283,7 @@ MonoBehaviour:
   wallJumpVerticalForce: 1.6
   wallCheckLeft: {fileID: 0}
   wallCheckRight: {fileID: 0}
-  wallCheckSize: {x: 0.1, y: 0.8}
+  wallCheckSize: {x: 0.1, y: 0.45}
 --- !u!114 &5958319763988689920
 MonoBehaviour:
   m_ObjectHideFlags: 0
