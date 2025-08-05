@@ -38,7 +38,7 @@ public class GunControll : MonoBehaviourPun
         // RotateMuzzleToMouse();
         
         // 마우스 왼쪽 버튼 클릭 시 공격
-        if (Input.GetMouseButtonDown(0) && photonView.IsMine)
+        if (!Input.GetKey(KeyCode.E) && Input.GetMouseButtonDown(0) && photonView.IsMine)
         {
             if (currentWeapon != null)
             {

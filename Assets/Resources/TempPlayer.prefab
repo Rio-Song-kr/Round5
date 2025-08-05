@@ -150,6 +150,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 3772562996717285912}
   - {fileID: 9191272727559089292}
+  - {fileID: -6967930792878188186}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -169,7 +170,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f279f0ce4e5b79646a5c8b7183a0df8d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -207,6 +208,8 @@ MonoBehaviour:
   positionLerpRate: 10
   rotationLerpRate: 15
   velocityLerpRate: 8
+  _bounceMat: {fileID: 6200000, guid: f279f0ce4e5b79646a5c8b7183a0df8d, type: 2}
+  _unBounceMat: {fileID: 6200000, guid: 357895fbe146396468e011e2a3be4def, type: 2}
 --- !u!114 &9191272727559089292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,13 +222,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05035e31bc65c44ab1e4cad1efb5417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hookCrosshair: {fileID: 104772317902610037, guid: 38ac3c464d0869f48bbe1d134eb6dca0, type: 3}
-  hookLineRenderer: {fileID: 4779762942196342332, guid: a3b46dae3347b964c918dae1f69f3e87, type: 3}
+  hookCrosshairPrefab: {fileID: 104772317902610037, guid: 38ac3c464d0869f48bbe1d134eb6dca0, type: 3}
+  hookTestObj: {fileID: 332250030041233660, guid: a3b46dae3347b964c918dae1f69f3e87, type: 3}
+  hookLineRenderer: {fileID: 0}
   hookHitEffect: {fileID: 3310369482459089586, guid: ae5cb958901105144a0568b013aad026, type: 3}
   hookObject: {fileID: 581712458301378307, guid: a9edbd7fc7dad2d49b256d3ea40b7f9e, type: 3}
   hookableLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1600
   maxHookDistance: 15
   ropeMaxLength: 20
   ropeSpringForce: 150

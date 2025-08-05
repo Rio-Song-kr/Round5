@@ -204,7 +204,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
             {
                 case StatusEffectType.ReduceSpeed:
                     _calculatedGroundSpeed *= 1f + effect.EffectValue;
-                    _calculatedAirSpeed *= 1f + effect.EffectValue;
+                    // _calculatedAirSpeed *= 1f + effect.EffectValue;
                     break;
                 case StatusEffectType.FreezePlayer:
                     _freezePlayer = true;

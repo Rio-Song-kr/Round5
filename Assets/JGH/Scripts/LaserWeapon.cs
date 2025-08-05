@@ -19,13 +19,22 @@ public class LaserWeapon : BaseWeapon
         if (isFiring || isReloading || currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption) return;
         currentAmmo -= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
         
-        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time, firingPoint.position, firingPoint.rotation);
+        photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
     
     [PunRPC]
-    private IEnumerator RPC_FireLaser(double fireTime, Vector3 position, Quaternion rotation, PhotonMessageInfo info)
+    private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
+        
+        if (currentLaserInstance != null)
+        {
+            PhotonNetwork.Destroy(currentLaserInstance); // Destroy(gameObject)가 아닌 PhotonNetwork.Destroy!
+            currentLaserInstance = null;
+        }
+        
+        yield return null;
+        
         float lag = (float)(PhotonNetwork.Time - fireTime);
         yield return new WaitForSeconds(lag); // 지연 보상 적용
         
@@ -51,6 +60,7 @@ public class LaserWeapon : BaseWeapon
 
         // 1. 레이저 프리팹 생성
         currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
+        // currentLaserInstance = _poolManager.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
         // currentLaserInstance = PhotonNetwork.Instantiate("Laser", position, rotation);
 
         // 2. muzzle에 붙임
@@ -85,7 +95,7 @@ public class LaserWeapon : BaseWeapon
         // 레이저 정리
         if (currentLaserInstance != null)
         {
-            Destroy(currentLaserInstance);
+            PhotonNetwork.Destroy(currentLaserInstance);
         }
 
         currentLaserInstance = null;
@@ -108,6 +118,7 @@ public class LaserWeapon : BaseWeapon
         UpdateAmmoUI();
         isReloading = false;
         ammoDisplay.reloadIndicator.SetActive(false);
+        
     }
 
     public override WeaponType GetWeaponType()
@@ -122,7 +133,8 @@ public class LaserWeapon : BaseWeapon
 
         if (currentLaserInstance != null)
         {
-            Destroy(currentLaserInstance);
+            PhotonNetwork.Destroy(currentLaserInstance);
+            currentLaserInstance = null;
         }
     }
 }

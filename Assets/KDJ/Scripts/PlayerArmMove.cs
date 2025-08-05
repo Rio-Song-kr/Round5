@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Splines;
+using Photon.Pun;
 
-
-public class PlayerArmMove : MonoBehaviour
+public class PlayerArmMove : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private SplineContainer _leftArmSpline;
     [SerializeField] private SplineContainer _rightArmSpline;
@@ -16,10 +14,22 @@ public class PlayerArmMove : MonoBehaviour
     private bool _prevFlipped;
     private bool _prevGunInRight;
 
+    // 동기화 변수
+    private Vector3 _networkGunPos;
+    private Vector3 _networkGunAxisUp;
+
     private void Update()
     {
         Debug.Log("플립 상태:" + _isFlipped + ", 마우스 위치 오른쪽:" + _isGunInRight);
-        LookAtMouse();
+        if (photonView.IsMine)
+        {
+            LookAtMouse();
+        }
+        else
+        {
+            _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
+            _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+        }
         if (_isGunInRight)
         {
             if (_isFlipped)
@@ -182,5 +192,21 @@ public class PlayerArmMove : MonoBehaviour
 
         Vector3 direction = (mousePosition - _gunAxis.transform.position).normalized;
         _gunAxis.transform.up = direction;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // 로컬 플레이어가 데이터를 보냄
+            stream.SendNext(_gunPos.position);
+            stream.SendNext(_gunAxis.up);
+        }
+        else
+        {
+            // 리모트 플레이어가 데이터를 받음
+            _networkGunPos = (Vector3)stream.ReceiveNext();
+            _networkGunAxisUp = (Vector3)stream.ReceiveNext();
+        }
     }
 }

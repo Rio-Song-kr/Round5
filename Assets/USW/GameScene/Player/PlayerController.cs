@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
@@ -28,6 +29,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [SerializeField] private float rotationLerpRate = 15f;
     [SerializeField] private float velocityLerpRate = 8f;
 
+    [Header("물리")]
+    [SerializeField] private PhysicsMaterial2D _bounceMat;
+    [SerializeField] private PhysicsMaterial2D _unBounceMat;
+
     // 컴포넌트들
     private Rigidbody2D rb;
     private Collider2D col;
@@ -42,6 +47,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     // 점프 변수들
     private bool isGrounded;
+    private bool wasGrounded;
     private bool canJump;
     private bool canSecondJump;
     private bool hasJumpedInAir;
@@ -71,6 +77,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool _isFreeze = false;
     private bool _isPlayerMoved;
     private bool _prevPlayerMoveState;
+
+    private Coroutine _bounceCoroutine;
 
     //# 플레이어 움직임 여부에 따라 Skill 사용 시간/Abyssal Countdown의 증감 여부를 위해 필요
     public Action<bool> OnPlayerMoveStateChanged;
@@ -104,6 +112,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _status.OnPlayerSpeedValueChanged += SetMoveSpeed;
         _status.OnPlayerFreezeValueChanged += SetFreeze;
         //# 무적, CanAttack, SetHp는 다른 스크립트에 추가
+        _bounceCoroutine = StartCoroutine(ChangeBounce());
+    }
+
+    private void OnDisable()
+    {
+        if (_bounceCoroutine != null)
+            StopCoroutine(_bounceCoroutine);
     }
     //# --- 추가사항 ---
 
@@ -382,7 +397,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void UpdateGroundCheck()
     {
-        bool wasGrounded = isGrounded;
+        wasGrounded = isGrounded;
 
         // 로프에 매달려 있을 때는 ground check를 조금 다르게 처리
         if (ropeSystem != null && ropeSystem.IsSwinging())
@@ -400,9 +415,31 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             canJump = true;
             canSecondJump = true;
             hasJumpedInAir = false;
+            // rb.velocity = new Vector2(rb.velocity.x, 0f);
 
             // 점프 상태 변경을 다른 클라이언트에 알림
             photonView.RPC("OnJumpStateChanged", RpcTarget.Others, canJump, hasJumpedInAir);
+        }
+        else if (isGrounded && wasGrounded)
+        {
+        }
+    }
+
+    private IEnumerator ChangeBounce()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+            if (isGrounded && wasGrounded)
+            {
+                Debug.Log("UnBounceMat");
+                rb.sharedMaterial = _unBounceMat;
+            }
+            else if (!isGrounded && !wasGrounded)
+            {
+                Debug.Log("BounceMat");
+                rb.sharedMaterial = _bounceMat;
+            }
         }
     }
 
