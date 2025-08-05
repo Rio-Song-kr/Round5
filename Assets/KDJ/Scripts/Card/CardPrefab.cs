@@ -1,20 +1,20 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class CardPrefab : MonoBehaviour
 {
-    [SerializeField] private CardBase _cardData;
+    [SerializeField] public CardBase CardData;
     [SerializeField] private TMP_Text _cardNameText;
     [SerializeField] private TMP_Text _cardDescriptionText;
 
     private void Start()
     {
-        if (_cardData != null)
+        if (CardData != null)
         {
-            _cardNameText.text = _cardData.CardName;
-            _cardDescriptionText.text = _cardData.CardDescription;
+            _cardNameText.text = CardData.CardName;
+            _cardDescriptionText.text = CardData.CardDescription;
         }
     }
 }
