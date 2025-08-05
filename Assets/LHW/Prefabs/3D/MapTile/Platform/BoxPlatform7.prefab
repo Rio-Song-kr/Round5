@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6135327463217212685}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BoxPlatform7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,6 +45,10 @@ PrefabInstance:
     - target: {fileID: 4471842203012402049, guid: 8e8653264b23bce48b9942e1dd0a9e69, type: 3}
       propertyPath: m_Name
       value: BoxPlatform6 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4471842203012402049, guid: 8e8653264b23bce48b9942e1dd0a9e69, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4855803892952999291, guid: 8e8653264b23bce48b9942e1dd0a9e69, type: 3}
       propertyPath: m_ConnectedAnchor.x

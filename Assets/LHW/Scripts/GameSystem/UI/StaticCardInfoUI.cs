@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,29 @@ public class StaticCardInfoUI : MonoBehaviour
 
     string[] leftCardList;
     string[] rightCardList;
+
+    PhotonView leftPanelView;
+    PhotonView rightPanelView;
+
+    int leftPanelViewID;
+    int rightPanelViewID;
+
+    private PoolManager pools;
+
+    public PoolManager Pools => pools;
+
+    private void Awake()
+    {
+        pools = FindObjectOfType<PoolManager>();
+        pools.InitializePool(UIImagePrefab.name, UIImagePrefab, 3, 9);
+        
+
+        leftPanelView = leftPanelContent.GetComponent<PhotonView>();
+        rightPanelView = rightPanelContent.GetComponent<PhotonView>();
+
+        leftPanelViewID = leftPanelView.ViewID;
+        rightPanelViewID = rightPanelView.ViewID;
+    }
 
     private void OnEnable()
     {
@@ -33,8 +57,9 @@ public class StaticCardInfoUI : MonoBehaviour
         {
             for(int i = leftUIImage.Count; i < leftCardList.Length; i++)
             {
-                GameObject skillInfo = Instantiate(UIImagePrefab);
-                skillInfo.transform.SetParent(leftPanelContent);
+                GameObject skillInfo = PhotonNetwork.Instantiate(UIImagePrefab.name, transform.position, Quaternion.identity);
+                PhotonView skillInfoView = skillInfo.GetComponent<PhotonView>();
+                skillInfoView.RPC(nameof(SkillInfoUI.SetParentToPanel), RpcTarget.All, leftPanelViewID);
                 // TODO : 카드 정보 입력
                 leftUIImage.Add(skillInfo);
             }
@@ -44,8 +69,9 @@ public class StaticCardInfoUI : MonoBehaviour
         {
             for (int i = rightUIImage.Count; i < rightCardList.Length; i++)
             {
-                GameObject skillInfo = Instantiate(UIImagePrefab);
-                skillInfo.transform.SetParent(rightPanelContent);
+                GameObject skillInfo = PhotonNetwork.Instantiate(UIImagePrefab.name, transform.position, Quaternion.identity);
+                PhotonView skillInfoView = skillInfo.GetComponent<PhotonView>();
+                skillInfoView.RPC(nameof(SkillInfoUI.SetParentToPanel), RpcTarget.All, rightPanelViewID);
                 // TODO : 카드 정보 입력
                 rightUIImage.Add(skillInfo);
             }

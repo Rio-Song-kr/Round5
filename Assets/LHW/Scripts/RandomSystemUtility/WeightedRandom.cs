@@ -176,4 +176,10 @@ public class WeightedRandom<T>
     {
         return _dic;
     }
+
+    public void ClearList()
+    {
+        _dic = null;
+        _dic = new Dictionary<T, int>();
+    }
 }
