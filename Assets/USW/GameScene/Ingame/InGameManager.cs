@@ -8,7 +8,6 @@ using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 /// <summary>
-/// PUN2 환경에서 동작하는 인게임 매니저
 /// 3판 2선승 라운드 시스템과 3판 2선승 매치 시스템 관리
 /// </summary>
 public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
@@ -86,7 +85,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool IsWaitingForRematch => isWaitingForRematch;
     #endregion
 
-    
+  
     public int CurrentRound => currentRound;
     public int CurrentMatch => currentMatch;
     public string LastRoundWinner => lastRoundWinner;
@@ -94,7 +93,17 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     
     public Dictionary<string, int> GetRoundScores() => new Dictionary<string, int>(roundScores);
     public Dictionary<string, int> GetMatchScores() => new Dictionary<string, int>(matchScores);
-   
+ 
+    
+    private TestPlayerManager playerManager;
+
+    private void Start()
+    {
+        
+        playerManager = FindFirstObjectByType<TestPlayerManager>();
+    }
+    
+  
 
     #region Initialization
     private void Init()
@@ -313,8 +322,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         isCardSelectTime = true;
         OnCardSelectStart?.Invoke();
         Debug.Log("카드 선택 시작");
-
-
     }
 
     public void EndCardSelect()
@@ -412,7 +419,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     }
     #endregion
 
-    #region Rematch System
+    #region 리매치 시스템
     private void StartRematchWaiting()
     {
         if (!PhotonNetwork.IsMasterClient) return;
@@ -470,29 +477,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             // 모든 플레이어가 리매치에 동의
             photonView.RPC("RPC_RematchAccepted", RpcTarget.All);
         }
-        else
-        {
-            // 리매치 거부된 경우 처리할 로직
-            StartCoroutine(CheckRematchTimeout());
-        }
     }
-
-    private IEnumerator CheckRematchTimeout()
-    {
-        yield return new WaitForSeconds(10f); // 10초 대기
-        
-        if (isWaitingForRematch)
-        {
-            photonView.RPC("RPC_RematchDeclined", RpcTarget.All);
-        }
-    }
-
+    
     [PunRPC]
     private void RPC_RematchAccepted()
     {
         isWaitingForRematch = false;
         OnRematchRequest?.Invoke(true);
-        Debug.Log("리매치 승인! 새 게임 시작");
+        Debug.Log("두명다 리매치 승인함");
         
         // 게임 재시작
         RPC_StartGame();
@@ -505,8 +497,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         OnRematchRequest?.Invoke(false);
         Debug.Log("리매치 거부됨");
         
-        // 메인 메뉴로 돌아가거나 다른 처리
-        // PhotonNetwork.LeaveRoom();
+        // 메인 메뉴로 돌아가는건 gamerestartpanel EndGame 에서 처리하고있음
+        
     }
     #endregion
     
@@ -514,7 +506,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         currentGameState = newState;
     }
-
 
     #region Photon Callbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -558,15 +549,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region 퍼블릭 메서드
-    public bool IsPlayerAlive(string playerKey)
-    {
-        if (playerStatusDict.ContainsKey(playerKey))
-        {
-            return playerStatusDict[playerKey]?.IsAlive ?? false;
-        }
-        return playerAliveStatus.ContainsKey(playerKey) && playerAliveStatus[playerKey];
-    }
-
     public int GetPlayerRoundScore(string playerKey)
     {
         return roundScores.ContainsKey(playerKey) ? roundScores[playerKey] : 0;
@@ -577,69 +559,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         return matchScores.ContainsKey(playerKey) ? matchScores[playerKey] : 0;
     }
     
-    /// <summary>
-    /// 특정 플레이어에게 데미지 주기
-    /// </summary>
-    public void DealDamageToPlayer(string playerKey, float damage)
-    {
-        if (playerStatusDict.ContainsKey(playerKey))
-        {
-            var playerStatus = playerStatusDict[playerKey];
-            playerStatus?.TakeDamage(damage);
-        }
-    }
-
-    /// <summary>
-    /// 플레이어 현재 HP 가져오기
-    /// </summary>
-    public float GetPlayerCurrentHp(string playerKey)
-    {
-        if (playerStatusDict.ContainsKey(playerKey))
-        {
-            return playerStatusDict[playerKey]?.CurrentHp ?? 0f;
-        }
-        return 0f;
-    }
-
-    /// <summary>
-    /// 플레이어 최대 HP 가져오기
-    /// </summary>
-    public float GetPlayerMaxHp(string playerKey)
-    {
-        if (playerStatusDict.ContainsKey(playerKey))
-        {
-            return playerStatusDict[playerKey]?.CurrentMaxHp ?? 0f;
-        }
-        return 0f;
-    }
-
-    /// <summary>
-    /// 모든 살아있는 플레이어 목록 가져오기
-    /// </summary>
-    public List<string> GetAlivePlayers()
-    {
-        return playerStatusDict
-            .Where(kvp => kvp.Value?.IsAlive ?? false)
-            .Select(kvp => kvp.Key)
-            .ToList();
-    }
-
-    /// <summary>
-    /// PlayerStatus로 플레이어 가져오기
-    /// </summary>
-    public PlayerStatus GetPlayerStatus(string playerKey)
-    {
-        return playerStatusDict.ContainsKey(playerKey) ? playerStatusDict[playerKey] : null;
-    }
     #endregion
     
-    
-    #region Debug Methods (테스트용)
+    #region (테스트용)
     
     private void Update()
     {
-        // 키보드 테스트용 (에디터에서만)
-        #if UNITY_EDITOR
+       
+      
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             DebugLeftPlayerWin();
@@ -652,10 +579,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             DebugStartGame();
         }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            DebugPrintGameState();
-        }
         if (Input.GetKeyDown(KeyCode.Y))
         {
             DebugVoteRematch(true);
@@ -664,44 +587,46 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             DebugVoteRematch(false);
         }
-        #endif
     }
     
     /// <summary>
     /// 테스트: 왼쪽 플레이어 승리 처리
     /// </summary>
-    [ContextMenu("Debug: Left Player Win")]
     public void DebugLeftPlayerWin()
     {
         if (!PhotonNetwork.IsMasterClient) return;
         
-        string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
-        Debug.Log("DEBUG: 왼쪽 플레이어 승리!");
-        EndRound(leftPlayerKey);
+        if (PhotonNetwork.PlayerList.Length > 0)
+        {
+            string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+            Debug.Log("왼쪽 플레이어 승리");
+            EndRound(leftPlayerKey);
+        }
     }
     
     /// <summary>
     /// 테스트: 오른쪽 플레이어 승리 처리
     /// </summary>
-    [ContextMenu("Debug: Right Player Win")]
     public void DebugRightPlayerWin()
     {
         if (!PhotonNetwork.IsMasterClient) return;
         
-        string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
-        Debug.Log("DEBUG: 오른쪽 플레이어 승리!");
-        EndRound(rightPlayerKey);
+        if (PhotonNetwork.PlayerList.Length > 1)
+        {
+            string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
+            Debug.Log("오른쪽 플레이어 승리");
+            EndRound(rightPlayerKey);
+        }
     }
     
     /// <summary>
     /// 테스트: 게임 시작
     /// </summary>
-    [ContextMenu("Debug: Start Game")]
     public void DebugStartGame()
     {
         if (!PhotonNetwork.IsMasterClient) return;
         
-        Debug.Log("DEBUG: 게임 시작!");
+        Debug.Log("게임 시작!");
         StartGame();
     }
     
@@ -710,35 +635,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     /// </summary>
     public void DebugVoteRematch(bool vote)
     {
-        Debug.Log($"DEBUG: 리매치 투표 - {(vote ? "찬성" : "반대")}");
+        Debug.Log($"리매치 투표 - {(vote ? "찬성" : "반대")}");
         VoteRematch(vote);
     }
-    
-    /// <summary>
-    /// 테스트: 현재 게임 상태 출력
-    /// </summary>
-    [ContextMenu("Debug: Print Game State")]
-    public void DebugPrintGameState()
-    {
-        Debug.Log($"=== 게임 상태 ===");
-        Debug.Log($"현재 상태: {currentGameState}");
-        Debug.Log($"현재 라운드: {currentRound}");
-        Debug.Log($"현재 매치: {currentMatch}");
-        Debug.Log($"마지막 라운드 승자: {lastRoundWinner}");
-        Debug.Log($"마지막 매치 승자: {lastMatchWinner}");
-        
-        Debug.Log($"=== 라운드 점수 ===");
-        foreach(var score in roundScores)
-        {
-            Debug.Log($"플레이어 {score.Key}: {score.Value}점");
-        }
-        
-        Debug.Log($"=== 매치 점수 ===");
-        foreach(var score in matchScores)
-        {
-            Debug.Log($"플레이어 {score.Key}: {score.Value}승");
-        }
-    }
-    
     #endregion
 }
