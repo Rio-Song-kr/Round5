@@ -9,7 +9,7 @@ public class TutoHookMsgController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        OKButton.GetComponent<Button>().A
+        // OKButton.GetComponent<Button>().A
     }
 
     // Update is called once per frame
