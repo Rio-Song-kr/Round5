@@ -25,6 +25,7 @@ public class RandomMapPresetCreator : MonoBehaviour
             {
                 RandomInit();
                 RandomMapSelect(i);
+                mapWeightedRandom.ClearList();
             }
         }
     }
