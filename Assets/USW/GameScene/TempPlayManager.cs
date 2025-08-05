@@ -10,6 +10,9 @@ public class TempPlayManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject _PlayerPrefab;
     [SerializeField] private Camera _camera;
+
+    private PoolManager _poolManager;
+    
     
     [Header("Player Spawn Positions")]
     [SerializeField] private Transform[] playerSpawnPoints = new Transform[2];
@@ -23,14 +26,15 @@ public class TempPlayManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        SpawnPlayer();
+        _poolManager = FindFirstObjectByType<PoolManager>();
+        _poolManager.InitializePool("Player", _PlayerPrefab, 1, 2);
+        // SpawnPlayer();
     }
 
     public override void OnJoinedRoom()
     {
         // 중복 생성 방지
         if (hasSpawned) return;
-        
         SpawnPlayer();
     }
     
@@ -41,7 +45,7 @@ public class TempPlayManager : MonoBehaviourPunCallbacks
     {
         Vector2 spawnPosition = GetPlayerSpawnPosition();
         
-        GameObject player = PhotonNetwork.Instantiate("TempPlayer", spawnPosition, Quaternion.identity);
+        GameObject player = PhotonNetwork.Instantiate("Player", spawnPosition, Quaternion.identity);
         hasSpawned = true;
     }
     
