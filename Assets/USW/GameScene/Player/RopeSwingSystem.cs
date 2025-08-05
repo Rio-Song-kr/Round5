@@ -179,6 +179,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void SetupComponents()
     {
+        hookLineRenderer = Instantiate(hookTestObj).GetComponent<LineRenderer>();
+
         // 궤적용 LineRenderer 설정 (로컬 플레이어만)
         if (photonView.IsMine && trajectoryRenderer == null)
         {
@@ -186,7 +188,6 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             trajectoryObj.transform.parent = transform;
             trajectoryRenderer = trajectoryObj.AddComponent<LineRenderer>();
 
-            hookLineRenderer = Instantiate(hookTestObj).GetComponent<LineRenderer>();
             trajectoryRenderer.material = hookLineRenderer.material;
             trajectoryRenderer.startWidth = 0.02f;
             trajectoryRenderer.endWidth = 0.02f;
@@ -379,11 +380,16 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             hookInstance.transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
         }
 
+        // if (!photonView.IsMine) return;
         if (hookLineRenderer != null)
         {
             hookLineRenderer.enabled = true;
+            // photonView.RPC(nameof(SetDisplayHookLineRenderer), RpcTarget.All, true);
         }
     }
+
+    [PunRPC]
+    private void SetDisplayHookLineRenderer(bool value) => hookLineRenderer.enabled = value;
 
     private void ShowHookDetached()
     {
@@ -392,9 +398,11 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             hookInstance.SetActive(false);
         }
 
+        // if (!photonView.IsMine) return;
         if (hookLineRenderer != null)
         {
             hookLineRenderer.enabled = false;
+            // photonView.RPC(nameof(SetDisplayHookLineRenderer), RpcTarget.All, false);
         }
     }
 
