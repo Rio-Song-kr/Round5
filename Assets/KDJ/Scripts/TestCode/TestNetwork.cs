@@ -7,6 +7,7 @@ using Photon.Realtime;
 
 public class TestNetwork : MonoBehaviourPunCallbacks
 {
+    [SerializeField] RandomMapPresetCreator creator;
     private void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -31,6 +32,16 @@ public class TestNetwork : MonoBehaviourPunCallbacks
         base.OnCreatedRoom();
         Debug.Log("방 만듬");
         if (PhotonNetwork.IsMasterClient)
-            Debug.Log("마스터 클라이언트 입니다.");      
+        {
+            Debug.Log("마스터 클라이언트 입니다.");
+        }
+        // 이형원 - 테스트용 코드로 추가했습니다
+        creator.gameObject.SetActive(true);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        // 이형원 - 테스트용 코드로 추가했습니다
+        creator.gameObject.SetActive(true);
     }
 }
