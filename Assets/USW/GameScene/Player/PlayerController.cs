@@ -336,7 +336,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             canJump = newCanJump;
             hasJumpedInAir = newHasJumpedInAir;
+            return;
         }
+
+        // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
+        var landEffectObj = PhotonNetwork.Instantiate(
+            "LandEffect",
+            transform.position + new Vector3(0, _jumpEffectOffset, 0),
+            Quaternion.Euler(-90, 0, 0)
+        );
+
+
+        var landEffect = landEffectObj.GetComponentInChildren<ParticleSystem>();
+        landEffect.Play();
+        StartCoroutine(ReturnToPool(landEffectObj, landEffect));
     }
 
     /// <summary>
@@ -434,7 +447,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             // rb.velocity = new Vector2(rb.velocity.x, 0f);
 
             // 점프 상태 변경을 다른 클라이언트에 알림
-            photonView.RPC("OnJumpStateChanged", RpcTarget.Others, canJump, hasJumpedInAir);
+            photonView.RPC("OnJumpStateChanged", RpcTarget.All, canJump, hasJumpedInAir);
         }
         else if (isGrounded && wasGrounded)
         {
