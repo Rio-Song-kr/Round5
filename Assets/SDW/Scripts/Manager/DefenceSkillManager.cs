@@ -41,14 +41,14 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         //# 테스트용 - Skill 추가, 추후 카드 선택 시 AddSkill을 추가하여 사용
         //# Shield 스킬 기본 스킬
-        // AddSkill(DefenceSkills.Shield);
-        //
-        // AddSkill(DefenceSkills.ShieldUp);
-        // AddSkill(DefenceSkills.Defender);
-        // AddSkill(DefenceSkills.Huge);
-        //
-        // AddSkill(DefenceSkills.AbyssalCountdown);
-        // AddSkill(DefenceSkills.Emp);
+        AddSkill(DefenceSkills.Shield);
+
+        AddSkill(DefenceSkills.ShieldUp);
+        AddSkill(DefenceSkills.Defender);
+        AddSkill(DefenceSkills.Huge);
+
+        AddSkill(DefenceSkills.AbyssalCountdown);
+        AddSkill(DefenceSkills.Emp);
         AddSkill(DefenceSkills.FrostSlam);
 
         StartCoroutine(WaitForAllPlayerJoin());
