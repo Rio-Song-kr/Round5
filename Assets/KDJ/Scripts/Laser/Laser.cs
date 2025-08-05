@@ -36,8 +36,8 @@ public class Laser : MonoBehaviourPun
         _laserEffect.enabled = false;
         transform.localScale = Vector3.one; // 레이저 오브젝트의 스케일을 초기화
         
-        _poolManager = FindFirstObjectByType<PoolManager>();
-        _poolManager.InitializePool("LaserSoot", _laserSoot, 200, 300);
+        // _poolManager = FindFirstObjectByType<PoolManager>();
+        // _poolManager.InitializePool("LasetSoot", _laserSoot, 1, 300);
     }
 
     private void Start()
@@ -45,7 +45,7 @@ public class Laser : MonoBehaviourPun
         // _laserSootPool = new LaserSootPool<LaserSoot>();
         // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
         _poolManager = FindFirstObjectByType<PoolManager>();
-        _poolManager.InitializePool("LaserSoot", _laserSoot, 200, 300);
+        _poolManager.InitializePool("LasetSoot", _laserSoot, 200, 300);
     }
 
     // 레이저 발사시 중복 발사됨
@@ -143,7 +143,7 @@ public class Laser : MonoBehaviourPun
                             // transform.rotation)
                         // .GetComponent<LaserSoot>();
                     var soot = PhotonNetwork.Instantiate(
-                            "LaserSoot",
+                            "LasetSoot",
                             _hits[0].point,
                             transform.rotation)
                         .GetComponent<LaserSoot>();
