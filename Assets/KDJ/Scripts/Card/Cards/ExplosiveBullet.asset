@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e466fad337d5e04ab401b77d18b3624, type: 3}
   m_Name: ExplosiveBullet
   m_EditorClassIdentifier: 
-  CardName: EXPLOSIVE BULLET
+  CardName: <color=#ff4748>EXPLOSIVE BULLET</color>
   CardDescription: 'Bullet explodes on impact
 
-    <color=red>-50%</color> ATKSPD
+    <color=red>-100%</color> ATKSPD
 
     <color=red>+0.25s</color>
     Reload Time'
@@ -26,4 +26,5 @@ MonoBehaviour:
   ReloadTimeAddition: 0.25
   AttackSpeedMultiplier: 2
   AmmoIncrease: 0
+  AmmoConsumption: 0
   WeaponIndex: 2
