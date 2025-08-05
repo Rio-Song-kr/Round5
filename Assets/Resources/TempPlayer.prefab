@@ -200,7 +200,7 @@ MonoBehaviour:
   jumpForce: 20
   jumpCutMultiplier: 0.5
   groundCheck: {fileID: 0}
-  groundCheckOffset: -0.2
+  groundCheckOffset: -0.3
   groundCheckSize: {x: 0.5, y: 0.1}
   groundLayerMask:
     serializedVersion: 2
@@ -210,6 +210,7 @@ MonoBehaviour:
   velocityLerpRate: 8
   _bounceMat: {fileID: 6200000, guid: f279f0ce4e5b79646a5c8b7183a0df8d, type: 2}
   _unBounceMat: {fileID: 6200000, guid: 357895fbe146396468e011e2a3be4def, type: 2}
+  _jumpEffecdtOffset: -0.2
 --- !u!114 &9191272727559089292
 MonoBehaviour:
   m_ObjectHideFlags: 0

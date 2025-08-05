@@ -7,6 +7,11 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _borderEffect;
+    [SerializeField] private GameObject _deadFragEffect;
+    [SerializeField] private GameObject _deadSmokeEffect;
+    [SerializeField] private GameObject _jumpEffect;
+    [SerializeField] private GameObject _landEffect;
     [SerializeField] private Camera _camera;
     [SerializeField] private PoolManager _pools;
     public List<GameObject> PlayerList = new List<GameObject>();
@@ -20,6 +25,11 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
         _pools = FindFirstObjectByType<PoolManager>();
         _pools.InitializePool(_playerPrefab.name, _playerPrefab, 1, 2);
         _pools.InitializePool(_laserPrefab.name, _laserPrefab, 1, 2);
+        _pools.InitializePool("BorderEffect", _borderEffect, 1, 2);
+        _pools.InitializePool("DeadFragEffect", _deadFragEffect, 1, 2);
+        _pools.InitializePool("DeadSmokeEffect", _deadSmokeEffect, 1, 2);
+        _pools.InitializePool("JumpEffectWrap", _jumpEffect, 2, 10);
+        _pools.InitializePool("LandEffect", _landEffect, 1, 2);
     }
 
     /// <summary>
@@ -44,23 +54,21 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
 
         var player = PhotonView.Find(playerViewId);
         PlayerList.Add(player.gameObject);
-        
+
         RegisterPlayerStatusToInGameManager(player.gameObject);
     }
-    
-    
-    
+
     /// <summary>
     /// Player의 PlayerStatus를 InGameManager에 등록
     /// </summary>
     private void RegisterPlayerStatusToInGameManager(GameObject playerObject)
     {
         // PlayerStatus 컴포넌트 찾고
-        PlayerStatus playerStatus = playerObject.GetComponent<PlayerStatus>();
-        
+        var playerStatus = playerObject.GetComponent<PlayerStatus>();
+
         // PhotonView에서 소유자 정보 가져와서
-        PhotonView photonView = playerObject.GetComponent<PhotonView>();
-        
+        var photonView = playerObject.GetComponent<PhotonView>();
+
         // PlayerKey 생성 후 InGameManager에 등록
         string playerKey = photonView.Owner.ActorNumber.ToString();
         InGameManager.Instance.RegisterPlayerStatus(playerKey, playerStatus);
@@ -75,20 +83,20 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         base.OnPlayerLeftRoom(otherPlayer);
-        
+
         // 해당 플레이어의 오브젝트를 PlayerList에서 제거
         string playerKey = otherPlayer.ActorNumber.ToString();
-        
+
         // PlayerList에서 해당 플레이어 오브젝트 찾아서 제거
         for (int i = PlayerList.Count - 1; i >= 0; i--)
         {
             if (PlayerList[i] == null) continue;
-            
-            PhotonView pv = PlayerList[i].GetComponent<PhotonView>();
+
+            var pv = PlayerList[i].GetComponent<PhotonView>();
             if (pv != null && pv.Owner != null && pv.Owner.ActorNumber.ToString() == playerKey)
             {
                 PlayerList.RemoveAt(i);
-                
+
                 // ViewID제거
                 if (i < PlayerViewIdList.Count)
                 {
