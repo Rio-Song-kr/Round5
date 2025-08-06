@@ -414,6 +414,9 @@ MonoBehaviour:
   positionLerpRate: 10
   rotationLerpRate: 15
   velocityLerpRate: 8
+  _bounceMat: {fileID: 0}
+  _unBounceMat: {fileID: 0}
+  _jumpEffectOffset: -0.2
 --- !u!114 &2889910838071331562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,7 +429,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05035e31bc65c44ab1e4cad1efb5417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hookCrosshair: {fileID: 0}
+  hookCrosshairPrefab: {fileID: 104772317902610037, guid: 38ac3c464d0869f48bbe1d134eb6dca0, type: 3}
+  hookTestObj: {fileID: 332250030041233660, guid: a3b46dae3347b964c918dae1f69f3e87, type: 3}
   hookLineRenderer: {fileID: 0}
   hookHitEffect: {fileID: 3310369482459089586, guid: ae5cb958901105144a0568b013aad026, type: 3}
   hookObject: {fileID: 581712458301378307, guid: a9edbd7fc7dad2d49b256d3ea40b7f9e, type: 3}
@@ -489,6 +493,7 @@ MonoBehaviour:
   wallJumpHorizontalForce: 1.2
   wallJumpVerticalForce: 1.6
   wallCheckLeft: {fileID: 0}
+  _wallJumpOffset: 0.2
   wallCheckRight: {fileID: 0}
   wallCheckSize: {x: 0.1, y: 0.8}
 --- !u!114 &5650949831171443985

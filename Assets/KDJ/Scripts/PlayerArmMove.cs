@@ -20,6 +20,9 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
+
+        // Debug.Log("플립 상태:" + _isFlipped + ", 마우스 위치 오른쪽:" + _isGunInRight);
+
         if (photonView.IsMine)
         {
             LookAtMouse();

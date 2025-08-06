@@ -1,9 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
 
 public class TestPlayerManager : MonoBehaviourPunCallbacks
 {
@@ -39,9 +39,17 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void Start()
     {
-       Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
-        var player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector2(Random.Range(-8f, 0), Random.Range(-4f, 4f)),
-            Quaternion.identity);
+        StartCoroutine(DelayedAddPlayer());
+    }
+
+    private IEnumerator DelayedAddPlayer()
+    {
+        yield return new WaitForSeconds(1f);
+
+        Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
+        // var player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector2(Random.Range(-8f, 0), Random.Range(-4f, 4f)),
+        //     Quaternion.identity);
+        var player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector2(-50f, -50f), Quaternion.identity);
 
         int playerViewId = player.GetComponent<PhotonView>().ViewID;
         photonView.RPC(nameof(AddPlayer), RpcTarget.AllBuffered, playerViewId);

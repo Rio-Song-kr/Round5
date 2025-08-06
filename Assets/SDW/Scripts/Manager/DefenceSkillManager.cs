@@ -43,13 +43,13 @@ public class DefenceSkillManager : MonoBehaviourPun
         //# Shield 스킬 기본 스킬
         AddSkill(DefenceSkills.Shield);
 
-        AddSkill(DefenceSkills.ShieldUp);
-        AddSkill(DefenceSkills.Defender);
-        AddSkill(DefenceSkills.Huge);
-
-        AddSkill(DefenceSkills.AbyssalCountdown);
-        AddSkill(DefenceSkills.Emp);
-        AddSkill(DefenceSkills.FrostSlam);
+        // AddSkill(DefenceSkills.ShieldUp);
+        // AddSkill(DefenceSkills.Defender);
+        // AddSkill(DefenceSkills.Huge);
+        //
+        // AddSkill(DefenceSkills.AbyssalCountdown);
+        // AddSkill(DefenceSkills.Emp);
+        // AddSkill(DefenceSkills.FrostSlam);
 
         StartCoroutine(WaitForAllPlayerJoin());
     }
@@ -64,7 +64,6 @@ public class DefenceSkillManager : MonoBehaviourPun
         {
             StartCoroutine(DelayedTime());
             _isAllJoined = false;
-            _isStarted = true;
         }
 
         if (!Input.GetMouseButtonDown(1) || !_isStarted) return;
@@ -198,5 +197,19 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         _coroutines[skillName] = null;
         _cooldowns[skillName] = null;
+    }
+
+    //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
+    private void SetIsStarted(bool value)
+    {
+        _isStarted = value;
+        var defenceSkillsList = CardManager.Instance.GetDefenceCard();
+
+        if (defenceSkillsList == null || defenceSkillsList.Count == 0) return;
+
+        foreach (var skill in defenceSkillsList)
+        {
+            AddSkill(skill);
+        }
     }
 }

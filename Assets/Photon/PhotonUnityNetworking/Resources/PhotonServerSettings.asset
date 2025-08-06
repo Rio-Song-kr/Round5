@@ -34,60 +34,32 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - ActivateFrostSlamEffect
+  - ActivateMapCreator
+  - AddPlayer
+  - ApplyFrostSlamEffect
+  - ApplyReduceEffect
+  - ApplyReduceSpeed
+  - BigBulletShot
+  - CardSelectUIActivate
+  - ChangeScene
   - ClickRpc
+  - DefaultShot
   - DestroyRpc
   - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - BulletMove
-  - Shot
-  - 
-  - BigBulletShot
+  - DisableShieldEffect
+  - DisableShieldObject
+  - DisableShieldsUpEffect
+  - EndEffect
   - ExplosiveBulletShot
-  - DefaultShot
-  - RPC_FinishReload
-  - RPC_FireLaser
-  - RPC_SetAnimatorSpeed
-  - RPC_SetWeapon
-  - RPC_StartAutoReload
-  - SetIsWinner
-  - UseSkills
-  - RPC_SyncMasterCanvas
-  - RPC_SwitchToClientCanvas
-  - RPC_Flip
-  - RPC_SpawnCards
-  - SpawnRandomCards1
-  - UseActiveSkills
-  - UsePassiveSkills
-  - RPC_FlipCardByIndex
-  - RPC_SpawnCardsWithIndexes
-  - RPC_SyncClientCanvas
-  - RPC_PlayCardSelectionAnimation
+  - FillAmountInit
+  - Fire
+  - GameRestartPanelActivate
   - InitBullet
-  - ApplyFreeze
-  - DisableShieldEffect
-  - EndEffect
+  - InitializeArc
+  - InitializeArcEffect
   - InitializeComponent
-  - OnTriggerEnter2D
-  - RemoveFreeze
-  - ReturnToPool
-  - SetFillAmount
-  - SetPoolRPC
-  - Shoot
-  - StartEffect
-  - SyncTargetPosition
-  - RPC_MoveLeftArm
-  - RPC_MoveRightArm
-  - RPC_SelectCardArm
-  - RPC_PlayShrinkAnimation
-  - RPC_HighlightCardByIndex
-  - RPC_UnhighlightCardByIndex
-  - DisableShieldEffect
-  - EndEffect
-  - InitializeComponent
-  - StartEffect
-  - 
-  - ApplyFreeze
+  - InitializeShieldsUpEffect
   - OnEmergencyReset
   - OnForceJump
   - OnHookAttached
@@ -102,77 +74,62 @@ MonoBehaviour:
   - OnVisualEffectChanged
   - OnWallJump
   - OnWallStateChanged
-  - RemoveFreeze
-  - ReturnToPool
-  - RPC_SetBulletType
-  - SetFillAmount
-  - SetPoolRPC
-  - Shoot
-  - SyncTargetPosition
-  - RPC_SwitchTurnToOther
-  - CardSelectUIActivate
-  - GameRestartPanelActivate
-  - RoundActivate
-  - RoundChange
-  - RoundOverPanelActivate
-  - RoundWinImgAnimationActivate
-  - RPC_DynamicMove
-  - SetParentToRound
-  - WinImgUIActivate
-  - ActivateFrostSlamEffect
-  - ApplyFrostSlamEffect
-  - ApplyReduceEffect
-  - ApplyReduceSpeed
-  - DisableShieldObject
-  - DisableShieldsUpEffect
-  - FillAmountInit
-  - CardSelectUIActivate
-  - DisableShieldObject
-  - DisableShieldsUpEffect
-  - FillAmountInit
-  - GameRestartPanelActivate
-  - InitializeArc
-  - InitializeArcEffect
-  - InitializeShieldsUpEffect
   - PlayHitEffect
   - PlayVfxArc
   - RemoveReduceSpeed
-  - RPC_TextInit
+  - RespawnSpaceship
+  - ReturnToPool
   - RoundActivate
   - RoundChange
   - RoundOverPanelActivate
   - RoundWinImgAnimationActivate
   - RPC_DynamicMove
-  - RPC_SwitchTurnToOther
-  - RPC_TextInit
-  - SetParentToRound
-  - TakeDamage
-  - UpdateFirstLine
-  - UseShieldEffect
-  - UseShieldsUpEffect
-  - WinnerImageInit
-  - WinnerImageMove
-  - WinnerImageScaleChange
-  - WinImgUIActivate
-  - WinnerImageInit
-  - WinnerImageMove
-  - WinnerImageScaleChange
   - RPC_EndCardSelect
   - RPC_EndGame
   - RPC_EndMatch
   - RPC_EndRound
+  - RPC_FinishReload
+  - RPC_FireLaser
+  - RPC_Flip
+  - RPC_FlipCardByIndex
+  - RPC_HighlightCardByIndex
+  - RPC_PlayCardSelectionAnimation
   - RPC_PlayerDefeated
+  - RPC_PlayShrinkAnimation
   - RPC_RematchAccepted
   - RPC_RematchDeclined
+  - RPC_SelectCardArm
+  - RPC_SetAnimatorSpeed
+  - RPC_SetBulletType
+  - RPC_SetWeapon
+  - RPC_StartAutoReload
   - RPC_StartCardSelect
   - RPC_StartGame
   - RPC_StartRematchWaiting
   - RPC_StartRound
+  - RPC_SwitchTurnToOther
+  - RPC_SyncClientCanvas
+  - RPC_SyncMasterCanvas
+  - RPC_TextInit
+  - RPC_UnhighlightCardByIndex
   - RPC_VoteRematch
-  - AddPlayer
   - SetDisplayHookLineRenderer
+  - SetFillAmount
+  - SetIsWinner
   - SetParentToPanel
-  - ChangeScene
+  - SetParentToRound
+  - SetPoolRPC
+  - Shoot
+  - StartEffect
+  - SyncTargetPosition
+  - TakeDamage
+  - UpdateFirstLine
+  - UseShieldEffect
+  - UseShieldsUpEffect
+  - WinImgUIActivate
+  - WinnerImageInit
+  - WinnerImageMove
+  - WinnerImageScaleChange
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
