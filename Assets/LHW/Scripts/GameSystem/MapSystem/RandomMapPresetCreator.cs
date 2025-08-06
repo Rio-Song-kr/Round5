@@ -1,5 +1,7 @@
-using System;
 using Photon.Pun;
+using System.Collections;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RandomMapPresetCreator : MonoBehaviourPun
@@ -9,6 +11,10 @@ public class RandomMapPresetCreator : MonoBehaviourPun
 
     // �� ��ġ ������
     [SerializeField] private float mapTransformOffset = 35;
+
+    [SerializeField] private MapController controller;
+
+    Coroutine mapUpdateCoroutine;
 
     public float MapTransformOffset
     {
@@ -38,13 +44,11 @@ public class RandomMapPresetCreator : MonoBehaviourPun
     private void OnEnable()
     {
         InGameManager.OnGameStart += OnGameStart;
-        InGameManager.OnRoundStart += OnRoundStart;        
     }
 
     private void OnDisable()
     {
         InGameManager.OnGameStart -= OnGameStart;
-        InGameManager.OnRoundStart -= OnRoundStart;
     }
 
     void OnGameStart()
@@ -58,14 +62,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
                 mapWeightedRandom.ClearList();
                 Debug.Log("�ݺ�");
             }
-        }
-    }
-
-    void OnRoundStart()
-    {
-        if (InGameManager.Instance)
-        {
-            MapUpdate(InGameManager.Instance.CurrentRound);
+            MapUpdate(InGameManager.Instance.CurrentMatch);            
         }
     }
 
@@ -104,22 +101,30 @@ public class RandomMapPresetCreator : MonoBehaviourPun
         return mapListTransform[round];
     }
 
-    public void MapUpdate(int round)
+    public void MapUpdate(int match)
     {
-        if (InGameManager.Instance != null &&
-            InGameManager.Instance.CurrentGameState == InGameManager.GameState.GameEnding)
-            for (int i = 0; i < mapListTransform.Length; i++)
+        mapUpdateCoroutine = StartCoroutine(MapUpdateCoroutine(match));
+    }
+
+    IEnumerator MapUpdateCoroutine(int match)
+    {
+        yield return new WaitForSeconds(2f);
+
+        for (int i = 0; i < mapListTransform.Length; i++)
+        {
+            PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
+            if (match == i)
             {
-                PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
-                if (round == i)
-                {
-                    MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, true);
-                }
-                else
-                {
-                    MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, false);
-                }
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, true);
             }
+            else
+            {
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, false);
+            }
+        }
+        controller.GoToNextStage();
+
+        mapUpdateCoroutine = null;
     }
 
     [PunRPC]

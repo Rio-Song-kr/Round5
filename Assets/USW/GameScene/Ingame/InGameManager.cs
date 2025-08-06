@@ -217,9 +217,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         SetGameState(GameState.RoundEnding);
         lastRoundWinner = winnerKey;
-        roundScores[winnerKey]++;
-        
-        OnRoundEnd?.Invoke();
+        roundScores[winnerKey]++;        
+
         Debug.Log($"라운드 종료 승자: {winnerKey}");
 
         // 매치 승리 확인
@@ -231,11 +230,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             StartCoroutine(StartRoundWithDelay());
         }
+
+        OnRoundEnd?.Invoke();
     }
 
     private IEnumerator EndMatchWithDelay(string winnerKey)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.3f);
         EndMatch(winnerKey);
     }
 
@@ -260,7 +261,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             roundScores[key] = 0;
         }
         
-        OnMatchEnd?.Invoke();
         Debug.Log($"매치 종료 승자: {winnerKey}");
 
         // 게임 승리 확인
@@ -273,6 +273,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             // 카드 선택 시작
             StartCoroutine(StartCardSelectWithDelay());
         }
+
+        OnMatchEnd?.Invoke();
     }
 
     private IEnumerator EndGameWithDelay(string winnerKey)
@@ -330,7 +332,10 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void RPC_StartCardSelect()
     {
         SetGameState(GameState.CardSelecting);
-        isCardSelectTime = true;
+        CardSelectManager cardSelectManager = FindObjectOfType<CardSelectManager>();
+        cardSelectManager.ResetCardSelectionState();
+
+        isCardSelectTime = true;        
         OnCardSelectStart?.Invoke();
         Debug.Log("카드 선택 시작");
     }
@@ -587,8 +592,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     
     private void Update()
     {
-       
-      
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             DebugLeftPlayerWin();

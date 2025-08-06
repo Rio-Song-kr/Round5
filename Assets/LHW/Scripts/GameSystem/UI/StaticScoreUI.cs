@@ -17,14 +17,14 @@ public class StaticScoreUI : MonoBehaviour
     private void OnEnable()
     {
         Init();
-        TestIngameManager.OnRoundOver += RoundScoreChange;
-        TestIngameManager.OnGameSetOver += GameScoreChange;
+        InGameManager.OnRoundEnd += RoundScoreChange;
+        InGameManager.OnMatchEnd += GameScoreChange;
     }
 
     private void OnDisable()
     {
-        TestIngameManager.OnRoundOver -= RoundScoreChange;
-        TestIngameManager.OnGameSetOver -= GameScoreChange;
+        InGameManager.OnRoundEnd -= RoundScoreChange;
+        InGameManager.OnMatchEnd -= GameScoreChange;
     }
 
     private void Init()
@@ -41,8 +41,11 @@ public class StaticScoreUI : MonoBehaviour
     /// </summary>
     private void RoundScoreChange()
     {
-        string currentWinner = TestIngameManager.Instance.ReadScore(out int left, out int right);
-        if (currentWinner == "Left" && left == 1)
+        string winner = InGameManager.Instance.LastRoundWinner;
+        string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+        string rightPlayerKey= PhotonNetwork.PlayerList[1].ActorNumber.ToString();
+        string winnerSide = (!string.IsNullOrEmpty(winner) && winner == leftPlayerKey) ? "Left" : "Right";
+        if (winnerSide == "Left" && InGameManager.Instance.GetPlayerRoundScore(leftPlayerKey) == 1)
         {
             for (int i = 0; i < leftWinImages.Length; i++)
             {
@@ -56,7 +59,7 @@ public class StaticScoreUI : MonoBehaviour
                 }
             }
         }
-        else if (currentWinner == "Right" && right == 1)
+        else if (winnerSide == "Right" && InGameManager.Instance.GetPlayerRoundScore(rightPlayerKey) == 1)
         {
             for (int i = 0; i < leftWinImages.Length; i++)
             {
@@ -77,28 +80,32 @@ public class StaticScoreUI : MonoBehaviour
     /// </summary>
     private void GameScoreChange()
     {
-        string currentWinner = TestIngameManager.Instance.ReadRoundScore(out int leftWinNum, out int rightWinNum);
-        currentWinner = TestIngameManager.Instance.ReadScore(out int leftRoundNum, out int rightRoundNum);
+        string winner = InGameManager.Instance.LastRoundWinner;
+        string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+        string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
+        string winnerSide = (!string.IsNullOrEmpty(winner) && winner == leftPlayerKey) ? "Left" : "Right";
 
-        if (currentWinner == "Left")
+        if (winnerSide == "Left")
         {
-            PhotonView leftImgView = leftWinImages[leftWinNum-1].GetComponent<PhotonView>();
+            int matchWin = InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey);
+            PhotonView leftImgView = leftWinImages[matchWin-1].GetComponent<PhotonView>();
             leftImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
             
-            if (rightRoundNum == 1 && rightWinImages[rightWinNum].activeSelf)
+            if (rightWinImages[InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey)].activeSelf)
             {
-                PhotonView rightImgView = rightWinImages[rightWinNum].GetComponent<PhotonView>();
+                PhotonView rightImgView = rightWinImages[InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey)].GetComponent<PhotonView>();
                 rightImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, false);
             }
         }
-        else if (currentWinner == "Right")
+        else if (winnerSide == "Right")
         {
-            PhotonView rightImgView = rightWinImages[rightWinNum-1].GetComponent<PhotonView>();
+            int matchWin = InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey);
+            PhotonView rightImgView = rightWinImages[matchWin-1].GetComponent<PhotonView>();
             rightImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
             
-            if (leftRoundNum == 1 && leftWinImages[leftWinNum].activeSelf)
+            if (leftWinImages[InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey)].activeSelf)
             {
-                PhotonView leftImgView = leftWinImages[leftWinNum].GetComponent<PhotonView>();
+                PhotonView leftImgView = leftWinImages[InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey)].GetComponent<PhotonView>();
                 leftImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, false);
             }
         }
