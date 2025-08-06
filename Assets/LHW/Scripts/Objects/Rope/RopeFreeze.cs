@@ -15,14 +15,14 @@ public class RopeFreeze : MonoBehaviour
 
     private void OnEnable()
     {
-        TestIngameManager.OnRoundOver += FreezeRope;
-        TestIngameManager.onCardSelectEnd += FreezeRope;
+        InGameManager.OnRoundEnd += FreezeRope;
+        InGameManager.OnCardSelectEnd += FreezeRope;
     }
 
     private void OnDisable()
     {
-        TestIngameManager.OnRoundOver -= FreezeRope;
-        TestIngameManager.onCardSelectEnd -= FreezeRope;
+        InGameManager.OnRoundEnd -= FreezeRope;
+        InGameManager.OnCardSelectEnd -= FreezeRope;
     }
 
     private void FreezeRope()
@@ -37,7 +37,7 @@ public class RopeFreeze : MonoBehaviour
         yield return new WaitForSeconds(freezeTime);
 
         rigid.bodyType = RigidbodyType2D.Dynamic;
-        rigid.mass = 5;
+        rigid.mass = 3;
         rigid.drag = 0.2f;
         rigid.angularDrag = 0.1f;
         rigid.gravityScale = 1f;
