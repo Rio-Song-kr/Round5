@@ -1512,6 +1512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4794b4241eeb410489d4e1e029d366cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  creator: {fileID: 5145603770729905725}
   yesButton: {fileID: 4105091208084843325}
   noButton: {fileID: 5899011108128127674}
 --- !u!114 &4218052848200620002
@@ -2609,8 +2610,8 @@ MonoBehaviour:
   - {fileID: 6077040965735311254, guid: 8831f02937920454bb5448254aed650c, type: 3}
   - {fileID: 333661759096171217, guid: 75198ab9b3688534d81c21dc67db1409, type: 3}
   - {fileID: 8909731782164389339, guid: 507ea0674f1dde54995bf4ee9b0a801d, type: 3}
-  mapController: {fileID: 7439425923849553118}
   mapTransformOffset: 35
+  controller: {fileID: 0}
   gameCycleNum: 3
   mapListTransform:
   - {fileID: 5942931552343826983}

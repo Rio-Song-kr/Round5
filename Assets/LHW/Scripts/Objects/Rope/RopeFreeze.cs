@@ -13,6 +13,11 @@ public class RopeFreeze : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        rigid.bodyType = RigidbodyType2D.Kinematic;
+    }
+
     private void OnEnable()
     {
         InGameManager.OnRoundEnd += FreezeRope;
