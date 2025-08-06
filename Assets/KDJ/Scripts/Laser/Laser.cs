@@ -165,7 +165,7 @@ public class Laser : MonoBehaviourPun
                             {
                                 float damage = _baseDamage * _damageMultiplier; // 6 * (1 - 0.7) 데미지 6에서 -70% = 6 * 0.3 = 1.8
                                 // TODO: 적한테 데미지 적용
-                                // targetView.RPC("TakeDamage", RpcTarget.All, damage);
+                                targetView.RPC("TakeDamage", RpcTarget.All, damage);
                             }
                         }
 

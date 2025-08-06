@@ -28,8 +28,8 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
         _pools.InitializePool(_playerPrefab.name, _playerPrefab, 1, 2);
         _pools.InitializePool(_laserPrefab.name, _laserPrefab, 1, 2);
         _pools.InitializePool("BorderEffect", _borderEffect, 1, 2);
-        _pools.InitializePool("DeadFragEffect", _deadFragEffect, 1, 2);
-        _pools.InitializePool("DeadSmokeEffect", _deadSmokeEffect, 1, 2);
+        _pools.InitializePool("DeadFragWrap", _deadFragEffect, 1, 2);
+        _pools.InitializePool("DeadSmokeWrap", _deadSmokeEffect, 1, 2);
         _pools.InitializePool("JumpEffectWrap", _jumpEffect, 2, 10);
         _pools.InitializePool("LandEffect", _landEffect, 1, 2);
     }

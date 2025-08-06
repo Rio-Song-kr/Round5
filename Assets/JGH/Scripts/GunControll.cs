@@ -33,7 +33,8 @@ public class GunControll : MonoBehaviourPun
 
     private void Update()
     {
-        if (!photonView.IsMine || !_isStarted) return;
+        // if (!photonView.IsMine || !_isStarted) return;
+        if (!photonView.IsMine) return;
 
         // 마우스 위치에 따라 총구 회전
         // RotateMuzzleToMouse();
@@ -59,23 +60,37 @@ public class GunControll : MonoBehaviourPun
     private void OnApplyCards(out bool[] weapons)
     {
         weapons = CardManager.Instance.GetWeaponCard();
+        Debug.Log($"weapons : {weapons[0]}, {weapons[1]}, {weapons[2]}");
+
+        // 폭발성 무기면 변수 true 
+
+        // 레이저인 경우 효과X
         if (weapons[0] && lastWeapon != WeaponType.Laser) // Laser
         {
             EquipWeapon(WeaponType.Laser);
             lastWeapon = WeaponType.Laser;
         }
 
-        if (weapons[1] && lastWeapon != WeaponType.Bullet) // Explosive
+        else if (weapons[1] && lastWeapon != WeaponType.Bullet) // Explosive
+
         {
             _isExplosiveBullet = true;
             EquipWeapon(WeaponType.Bullet); // 예: Explosive 타입이 Bullet 기반이라면
             lastWeapon = WeaponType.Bullet;
         }
 
-        if (weapons[2] && lastWeapon != WeaponType.Shotgun) // Barrage
+        // 샷건인 경우
+        else if (weapons[2] && lastWeapon != WeaponType.Shotgun) // Barrage
+
         {
             EquipWeapon(WeaponType.Shotgun); // Barrage는 샷건 계열일 경우
             lastWeapon = WeaponType.Shotgun;
+        }
+        // 무기 카드 선택 안한 경우
+        else if (lastWeapon != WeaponType.Bullet)
+        {
+            EquipWeapon(WeaponType.Bullet); // 예: Explosive 타입이 Bullet 기반이라면
+            lastWeapon = WeaponType.Bullet;
         }
     }
 
@@ -85,22 +100,29 @@ public class GunControll : MonoBehaviourPun
     /// <param name="weaponType"></param>
     public void EquipWeapon(WeaponType weaponType)
     {
-        DisableAllWeapons();
+        // DisableAllWeapons();
 
-        switch (weaponType)
+
+        if (weaponType == WeaponType.Bullet)
         {
-            case WeaponType.Bullet:
-                currentWeaponObject = bulletWeaponObject; break;
-            case WeaponType.Laser:
-                currentWeaponObject = LaserWeaponObject; break;
-            case WeaponType.Shotgun:
-                currentWeaponObject = barrelWeaponObject; break;
+            currentWeaponObject = bulletWeaponObject;
         }
+        else if (weaponType == WeaponType.Laser)
+        {
+            currentWeaponObject = LaserWeaponObject;
+        }
+
+        else
+        {
+            currentWeaponObject = barrelWeaponObject;
+        }
+
 
         currentWeaponObject.SetActive(true);
         currentWeapon = currentWeaponObject.GetComponent<IWeapon>();
 
-        currentWeapon?.Initialize();
+        currentWeapon.Initialize();
+
 
         // 내 무기 선택 시 상대에게 전달
         if (photonView.IsMine)

@@ -74,10 +74,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     /// 기준 공격 속도 체크 메서드 추가
     /// </summary>
     /// <returns></returns>
-    protected bool CanAttack() =>
-        // return Time.time - lastAttackTime >= 1f / attackSpeed;
-        // return Time.time - lastAttackTime >= 1f / playerStatusDataSO.DefaultAttackSpeed;
-        Time.time - lastAttackTime >= CardManager.Instance.GetCaculateCardStats().DefaultAttackSpeed;
+    protected bool CanAttack()
+        => Time.time - lastAttackTime >= CardManager.Instance.GetCaculateCardStats().DefaultAttackSpeed;
 
     public override void OnEnable()
     {
@@ -106,6 +104,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected void ReloadSpeedFromAnimator()
     {
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
+        Debug.Log(
+            $"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
         float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
 
         photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
@@ -130,6 +130,11 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
             {
                 FinishReload();
             }
+        }
+
+        if (photonView.IsMine)
+        {
+            maxAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
         }
     }
 
@@ -180,6 +185,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     private IEnumerator IdleCheckRoutine()
     {
         lastAttackTime = Time.time;
+        Debug.Log($"----- lastAttackTime : {lastAttackTime}");
+
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
@@ -201,6 +208,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void UpdateAmmoUI()
     {
+        Debug.Log($"currentAmmo: {currentAmmo}, maxAmmo: {maxAmmo}");
+
         ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
         // ammoDisplay?.UpdateAmmoIcons(currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
     }
