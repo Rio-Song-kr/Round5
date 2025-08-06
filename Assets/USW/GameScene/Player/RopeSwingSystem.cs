@@ -54,6 +54,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     private bool climbDownInput;
     private float moveInput;
 
+    private bool _isStarted;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -195,7 +197,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
             trajectoryRenderer.enabled = true;
 
             crossHairObj = Instantiate(hookCrosshairPrefab);
-            crossHairObj.SetActive(true);
+            crossHairObj.SetActive(false);
         }
 
         if (hookLineRenderer)
@@ -597,4 +599,11 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     public Vector2 GetHookPoint() => hookPoint;
 
     #endregion
+
+    //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
+    private void SetIsStarted(bool value)
+    {
+        _isStarted = value;
+        crossHairObj.SetActive(value);
+    }
 }
