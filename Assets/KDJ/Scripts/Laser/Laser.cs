@@ -24,8 +24,8 @@ public class Laser : MonoBehaviourPun
     private bool _canShoot;
 
     // 데미지
-    private float _baseDamage = 6f;
-    private float _damageMultiplier = 0.3f;
+    private float _baseDamage = 10f;
+    private float _damageMultiplier = 0.25f;
 
     public bool CanShoot => _laserCoroutine == null; // 레이저가 활성화되어 있지 않으면 true
 
@@ -125,12 +125,15 @@ public class Laser : MonoBehaviourPun
         _laserEffect.SetVector3("ParentScale", scale); // 부모 오브젝트의 스케일 설정
         float Timer = 0f;
         float particleTimer = 0f;
+        float laserTick = 0f;
+        int laserTickCount = 0;
 
 
         while (Timer <= Duration)
         {
             Timer += Time.deltaTime;
             particleTimer += Time.deltaTime;
+
             LaserBeam();
             Debug.Log($"isLaserHit: {_isLaserHit}");
             if (particleTimer >= _particleDelay)
@@ -166,10 +169,33 @@ public class Laser : MonoBehaviourPun
                             }
                         }
 
+
+
+
                         particleTimer = 0f;
                     }
                 }
             }
+
+            if (_hits[0].collider.gameObject.layer == 8)
+            {
+
+                laserTick += Time.deltaTime;
+
+                if (laserTick >= 0.495f) // 0.5초마다 틱 데미지 적용
+                {
+                    IDamagable damagable = _hits[0].collider.GetComponent<IDamagable>();
+                    if (damagable != null)
+                    {
+                        float damage = _baseDamage * _damageMultiplier;
+                        damagable.TakeDamage(damage, _hits[0].point, _hits[0].normal); // IDamagable 인터페이스를 통해 데미지 적용
+                    }
+                    laserTick = 0f;
+                }
+
+            }
+            else laserTick = 0f; // IDamagable이 아닌 경우 틱 데미지 초기화
+
             yield return null;
         }
 
