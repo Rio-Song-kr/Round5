@@ -7,11 +7,10 @@ public class ExplosiveBullet : MonoBehaviour
 {
     private Collider2D[] _colls = new Collider2D[20];
 
-    void Start()
+    private void Start()
     {
         ExplosionShock();
         CameraShake.Instance.ShakeCaller(0.65f, 0.1f);
-
     }
 
     public void ExplosionShock()
@@ -23,9 +22,13 @@ public class ExplosiveBullet : MonoBehaviour
         {
             for (int i = 0; i < count; i++)
             {
-                IDamagable damagable = _colls[i].GetComponent<IDamagable>();
-                Rigidbody2D rb = _colls[i].GetComponent<Rigidbody2D>();
-                Vector3 distance = _colls[i].transform.position - transform.position;
+                var damagable = _colls[i].GetComponent<IDamagable>();
+                var rb = _colls[i].GetComponent<Rigidbody2D>();
+                var distance = _colls[i].transform.position - transform.position;
+
+                var hitPosition = _colls[i].ClosestPoint(transform.position);
+                Vector2 hitNormal = distance.normalized;
+
                 if (rb != null)
                 {
                     // (n / distance.sqrMagnitude) n 부분 숫자가 높으면 폭발 강도가 세집니다.
@@ -39,7 +42,7 @@ public class ExplosiveBullet : MonoBehaviour
                     // 6f은 피해량. 이후 스텟 최종 피해량으로 변경 필요
                     float damage = 1f / distance.sqrMagnitude;
                     damage = Mathf.Clamp(damage, 0.1f, 6f); // 최소 0.1, 최대 6으로 제한
-                    damagable.TakeDamage(damage);
+                    damagable.TakeDamage(damage, hitPosition, hitNormal);
                 }
             }
         }

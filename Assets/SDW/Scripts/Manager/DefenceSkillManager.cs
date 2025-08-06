@@ -203,5 +203,13 @@ public class DefenceSkillManager : MonoBehaviourPun
     private void SetIsStarted(bool value)
     {
         _isStarted = value;
+        var defenceSkillsList = CardManager.Instance.GetDefenceCard();
+
+        if (defenceSkillsList == null || defenceSkillsList.Count == 0) return;
+
+        foreach (var skill in defenceSkillsList)
+        {
+            AddSkill(skill);
+        }
     }
 }
