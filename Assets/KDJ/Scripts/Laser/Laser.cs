@@ -188,7 +188,7 @@ public class Laser : MonoBehaviourPun
                     if (damagable != null)
                     {
                         float damage = _baseDamage * _damageMultiplier;
-                        damagable.TakeDamage(damage); // IDamagable 인터페이스를 통해 데미지 적용
+                        damagable.TakeDamage(damage, _hits[0].point, _hits[0].normal); // IDamagable 인터페이스를 통해 데미지 적용
                     }
                     laserTick = 0f;
                 }

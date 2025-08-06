@@ -98,4 +98,9 @@ public class TestPlayer : MonoBehaviour, IDamagable
         _hpText.text = $"{_maxHp.ToString("F1")} / {_hp.ToString("F1")}";
         _hpBar.fillAmount = _hp / _maxHp;
     }
+
+    public void TakeDamage(float amount, Vector2 position, Vector2 direction)
+    {
+        throw new NotImplementedException();
+    }
 }
