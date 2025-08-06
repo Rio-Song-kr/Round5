@@ -143,37 +143,6 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
         }
     }
     
-    /// <summary>
-    /// 에디터에서 위치 시각화
-    /// </summary>
-    private void OnDrawGizmosSelected()
-    {
-        
-        if (player1StartPos != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(player1StartPos.position, 0.5f);
-        }
-        
-        if (player2StartPos != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(player2StartPos.position, 0.5f);
-        }
-        
-        
-        if (player1EndPos != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(player1EndPos.position, 0.5f);
-        }
-        
-        if (player2EndPos != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(player2EndPos.position, 0.5f);
-        }
-    }
     
     #region Photon Callbacks
     
