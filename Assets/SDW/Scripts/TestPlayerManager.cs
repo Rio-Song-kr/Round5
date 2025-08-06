@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Photon.Pun;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 public class TestPlayerManager : MonoBehaviourPunCallbacks
 {
@@ -35,16 +37,14 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
     /// <summary>
     /// 사용자가 게임 방에 참여했을 때 호출되는 메서드로, 참여한 방에 대한 초기 설정 및 객체 생성을 수행
     /// </summary>
-    public override void OnJoinedRoom()
+    private void Start()
     {
-        Debug.Log("방에 참가하셨습니다.");
+       Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
         var player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector2(Random.Range(-8f, 0), Random.Range(-4f, 4f)),
             Quaternion.identity);
 
         int playerViewId = player.GetComponent<PhotonView>().ViewID;
         photonView.RPC(nameof(AddPlayer), RpcTarget.AllBuffered, playerViewId);
-
-        PhotonNetwork.Instantiate(_laserPrefab.name, Vector3.zero, Quaternion.Euler(0, 90, 0));
     }
 
     [PunRPC]

@@ -22,8 +22,7 @@ public class Laser : MonoBehaviourPun
     public float LaserScale = 1f;
 
     private bool _canShoot;
-    
-    
+
     // 데미지
     private float _baseDamage = 6f;
     private float _damageMultiplier = 0.3f;
@@ -35,31 +34,21 @@ public class Laser : MonoBehaviourPun
         _laserEffect = GetComponent<VisualEffect>();
         _laserEffect.enabled = false;
         transform.localScale = Vector3.one; // 레이저 오브젝트의 스케일을 초기화
-        
+
         _poolManager = FindFirstObjectByType<PoolManager>();
         _poolManager.InitializePool("LaserSoot", _laserSoot, 100, 200);
     }
 
-    // private void Start()
-    // {
-    // // _laserSootPool = new LaserSootPool<LaserSoot>();
-    // // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
-    // _poolManager = FindFirstObjectByType<PoolManager>();
-    // _poolManager.InitializePool("LaserSoot", _laserSoot, 200, 300);
-    // }
+    private void OnDisable()
+    {
+        _isLaserHit = false;
+        _laserEffect.enabled = false;
+        if (_laserCoroutine != null)
+            StopCoroutine(_laserCoroutine);
+        _laserCoroutine = null;
+    }
 
-    // 레이저 발사시 중복 발사됨
-    // private void Update()
-    // {
-    // if (!photonView.IsMine) return;
-    //
-    // if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
-    // {
-    //     photonView.RPC(nameof(Shoot), RpcTarget.All);
-    // }
-    // }
-
-    void Update()
+    private void Update()
     {
         Debug.Log("canShoot: " + CanShoot);
     }
@@ -70,7 +59,7 @@ public class Laser : MonoBehaviourPun
         Debug.Log("레이저 발사 요청");
         if (!photonView.IsMine) return;
         // photonView.RPC(nameof(Shoot), RpcTarget.All);
-     
+
         Debug.Log("레이저 발사 요청 2");
         Debug.Log($"코루틴 상태:{_laserCoroutine}");
 
@@ -93,7 +82,6 @@ public class Laser : MonoBehaviourPun
 
         if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
         {
-            
             _laserCoroutine = StartCoroutine(LaserCoroutine());
         }
     }
@@ -106,8 +94,8 @@ public class Laser : MonoBehaviourPun
         Debug.Log("레이저 빔 발사");
         CameraShake.Instance.ShakeCaller(0.15f, 0.02f); // 카메라 흔들기 효과
         _laserEffect.SetVector3("StartPos", transform.position); // 레이저 시작 위치 설정
-        // if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f, ~_layerMask) > 0)
-        if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f) > 0)
+
+        if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f, ~_layerMask) > 0)
         {
             Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
             _laserEffect.SetVector3("EndPos", _hits[0].point); // 레이저가 충돌한 위치로 끝 위치 설정
@@ -149,17 +137,6 @@ public class Laser : MonoBehaviourPun
             {
                 if (_isLaserHit)
                 {
-                    // LaserSoot soot = _laserSootPool.Pool.Get();
-                    // var soot = _laserSootPool.Instantiate(
-                    //         _laserSoot.name,
-                    //         transform.position,
-                    //         transform.rotation)
-                    //     .GetComponent<LaserSoot>();
-                    // var soot = PhotonNetwork.Instantiate(
-                            // "LaserSoot",
-                            // transform.position,
-                            // transform.rotation)
-                        // .GetComponent<LaserSoot>();
                     var soot = PhotonNetwork.Instantiate(
                             "LaserSoot",
                             _hits[0].point,
@@ -176,7 +153,7 @@ public class Laser : MonoBehaviourPun
                             rb.AddForce((_hits[0].point - new Vector2(transform.position.x, transform.position.y)).normalized
                                         * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 넉백 적용
                         }
-                        
+
                         // 틱 데미지 적용 (이펙트와 동시에)
                         if (photonView.IsMine)
                         {
@@ -188,7 +165,7 @@ public class Laser : MonoBehaviourPun
                                 // targetView.RPC("TakeDamage", RpcTarget.All, damage);
                             }
                         }
-    
+
                         particleTimer = 0f;
                     }
                 }
