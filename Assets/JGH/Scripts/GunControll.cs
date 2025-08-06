@@ -28,30 +28,15 @@ public class GunControll : MonoBehaviourPun
     /// <summary>
     /// 처음 시작 시 기본 무기 적용
     /// </summary>
-    // private void Start()
-    // {
-    //     if (photonView.IsMine)
-    //         EquipWeapon(WeaponType.Bullet);
-    // }
-    private IEnumerator Start()
+    private void Start()
     {
-        // CardManager.Instance가 null이 아니게 될 때까지 기다림
-        yield return new WaitUntil(() => CardManager.Instance != null);
-
-        if (photonView.IsMine)
-        {
-            SetIsStarted(true);
-            Debug.Log("카드 이벤트 연결 완료 + 무기 로직 시작");
-        }
-
-        // 기본 무기 설정 (기존 Start() 코드와 합침)
         EquipWeapon(WeaponType.Bullet);
     }
     
     private void Update()
     {
-         if (!photonView.IsMine || !_isStarted) return;
-       // if (!photonView.IsMine) return;
+         // if (!photonView.IsMine || !_isStarted) return;
+       if (!photonView.IsMine) return;
 
         // 마우스 위치에 따라 총구 회전
         // RotateMuzzleToMouse();
@@ -77,7 +62,6 @@ public class GunControll : MonoBehaviourPun
     private void OnApplyCards(out bool[] weapons)
     {
         weapons = CardManager.Instance.GetWeaponCard();
-        Debug.Log($"AttackCard {weapons[0]}, {weapons[1]}, {weapons[2]}");
         
         // 폭발성인 경우
         _isExplosiveBullet = weapons[1]; 
@@ -105,18 +89,14 @@ public class GunControll : MonoBehaviourPun
     {
         DisableAllWeapons();
 
-        if (weaponType == WeaponType.Bullet)
+        switch (weaponType)
         {
-            currentWeaponObject = bulletWeaponObject;
-        }
-        else if (weaponType == WeaponType.Laser)
-        {
-            currentWeaponObject = LaserWeaponObject;
-        }
-
-        else
-        {
-            currentWeaponObject = barrelWeaponObject;
+            case WeaponType.Bullet:
+                currentWeaponObject = bulletWeaponObject; break;
+            case WeaponType.Laser:
+                currentWeaponObject = LaserWeaponObject; break;
+            case WeaponType.Shotgun:
+                currentWeaponObject = barrelWeaponObject; break;
         }
 
 
