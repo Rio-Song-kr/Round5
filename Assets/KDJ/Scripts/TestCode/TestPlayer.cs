@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestPlayer : MonoBehaviour
+public class TestPlayer : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _speed;
     [SerializeField] private Rigidbody2D _rb2d;
@@ -17,6 +19,9 @@ public class TestPlayer : MonoBehaviour
     private float _maxHp = 50f;
     private float _hp;
 
+    public event Action OnDeath;
+
+    public bool IsAlive => throw new NotImplementedException();
 
     private void Awake()
     {
@@ -56,6 +61,7 @@ public class TestPlayer : MonoBehaviour
 
     }
 
+    [PunRPC]
     public void TakeDamage(float damage)
     {
         _hp -= damage;
