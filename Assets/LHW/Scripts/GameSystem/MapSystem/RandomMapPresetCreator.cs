@@ -1,5 +1,7 @@
 using Photon.Pun;
+using System.Collections;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RandomMapPresetCreator : MonoBehaviourPun
@@ -9,6 +11,8 @@ public class RandomMapPresetCreator : MonoBehaviourPun
 
     // �� ��ġ ������
     [SerializeField] private float mapTransformOffset = 35;
+
+    Coroutine mapUpdateCoroutine;
 
     public float MapTransformOffset
     {
@@ -38,13 +42,11 @@ public class RandomMapPresetCreator : MonoBehaviourPun
     private void OnEnable()
     {
         InGameManager.OnGameStart += OnGameStart;
-        InGameManager.OnRoundStart += OnRoundStart;
     }
 
     private void OnDisable()
     {
         InGameManager.OnGameStart -= OnGameStart;
-        InGameManager.OnRoundStart -= OnRoundStart;
     }
 
     void OnGameStart()
@@ -58,13 +60,8 @@ public class RandomMapPresetCreator : MonoBehaviourPun
                 mapWeightedRandom.ClearList();
                 Debug.Log("�ݺ�");
             }
+            MapUpdate(InGameManager.Instance.CurrentMatch);
         }
-    }
-
-
-    void OnRoundStart()
-    {
-        MapUpdate(InGameManager.Instance.CurrentMatch);
     }
 
     /// <summary>
@@ -102,12 +99,19 @@ public class RandomMapPresetCreator : MonoBehaviourPun
         return mapListTransform[round];
     }
 
-    public void MapUpdate(int round)
+    public void MapUpdate(int match)
     {
+        mapUpdateCoroutine = StartCoroutine(MapUpdateCoroutine(match));
+    }
+
+    IEnumerator MapUpdateCoroutine(int match)
+    {
+        yield return new WaitForSeconds(2f);
+
         for (int i = 0; i < mapListTransform.Length; i++)
         {
             PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
-            if (round == i)
+            if (match == i)
             {
                 MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, true);
             }
@@ -116,6 +120,8 @@ public class RandomMapPresetCreator : MonoBehaviourPun
                 MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, false);
             }
         }
+
+        mapUpdateCoroutine = null;
     }
 
     [PunRPC]
