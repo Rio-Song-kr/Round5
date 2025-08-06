@@ -42,32 +42,47 @@ public class Laser : MonoBehaviourPun
 
     // private void Start()
     // {
-        // // _laserSootPool = new LaserSootPool<LaserSoot>();
-        // // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
-        // _poolManager = FindFirstObjectByType<PoolManager>();
-        // _poolManager.InitializePool("LaserSoot", _laserSoot, 200, 300);
+    // // _laserSootPool = new LaserSootPool<LaserSoot>();
+    // // _laserSootPool.SetPool(_laserSoot, 10, transform); // 레이저 그을림 효과 풀 초기화
+    // _poolManager = FindFirstObjectByType<PoolManager>();
+    // _poolManager.InitializePool("LaserSoot", _laserSoot, 200, 300);
     // }
 
     // 레이저 발사시 중복 발사됨
     // private void Update()
     // {
-        // if (!photonView.IsMine) return;
-        //
-        // if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
-        // {
-        //     photonView.RPC(nameof(Shoot), RpcTarget.All);
-        // }
+    // if (!photonView.IsMine) return;
+    //
+    // if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 버튼 클릭 시 레이저 발사
+    // {
+    //     photonView.RPC(nameof(Shoot), RpcTarget.All);
     // }
+    // }
+
+    void Update()
+    {
+        Debug.Log("canShoot: " + CanShoot);
+    }
 
     public void ShootLaser()
     {
+        Debug.Log($"ShootLaser 호출, CanShoot: {CanShoot}");
+        Debug.Log("레이저 발사 요청");
         if (!photonView.IsMine) return;
         // photonView.RPC(nameof(Shoot), RpcTarget.All);
-        _canShoot = true;
+     
+        Debug.Log("레이저 발사 요청 2");
+        Debug.Log($"코루틴 상태:{_laserCoroutine}");
 
         if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
         {
+            Debug.Log("레이저 코루틴 시작");
             _laserCoroutine = StartCoroutine(LaserCoroutine());
+            Debug.Log($"코루틴 시작 후 상태: {_laserCoroutine}");
+        }
+        else
+        {
+            Debug.Log("CanShoot 조건이 false라서 코루틴 시작 안함");
         }
     }
 
@@ -78,6 +93,7 @@ public class Laser : MonoBehaviourPun
 
         if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
         {
+            
             _laserCoroutine = StartCoroutine(LaserCoroutine());
         }
     }
@@ -87,6 +103,7 @@ public class Laser : MonoBehaviourPun
     /// </summary>
     private void LaserBeam()
     {
+        Debug.Log("레이저 빔 발사");
         CameraShake.Instance.ShakeCaller(0.15f, 0.02f); // 카메라 흔들기 효과
         _laserEffect.SetVector3("StartPos", transform.position); // 레이저 시작 위치 설정
         // if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f, ~_layerMask) > 0)
@@ -99,6 +116,7 @@ public class Laser : MonoBehaviourPun
         }
         else
         {
+            Debug.Log("레이저가 충돌하지 않았습니다.");
             _laserEffect.SetVector3("EndPos", transform.position + transform.up * 100); // 충돌이 없으면 기본 끝 위치 설정
             _laserEffect.SetVector3("HitPos", transform.position + transform.up * 100); // 파편 이펙트용 기본 위치 설정
             _isLaserHit = false; // 레이저가 충돌하지 않았음을 표시

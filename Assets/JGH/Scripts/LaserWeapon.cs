@@ -25,7 +25,7 @@ public class LaserWeapon : BaseWeapon
     [PunRPC]
     private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
-        StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
+        //StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
         
         if (currentLaserInstance != null)
         {

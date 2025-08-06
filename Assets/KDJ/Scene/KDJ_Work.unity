@@ -1062,7 +1062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &240575619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1075,6 +1075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc365f2e76d9c114dbf254d6cb1db53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  creator: {fileID: 0}
 --- !u!4 &240575620
 Transform:
   m_ObjectHideFlags: 0
@@ -18182,6 +18183,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CrossHairs
       objectReference: {fileID: 0}
+    - target: {fileID: 104772317902610037, guid: 38ac3c464d0869f48bbe1d134eb6dca0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2503759156503355372, guid: 38ac3c464d0869f48bbe1d134eb6dca0, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -18641,6 +18646,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HookTrajectory
       objectReference: {fileID: 0}
+    - target: {fileID: 4846409922308819089, guid: 45a764a4ba92a464ebaaea818942a01a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4943128544359215467, guid: 45a764a4ba92a464ebaaea818942a01a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.22
@@ -18681,6 +18690,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7839299565767064536, guid: 45a764a4ba92a464ebaaea818942a01a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b6329e9bdeb623340b9e35afdcea659a, type: 2}
     - target: {fileID: 9114132052459261280, guid: 45a764a4ba92a464ebaaea818942a01a, type: 3}
       propertyPath: _hookCrosshair
       value: 
