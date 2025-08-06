@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 public class GunControll : MonoBehaviourPun
 {
@@ -27,6 +30,8 @@ public class GunControll : MonoBehaviourPun
     /// </summary>
     private void Start()
     {
+    //    EquipWeapon(WeaponType.Bullet);
+    
         //#20250807 0200 추가사항
         InGameManager.OnplayerSystemActivate += SetIsStarted;
         
@@ -39,10 +44,11 @@ public class GunControll : MonoBehaviourPun
         InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
+
     private void Update()
     {
-         if (!photonView.IsMine || !_isStarted) return;
-       // if (!photonView.IsMine) return;
+         // if (!photonView.IsMine || !_isStarted) return;
+       if (!photonView.IsMine) return;
 
         // 마우스 위치에 따라 총구 회전
         // RotateMuzzleToMouse();
@@ -60,7 +66,7 @@ public class GunControll : MonoBehaviourPun
 
         OnApplyCards(out bool[] weapons);
     }
-
+    
     /// <summary>
     /// 적용된 무기 카드를 확인 후 무기 변경을 담당하는 함수한테 전달하는 함수
     /// </summary>
@@ -68,37 +74,22 @@ public class GunControll : MonoBehaviourPun
     private void OnApplyCards(out bool[] weapons)
     {
         weapons = CardManager.Instance.GetWeaponCard();
-        Debug.Log($"weapons : {weapons[0]}, {weapons[1]}, {weapons[2]}");
+        
+        // 폭발성인 경우
+        _isExplosiveBullet = weapons[1]; 
+        
+        WeaponType weaponToEquip = WeaponType.Bullet; // 기본은 Bullet
 
-        // 폭발성 무기면 변수 true 
+        if (weapons[0])
+            weaponToEquip = WeaponType.Laser;
+        else if (weapons[2])
+            weaponToEquip = WeaponType.Shotgun;
 
-        // 레이저인 경우 효과X
-        if (weapons[0] && lastWeapon != WeaponType.Laser) // Laser
+        // 같은 무기면 장착 안함
+        if (lastWeapon != weaponToEquip)
         {
-            EquipWeapon(WeaponType.Laser);
-            lastWeapon = WeaponType.Laser;
-        }
-
-        else if (weapons[1] && lastWeapon != WeaponType.Bullet) // Explosive
-
-        {
-            _isExplosiveBullet = true;
-            EquipWeapon(WeaponType.Bullet); // 예: Explosive 타입이 Bullet 기반이라면
-            lastWeapon = WeaponType.Bullet;
-        }
-
-        // 샷건인 경우
-        else if (weapons[2] && lastWeapon != WeaponType.Shotgun) // Barrage
-
-        {
-            EquipWeapon(WeaponType.Shotgun); // Barrage는 샷건 계열일 경우
-            lastWeapon = WeaponType.Shotgun;
-        }
-        // 무기 카드 선택 안한 경우
-        else if (lastWeapon != WeaponType.Bullet)
-        {
-            EquipWeapon(WeaponType.Bullet); // 예: Explosive 타입이 Bullet 기반이라면
-            lastWeapon = WeaponType.Bullet;
+            EquipWeapon(weaponToEquip);
+            lastWeapon = weaponToEquip;
         }
     }
 
@@ -108,21 +99,16 @@ public class GunControll : MonoBehaviourPun
     /// <param name="weaponType"></param>
     public void EquipWeapon(WeaponType weaponType)
     {
-        // DisableAllWeapons();
+        DisableAllWeapons();
 
-
-        if (weaponType == WeaponType.Bullet)
+        switch (weaponType)
         {
-            currentWeaponObject = bulletWeaponObject;
-        }
-        else if (weaponType == WeaponType.Laser)
-        {
-            currentWeaponObject = LaserWeaponObject;
-        }
-
-        else
-        {
-            currentWeaponObject = barrelWeaponObject;
+            case WeaponType.Bullet:
+                currentWeaponObject = bulletWeaponObject; break;
+            case WeaponType.Laser:
+                currentWeaponObject = LaserWeaponObject; break;
+            case WeaponType.Shotgun:
+                currentWeaponObject = barrelWeaponObject; break;
         }
 
 
