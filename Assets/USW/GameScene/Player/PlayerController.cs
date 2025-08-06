@@ -117,6 +117,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _status.OnPlayerFreezeValueChanged += SetFreeze;
         //# 무적, CanAttack, SetHp는 다른 스크립트에 추가
         _bounceCoroutine = StartCoroutine(ChangeBounce());
+
+        //#20250807 0200 추가사항
+        InGameManager.OnplayerSystemActivate += SetIsStarted;
+    }
+
+    private void OnDestroy()
+    {
+        InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
     private void OnDisable()
@@ -829,8 +837,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     //# --- 추가사항 ---
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    private void SetIsStarted(bool value)
+    public void SetIsStarted(bool value)
     {
         _isStarted = value;
     }
+    
 }
