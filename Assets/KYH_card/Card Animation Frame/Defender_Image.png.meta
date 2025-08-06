@@ -1,0 +1,2340 @@
+fileFormatVersion: 2
+guid: 47295851fb2a1a84f9146d09a15efb98
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Defender_Image_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e91ad2ac06021d449b91f4a3bdf87e1
+      internalID: -526309266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_1
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ab437165fa6e944882a76ca50854b34
+      internalID: -1585411019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_2
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a1b7a51ad71e2d4abf6bd431a939260
+      internalID: -230280100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_3
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f135857f7d89aa459e5b9b01dd0ba37
+      internalID: -150498294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_4
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a83bdae4c0cba3449d500b2550b3925
+      internalID: 807480984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_5
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c77047d3ab0790949aac7d0408779c3f
+      internalID: 72436971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_6
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac1684f4690043541b2ea37e67f8d7b5
+      internalID: 1431074311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_7
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7eb9addb8c93c5247859cddb22e12453
+      internalID: -1034057934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_8
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 154021fe7ebdd8b4fb974997f70738f6
+      internalID: -1040025386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_9
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 3204
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c4de68b924cbeb4d85ae68aacd4cbae
+      internalID: 204218418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecbce06993ebbae40bef38df4213b6a1
+      internalID: -1113726413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_11
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c6d4af95f1c2744e91ecd9377aa6375
+      internalID: 1077999578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_12
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3279d434ab9ca214a915569981e84b0a
+      internalID: 2121233791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_13
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d79f5ce5cb9a50459d5b24da3fee21e
+      internalID: 1995023155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_14
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28df070514d17b94faf39886a306010c
+      internalID: 1664667466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_15
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a8ef2da2b4cc5d46bd1fbe35a9978e8
+      internalID: 1908211081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_16
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbb53a43b5098c64fba5a9f3736f0be5
+      internalID: 1041181500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_17
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 033962572c9aa194280f8a645f1f7b4a
+      internalID: 2041249565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_18
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d471da9a0ed992645aa36d788c1d4049
+      internalID: 984222296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_19
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 2848
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b9b525a3e89e274bb3f2623b54a0173
+      internalID: -868287224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a711308cb433f10438c1431d825c91f1
+      internalID: -96021562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_21
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e66dce40b649c914ba0a93f6990c46f6
+      internalID: -295928877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_22
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a66868c651e190d48accd45510824ba6
+      internalID: -634198458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_23
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7d98ed54f8e6c041853a22911e0f278
+      internalID: 1689087358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_24
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db8586ad548a961458177167ba70bebd
+      internalID: 1488171582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_25
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 319d45bbdbc84a14589addf3371e8d29
+      internalID: 1074119656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_26
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8a26c0dd7ae6d84cbff8699e84ade21
+      internalID: 549945072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_27
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fc28a50067abb146acfbc74ccd1cddf
+      internalID: 1722497770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_28
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4abca9046d2d9e548a032124cf8bf24d
+      internalID: 1231286646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_29
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 2492
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7753cb0217798cf4781783884b81fb48
+      internalID: 339808901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64431c6b632a7fd458a921cf173ac922
+      internalID: 841141448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_31
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f17770a3b6303c74e8eb4af06b3f7e1a
+      internalID: -1763027160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_32
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2d05159205425241bbd78b5012e7f2e
+      internalID: 269715336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_33
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1c471bf34d10ee45863fecf0b07c15e
+      internalID: -1090468507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_34
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7cb6e52c2393a243a451a19d567e601
+      internalID: 1432553658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_35
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d5b2a3fd64dee34eb2bcec093b8b268
+      internalID: 1312385026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_36
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18b907ab31a6db7419046f0b06f5bd6c
+      internalID: -1190800949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_37
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa013e5306a6ff048b3378b84c14014e
+      internalID: -1873035305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_38
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f5fd455843b2a5499b2f4c41984948a
+      internalID: -1362267711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_39
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 2136
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67b76bf75341cdd46beb6e5462f0cf7d
+      internalID: 622694275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3c85a6eadeec8a489a90ec21d24f053
+      internalID: 1403791967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_41
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3a5cd4924bcbda468b12db64df08735
+      internalID: -581954361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_42
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd630b3086af045499056875ea47fb17
+      internalID: 1072702592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_43
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43573d626ef0d4a489d67d048c2eaa4f
+      internalID: 1362643730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_44
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c4850b1eead5d74a86b28589567f341
+      internalID: 332263472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_45
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8ed71741f82a3a49825f748f8f248bb
+      internalID: -1886722161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_46
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bf8a49b17a84494c99fc31bb0097965
+      internalID: -1422929497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_47
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60444c66fd2ba1147b58d1c67c40b37d
+      internalID: -1403988315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_48
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39e71ff42541d0a40b62187a499527ac
+      internalID: 1696160265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_49
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 1780
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adb3827b05a62a7499f1ec3b5a02f1f1
+      internalID: -793034558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_50
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da2a4ea408f3ebb40981368f336aa2f0
+      internalID: -1471706286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_51
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33c6ef87f1fc98c4aa7a8ffc54c0daf2
+      internalID: 1257008031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_52
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14073868d3cbf17478f62357d9341b97
+      internalID: -555265706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_53
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 464c4d1a40b28334c9388f1d983e4ebe
+      internalID: 1145699157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_54
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27f1ced1024b4f94a81696b087684c22
+      internalID: 119186224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_55
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff12ef02bc8c2154b95ad399fbfc9874
+      internalID: 534297048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_56
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: caef1d83567b78142a5927e722f3d38f
+      internalID: 459152729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_57
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6992fef69ca5f5c409e2c5ec87ac20b4
+      internalID: 1582853063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_58
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 479736cb66511014caec30d2561b3ceb
+      internalID: 1600630491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_59
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38ecdc69e00117341b39ef0402e27e58
+      internalID: 40801524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61b9054d32bc9d149b076e837d6d0e0a
+      internalID: -673015945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_61
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 313550b339ef9a3418d040a10a8da70b
+      internalID: 350785073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_62
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 826fc82898d5c53419a7775392ccdeb0
+      internalID: -1531234107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_63
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f359ede9b35dc4041aed9d8fb5a744da
+      internalID: -1653173650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_64
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec23350a1c4337b4f94470ae5e8a4958
+      internalID: -211920223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_65
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a10ede3cb8a5a1a4e80e901c2e9a5534
+      internalID: -102970643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_66
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79aa1fc9fd82f4a49b5532d627d766e8
+      internalID: -1311913781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_67
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6653c624fc6c84147a6e04224962975c
+      internalID: 2028739414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_68
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99bbfa7732b66e94e8973573de0ece2f
+      internalID: -1707435827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_69
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5120dd9a0ddc55040b52c0b45775f9f2
+      internalID: 1458885804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_70
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b3cd6a87f696604d8d9a3215dfd3f2a
+      internalID: -570773994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_71
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d13fff626d4f6c47b7028335ac3cfb4
+      internalID: -2073744644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_72
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4418aa3ad619a98489013e3db19f39d8
+      internalID: -793562078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_73
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bfa599cda44d584f8c96be6d0cfb20d
+      internalID: -1041530347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_74
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9ab688a1f0c74e45b89fb1dd625d6cf
+      internalID: 1521762026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_75
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a30307cc10623d4fa900429904ffb0e
+      internalID: -1347404915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_76
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eee7740db1c42504bbcc18c35be8451b
+      internalID: -1909089313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_77
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab49974d8059dd84c9722c811b18370a
+      internalID: -212924569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_78
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b82f7f846a0afb64abcec5fc64bed7d9
+      internalID: 1117619109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_79
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f5c0607653c149428688e19e25808ef
+      internalID: -786052185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_80
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c42b58933edaa040ae7523202ae5a51
+      internalID: 1712331700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_81
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d067beae622e656449cce1da30fceee1
+      internalID: 1361318760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_82
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3afa9bb57bf78d745bc6fa0c9b757518
+      internalID: 622879608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_83
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3059a53803cb3f24fb5642fe5762971a
+      internalID: -1521315343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_84
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7dd3e157d5dcee42a5c13978c34842e
+      internalID: 2124133162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_85
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa6633695daa9334e875692c4732baa3
+      internalID: 2026655925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_86
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dba5e285404d1844ea8d7d8cd939b70e
+      internalID: 1019930230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_87
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ab21351402725248822a5a3310a366d
+      internalID: -1170418366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_88
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 818f463d1a630a64495e99e9862955ba
+      internalID: -1688593547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_89
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0acb5f2defc05f6459ccd8c3c6f351ad
+      internalID: -894804901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_90
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1a332f3bc0295640a4f4cd615fd164c
+      internalID: 1471955827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_91
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a0129c9612e4a84393813fc3620a710
+      internalID: 130352108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_92
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbf9cd77f10ea4c4f87e97c41b3ef39b
+      internalID: -326906967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_93
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68057c0b9a00c774295bcbda08a248a7
+      internalID: 1671557141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_94
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3afb834f17d688e4da8048150b5a6d87
+      internalID: 1961855559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_95
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bb140d78ea76a84dbee7fd89127204d
+      internalID: -409171541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_96
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25df78bdfe48da742893894b2be2c0f2
+      internalID: 2052503061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_97
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f185fba8ce640149a4dcf8b1cc59d87
+      internalID: 55718835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_98
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed8e99109e12e234d957cde90d5c084b
+      internalID: 665852726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Defender_Image_99
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 860e85c39e68d9c4682b83c9337fd695
+      internalID: 192546716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 338f7084c7aadf847879661f91f712a5
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Defender_Image_0: -526309266
+      Defender_Image_1: -1585411019
+      Defender_Image_10: -1113726413
+      Defender_Image_11: 1077999578
+      Defender_Image_12: 2121233791
+      Defender_Image_13: 1995023155
+      Defender_Image_14: 1664667466
+      Defender_Image_15: 1908211081
+      Defender_Image_16: 1041181500
+      Defender_Image_17: 2041249565
+      Defender_Image_18: 984222296
+      Defender_Image_19: -868287224
+      Defender_Image_2: -230280100
+      Defender_Image_20: -96021562
+      Defender_Image_21: -295928877
+      Defender_Image_22: -634198458
+      Defender_Image_23: 1689087358
+      Defender_Image_24: 1488171582
+      Defender_Image_25: 1074119656
+      Defender_Image_26: 549945072
+      Defender_Image_27: 1722497770
+      Defender_Image_28: 1231286646
+      Defender_Image_29: 339808901
+      Defender_Image_3: -150498294
+      Defender_Image_30: 841141448
+      Defender_Image_31: -1763027160
+      Defender_Image_32: 269715336
+      Defender_Image_33: -1090468507
+      Defender_Image_34: 1432553658
+      Defender_Image_35: 1312385026
+      Defender_Image_36: -1190800949
+      Defender_Image_37: -1873035305
+      Defender_Image_38: -1362267711
+      Defender_Image_39: 622694275
+      Defender_Image_4: 807480984
+      Defender_Image_40: 1403791967
+      Defender_Image_41: -581954361
+      Defender_Image_42: 1072702592
+      Defender_Image_43: 1362643730
+      Defender_Image_44: 332263472
+      Defender_Image_45: -1886722161
+      Defender_Image_46: -1422929497
+      Defender_Image_47: -1403988315
+      Defender_Image_48: 1696160265
+      Defender_Image_49: -793034558
+      Defender_Image_5: 72436971
+      Defender_Image_50: -1471706286
+      Defender_Image_51: 1257008031
+      Defender_Image_52: -555265706
+      Defender_Image_53: 1145699157
+      Defender_Image_54: 119186224
+      Defender_Image_55: 534297048
+      Defender_Image_56: 459152729
+      Defender_Image_57: 1582853063
+      Defender_Image_58: 1600630491
+      Defender_Image_59: 40801524
+      Defender_Image_6: 1431074311
+      Defender_Image_60: -673015945
+      Defender_Image_61: 350785073
+      Defender_Image_62: -1531234107
+      Defender_Image_63: -1653173650
+      Defender_Image_64: -211920223
+      Defender_Image_65: -102970643
+      Defender_Image_66: -1311913781
+      Defender_Image_67: 2028739414
+      Defender_Image_68: -1707435827
+      Defender_Image_69: 1458885804
+      Defender_Image_7: -1034057934
+      Defender_Image_70: -570773994
+      Defender_Image_71: -2073744644
+      Defender_Image_72: -793562078
+      Defender_Image_73: -1041530347
+      Defender_Image_74: 1521762026
+      Defender_Image_75: -1347404915
+      Defender_Image_76: -1909089313
+      Defender_Image_77: -212924569
+      Defender_Image_78: 1117619109
+      Defender_Image_79: -786052185
+      Defender_Image_8: -1040025386
+      Defender_Image_80: 1712331700
+      Defender_Image_81: 1361318760
+      Defender_Image_82: 622879608
+      Defender_Image_83: -1521315343
+      Defender_Image_84: 2124133162
+      Defender_Image_85: 2026655925
+      Defender_Image_86: 1019930230
+      Defender_Image_87: -1170418366
+      Defender_Image_88: -1688593547
+      Defender_Image_89: -894804901
+      Defender_Image_9: 204218418
+      Defender_Image_90: 1471955827
+      Defender_Image_91: 130352108
+      Defender_Image_92: -326906967
+      Defender_Image_93: 1671557141
+      Defender_Image_94: 1961855559
+      Defender_Image_95: -409171541
+      Defender_Image_96: 2052503061
+      Defender_Image_97: 55718835
+      Defender_Image_98: 665852726
+      Defender_Image_99: 192546716
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
