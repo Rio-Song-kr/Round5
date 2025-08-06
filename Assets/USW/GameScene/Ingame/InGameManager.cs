@@ -38,7 +38,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public static event Action OnCardSelectStart;
     public static event Action OnCardSelectEnd;
     public static event Action<string> OnPlayerDefeated; 
-    public static event Action<bool> OnRematchRequest; 
+    public static event Action<bool> OnRematchRequest;
+
+    public static event Action OnPlayerDisconnected;
     #endregion
 
     #region 게임 status
@@ -525,6 +527,17 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         playerAliveStatus.Remove(playerKey);
         rematchVotes.Remove(playerKey);
         UnregisterPlayerStatus(playerKey);
+
+        if (PhotonNetwork.PlayerList.Length < 2)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StopAllCoroutines();
+                SetGameState(GameState.Waiting);
+
+                OnPlayerDisconnected?.Invoke();
+            }
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
