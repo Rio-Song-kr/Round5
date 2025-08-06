@@ -34,51 +34,57 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
     public Action<bool> OnPlayerCanAttackValueChanged;
     public Action<bool> OnInvincibilityValueChanged;
 
-    
     #region IDamageable 부분
-    
+
     public bool IsAlive => _currentHp > 0 && !_isDead;
     public event Action OnDeath;
-    
-    public void TakeDamage(float amount)
+
+    public void TakeDamage(float amount, Vector2 position, Vector2 direction)
     {
-        if (_isInvincibility || _isDead || amount <= 0) 
+        if (_isInvincibility || _isDead || amount <= 0)
         {
             return;
         }
 
         float previousHp = _currentHp;
         _currentHp = Mathf.Max(0, _currentHp - amount);
-        
-        
+
+
         // 기존 이벤트 발생 (추후 UI 업데이트용)
         OnPlayerHpValueChanged?.Invoke(_currentHp, _currentMaxHp);
-        
+
         if (_currentHp <= 0 && !_isDead)
         {
-            HandleDeath();
+            HandleDeath(position, direction);
         }
     }
 
     /// <summary>
     /// 사망 처리 - HP가 0이 되면 자동 호출됨
     /// </summary>
-    private void HandleDeath()
+    private void HandleDeath(Vector2 position, Vector2 direction)
     {
         if (_isDead) return;
 
         _isDead = true;
         _currentHp = 0;
-        
+
         // IDamageable 이벤트 발생 (InGameManager에다가 사망한거 알림)
         OnDeath?.Invoke();
-        
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        var rotation = Quaternion.Euler(0, 0, angle);
+
+        //todo 사망 Effect
+        var deadFragEffect = PhotonNetwork.Instantiate("DeadFragEffect", position, rotation);
+        var deadSmokeEffect = PhotonNetwork.Instantiate("DeadSmokeEffect", position, rotation);
+
         // 사망 시 모든 상태 초기화
         _activeEffect.Clear();
         _isInvincibility = false;
         _canAttack = false;
         _freezePlayer = false;
-        
+
         // 기존 이벤트들 발생 (UI 업데이트)
         OnInvincibilityValueChanged?.Invoke(_isInvincibility);
         OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
@@ -91,7 +97,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
     public float CurrentMaxHp => _currentMaxHp;
 
     #endregion
-    
+
     /// <summary>
     /// 초기화
     /// </summary>
@@ -124,7 +130,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
             InGameManager.Instance.RegisterPlayerStatus(playerKey, this);
         }
     }
-    
+
     /// <summary>
     /// IngameManager 연동 해제
     /// </summary>
@@ -149,7 +155,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
     {
         _currentHp = _calculatedMaxHp;
         _isDead = false;
-        
+
         _currentMaxHp = _calculatedMaxHp;
         _currentGroundSpeed = _playerData.DefaultGroundSpeed;
         _currentAirSpeed = _playerData.DefaultAirSpeed;

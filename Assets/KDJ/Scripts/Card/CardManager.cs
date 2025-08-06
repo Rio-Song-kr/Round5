@@ -110,6 +110,20 @@ public class CardManager : MonoBehaviour
         return weaponCards;
     }
 
+    public List<DefenceSkills> GetDefenceCard()
+    {
+        List<DefenceSkills> defenceSKillList = new();
+
+        foreach (var card in _cards)
+        {
+            if (card is not DefenseCard) continue;
+
+            var defenceSkills = card as DefenseCard;
+            defenceSKillList.Add(defenceSkills.DefenceSkill);
+        }
+        return defenceSKillList;
+    }
+
     /// <summary>
     /// 카드를 추가합니다.
     /// 카드가 null이 아니면 리스트에 추가합니다.
