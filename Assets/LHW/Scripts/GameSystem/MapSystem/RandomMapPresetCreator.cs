@@ -12,6 +12,8 @@ public class RandomMapPresetCreator : MonoBehaviourPun
     // �� ��ġ ������
     [SerializeField] private float mapTransformOffset = 35;
 
+    [SerializeField] private MapController controller;
+
     Coroutine mapUpdateCoroutine;
 
     public float MapTransformOffset
@@ -60,7 +62,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
                 mapWeightedRandom.ClearList();
                 Debug.Log("�ݺ�");
             }
-            MapUpdate(InGameManager.Instance.CurrentMatch);
+            MapUpdate(InGameManager.Instance.CurrentMatch);            
         }
     }
 
@@ -120,6 +122,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
                 MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, false);
             }
         }
+        controller.GoToNextStage();
 
         mapUpdateCoroutine = null;
     }

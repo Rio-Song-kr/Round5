@@ -19,12 +19,12 @@ public class MapController : MonoBehaviour
 
     private void OnEnable()
     {
-        InGameManager.OnRoundStart += GoToNextStage;
+        InGameManager.OnRoundEnd += GoToNextStage;
     }
 
     private void OnDisable()
     {
-        InGameManager.OnRoundStart -= GoToNextStage;
+        InGameManager.OnRoundEnd -= GoToNextStage;
     }
 
     public void GoToNextStage()
@@ -47,6 +47,8 @@ public class MapController : MonoBehaviour
     private void MapMove()
     {
         if (!PhotonNetwork.IsMasterClient) return;
+
+        if (InGameManager.Instance.CurrentMatch > 2) return;
 
         moveCoroutine = StartCoroutine(MovementCoroutine());
 
