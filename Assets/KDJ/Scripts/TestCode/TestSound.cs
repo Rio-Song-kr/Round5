@@ -18,5 +18,19 @@ public class TestSound : MonoBehaviour
         {
             SoundManager.Instance.PlayBGM("BGM3");
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SoundManager.Instance.PlaySFX("HookSound");
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SoundManager.Instance.PlaySFX("JumpSound");
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            SoundManager.Instance.PlaySFX("ShotSound");
+        }
     }
 }
