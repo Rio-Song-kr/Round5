@@ -63,7 +63,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &801066225013225315
 MonoBehaviour:
@@ -2449,11 +2449,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5197044876018359740}
   - {fileID: 4070847618416856942}
   - {fileID: 769634088244429003}
   - {fileID: 1942514565852147147}
   - {fileID: 6422092547991676405}
-  - {fileID: 5197044876018359740}
   m_Father: {fileID: 4543618820458550231}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2573,7 +2573,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6571036711804565555
 Transform:
   m_ObjectHideFlags: 0
@@ -2609,6 +2609,7 @@ MonoBehaviour:
   - {fileID: 6077040965735311254, guid: 8831f02937920454bb5448254aed650c, type: 3}
   - {fileID: 333661759096171217, guid: 75198ab9b3688534d81c21dc67db1409, type: 3}
   - {fileID: 8909731782164389339, guid: 507ea0674f1dde54995bf4ee9b0a801d, type: 3}
+  mapController: {fileID: 7439425923849553118}
   mapTransformOffset: 35
   gameCycleNum: 3
   mapListTransform:

@@ -76,6 +76,9 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
         canvasController.ResetCardSelectionState();
 
+        // 이형원 임시 시도
+        canvasController.TryStartCardSelection();
+
         // 캔버스 컨트롤러 초기화 및 시작하는부분 
         // DOVirtual.DelayedCall(0.2f, () =>
         // {

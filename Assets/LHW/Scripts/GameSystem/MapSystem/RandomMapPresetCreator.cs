@@ -1,4 +1,3 @@
-using System;
 using Photon.Pun;
 using UnityEngine;
 
@@ -38,7 +37,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
     private void OnEnable()
     {
         InGameManager.OnGameStart += OnGameStart;
-        InGameManager.OnRoundStart += OnRoundStart;        
+        InGameManager.OnRoundStart += OnRoundStart;
     }
 
     private void OnDisable()
@@ -65,7 +64,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
     {
         if (InGameManager.Instance)
         {
-            MapUpdate(InGameManager.Instance.CurrentRound);
+            MapUpdate(InGameManager.Instance.CurrentMatch);
         }
     }
 
@@ -106,20 +105,18 @@ public class RandomMapPresetCreator : MonoBehaviourPun
 
     public void MapUpdate(int round)
     {
-        if (InGameManager.Instance != null &&
-            InGameManager.Instance.CurrentGameState == InGameManager.GameState.GameEnding)
-            for (int i = 0; i < mapListTransform.Length; i++)
+        for (int i = 0; i < mapListTransform.Length; i++)
+        {
+            PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
+            if (round == i)
             {
-                PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
-                if (round == i)
-                {
-                    MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, true);
-                }
-                else
-                {
-                    MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, false);
-                }
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, true);
             }
+            else
+            {
+                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, false);
+            }
+        }
     }
 
     [PunRPC]

@@ -1,6 +1,6 @@
-using System.Collections;
 using DG.Tweening;
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 
 public class SceneChangePanelController : MonoBehaviourPun
@@ -22,10 +22,9 @@ public class SceneChangePanelController : MonoBehaviourPun
 
         transform.DOMove(roundOverTransform.position, 1f).SetDelay(1f);
         yield return delay;
-        if (!TestIngameManager.Instance.IsGameOver)
-        {
-            transform.position = sceneChangeInitTransform.position;
-        }
+
+        transform.position = sceneChangeInitTransform.position;
+
         sceneChangeCoroutine = null;
     }
 }

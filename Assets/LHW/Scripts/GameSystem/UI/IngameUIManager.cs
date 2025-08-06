@@ -82,7 +82,7 @@ public class IngameUIManager : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
-            cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.AllBuffered, false);
+            cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.All, false);
         }
     }
 
@@ -91,7 +91,7 @@ public class IngameUIManager : MonoBehaviour
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonView cardSelectPanelView = cardSelectPanel.GetComponent<PhotonView>();
-            cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate),RpcTarget.AllBuffered, true);
+            cardSelectPanelView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate),RpcTarget.All, true);
         }
     }
 

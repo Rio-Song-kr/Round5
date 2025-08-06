@@ -903,11 +903,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 403983635541968554, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
-      value: 23
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 561483865905138422, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
-      value: 19
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 1164594987290256827, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
@@ -915,11 +915,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1671992340536906910, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
+    - target: {fileID: 1896980629960606483, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+      propertyPath: cardSelectPanel
+      value: 
+      objectReference: {fileID: 2131150375}
     - target: {fileID: 1972615973659971720, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
-      value: 21
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2307323304712826872, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: m_Name
@@ -979,7 +983,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3983128548120719942, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
-      value: 22
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 4218052848200620002, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
@@ -987,7 +991,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4911635157582052957, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
-      value: 24
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 5013494513602135403, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
@@ -996,10 +1000,6 @@ PrefabInstance:
     - target: {fileID: 5035273498967088252, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
       value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 5890842974326709222, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5902672813501062940, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
@@ -1098,6 +1098,7 @@ GameObject:
   m_Component:
   - component: {fileID: 360575323}
   - component: {fileID: 360575322}
+  - component: {fileID: 360575324}
   m_Layer: 0
   m_Name: InGameManager
   m_TagString: Untagged
@@ -1136,6 +1137,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &360575324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360575321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 360575322}
+  sceneViewId: 27
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &419480818
 GameObject:
   m_ObjectHideFlags: 0
