@@ -62,10 +62,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
 
     void OnRoundStart()
     {
-        if (InGameManager.Instance)
-        {
-            MapUpdate(InGameManager.Instance.CurrentMatch);
-        }
+        MapUpdate(InGameManager.Instance.CurrentMatch);
     }
 
     /// <summary>

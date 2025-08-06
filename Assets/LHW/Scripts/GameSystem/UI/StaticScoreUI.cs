@@ -91,7 +91,7 @@ public class StaticScoreUI : MonoBehaviour
             PhotonView leftImgView = leftWinImages[matchWin-1].GetComponent<PhotonView>();
             leftImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
             
-            if (InGameManager.Instance.GetPlayerRoundScore(rightPlayerKey) == 1 && rightWinImages[InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey)].activeSelf)
+            if (rightWinImages[InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey)].activeSelf)
             {
                 PhotonView rightImgView = rightWinImages[InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey)].GetComponent<PhotonView>();
                 rightImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, false);
@@ -103,7 +103,7 @@ public class StaticScoreUI : MonoBehaviour
             PhotonView rightImgView = rightWinImages[matchWin-1].GetComponent<PhotonView>();
             rightImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
             
-            if (InGameManager.Instance.GetPlayerRoundScore(leftPlayerKey) == 1 && leftWinImages[InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey)].activeSelf)
+            if (leftWinImages[InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey)].activeSelf)
             {
                 PhotonView leftImgView = leftWinImages[InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey)].GetComponent<PhotonView>();
                 leftImgView.RPC(nameof(WinimgUIController.WinImgUIActivate), RpcTarget.AllBuffered, false);
