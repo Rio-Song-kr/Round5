@@ -1,29 +1,34 @@
+ï»¿using System.Collections;
 using DG.Tweening;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using JetBrains.Annotations;
 
 public class CardSelectManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private CanvasController canvasController;
-
+    [SerializeField] private GameObject canvasActivation;
     [SerializeField] private CardSelectCheckManager cardSelectCheckManager;
+    [SerializeField] private CardSelectPanelItem cardSelectPanelItem;
+    private FlipCard flipCard;
 
-    [Header("ÀüÃ¼ Ä«µå ÇÁ¸®ÆÕ ¸®½ºÆ®")]
-    public List<GameObject> allCardPrefabs; // °ÔÀÓ¿¡¼­ »ç¿ëÇÒ ÀüÃ¼ Ä«µå ÇÁ¸®ÆÕ ¸ñ·Ï
+    [Header("ì „ì²´ ì¹´ë“œ í”„ë¦¬íŒ¹ ë¦¬ìŠ¤íŠ¸")]
+    public List<GameObject> allCardPrefabs; // ê²Œì„ì—ì„œ ì‚¬ìš©í•  ì „ì²´ ì¹´ë“œ í”„ë¦¬íŒ¹ ëª©ë¡
 
-    [Header("ºÎ¸ğ ·¹ÀÌ¾Æ¿ô ±×·ì")]
-    public Transform cardSpawnParent1; // »ı¼ºµÈ Ä«µå°¡ ºÙÀ» ºÎ¸ğ(Äµ¹ö½º ³» À§Ä¡ ÄÁÅ×ÀÌ³Ê)
+    [Header("ë¶€ëª¨ ë ˆì´ì•„ì›ƒ ê·¸ë£¹")]
+    public Transform cardSpawnParent1; // ìƒì„±ëœ ì¹´ë“œê°€ ë¶™ì„ ë¶€ëª¨(ìº”ë²„ìŠ¤ ë‚´ ìœ„ì¹˜ ì»¨í…Œì´ë„ˆ)
     public Transform cardSpawnParent2;
 
-    [Header("Ãâ·ÂÇÒ Ä«µå °³¼ö")]
-    public int cardCountToShow = 3; // ÇÑ ¹ø¿¡ º¸¿©ÁÙ Ä«µå °³¼ö
+    [Header("ì¶œë ¥í•  ì¹´ë“œ ê°œìˆ˜")]
+    public int cardCountToShow = 3; // í•œ ë²ˆì— ë³´ì—¬ì¤„ ì¹´ë“œ ê°œìˆ˜
 
-    [Header("ºÎÃ¤²Ã ¹èÄ¡ ¼³Á¤")]
-    public float xSpacing = 300f; // Ä«µå °£ X °£°İ °íÁ¤°ª
-    public float curveHeight = 150f; // Y À§Ä¡¸¦ °î¼±Ã³·³ ÁÖ±â À§ÇÑ °ª
-    public float maxAngle = 60f; // È¸Àü ½Ã°¢ ¿¬Ãâ
+    [Header("ë¶€ì±„ê¼´ ë°°ì¹˜ ì„¤ì •")]
+    public float xSpacing = 300f; // ì¹´ë“œ ê°„ X ê°„ê²© ê³ ì •ê°’
+    public float curveHeight = 150f; // Y ìœ„ì¹˜ë¥¼ ê³¡ì„ ì²˜ëŸ¼ ì£¼ê¸° ìœ„í•œ ê°’
+    public float maxAngle = 60f; // íšŒì „ ì‹œê° ì—°ì¶œ
     public float appearYOffset = -600f;
 
     private CardSceneArmController armController;
@@ -37,32 +42,49 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     [SerializeField] private CharacterShrinkEffect masterShrinkEffect;
     [SerializeField] private CharacterShrinkEffect clientShrinkEffect;
 
-    [Header("ÄÉ¸¯ÅÍ Å©±â Á¶Àı")]
+    [Header("ì¼€ë¦­í„° í¬ê¸° ì¡°ì ˆ")]
     [SerializeField] private CharacterShrinkEffect shrinkEffect;
 
+    private List<GameObject> currentCards = new List<GameObject>(); // í˜„ì¬ í™”ë©´ì— í‘œì‹œ ì¤‘ì¸ ì¹´ë“œ ëª©ë¡
+    [SerializeField] private bool hasSelect = false; // í”Œë ˆì´ì–´ê°€ ì¹´ë“œë¥¼ ì„ íƒí–ˆëŠ”ì§€ ì—¬ë¶€
 
-    private List<GameObject> currentCards = new(); // ÇöÀç È­¸é¿¡ Ç¥½Ã ÁßÀÎ Ä«µå ¸ñ·Ï
-    [SerializeField] private bool hasSelect = false; // ÇÃ·¹ÀÌ¾î°¡ Ä«µå¸¦ ¼±ÅÃÇß´ÂÁö ¿©ºÎ
-
-
-    void Start()
+    private void Start()
     {
-        
-
         cardSelectCheckManager.cardSelectPanelSpawn();
         cardSelectCheckManager.CardSelectPanelSpawn(PhotonNetwork.LocalPlayer);
 
         UpdateCharacterVisibility();
         // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
-        // Debug.Log("°ÔÀÓ ¾À À¸·Î ³Ñ¾î°¡±â À§ÇØ ·Îµù ÁøÇà");
+        // Debug.Log("ê²Œì„ ì”¬ ìœ¼ë¡œ ë„˜ì–´ê°€ê¸° ìœ„í•´ ë¡œë”© ì§„í–‰");
 
         // if (PhotonNetwork.IsMasterClient)
         // {
         //     List<int> selectedMasterIndexes = GetRandomCardIndexes();
         //     photonView.RPC(nameof(RPC_SpawnCardsWithIndexes), RpcTarget.All, selectedMasterIndexes.ToArray());
         // }
-
     }
+
+    private void OnEnable()
+    {
+        InGameManager.OnCardSelectStart += InGameManagerOnOnCardSelectStart;
+    }
+
+    // InGameManagerì—ì„œ ì¹´ë“œ ì„ íƒì´ ì‹œì‘ë  ë•Œ í˜¸ì¶œí•˜ëŠ”ê±° 
+    private void InGameManagerOnOnCardSelectStart()
+    {
+        canvasActivation.SetActive(true);
+
+        canvasController.ResetCardSelectionState();
+
+        // ìº”ë²„ìŠ¤ ì»¨íŠ¸ë¡¤ëŸ¬ ì´ˆê¸°í™” ë° ì‹œì‘í•˜ëŠ”ë¶€ë¶„ 
+        // DOVirtual.DelayedCall(0.2f, () =>
+        // {
+        //     canvasController.DecideNextSelector();
+        // });
+
+        // ìº”ë²„ìŠ¤ ì»¨íŠ¸ë¡¤ëŸ¬ 
+    }
+
     public void UpdateCharacterVisibility()
     {
         bool isMaster = PhotonNetwork.IsMasterClient;
@@ -73,26 +95,26 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         {
             if (canvasController.IsMyTurn())
             {
-                if (isMaster) ActivateMasterCharacter();     // ¸¶½ºÅÍ ¡æ ¼±ÅÃÀÚ
-                else ActivateClientCharacter();              // Âü°¡ÀÚ ¡æ ¼±ÅÃÀÚ
+                if (isMaster) ActivateMasterCharacter(); // ë§ˆìŠ¤í„° â†’ ì„ íƒì
+                else ActivateClientCharacter(); // ì°¸ê°€ì â†’ ì„ íƒì
             }
             else
             {
-                if (isMaster) ActivateClientCharacter();     // ¸¶½ºÅÍ ¡æ °üÀüÀÚ
-                else ActivateMasterCharacter();              // Âü°¡ÀÚ ¡æ °üÀüÀÚ
+                if (isMaster) ActivateClientCharacter(); // ë§ˆìŠ¤í„° â†’ ê´€ì „ì
+                else ActivateMasterCharacter(); // ì°¸ê°€ì â†’ ê´€ì „ì
             }
         }
         else if (clientCanvasActive)
         {
             if (canvasController.IsMyTurn())
             {
-                if (isMaster) ActivateClientCharacter();     // ¸¶½ºÅÍ ¡æ ¼±ÅÃÀÚ
-                else ActivateMasterCharacter();              // Âü°¡ÀÚ ¡æ ¼±ÅÃÀÚ
+                if (isMaster) ActivateClientCharacter(); // ë§ˆìŠ¤í„° â†’ ì„ íƒì
+                else ActivateMasterCharacter(); // ì°¸ê°€ì â†’ ì„ íƒì
             }
             else
             {
-                if (isMaster) ActivateMasterCharacter();     // ¸¶½ºÅÍ ¡æ °üÀüÀÚ
-                else ActivateClientCharacter();              // Âü°¡ÀÚ ¡æ °üÀüÀÚ
+                if (isMaster) ActivateMasterCharacter(); // ë§ˆìŠ¤í„° â†’ ê´€ì „ì
+                else ActivateClientCharacter(); // ì°¸ê°€ì â†’ ê´€ì „ì
             }
         }
         else
@@ -101,45 +123,44 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             clientCharacter.SetActive(false);
         }
     }
-      public void ActivateMasterCharacter()
-      {
-          masterCharacter.SetActive(true);
-          clientCharacter.SetActive(false);
-    
-          armController = masterArmController;
-          shrinkEffect = masterShrinkEffect;
-      }
-    
-      public void ActivateClientCharacter()
-      {
-          masterCharacter.SetActive(false);
-          clientCharacter.SetActive(true);
-    
-          armController = clientArmController;
-          shrinkEffect = clientShrinkEffect;
-      }
+    public void ActivateMasterCharacter()
+    {
+        Debug.Log("ActivateMasterCharacter()");
+        masterCharacter.SetActive(true);
+        clientCharacter.SetActive(false);
+
+        armController = masterArmController;
+        shrinkEffect = masterShrinkEffect;
+    }
+
+    public void ActivateClientCharacter()
+    {
+        Debug.Log("ActivateMasterCharacter()");
+        masterCharacter.SetActive(false);
+        clientCharacter.SetActive(true);
+
+        armController = clientArmController;
+        shrinkEffect = clientShrinkEffect;
+    }
 
     // private void Awake()
     // {
     //     PhotonNetwork.AutomaticallySyncScene = true;
     // }
 
-    public CardSceneArmController GetArmController()
-    {
-        return armController;
-    }
+    public CardSceneArmController GetArmController() => armController;
 
     [PunRPC]
     public void RPC_SelectCardArm(int index)
     {
-        Debug.Log($"[CardSelectManager] ¼¿·ºÆ® Ä«µå ¾Ï index = {index} È£ÃâµÊ");
+        Debug.Log($"[CardSelectManager] ì…€ë ‰íŠ¸ ì¹´ë“œ ì•” index = {index} í˜¸ì¶œë¨");
         armController.SelectCard(index);
     }
 
-    // ·£´ı Ä«µå »ı¼º ¹× È­¸é¿¡ Ãâ·Â
+    // ëœë¤ ì¹´ë“œ ìƒì„± ë° í™”ë©´ì— ì¶œë ¥
     public List<int> GetRandomCardIndexes()
     {
-        List<int> indexes = new();
+        var indexes = new List<int>();
         while (indexes.Count < cardCountToShow)
         {
             int rand = Random.Range(0, allCardPrefabs.Count);
@@ -149,31 +170,31 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         return indexes;
     }
 
-    [PunRPC]
-    public void RPC_SpawnCardsWithIndexes(int[] indexes)
-    {
-        SpawnCardsFromIndexes(indexes, canvasController.IsMyTurn());
-    }
+    // [PunRPC]
+    // public void RPC_SpawnCardsWithIndexes(int[] indexes)
+    // {
+    //     SpawnCardsFromIndexes(indexes, canvasController.IsMyTurn());
+    // }
 
     public void SpawnCardsFromIndexes(int[] indexes, bool canInteract)
     {
-      //  if (hasSelect)
-      //  {
-      //      Debug.Log("ÀÌ¹Ì Ä«µå ¼±ÅÃ ¿Ï·á »óÅÂ ¡æ Ä«µå »ı¼º ½ºÅµ");
-      //      return; // ¼±ÅÃÀÌ ³¡³µ´Ù¸é Ä«µå ´Ù½Ã ¶ç¿ìÁö ¾ÊÀ½
-      //  }
+        //  if (hasSelect)
+        //  {
+        //      Debug.Log("ì´ë¯¸ ì¹´ë“œ ì„ íƒ ì™„ë£Œ ìƒíƒœ â†’ ì¹´ë“œ ìƒì„± ìŠ¤í‚µ");
+        //      return; // ì„ íƒì´ ëë‚¬ë‹¤ë©´ ì¹´ë“œ ë‹¤ì‹œ ë„ìš°ì§€ ì•ŠìŒ
+        //  }
 
-        Debug.Log("Ä«µå »ı¼º ½ÃÀÛ");
+        Debug.Log("ì¹´ë“œ ìƒì„± ì‹œì‘");
         currentCards.Clear();
 
         float centerIndex = (indexes.Length - 1) / 2f;
 
         for (int i = 0; i < indexes.Length; i++)
         {
-            Debug.Log("Æ÷ ¹® ¾ÈÀ¸·Î µé¾î¿ÔÀ½");
-            GameObject card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent1);
-            RectTransform rt = card.GetComponent<RectTransform>();
-            CanvasGroup cg = card.GetComponent<CanvasGroup>();
+            Debug.Log("í¬ ë¬¸ ì•ˆìœ¼ë¡œ ë“¤ì–´ì™”ìŒ");
+            var card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent1);
+            var rt = card.GetComponent<RectTransform>();
+            var cg = card.GetComponent<CanvasGroup>();
             if (cg == null) cg = card.AddComponent<CanvasGroup>();
 
             float offset = i - centerIndex;
@@ -187,43 +208,42 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
                 rt.localRotation = Quaternion.Euler(0, 0, rotZ);
                 cg.alpha = 0f;
 
-                Sequence seq = DOTween.Sequence();
+                var seq = DOTween.Sequence();
                 seq.Append(rt.DOAnchorPos(new Vector2(x, y), 0.6f).SetEase(Ease.OutCubic));
                 seq.Join(cg.DOFade(1f, 0.6f));
             }
 
-            FlipCard flip = card.GetComponent<FlipCard>();
+            var flip = card.GetComponent<FlipCard>();
             if (flip != null)
             {
                 flip.SetManager(this);
-                flip.SetCardIndex(i); // ÀÎµ¦½º ±â¹İ µ¿±âÈ­¿ë
+                flip.SetCardIndex(i); // ì¸ë±ìŠ¤ ê¸°ë°˜ ë™ê¸°í™”ìš©
                 flip.SetInteractable(canInteract);
             }
 
             currentCards.Add(card);
         }
-
     }
 
     public void SpawnClientCardsFromIndexes(int[] indexes, bool canInteract)
     {
-       // if (hasSelect)
-       // {
-       //     Debug.Log("ÀÌ¹Ì Ä«µå ¼±ÅÃ ¿Ï·á »óÅÂ ¡æ Ä«µå »ı¼º ½ºÅµ");
-       //     return; // ¼±ÅÃÀÌ ³¡³µ´Ù¸é Ä«µå ´Ù½Ã ¶ç¿ìÁö ¾ÊÀ½
-       // }
+        // if (hasSelect)
+        // {
+        //     Debug.Log("ì´ë¯¸ ì¹´ë“œ ì„ íƒ ì™„ë£Œ ìƒíƒœ â†’ ì¹´ë“œ ìƒì„± ìŠ¤í‚µ");
+        //     return; // ì„ íƒì´ ëë‚¬ë‹¤ë©´ ì¹´ë“œ ë‹¤ì‹œ ë„ìš°ì§€ ì•ŠìŒ
+        // }
 
-        Debug.Log("Ä«µå »ı¼º ½ÃÀÛ");
+        Debug.Log("ì¹´ë“œ ìƒì„± ì‹œì‘");
         currentCards.Clear();
 
         float centerIndex = (indexes.Length - 1) / 2f;
 
         for (int i = 0; i < indexes.Length; i++)
         {
-            Debug.Log("Æ÷ ¹® ¾ÈÀ¸·Î µé¾î¿ÔÀ½");
-            GameObject card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent2);
-            RectTransform rt = card.GetComponent<RectTransform>();
-            CanvasGroup cg = card.GetComponent<CanvasGroup>();
+            Debug.Log("í¬ ë¬¸ ì•ˆìœ¼ë¡œ ë“¤ì–´ì™”ìŒ");
+            var card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent2);
+            var rt = card.GetComponent<RectTransform>();
+            var cg = card.GetComponent<CanvasGroup>();
             if (cg == null) cg = card.AddComponent<CanvasGroup>();
 
             float offset = i - centerIndex;
@@ -237,22 +257,21 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
                 rt.localRotation = Quaternion.Euler(0, 0, rotZ);
                 cg.alpha = 0f;
 
-                Sequence seq = DOTween.Sequence();
+                var seq = DOTween.Sequence();
                 seq.Append(rt.DOAnchorPos(new Vector2(x, y), 0.6f).SetEase(Ease.OutCubic));
                 seq.Join(cg.DOFade(1f, 0.6f));
             }
 
-            FlipCard flip = card.GetComponent<FlipCard>();
+            var flip = card.GetComponent<FlipCard>();
             if (flip != null)
             {
                 flip.SetManager(this);
-                flip.SetCardIndex(i); // ÀÎµ¦½º ±â¹İ µ¿±âÈ­¿ë
+                flip.SetCardIndex(i); // ì¸ë±ìŠ¤ ê¸°ë°˜ ë™ê¸°í™”ìš©
                 flip.SetInteractable(canInteract);
             }
 
             currentCards.Add(card);
         }
-
     }
 
     public List<GameObject> GetCurrentCards() => currentCards;
@@ -262,10 +281,10 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     {
         if (index >= 0 && index < currentCards.Count)
         {
-            FlipCard flip = currentCards[index].GetComponent<FlipCard>();
+            var flip = currentCards[index].GetComponent<FlipCard>();
             if (flip != null)
             {
-                Debug.Log("Ä«µå µÚÁıÈû ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà");
+                Debug.Log("ì¹´ë“œ ë’¤ì§‘í˜ ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰");
                 flip.PlayFlipAnimation();
             }
         }
@@ -276,13 +295,13 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     {
         if (index < 0 || index >= currentCards.Count) return;
 
-        GameObject card = currentCards[index];
+        var card = currentCards[index];
         if (card == null) return;
 
-        FlipCard flip = card.GetComponent<FlipCard>();
+        var flip = card.GetComponent<FlipCard>();
         if (flip == null) return;
 
-        flip.PlayHighlight(); // È®ÀåµÈ ¿¬Ãâ¿ë ¸Ş¼­µå
+        flip.PlayHighlight(); // í™•ì¥ëœ ì—°ì¶œìš© ë©”ì„œë“œ
     }
 
     [PunRPC]
@@ -290,74 +309,83 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     {
         if (index < 0 || index >= currentCards.Count) return;
 
-        GameObject card = currentCards[index];
+        var card = currentCards[index];
         if (card == null) return;
 
-        FlipCard flip = card.GetComponent<FlipCard>();
+        var flip = card.GetComponent<FlipCard>();
         if (flip == null) return;
 
         flip.PlayUnhighlight();
     }
 
-
-    // Ä«µå ÇÏ³ª°¡ ¼±ÅÃµÇ¾úÀ» ¶§ È£ÃâµÊ
+    // ì¹´ë“œ í•˜ë‚˜ê°€ ì„ íƒë˜ì—ˆì„ ë•Œ í˜¸ì¶œë¨
     public void OnCardSelected(GameObject selected)
     {
+        Debug.Log($"[OnCardSelected] called | hasSelect: {hasSelect}");
         if (hasSelect) return;
 
         hasSelect = true;
 
-        Debug.Log("³» Ä«µå ¼±ÅÃ ¿Ï·áµÊ");
+        Debug.Log("ë‚´ ì¹´ë“œ ì„ íƒ ì™„ë£Œë¨");
 
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        if (cardSelectCheckManager.cardSelectPanels.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out CardSelectPanelItem panel))
+        if (cardSelectCheckManager.cardSelectPanels.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out var panel))
         {
             panel.OnCardSelected();
             panel.SelectCheck(PhotonNetwork.LocalPlayer);
         }
 
-        // Ä«µå È¿°ú Àû¿ë
-        CardEffect effect = selected.GetComponent<CardEffect>();
-        if (effect != null)
+        // ì¹´ë“œ íš¨ê³¼ ì ìš©
+        var card = selected.GetComponent<CardPrefab>();
+        if (card != null)
         {
-            GameObject playerObj = GameObject.FindWithTag("Player");
-            if (playerObj != null)
-            {
-                PlayerStats playerStats = playerObj.GetComponent<PlayerStats>();
-                if (playerStats != null)
-                {
-                    effect.ApplyShotEffect(playerStats);
-                    effect.ApplyStatusEffect(playerStats);
-                    Debug.Log($"[Ä«µå Àû¿ë] {effect.cardName} È¿°ú°¡ Àû¿ëµÇ¾ú½À´Ï´Ù.");
-                }
-            }
+            CardManager.Instance.AddCard(card.CardData);
         }
 
-        // ¼±ÅÃµÈ Ä«µå ÀÎµ¦½º¸¦ ±¸ÇØ¼­ RPC È£Ãâ
+        // ì„ íƒëœ ì¹´ë“œ ì¸ë±ìŠ¤ë¥¼ êµ¬í•´ì„œ RPC í˜¸ì¶œ
         int selectedIndex = currentCards.IndexOf(selected);
         photonView.RPC(nameof(RPC_PlayCardSelectionAnimation), RpcTarget.All, selectedIndex);
 
-        Debug.Log("¼±ÅÃµÈ Ä«µå: " + selected.name);
-       // Debug.Log("°ÔÀÓ ¾ÀÀ¸·Î ³Ñ¾î°¡±â À§ÇØ ·Îµù ÁøÇà");
+        Debug.Log("ì„ íƒëœ ì¹´ë“œ: " + selected.name);
+        // Debug.Log("ê²Œì„ ì”¬ìœ¼ë¡œ ë„˜ì–´ê°€ê¸° ìœ„í•´ ë¡œë”© ì§„í–‰");
 
-        if (canvasController.IsMyTurn())
+        // if (canvasController.IsMyTurn())
+        //todo ë‘ ë²ˆì§¸ í”Œë ˆì´ì–´ì˜ ê²½ìš°, ê°’ì´ ë³€ê²½ë˜ê¸° ì „ì„
+
+        StartCoroutine(CheckAllSelected());
+    }
+
+    private IEnumerator CheckAllSelected()
+    {
+        Debug.Log("Check All Selected");
+        yield return new WaitForSeconds(1f);
+
+        if (cardSelectCheckManager.AllPlayerCardSelectCheck())
         {
-            DOVirtual.DelayedCall(1f, () =>
-            {
-                if (cardSelectCheckManager.AllPlayerCardSelectCheck())
-                {
-                    if (PhotonNetwork.IsMasterClient) // ¸¶½ºÅÍ¸¸ ¾À ÀüÈ¯
-                    {
-                        Debug.Log("¸ğµç ÇÃ·¹ÀÌ¾î ¼±ÅÃ ¿Ï·á ¡æ Game Scene ÀüÈ¯");
-                        PhotonNetwork.LoadLevel("Game Scene");
-                    }
-                }
-                else
-                {
-                    canvasController.photonView.RPC("RPC_SwitchTurnToOther", RpcTarget.All);
-                }
-            });
+            Debug.Log("AllPlayerCardSelectCheck");
+            DOVirtual.DelayedCall(1f, () => { photonView.RPC(nameof(ChangeScene), RpcTarget.All); });
+        }
+        else
+        {
+            Debug.Log($"Switch Turn");
+            canvasController.photonView.RPC("RPC_SwitchTurnToOther", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    private void ChangeScene()
+    {
+        canvasController.ResetCardSelectionState();
+        masterCharacter.SetActive(false);
+        clientCharacter.SetActive(false);
+        if (PhotonNetwork.IsMasterClient) // ë§ˆìŠ¤í„°ë§Œ ì”¬ ì „í™˜
+        {
+            Debug.Log("ëª¨ë“  í”Œë ˆì´ì–´ ì„ íƒ ì™„ë£Œ â†’ Game Scene ì „í™˜");
+            // PhotonNetwork.LoadLevel("Game Scene");
+            PhotonView canvasView = canvasController.photonView;
+            canvasView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.All, false);
+            InGameManager.Instance.StartGame();
         }
     }
 
@@ -366,28 +394,28 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < currentCards.Count; i++)
         {
-            GameObject card = currentCards[i];
+            var card = currentCards[i];
             if (card == null) continue;
 
-            RectTransform rt = card.GetComponent<RectTransform>();
-            CanvasGroup cg = card.GetComponent<CanvasGroup>();
+            var rt = card.GetComponent<RectTransform>();
+            var cg = card.GetComponent<CanvasGroup>();
             if (cg == null) cg = card.AddComponent<CanvasGroup>();
 
             if (i == selectedIndex)
             {
-                // ¼±ÅÃµÈ Ä«µå ¡æ ÆäÀÌµå¾Æ¿ô ÈÄ »èÁ¦
+                // ì„ íƒëœ ì¹´ë“œ â†’ í˜ì´ë“œì•„ì›ƒ í›„ ì‚­ì œ
                 cg.DOFade(0f, 0.5f)
-                  .SetEase(Ease.InOutSine)
-                  .OnComplete(() => Destroy(card));
+                    .SetEase(Ease.InOutSine)
+                    .OnComplete(() => Destroy(card));
             }
             else
             {
-                // ³ª¸ÓÁö Ä«µå ¡æ ¸Ö¾îÁö¸é¼­ Ãà¼Ò ÈÄ »èÁ¦
+                // ë‚˜ë¨¸ì§€ ì¹´ë“œ â†’ ë©€ì–´ì§€ë©´ì„œ ì¶•ì†Œ í›„ ì‚­ì œ
                 float angleZ = rt.localEulerAngles.z;
                 Vector2 direction = Quaternion.Euler(0, 0, angleZ) * Vector2.up;
-                Vector2 targetPos = rt.anchoredPosition + direction * 400f;
+                var targetPos = rt.anchoredPosition + direction * 400f;
 
-                Sequence seq = DOTween.Sequence();
+                var seq = DOTween.Sequence();
                 seq.Join(rt.DOAnchorPos(targetPos, 1f).SetEase(Ease.InCubic));
                 seq.Join(rt.DOScale(0.1f, 1f).SetEase(Ease.InCubic));
                 seq.Join(cg.DOFade(0f, 1f));
@@ -399,33 +427,73 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         shrinkEffect.RequestShrinkEffect();
     }
 
-     public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable propertiesThatChanged)
-     {
-         base.OnPlayerPropertiesUpdate(target, propertiesThatChanged);
-    
-         if (propertiesThatChanged.ContainsKey("Select"))
-         {
-             cardSelectCheckManager.cardSelectPanels[target.ActorNumber].SelectCheck(target);
-    
-             // ¸ğµç ÇÃ·¹ÀÌ¾î Ä«µå ¼±ÅÃ ¿Ï·á ¡æ °ÔÀÓ ¾À ÀüÈ¯ (2ÃÊ ÈÄ)
-             if (PhotonNetwork.IsMasterClient && cardSelectCheckManager.AllPlayerCardSelectCheck())
-             {
-                 Debug.Log("¸ğµç ÇÃ·¹ÀÌ¾î Ä«µå ¼±ÅÃ ¿Ï·á ¡æ Game Scene ·Îµå");
-    
-                 DOVirtual.DelayedCall(1f, () =>
-                 {
-                     PhotonNetwork.LoadLevel("Game Scene");
-                 });
-             }
-         }
-     }
-
-    public bool HasSelected()
+    public override void OnPlayerPropertiesUpdate(Player target, Hashtable propertiesThatChanged)
     {
-        return hasSelect;
+        base.OnPlayerPropertiesUpdate(target, propertiesThatChanged);
+
+        if (propertiesThatChanged.ContainsKey("Select"))
+        {
+            cardSelectCheckManager.cardSelectPanels[target.ActorNumber].SelectCheck(target);
+
+            // ëª¨ë“  í”Œë ˆì´ì–´ ì¹´ë“œ ì„ íƒ ì™„ë£Œ â†’ ê²Œì„ ì”¬ ì „í™˜ (2ì´ˆ í›„)
+            if (cardSelectCheckManager.AllPlayerCardSelectCheck())
+            {
+                Debug.Log("ëª¨ë“  í”Œë ˆì´ì–´ ì¹´ë“œ ì„ íƒ ì™„ë£Œ ");
+
+                DOVirtual.DelayedCall(1f, () =>
+                {
+                    Debug.Log("ë¼ìš´ë“œ ì¢…ë£Œë¨ â†’ ë‹¤ìŒ ì¹´ë“œ ì„ íƒ ì¤€ë¹„");
+
+                    Debug.Log("ì¹´ë“œ ì„ íƒ ìƒíƒœ ë¹„í™œì„±í™”");
+                    // 1. ì¹´ë“œ ì„ íƒ ìƒíƒœ ë¦¬ì…‹ í•˜ëŠ”ë¶€ë¶„
+                    ResetCardSelectionState();
+
+
+                    Debug.Log("ìº”ë²„ìŠ¤ ë¹„í™œì„±í™”");
+                    // 2. CanvasController ì–‘ìª½ ìº”ë²„ìŠ¤ ë¹„í™œì„±í™”
+                    canvasController.ResetCardSelectionState();
+
+
+                    Debug.Log("ì¢…ë£Œì‹œì‘");
+                    // 3. ì¹´ë“œ ì„ íƒì´ ì¢…ë£Œëœê±¸ ì•Œë ¤ì•¼í•¨
+                    if (InGameManager.Instance)
+                    {
+                        InGameManager.Instance.EndCardSelect();
+                    }
+                });
+            }
+        }
     }
 
+    public bool HasSelected() => hasSelect;
 
+    public void ResetCardSelectionState()
+    {
+        Debug.Log("ì¹´ë“œì„ íƒìƒí™© ì´ˆê¸°í™”");
+        hasSelect = false;
 
+        // ì–‘ìª½ Canvasì˜ ìì‹ ì¹´ë“œ ì˜¤ë¸Œì íŠ¸ ì œê±°
+        foreach (Transform t in cardSpawnParent1)
+        {
+            Destroy(t.gameObject);
+        }
 
+        foreach (Transform t in cardSpawnParent2)
+        {
+            Destroy(t.gameObject);
+        }
+
+        var props = new Hashtable();
+        props["Select"] = false;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+        // ìºë¦­í„° êº¼ë‘ê¸°
+        masterCharacter.SetActive(false);
+        clientCharacter.SetActive(false);
+
+        foreach (var panel in cardSelectCheckManager.cardSelectPanels.Values)
+        {
+            panel.ResethasSelected();
+        }
+    }
 }

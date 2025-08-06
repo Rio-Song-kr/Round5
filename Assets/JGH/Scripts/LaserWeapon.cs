@@ -25,7 +25,9 @@ public class LaserWeapon : BaseWeapon
     [PunRPC]
     private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
+
         // StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
+
         
         if (currentLaserInstance != null)
         {
@@ -53,6 +55,12 @@ public class LaserWeapon : BaseWeapon
         
 
         ammoDisplay.reloadIndicator.SetActive(false);
+
+
+        // if (currentLaserInstance != null)
+        // {
+        //     Destroy(currentLaserInstance);
+        // }
 
 
         // 1. 레이저 프리팹 생성
@@ -85,7 +93,8 @@ public class LaserWeapon : BaseWeapon
         isFiring = true;
         isReloading = false;
 
-        yield return new WaitForSeconds(laserDuration);
+        // yield return new WaitForSeconds(laserDuration);
+        yield return new WaitUntil(() => currentLaser.CanShoot);
 
         isFiring = false;
         StartAutoReload();

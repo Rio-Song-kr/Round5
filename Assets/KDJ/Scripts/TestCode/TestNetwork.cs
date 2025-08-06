@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,28 @@ using Photon.Realtime;
 
 public class TestNetwork : MonoBehaviourPunCallbacks
 {
+    [SerializeField] RandomMapPresetCreator creator;
     private void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    /// <summary>
+    /// OnConnectedToMaster 있고
+    /// OnDisconnectedFromServer
+    /// OnJoinRoom
+    /// OnLeftRoom
+    /// 플레이어 관리도 얘가 해야하나 ?
+    /// 
+    /// </summary>
+    public void OnConnectedToServer()
+    {
+        Debug.Log("서버 연결 시도");
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.Log("끊기");
     }
 
     public override void OnConnectedToMaster()
@@ -31,6 +51,16 @@ public class TestNetwork : MonoBehaviourPunCallbacks
         base.OnCreatedRoom();
         Debug.Log("방 만듬");
         if (PhotonNetwork.IsMasterClient)
-            Debug.Log("마스터 클라이언트 입니다.");      
+        {
+            Debug.Log("마스터 클라이언트 입니다.");
+        }
+      
+        creator.gameObject.SetActive(true);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("온조인룸");
+        creator.gameObject.SetActive(true);
     }
 }

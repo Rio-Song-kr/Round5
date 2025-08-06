@@ -122,51 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &25443451
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 25443452}
-  - component: {fileID: 25443453}
-  m_Layer: 0
-  m_Name: CardSceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &25443452
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 25443451}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.2839458, y: 1.4165473, z: 0.9557698}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &25443453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 25443451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d12aa33afb931f4995470b357f200c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cardSelectScene: {fileID: 694687337}
 --- !u!1 &34367110
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +443,7 @@ Transform:
   - {fileID: 1638323626}
   - {fileID: 1631865302}
   - {fileID: 204656636}
-  m_Father: {fileID: 694687338}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &147892201
 MonoBehaviour:
@@ -1157,7 +1112,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 694687338}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &349513666
 GameObject:
@@ -1320,7 +1275,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasController: {fileID: 2131150376}
+  canvasActivation: {fileID: 0}
   cardSelectCheckManager: {fileID: 1793377347}
+  cardSelectPanelItem: {fileID: 0}
   allCardPrefabs:
   - {fileID: 3777309921307386761, guid: 400851c065456b64796eade7eb13cb88, type: 3}
   - {fileID: 3777309921307386761, guid: 905013e8ad8a4c04b873d309b9407f4b, type: 3}
@@ -1360,7 +1317,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 694687338}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &444598487
 MonoBehaviour:
@@ -1594,7 +1551,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 694687338}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &598721082
 MonoBehaviour:
@@ -1950,44 +1907,6 @@ Transform:
   - {fileID: 1868856302}
   - {fileID: 349513667}
   m_Father: {fileID: 1977317052}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &694687337
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 694687338}
-  m_Layer: 0
-  m_Name: CardScene
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &694687338
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 694687337}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 347977223}
-  - {fileID: 2131150377}
-  - {fileID: 598721081}
-  - {fileID: 444598486}
-  - {fileID: 1793377348}
-  - {fileID: 147892200}
-  - {fileID: 1977317052}
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &908538854
 GameObject:
@@ -2897,7 +2816,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 694687338}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1868856301
 GameObject:
@@ -3556,7 +3475,7 @@ Transform:
   - {fileID: 1086876560}
   - {fileID: 593740751}
   - {fileID: 691854534}
-  m_Father: {fileID: 694687338}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2076499814
 GameObject:
@@ -3728,7 +3647,7 @@ Transform:
   m_Children:
   - {fileID: 91932521}
   - {fileID: 1265388867}
-  m_Father: {fileID: 694687338}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2131150378
 MonoBehaviour:
@@ -3791,5 +3710,10 @@ SceneRoots:
   - {fileID: 462863130}
   - {fileID: 419480821}
   - {fileID: 1283546541}
-  - {fileID: 694687338}
-  - {fileID: 25443452}
+  - {fileID: 347977223}
+  - {fileID: 2131150377}
+  - {fileID: 598721081}
+  - {fileID: 444598486}
+  - {fileID: 1793377348}
+  - {fileID: 147892200}
+  - {fileID: 1977317052}

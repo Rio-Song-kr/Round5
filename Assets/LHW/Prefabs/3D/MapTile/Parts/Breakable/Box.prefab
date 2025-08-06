@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7031791273520029357}
   - component: {fileID: 1646784779061782558}
   - component: {fileID: 376802805612690447}
-  m_Layer: 10
+  m_Layer: 6
   m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,6 +212,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -5363366761858254728}
+  - {fileID: 376802805612690447}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

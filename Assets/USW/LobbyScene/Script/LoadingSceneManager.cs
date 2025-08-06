@@ -24,7 +24,7 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] private Transform player2StartPos;
     [SerializeField] private Transform player2EndPos;
     
-    private string gameSceneName = "USW_DemoScene2"; 
+    private string gameSceneName = "InGameScene"; 
     private bool isLoadingComplete = false;
     
     private void Start()

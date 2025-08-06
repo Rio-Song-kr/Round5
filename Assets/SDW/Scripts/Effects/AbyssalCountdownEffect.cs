@@ -320,13 +320,13 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
 
         //# 네트워크 지연 문제로, Player가 충돌이 감지됨에도 이동하는 문제가 있음
         //# 충돌된 플레이어가 AbyssalCountdown을 가지고 있다면 로컬에서도 바로 멈추기 위해 작성
-        var targetDefenceSkill = _targetPlayer.GetComponent<DefenceSkillManager>();
-
-        if (targetDefenceSkill.SkillNames.Contains(DefenceSkills.AbyssalCountdown))
-        {
-            if (!_status.HasStatusEffect(StatusEffectType.ReduceSpeed))
-                photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
-        }
+        // var targetDefenceSkill = _targetPlayer.GetComponent<DefenceSkillManager>();
+        //
+        // if (targetDefenceSkill.SkillNames.Contains(DefenceSkills.AbyssalCountdown))
+        // {
+        //     if (!_status.HasStatusEffect(StatusEffectType.ReduceSpeed))
+        //         photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, photonView.ViewID, _playerTransform.position);
+        // }
 
         _targetViewId = other.GetComponent<PhotonView>().ViewID;
 

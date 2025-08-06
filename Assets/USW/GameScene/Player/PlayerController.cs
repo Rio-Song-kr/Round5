@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
@@ -28,6 +29,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [SerializeField] private float rotationLerpRate = 15f;
     [SerializeField] private float velocityLerpRate = 8f;
 
+    [Header("물리")]
+    [SerializeField] private PhysicsMaterial2D _bounceMat;
+    [SerializeField] private PhysicsMaterial2D _unBounceMat;
+
+    [Header("이펙트")]
+    [SerializeField] private float _jumpEffectOffset = -0.2f;
+
     // 컴포넌트들
     private Rigidbody2D rb;
     private Collider2D col;
@@ -42,6 +50,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     // 점프 변수들
     private bool isGrounded;
+    private bool wasGrounded;
     private bool canJump;
     private bool canSecondJump;
     private bool hasJumpedInAir;
@@ -71,6 +80,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool _isFreeze = false;
     private bool _isPlayerMoved;
     private bool _prevPlayerMoveState;
+    private bool _isStarted;
+
+    private Coroutine _bounceCoroutine;
 
     //# 플레이어 움직임 여부에 따라 Skill 사용 시간/Abyssal Countdown의 증감 여부를 위해 필요
     public Action<bool> OnPlayerMoveStateChanged;
@@ -104,11 +116,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _status.OnPlayerSpeedValueChanged += SetMoveSpeed;
         _status.OnPlayerFreezeValueChanged += SetFreeze;
         //# 무적, CanAttack, SetHp는 다른 스크립트에 추가
+        _bounceCoroutine = StartCoroutine(ChangeBounce());
+    }
+
+    private void OnDisable()
+    {
+        if (_bounceCoroutine != null)
+            StopCoroutine(_bounceCoroutine);
     }
     //# --- 추가사항 ---
 
     private void Update()
     {
+        if (!_isStarted) return;
+
         if (photonView.IsMine)
         {
             //# --- 추가사항 ---
@@ -219,15 +240,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void OnNormalJump(float jumpPower)
     {
-        if (!photonView.IsMine)
-        {
-            // 플레이어 시각적 피드백
-            PlayJumpEffect();
-            return;
-        }
+        if (!photonView.IsMine) return;
+
+        // 플레이어 시각적 피드백
+        PlayJumpEffect(Quaternion.identity, new Vector3(0, _jumpEffectOffset, 0));
 
         ResetVelocityForJump(true);
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
         if (canSecondJump)
         {
             canSecondJump = false;
@@ -241,15 +261,19 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    private IEnumerator ReturnToPool(GameObject effectObj, ParticleSystem particle)
+    {
+        yield return new WaitForSeconds(particle.main.duration);
+        PhotonNetwork.Destroy(effectObj);
+    }
+
     [PunRPC]
     private void OnForceJump(float jumpPower)
     {
-        if (!photonView.IsMine)
-        {
-            // 플레이어 시각적 피드백
-            PlayJumpEffect();
-            return;
-        }
+        if (!photonView.IsMine) return;
+
+        // 플레이어 시각적 피드백
+        PlayJumpEffect(Quaternion.identity, new Vector3(0, _jumpEffectOffset, 0));
 
         // 다른 시스템들 상태 리셋
         if (ropeSystem != null && ropeSystem.IsSwinging())
@@ -315,15 +339,37 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             canJump = newCanJump;
             hasJumpedInAir = newHasJumpedInAir;
+            return;
         }
+
+        // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
+        var landEffectObj = PhotonNetwork.Instantiate(
+            "LandEffect",
+            transform.position + new Vector3(0, _jumpEffectOffset, 0),
+            Quaternion.Euler(-90, 0, 0)
+        );
+
+
+        var landEffect = landEffectObj.GetComponentInChildren<ParticleSystem>();
+        landEffect.Play();
+        StartCoroutine(ReturnToPool(landEffectObj, landEffect));
     }
 
     /// <summary>
     /// 로컬 플레이어용 시각적 점프 이펙트
     /// </summary>
-    private void PlayJumpEffect()
+    public void PlayJumpEffect(Quaternion rotation, Vector3 jumpEffectOffset)
     {
         // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
+        var jumpEffectObj = PhotonNetwork.Instantiate(
+            "JumpEffectWrap",
+            transform.position + jumpEffectOffset,
+            rotation
+        );
+
+        var jumpEffect = jumpEffectObj.GetComponentInChildren<ParticleSystem>();
+        jumpEffect.Play();
+        StartCoroutine(ReturnToPool(jumpEffectObj, jumpEffect));
     }
 
     #endregion
@@ -382,7 +428,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void UpdateGroundCheck()
     {
-        bool wasGrounded = isGrounded;
+        wasGrounded = isGrounded;
 
         // 로프에 매달려 있을 때는 ground check를 조금 다르게 처리
         if (ropeSystem != null && ropeSystem.IsSwinging())
@@ -397,12 +443,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 땅에 착지했을 때 점프 상태 활성화
         if (isGrounded && !wasGrounded)
         {
+            Debug.Log($"canJump : {canJump}, isGrounded : {isGrounded}");
             canJump = true;
             canSecondJump = true;
             hasJumpedInAir = false;
+            // rb.velocity = new Vector2(rb.velocity.x, 0f);
 
             // 점프 상태 변경을 다른 클라이언트에 알림
-            photonView.RPC("OnJumpStateChanged", RpcTarget.Others, canJump, hasJumpedInAir);
+            photonView.RPC("OnJumpStateChanged", RpcTarget.All, canJump, hasJumpedInAir);
+        }
+        else if (isGrounded && wasGrounded)
+        {
+        }
+    }
+
+    private IEnumerator ChangeBounce()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.01f);
+
+            if (isGrounded && wasGrounded) rb.sharedMaterial = _unBounceMat;
+            else if (!isGrounded && !wasGrounded) rb.sharedMaterial = _bounceMat;
         }
     }
 
@@ -765,4 +827,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void SetZeroToRemoteVelocity() => remoteVelocity = Vector2.zero;
     //# --- 추가사항 ---
+
+    //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
+    private void SetIsStarted(bool value)
+    {
+        _isStarted = value;
+    }
 }

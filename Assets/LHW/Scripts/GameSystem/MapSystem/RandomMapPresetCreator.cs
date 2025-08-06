@@ -1,23 +1,53 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
 
-public class RandomMapPresetCreator : MonoBehaviour
+public class RandomMapPresetCreator : MonoBehaviourPun
 {
-    // ¸ÊÀ» Resources·Î ÀúÀåÇÒ °Å¸é ÇØ´ç ¹æ½ÄÀ¸·Î º¯°æ ÇÊ¿ä
+    // ï¿½ï¿½ï¿½ï¿½ Resourcesï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½
     [SerializeField] GameObject[] mapResources;
 
-    // ¸Ê À§Ä¡ ¿ÀÇÁ¼Â
+    // ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private float mapTransformOffset = 35;
-    public float MapTransformOffset { get { return mapTransformOffset; } }
 
-    // ´ÜÀÏ ¶ó¿îµå ¼ö
+    public float MapTransformOffset
+    {
+        get { return mapTransformOffset; }
+    }
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     [SerializeField] int gameCycleNum = 3;
 
     [SerializeField] Transform[] mapListTransform;
 
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
+    private PoolManager pools;
+
+    public PoolManager Pools => pools;
+
+    private void Awake()
+    {
+        pools = FindObjectOfType<PoolManager>();
+        for (int i = 0; i < mapResources.Length; i++)
+        {
+            pools.InitializePool(mapResources[i].name, mapResources[i], 3, 9);
+        }
+    }
+
     private void OnEnable()
+    {
+        InGameManager.OnGameStart += OnGameStart;
+        InGameManager.OnRoundStart += OnRoundStart;        
+    }
+
+    private void OnDisable()
+    {
+        InGameManager.OnGameStart -= OnGameStart;
+        InGameManager.OnRoundStart -= OnRoundStart;
+    }
+
+    void OnGameStart()
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -25,12 +55,22 @@ public class RandomMapPresetCreator : MonoBehaviour
             {
                 RandomInit();
                 RandomMapSelect(i);
+                mapWeightedRandom.ClearList();
+                Debug.Log("ï¿½Ýºï¿½");
             }
         }
     }
 
+    void OnRoundStart()
+    {
+        if (InGameManager.Instance)
+        {
+            MapUpdate(InGameManager.Instance.CurrentRound);
+        }
+    }
+
     /// <summary>
-    /// ·£´ý È®·ü ÃÊ±â ¼¼ÆÃ
+    /// ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void RandomInit()
     {
@@ -41,7 +81,7 @@ public class RandomMapPresetCreator : MonoBehaviour
     }
 
     /// <summary>
-    /// ·£´ý ¸Ê ¼±ÅÃ - ÇÑ ¹ø ¼±ÅÃÇÑ ¸ÊÀº ·£´ý È®·ü¿¡¼­ ¾Æ¿¹ Á¦¿ÜµÇ¹Ç·Î ¸ÊÀÌ Áßº¹µÇÁö ¾Ê°Ô µÊ
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ÜµÇ¹Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ßºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½ï¿½
     /// </summary>
     private void RandomMapSelect(int round)
     {
@@ -55,8 +95,8 @@ public class RandomMapPresetCreator : MonoBehaviour
 
             PhotonView mapView = map.GetComponent<PhotonView>();
             mapView.RPC(nameof(MapDynamicMovement.SetParentToRound), RpcTarget.OthersBuffered, round);
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½");
         }
-        MapUpdate(TestIngameManager.Instance.CurrentGameRound);
     }
 
     public Transform GetRoundTransform(int round)
@@ -66,18 +106,25 @@ public class RandomMapPresetCreator : MonoBehaviour
 
     public void MapUpdate(int round)
     {
-        if (TestIngameManager.Instance.IsGameOver) return;
-        for(int i =0; i < mapListTransform.Length; i++)
-        {
-            PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
-            if(round == i)
+        if (InGameManager.Instance != null &&
+            InGameManager.Instance.CurrentGameState == InGameManager.GameState.GameEnding)
+            for (int i = 0; i < mapListTransform.Length; i++)
             {
-                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, true);
+                PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
+                if (round == i)
+                {
+                    MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, true);
+                }
+                else
+                {
+                    MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, false);
+                }
             }
-            else
-            {
-                MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, false);
-            }
-        }
+    }
+
+    [PunRPC]
+    public void ActivateMapCreator(bool activation)
+    {
+        gameObject.SetActive(activation);
     }
 }
