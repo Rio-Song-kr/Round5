@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Photon.Pun;
 using UnityEngine;
 
@@ -43,8 +42,6 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
 
         int playerViewId = player.GetComponent<PhotonView>().ViewID;
         photonView.RPC(nameof(AddPlayer), RpcTarget.AllBuffered, playerViewId);
-
-        PhotonNetwork.Instantiate(_laserPrefab.name, Vector3.zero, Quaternion.Euler(0, 90, 0));
     }
 
     [PunRPC]
