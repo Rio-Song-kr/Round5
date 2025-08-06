@@ -17,7 +17,9 @@ public class LaserSoot : MonoBehaviourPun
     [PunRPC]
     private void ReturnToPool()
     {
-        _pool.Destroy(gameObject);
+        if (!photonView.IsMine) return;
+        
+        PhotonNetwork.Destroy(gameObject);
     }
 
     public void SetPool()
