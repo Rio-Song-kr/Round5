@@ -104,6 +104,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public Dictionary<string, int> GetMatchScores() => new Dictionary<string, int>(matchScores);
 
     private TestPlayerManager playerManager;
+     
+    //#2025/08/07/02:00 추가 플레이어 시스템 활성화 하는 Action
+    public static Action<bool> OnplayerSystemActivate;
 
     private void Start()
     {
@@ -192,9 +195,18 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
         OnGameStart?.Invoke();
+        
+        //#20250807 02:00 추가사항
+        OnplayerSystemActivate?.Invoke(true);        
 
         StartCoroutine(StartRoundWithDelay());
     }
+    //# 필요하실떄 시스템 비활성화 용입니다.
+    /*  public void DeactivatePlayerSystem()
+     * {
+     *      OnplayerSystemActivate?.Invoke(false);
+     * }
+     */
 
     private IEnumerator StartRoundWithDelay()
     {

@@ -27,8 +27,16 @@ public class GunControll : MonoBehaviourPun
     /// </summary>
     private void Start()
     {
+        //#20250807 0200 추가사항
+        InGameManager.OnplayerSystemActivate += SetIsStarted;
+        
         if (photonView.IsMine)
             EquipWeapon(WeaponType.Bullet);
+    }
+
+    private void OnDestroy()
+    {
+        InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
     private void Update()
@@ -164,7 +172,7 @@ public class GunControll : MonoBehaviourPun
     //}
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    private void SetIsStarted(bool value)
+    public void SetIsStarted(bool value)
     {
         _isStarted = value;
     }

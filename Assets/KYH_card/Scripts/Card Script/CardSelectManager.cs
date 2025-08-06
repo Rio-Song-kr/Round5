@@ -97,6 +97,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
         if (masterCanvasActive)
         {
+            Debug.Log("이거 발동되면 Master캐릭터 남는거 맞음.");
             if (canvasController.IsMyTurn())
             {
                 if (isMaster) ActivateMasterCharacter(); // 마스터 → 선택자
@@ -110,6 +111,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         }
         else if (clientCanvasActive)
         {
+            Debug.Log("이거 발동되면 Client캐릭터 남는거 맞음.");
             if (canvasController.IsMyTurn())
             {
                 if (isMaster) ActivateClientCharacter(); // 마스터 → 선택자

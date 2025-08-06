@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
@@ -61,6 +62,14 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         rb = GetComponent<Rigidbody2D>();
         SetupComponents();
         InitializeHook();
+        
+        //#20250807 0200 추가사항
+        InGameManager.OnplayerSystemActivate += SetIsStarted;
+    }
+
+    private void OnDestroy()
+    {
+        InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
     private void Update()
@@ -601,7 +610,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     #endregion
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    private void SetIsStarted(bool value)
+    public void SetIsStarted(bool value)
     {
         _isStarted = value;
         crossHairObj.SetActive(value);
