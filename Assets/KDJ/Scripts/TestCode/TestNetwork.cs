@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,24 @@ public class TestNetwork : MonoBehaviourPunCallbacks
     private void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    /// <summary>
+    /// OnConnectedToMaster 있고
+    /// OnDisconnectedFromServer
+    /// OnJoinRoom
+    /// OnLeftRoom
+    /// 플레이어 관리도 얘가 해야하나 ?
+    /// 
+    /// </summary>
+    public void OnConnectedToServer()
+    {
+        Debug.Log("서버 연결 시도");
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.Log("끊기");
     }
 
     public override void OnConnectedToMaster()
@@ -35,13 +54,13 @@ public class TestNetwork : MonoBehaviourPunCallbacks
         {
             Debug.Log("마스터 클라이언트 입니다.");
         }
-        // 이형원 - 테스트용 코드로 추가했습니다
-        //creator.gameObject.SetActive(true);
+      
+        creator.gameObject.SetActive(true);
     }
 
     public override void OnJoinedRoom()
     {
-        // 이형원 - 테스트용 코드로 추가했습니다
-        //creator.gameObject.SetActive(true);
+        Debug.Log("온조인룸");
+        creator.gameObject.SetActive(true);
     }
 }

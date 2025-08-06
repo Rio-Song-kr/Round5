@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class CardSelectByHandManager : MonoBehaviourPun
 {
-    [SerializeField] GameObject[] cards;
-    [SerializeField] CardSceneArmController armController;
-    
-    
-   
+    [SerializeField] private GameObject[] cards;
+    [SerializeField] private CardSceneArmController armController;
+
     private int selectedIndex = -1;
     private void Start()
     {
@@ -16,41 +14,41 @@ public class CardSelectByHandManager : MonoBehaviourPun
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            SelectRightCard();
-            if (selectedIndex >= 0 && selectedIndex < cards.Length)
-            {
-                Debug.Log("������");
-                cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
-
-                // RPC�� �� ������ ���� ����
-                photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
-
-                CardAnimaitonPlay();
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            SelectLeftCard();
-            if (selectedIndex >= 0 && selectedIndex < cards.Length)
-            {
-                Debug.Log("������");
-                cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
-
-                photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
-
-                if (cards[selectedIndex].GetComponent<FlipCard>().IsFlipped)
-                {
-                    CardAnimaitonPlay();
-                }
-            }
-        }
+        // if (Input.GetKeyDown(KeyCode.D))
+        // {
+        //     SelectRightCard();
+        //     if (selectedIndex >= 0 && selectedIndex < cards.Length)
+        //     {
+        //         Debug.Log("������");
+        //         cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
+        //
+        //         // RPC�� �� ������ ���� ����
+        //         photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
+        //
+        //         CardAnimaitonPlay();
+        //     }
+        // }
+        // else if (Input.GetKeyDown(KeyCode.A))
+        // {
+        //     SelectLeftCard();
+        //     if (selectedIndex >= 0 && selectedIndex < cards.Length)
+        //     {
+        //         Debug.Log("������");
+        //         cards[selectedIndex].GetComponent<FlipCard>().PlayFlipAnimation();
+        //
+        //         photonView.RPC(nameof(RPC_SelectCardArm), RpcTarget.All, selectedIndex);
+        //
+        //         if (cards[selectedIndex].GetComponent<FlipCard>().IsFlipped)
+        //         {
+        //             CardAnimaitonPlay();
+        //         }
+        //     }
+        // }
     }
 
     // �� ����ȭ�� ���� RPC
     [PunRPC]
-    void RPC_SelectCardArm(int cardIndex)
+    private void RPC_SelectCardArm(int cardIndex)
     {
         armController.SelectCard(cardIndex);
     }
@@ -84,5 +82,4 @@ public class CardSelectByHandManager : MonoBehaviourPun
             }
         }
     }
-    
 }

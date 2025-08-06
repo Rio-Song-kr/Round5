@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool _isFreeze = false;
     private bool _isPlayerMoved;
     private bool _prevPlayerMoveState;
+    private bool _isStarted;
 
     private Coroutine _bounceCoroutine;
 
@@ -127,6 +128,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
+        if (!_isStarted) return;
+
         if (photonView.IsMine)
         {
             //# --- 추가사항 ---
@@ -824,4 +827,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void SetZeroToRemoteVelocity() => remoteVelocity = Vector2.zero;
     //# --- 추가사항 ---
+
+    //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
+    private void SetIsStarted(bool value)
+    {
+        _isStarted = value;
+    }
 }
