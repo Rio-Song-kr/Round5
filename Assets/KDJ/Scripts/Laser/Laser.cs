@@ -66,10 +66,11 @@ public class Laser : MonoBehaviourPun
 
     public void ShootLaser()
     {
+        Debug.Log($"ShootLaser 호출, CanShoot: {CanShoot}");
         Debug.Log("레이저 발사 요청");
         if (!photonView.IsMine) return;
         // photonView.RPC(nameof(Shoot), RpcTarget.All);
-        _canShoot = true;
+     
         Debug.Log("레이저 발사 요청 2");
         Debug.Log($"코루틴 상태:{_laserCoroutine}");
 
@@ -77,6 +78,11 @@ public class Laser : MonoBehaviourPun
         {
             Debug.Log("레이저 코루틴 시작");
             _laserCoroutine = StartCoroutine(LaserCoroutine());
+            Debug.Log($"코루틴 시작 후 상태: {_laserCoroutine}");
+        }
+        else
+        {
+            Debug.Log("CanShoot 조건이 false라서 코루틴 시작 안함");
         }
     }
 
