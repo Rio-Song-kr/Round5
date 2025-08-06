@@ -33,8 +33,8 @@ public class GunControll : MonoBehaviourPun
 
     private void Update()
     {
-        // if (!photonView.IsMine || !_isStarted) return;
-        if (!photonView.IsMine) return;
+         if (!photonView.IsMine || !_isStarted) return;
+       // if (!photonView.IsMine) return;
 
         // 마우스 위치에 따라 총구 회전
         // RotateMuzzleToMouse();

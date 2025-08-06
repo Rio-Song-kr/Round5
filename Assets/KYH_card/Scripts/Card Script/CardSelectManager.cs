@@ -76,6 +76,10 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
         canvasController.ResetCardSelectionState();
 
+        // 이형원 임시 시도
+        if(InGameManager.Instance.CurrentGameState != InGameManager.GameState.GameEnding)
+        canvasController.TryStartCardSelection();
+
         // 캔버스 컨트롤러 초기화 및 시작하는부분 
         // DOVirtual.DelayedCall(0.2f, () =>
         // {
@@ -385,7 +389,14 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             // PhotonNetwork.LoadLevel("Game Scene");
             PhotonView canvasView = canvasController.photonView;
             canvasView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.All, false);
-            InGameManager.Instance.StartGame();
+            if (InGameManager.Instance.CurrentRound == 0 && InGameManager.Instance.CurrentMatch == 0)
+            {
+                InGameManager.Instance.StartGame();
+            }
+            else
+            {
+                InGameManager.Instance.StartRound();
+            }
         }
     }
 
