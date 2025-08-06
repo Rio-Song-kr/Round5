@@ -64,7 +64,6 @@ public class CardManager : MonoBehaviour
             }
 
             // Debug.Log($"{count}회차 연산 결과 - BulletSpeedMultiplierSum: {BulletSpeedMultiplierSum}, DamageMultiplierSum: {DamageMultiplierSum}, ReloadTimeMultiplierSum: {ReloadTimeMultiplierSum}, BulletSpeedMultiplier: {BulletSpeedMultiplier}, AttackSpeedMultiplier: {AttackSpeedMultiplier}, ReloadTimeAdditionSum: {ReloadTimeAdditionSum}, AmmoIncreaseSum: {AmmoIncreaseSum}, AmmoConsumptionSum: {AmmoConsumptionSum}");
-
         }
 
         playerStats.DefaultDamage = _pStatus.DefaultDamage * (DamageMultiplierSum != 0 ? DamageMultiplierSum : 1);
@@ -115,7 +114,7 @@ public class CardManager : MonoBehaviour
 
     public List<DefenceSkills> GetDefenceCard()
     {
-        List<DefenceSkills> defenceSKillList = new();
+        var defenceSKillList = new List<DefenceSkills>();
 
         foreach (var card in _cards)
         {
@@ -146,6 +145,12 @@ public class CardManager : MonoBehaviour
     public void ClearLists()
     {
         _cards.Clear();
+    }
+
+    public void ClearAttackList()
+    {
+        var newList = _cards.FindAll((card) => card is DefenseCard);
+        _cards = newList;
     }
 
     /// <summary>
