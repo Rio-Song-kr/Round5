@@ -89,9 +89,8 @@ public class CardManager : MonoBehaviour
         playerStats.DefaultReloadSpeed = (_pStatus.DefaultReloadSpeed + ReloadTimeAdditionSum) *
                                          (ReloadTimeMultiplierSum != 0 ? ReloadTimeMultiplierSum : 1);
         playerStats.DefaultAttackSpeed = _pStatus.DefaultAttackSpeed * (AttackSpeedMultiplier != 0 ? AttackSpeedMultiplier : 1);
-        playerStats.DefaultBulletSpeed =
-            _pStatus.DefaultBulletSpeed * (BulletSpeedMultiplierSum != 0 ? BulletSpeedMultiplierSum : 1);
-        playerStats.DefaultAmmo = _pStatus.DefaultAmmo + AmmoIncreaseSum;
+        playerStats.DefaultBulletSpeed = _pStatus.DefaultBulletSpeed * (BulletSpeedMultiplierSum != 0 ? BulletSpeedMultiplierSum : 1);
+        playerStats.DefaultAmmo = 1 + AmmoIncreaseSum;
         playerStats.AmmoConsumption = _pStatus.AmmoConsumption + AmmoConsumptionSum;
 
         return playerStats;

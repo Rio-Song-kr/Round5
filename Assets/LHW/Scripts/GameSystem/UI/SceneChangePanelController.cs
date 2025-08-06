@@ -1,6 +1,6 @@
-using System.Collections;
 using DG.Tweening;
 using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 
 public class SceneChangePanelController : MonoBehaviourPun
@@ -8,24 +8,19 @@ public class SceneChangePanelController : MonoBehaviourPun
     [SerializeField] private Transform roundOverTransform;
     [SerializeField] private Transform sceneChangeInitTransform;
 
-    Coroutine sceneChangeCoroutine;
-
     [PunRPC]
     public void RoundChange()
     {
-        sceneChangeCoroutine = StartCoroutine(SceneChangeCoroutine());
+        SceneChange();
     }
 
-    IEnumerator SceneChangeCoroutine()
+    private void SceneChange()
     {
-        WaitForSeconds delay = new WaitForSeconds(3f);
-
         transform.DOMove(roundOverTransform.position, 1f).SetDelay(1f);
-        yield return delay;
-        if (!TestIngameManager.Instance.IsGameOver)
-        {
-            transform.position = sceneChangeInitTransform.position;
-        }
-        sceneChangeCoroutine = null;
+    }
+
+    private void OnDisable()
+    {
+        transform.position = sceneChangeInitTransform.position;
     }
 }

@@ -65,6 +65,13 @@ public class RoundOverPanelController : MonoBehaviourPun
     private void OnEnable()
     {
         Init();
+        InGameManager.OnMatchEnd += AddScoreAnimation;
+        InGameManager.OnMatchEnd += RoundChange;
+    }
+    private void OnDisable()
+    {
+        InGameManager.OnMatchEnd -= AddScoreAnimation;
+        InGameManager.OnMatchEnd -= RoundChange;
     }
 
     private void Init()
@@ -85,14 +92,12 @@ public class RoundOverPanelController : MonoBehaviourPun
     /// 라운드 점수 가져오는 메서드
     /// </summary>
     private void ReadScore(out int leftScore, out int rightScore)
-    {
-        
+    {        
         string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
         string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
 
         leftScore = InGameManager.Instance.GetPlayerRoundScore(leftPlayerKey);
-        rightScore = InGameManager.Instance.GetPlayerRoundScore(rightPlayerKey);
-       
+        rightScore = InGameManager.Instance.GetPlayerRoundScore(rightPlayerKey);       
     }
     
     /// <summary>
@@ -153,13 +158,6 @@ public class RoundOverPanelController : MonoBehaviourPun
             rightImageFillView.RPC(nameof(WinnerImageFillingUI.FillAmountInit), RpcTarget.All, (float)right / 2); 
         }
 
-        if (left == 2 || right == 2)
-        {
-            AddScoreAnimation();
-            RoundChange();
-            return;
-        }
-
         leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration, gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
         rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration, gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
     }
@@ -172,9 +170,11 @@ public class RoundOverPanelController : MonoBehaviourPun
     {
         ReadRoundScore(out int leftScore, out int rightScore);
 
-        string matchWinner = InGameManager.Instance.LastMatchWinner;
+        string matchWinner = InGameManager.Instance.LastRoundWinner;
         string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
         string currentWinner = (matchWinner == leftPlayerKey) ? "Left" : "Right";
+
+        Debug.Log(currentWinner);
         if (currentWinner == "Left")
         {
             leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f, winImageShrinkDuration, winImageShrinkDelay);

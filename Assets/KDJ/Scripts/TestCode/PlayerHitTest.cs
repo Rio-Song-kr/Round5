@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,13 @@ public class PlayerHitTest : MonoBehaviour
 {
     [SerializeField] private GameObject _deadEffect1;
     [SerializeField] private GameObject _deadEffect2;
-    private int _hp = 5;
+    private float _hp = 5f;
 
-    public void TakeDamage(int damage)
+    public bool IsAlive => throw new NotImplementedException();
+
+    public event Action OnDeath;
+
+    public void TakeDamage(float damage)
     {
         _hp -= damage;
         if (_hp <= 0)

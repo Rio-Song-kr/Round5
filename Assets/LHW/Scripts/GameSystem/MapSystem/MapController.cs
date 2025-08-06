@@ -19,14 +19,12 @@ public class MapController : MonoBehaviour
 
     private void OnEnable()
     {
-        TestIngameManager.OnRoundOver += GoToNextStage;
-        TestIngameManager.onCardSelectEnd += MapMove;
+        InGameManager.OnRoundEnd += GoToNextStage;
     }
 
     private void OnDisable()
     {
-        TestIngameManager.OnRoundOver -= GoToNextStage;
-        TestIngameManager.onCardSelectEnd -= MapMove;
+        InGameManager.OnRoundEnd -= GoToNextStage;
     }
 
     public void GoToNextStage()
@@ -50,17 +48,17 @@ public class MapController : MonoBehaviour
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        if (!TestIngameManager.Instance.IsCardSelectTime)
-        {
-            moveCoroutine = StartCoroutine(MovementCoroutine());
-        }
+        if (InGameManager.Instance.CurrentMatch > 2) return;
+
+        moveCoroutine = StartCoroutine(MovementCoroutine());
+
     }
 
     IEnumerator MovementCoroutine()
     {
         WaitForSeconds delay = new WaitForSeconds(mapChangeDelay);
 
-        MapDynamicMovement[] movements = rounds[TestIngameManager.Instance.CurrentGameRound].GetComponentsInChildren<MapDynamicMovement>();
+        MapDynamicMovement[] movements = rounds[InGameManager.Instance.CurrentMatch].GetComponentsInChildren<MapDynamicMovement>();
 
         for (int i = 0; i < movements.Length; i++)
         {
