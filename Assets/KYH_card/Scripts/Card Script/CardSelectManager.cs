@@ -357,14 +357,17 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     private IEnumerator CheckAllSelected()
     {
+        Debug.Log("Check All Selected");
         yield return new WaitForSeconds(1f);
 
         if (cardSelectCheckManager.AllPlayerCardSelectCheck())
         {
-            DOVirtual.DelayedCall(1f, () => { photonView.RPC(nameof(ChangeScene), RpcTarget.Others); });
+            Debug.Log("AllPlayerCardSelectCheck");
+            DOVirtual.DelayedCall(1f, () => { photonView.RPC(nameof(ChangeScene), RpcTarget.All); });
         }
         else
         {
+            Debug.Log($"Switch Turn");
             canvasController.photonView.RPC("RPC_SwitchTurnToOther", RpcTarget.All);
         }
     }
@@ -372,10 +375,13 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void ChangeScene()
     {
+        canvasController.ResetCardSelectionState();
+        masterCharacter.SetActive(false);
+        clientCharacter.SetActive(false);
         if (PhotonNetwork.IsMasterClient) // 마스터만 씬 전환
         {
             Debug.Log("모든 플레이어 선택 완료 → Game Scene 전환");
-            PhotonNetwork.LoadLevel("Game Scene");
+            // PhotonNetwork.LoadLevel("Game Scene");
         }
     }
 
