@@ -6,6 +6,9 @@ public class CardManager : MonoBehaviour
 {
     [SerializeField] private PlayerStatusDataSO _pStatus;
     [SerializeField] private List<CardBase> _cards = new List<CardBase>();
+
+    //# Test용
+    // [SerializeField] private CardBase[] _addCards;
     public static CardManager Instance { get; private set; }
     public bool IsCardEmpty => _cards.Count == 0;
 
@@ -21,6 +24,22 @@ public class CardManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    //# Test 용
+    // private void Start()
+    // {
+    //     StartCoroutine(AddCardCoroutine());
+    // }
+    //
+    // private IEnumerator AddCardCoroutine()
+    // {
+    //     yield return new WaitForSeconds(5);
+    //
+    //     foreach (var card in _addCards)
+    //     {
+    //         AddCard(card);
+    //     }
+    // }
 
     /// <summary>
     /// 현재 카드의 능력치를 계산하여 반환합니다.
@@ -133,10 +152,49 @@ public class CardManager : MonoBehaviour
     /// <param name="card"></param>
     public void AddCard(CardBase card)
     {
+        //todo Attack, Defence 카드 중복 체크
+        if (IsExistCard(card)) return;
+
+        //# 추가되는 카드랑 중복이 아니면서 Laser 카드일 때
+        if (card is AttackCard attackCard)
+        {
+            if (attackCard.WeaponIndex == 1)
+            {
+                ClearAttackList();
+                _cards.Add(card);
+                return;
+            }
+
+            //# 카드가 Laser는 아닌데, 내가 Laser를 가지고 있을 떄
+            if (GetExistAttackCard(1)) return;
+        }
+
         if (card != null)
         {
             _cards.Add(card);
         }
+    }
+
+    private bool IsExistCard(CardBase card)
+    {
+        //# card가 laser 카드가 아닌 상황에서 기존에 laser 카드가 있을 때
+        foreach (var existCard in _cards)
+        {
+            if (existCard == card) return true;
+        }
+        return false;
+    }
+
+    private bool GetExistAttackCard(int index)
+    {
+        foreach (var existCard in _cards)
+        {
+            if (existCard is AttackCard card)
+            {
+                if (card.WeaponIndex == index) return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>
