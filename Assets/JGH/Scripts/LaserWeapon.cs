@@ -53,10 +53,10 @@ public class LaserWeapon : BaseWeapon
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
-        if (currentLaserInstance != null)
-        {
-            Destroy(currentLaserInstance);
-        }
+        // if (currentLaserInstance != null)
+        // {
+        //     Destroy(currentLaserInstance);
+        // }
 
         // 1. 레이저 프리팹 생성
         currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
@@ -87,7 +87,8 @@ public class LaserWeapon : BaseWeapon
         isFiring = true;
         isReloading = false;
 
-        yield return new WaitForSeconds(laserDuration);
+        // yield return new WaitForSeconds(laserDuration);
+        yield return new WaitUntil(() => currentLaser.CanShoot);
 
         isFiring = false;
         StartAutoReload();
