@@ -8,14 +8,14 @@ public class Bullet : MonoBehaviourPun, IPunObservable
 {
     // 무기에서 조절
     // [SerializeField] public float Speed;                     // 총알 속도
-    [SerializeField] public float Damage;                    // 데미지 (현재 미사용)
-    [SerializeField] private Rigidbody2D _rb;                // 물리 기반 이동
-    [SerializeField] private GameObject _bigBullet;          // 큰 총알 이펙트
-    [SerializeField] private GameObject _explosiveBullet;    // 폭발 총알 이펙트
+    [SerializeField] public float Damage; // 데미지 (현재 미사용)
+    [SerializeField] private Rigidbody2D _rb; // 물리 기반 이동
+    [SerializeField] private GameObject _bigBullet; // 큰 총알 이펙트
+    [SerializeField] private GameObject _explosiveBullet; // 폭발 총알 이펙트
     [SerializeField] private GameObject _explosiveBulletEffect; // 폭발 이펙트 프리팹
-    [SerializeField] private GameObject _hitEffect;          // 일반 충돌 이펙트
-    [SerializeField] private bool _isBigBullet;              // 큰 총알 여부
-    [SerializeField] private bool _isExplosiveBullet;        // 폭발 총알 여부
+    [SerializeField] private GameObject _hitEffect; // 일반 충돌 이펙트
+    [SerializeField] private bool _isBigBullet; // 큰 총알 여부
+    [SerializeField] private bool _isExplosiveBullet; // 폭발 총알 여부
 
     [SerializeField] private PlayerStatusDataSO playerStatusDataSo;
 
@@ -91,8 +91,12 @@ public class Bullet : MonoBehaviourPun, IPunObservable
 
         if (collision.gameObject.layer == 8)
         {
-            IDamagable damagable = collision.gameObject.GetComponent<IDamagable>();
-            Attack(damagable); // 플레이어에게 공격
+            var contact = collision.contacts[0];
+            var hitPosition = contact.point;
+            var hitNormal = contact.normal;
+
+            var damagable = collision.gameObject.GetComponent<IDamagable>();
+            Attack(damagable, hitPosition, hitNormal); // 플레이어에게 공격
         }
 
         // 약간의 시간 지연 후 안전하게 파괴
@@ -105,7 +109,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     // {
     //     BulletMove(_baseWeapon.bulletSpeed);
     // }
-
 
     // 탄알이 2개로 날아가는 문제가 있어 추가
     // private IEnumerator Start()
@@ -133,7 +136,7 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     public void DefaultShot(Collision2D collision)
     {
         // 기본 이펙트 생성
-        GameObject effect = PhotonNetwork.Instantiate("Fragment", transform.position, Quaternion.identity);
+        var effect = PhotonNetwork.Instantiate("Fragment", transform.position, Quaternion.identity);
         // GameObject effect = Instantiate(_hitEffect.name, transform.position, Quaternion.identity);
         effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
         CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
@@ -152,7 +155,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         // _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
         // StartCoroutine(DestroyAfterDelay(4f));
     }
-
 
     public IEnumerator DestroyAfterDelay(float delay)
     {
@@ -177,12 +179,11 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     /// <summary>
     /// IDamagable 인터페이스를 구현한 객체에게 공격을 수행합니다.
     /// </summary>
-    public void Attack(IDamagable damagable)
+    public void Attack(IDamagable damagable, Vector2 position, Vector2 direction)
     {
         // 데미지 전달 부분은 임시데미지. 최종 데미지를 전달하도록 수정해야함.
-        damagable.TakeDamage(6f);
+        damagable.TakeDamage(6f, position, direction);
     }
-
 
     // private void Update()
     // {
@@ -192,8 +193,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     //         transform.rotation = Quaternion.Slerp(transform.rotation, _networkRotation, Time.deltaTime * 150f);
     //     }
     // }
-
-
 
     [PunRPC]
     public void BigBulletShot()
@@ -215,7 +214,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         PhotonNetwork.Destroy(bullet);
     }
 
-
     [PunRPC]
     public void ExplosiveBulletShot()
     {
@@ -235,6 +233,4 @@ public class Bullet : MonoBehaviourPun, IPunObservable
             _networkRotation = (Quaternion)stream.ReceiveNext();
         }
     }
-
 }
-

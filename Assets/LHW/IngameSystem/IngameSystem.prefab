@@ -2566,6 +2566,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6571036711804565555}
   - component: {fileID: 5145603770729905725}
+  - component: {fileID: 2882797028150961264}
   m_Layer: 0
   m_Name: RandomMapCreator
   m_TagString: Untagged
@@ -2614,6 +2615,28 @@ MonoBehaviour:
   - {fileID: 5942931552343826983}
   - {fileID: 2826403221778210821}
   - {fileID: 4823608685518638584}
+--- !u!114 &2882797028150961264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890842974326709222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6553336430739875724
 GameObject:
   m_ObjectHideFlags: 0

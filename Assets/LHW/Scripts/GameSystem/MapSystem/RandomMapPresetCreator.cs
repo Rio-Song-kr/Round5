@@ -2,7 +2,7 @@ using System;
 using Photon.Pun;
 using UnityEngine;
 
-public class RandomMapPresetCreator : MonoBehaviour
+public class RandomMapPresetCreator : MonoBehaviourPun
 {
     // ���� Resources�� ������ �Ÿ� �ش� ������� ���� �ʿ�
     [SerializeField] GameObject[] mapResources;
@@ -37,8 +37,18 @@ public class RandomMapPresetCreator : MonoBehaviour
 
     private void OnEnable()
     {
-        InGameManager.OnRoundStart += OnRoundStart;
+        InGameManager.OnGameStart += OnGameStart;
+        InGameManager.OnRoundStart += OnRoundStart;        
+    }
 
+    private void OnDisable()
+    {
+        InGameManager.OnGameStart -= OnGameStart;
+        InGameManager.OnRoundStart -= OnRoundStart;
+    }
+
+    void OnGameStart()
+    {
         if (PhotonNetwork.IsMasterClient)
         {
             for (int i = 0; i < mapListTransform.Length; i++)
@@ -49,11 +59,6 @@ public class RandomMapPresetCreator : MonoBehaviour
                 Debug.Log("�ݺ�");
             }
         }
-    }
-
-    private void OnDisable()
-    {
-        InGameManager.OnRoundStart -= OnRoundStart;
     }
 
     void OnRoundStart()
@@ -115,5 +120,11 @@ public class RandomMapPresetCreator : MonoBehaviour
                     MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.AllBuffered, false);
                 }
             }
+    }
+
+    [PunRPC]
+    public void ActivateMapCreator(bool activation)
+    {
+        gameObject.SetActive(activation);
     }
 }

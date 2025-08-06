@@ -22,7 +22,6 @@ public class CardManager : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// 현재 카드의 능력치를 계산하여 반환합니다.
     /// 카드가 없으면 null을 반환합니다.
@@ -41,9 +40,11 @@ public class CardManager : MonoBehaviour
         int AmmoConsumptionSum = 0;
         int count = 0;
 
+        var playerStats = ScriptableObject.CreateInstance<PlayerStatusDataSO>();
+
         if (_cards == null || _cards.Count == 0)
         {
-            return null; // 카드가 없으면 null 반환
+            return playerStats; // 카드가 없으면 null 반환
         }
 
         foreach (var card in _cards)
@@ -63,9 +64,9 @@ public class CardManager : MonoBehaviour
             }
         }
 
-        PlayerStatusDataSO playerStats = ScriptableObject.CreateInstance<PlayerStatusDataSO>();
         playerStats.DefaultDamage = _pStatus.DefaultDamage * (DamageMultiplierSum != 0 ? DamageMultiplierSum : 1);
-        playerStats.DefaultReloadSpeed = (_pStatus.DefaultReloadSpeed + ReloadTimeAdditionSum) * (ReloadTimeMultiplierSum != 0 ? ReloadTimeMultiplierSum : 1);
+        playerStats.DefaultReloadSpeed = (_pStatus.DefaultReloadSpeed + ReloadTimeAdditionSum) *
+                                         (ReloadTimeMultiplierSum != 0 ? ReloadTimeMultiplierSum : 1);
         playerStats.DefaultAttackSpeed = _pStatus.DefaultAttackSpeed * (AttackSpeedMultiplier != 0 ? AttackSpeedMultiplier : 1);
         playerStats.DefaultBulletSpeed = _pStatus.DefaultBulletSpeed * (BulletSpeedMultiplierSum != 0 ? BulletSpeedMultiplierSum : 1);
         playerStats.DefaultAmmo = 1 + AmmoIncreaseSum;
@@ -73,7 +74,6 @@ public class CardManager : MonoBehaviour
 
         return playerStats;
     }
-
 
     /// <summary>
     /// 현재 카드중에 무기 카드가 있는지 확인합니다.
@@ -109,6 +109,20 @@ public class CardManager : MonoBehaviour
         return weaponCards;
     }
 
+    public List<DefenceSkills> GetDefenceCard()
+    {
+        List<DefenceSkills> defenceSKillList = new();
+
+        foreach (var card in _cards)
+        {
+            if (card is not DefenseCard) continue;
+
+            var defenceSkills = card as DefenseCard;
+            defenceSKillList.Add(defenceSkills.DefenceSkill);
+        }
+        return defenceSKillList;
+    }
+
     /// <summary>
     /// 카드를 추가합니다.
     /// 카드가 null이 아니면 리스트에 추가합니다.
@@ -135,8 +149,5 @@ public class CardManager : MonoBehaviour
     /// 없다면 null을 반환합니다. 
     /// </summary>
     /// <returns></returns>
-    public List<CardBase> GetLists()
-    {
-        return _cards ?? null;
-    }
+    public List<CardBase> GetLists() => _cards ?? null;
 }
