@@ -73,11 +73,15 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
         OnDeath?.Invoke();
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        var rotation = Quaternion.Euler(0, 0, angle);
+        var rotation = Quaternion.Euler(0, 0, angle + 90);
+
+        Debug.Log(angle);
+
+        gameObject.SetActive(false);
 
         //todo 사망 Effect
-        var deadFragEffect = PhotonNetwork.Instantiate("DeadFragEffect", position, rotation);
-        var deadSmokeEffect = PhotonNetwork.Instantiate("DeadSmokeEffect", position, rotation);
+        var deadFragEffect = PhotonNetwork.Instantiate("DeadFragWrap", position, rotation);
+        var deadSmokeEffect = PhotonNetwork.Instantiate("DeadSmokeWrap", position, rotation);
 
         // 사망 시 모든 상태 초기화
         _activeEffect.Clear();
