@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerDisconnectedPopup : MonoBehaviour
+public class PlayerDisconnectedPopup : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject popupPanel;
 
     [SerializeField] private Button confirmButton;
-    
+
     private void OnEnable()
     {
         InGameManager.OnPlayerDisconnected += ShowDisconnectedPopup;
@@ -30,25 +30,32 @@ public class PlayerDisconnectedPopup : MonoBehaviour
     void ShowDisconnectedPopup()
     {
         popupPanel.SetActive(true);
-        
+
         // 게임 일시정지 
         Time.timeScale = 0;
     }
 
     void OnConfirmClick()
     {
-        StartCoroutine(DisconnectAndGoToLobby());
+        Time.timeScale = 1;
+        PhotonNetwork.LeaveRoom();
     }
 
-    private IEnumerator DisconnectAndGoToLobby()
+    public override void OnLeftRoom()
     {
-        PhotonNetwork.Disconnect();
+        base.OnLeftRoom();
+        
+                
+        //카드 상태 초기화.
+        CardManager.Instance.ClearLists();
 
-        while (PhotonNetwork.IsConnected)
-        {
-            yield return null;
-        }
+        var inGameManager = FindAnyObjectByType<InGameManager>();
+        if(inGameManager != null)
+            Destroy(inGameManager.gameObject);
+        
+        //카드 상태 초기화.
+        CardManager.Instance.ClearLists();
 
-        SceneManager.LoadScene("LobbyScene");
+        SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
     }
 }

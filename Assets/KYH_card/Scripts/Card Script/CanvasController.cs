@@ -13,7 +13,6 @@ public class CanvasController : MonoBehaviourPunCallbacks
     private bool alreadyStarted = false;
     private void Start()
     {
-        
         Debug.Log("CanvasController Start 호출");
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(false);
@@ -27,15 +26,19 @@ public class CanvasController : MonoBehaviourPunCallbacks
                 ? PhotonNetwork.PlayerList[0].ActorNumber
                 : PhotonNetwork.PlayerList[1].ActorNumber;
 
-            Hashtable props = new Hashtable();
+            var props = new Hashtable();
             props["IsFirstSelector"] = firstSelectorActorNum;
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+            // InGameManager.Instance.SetPlayerActorNumber(firstSelectorActorNum);
+            photonView.RPC(nameof(SetFirstSelectorActorNumber), RpcTarget.All, firstSelectorActorNum);
         }
 
         // ������/Ŭ���̾�Ʈ ���� ���� �ʱ�ȭ �õ�
-       // TryStartCardSelection();
-
+        // TryStartCardSelection();
     }
+
+    [PunRPC]
+    private void SetFirstSelectorActorNumber(int actorNumber) => InGameManager.Instance.SetPlayerActorNumber(actorNumber);
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
@@ -55,7 +58,6 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
         if (alreadyStarted)
         {
-
             Debug.LogWarning("[TryStartCardSelection] �̹� ���۵� �� �ߴ�");
             alreadyStarted = false;
 
@@ -72,13 +74,14 @@ public class CanvasController : MonoBehaviourPunCallbacks
         if (isMyTurn)
         {
             Debug.Log("���� ���� ������ �� ī�� ���� ����");
+            Debug.Log($"LocalPlayer : {PhotonNetwork.LocalPlayer.ActorNumber}, Selector : {selectorActorNum}");
 
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isWinner", out object isWinnerObj)
                 && (bool)isWinnerObj == true)
             {
                 Debug.Log("���� ���� �� ī�� ���� ����");
 
-                Hashtable props = new Hashtable();
+                var props = new Hashtable();
                 props["Select"] = true;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
@@ -134,7 +137,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
             {
                 Debug.Log("���� ���� �� ī�� ���� ����");
 
-                Hashtable props = new Hashtable();
+                var props = new Hashtable();
                 props["Select"] = true;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(props);
                 return;
@@ -174,7 +177,6 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
     public void DecideNextSelector()
     {
-
         Debug.Log("�ӽ� �׽�Ʈ�� ��,�� ���� ���� �ʱ�ȭ");
         // int nextSelector = Random.Range(0, 2) == 0
         //     ? PhotonNetwork.PlayerList[0].ActorNumber
@@ -182,7 +184,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
         int nextSelector = PhotonNetwork.PlayerList[0].ActorNumber;
 
 
-        Hashtable props = new Hashtable();
+        var props = new Hashtable();
         props["IsFirstSelector"] = nextSelector;
         PhotonNetwork.CurrentRoom.SetCustomProperties(props);
     }

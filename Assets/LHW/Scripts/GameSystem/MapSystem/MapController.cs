@@ -4,16 +4,16 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// »ý¼ºµÈ ·£´ý 3°³ÀÇ ¸ÊÀÌ ÇÑ °ÔÀÓ Á¾·á ÈÄ ÀÌµ¿ÇÏ°Ô ÇÏ´Â ½ºÅ©¸³Æ®
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï°ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®
 /// </summary>
 public class MapController : MonoBehaviour
 {
     [Header("Offset")]
-    [Tooltip("¸Ê ÀüÈ¯ ½ÃÀÛ µô·¹ÀÌ")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float mapChangeDelay = 0.8f;
 
     [SerializeField] private GameObject[] rounds;
-    public float MapChangeDelay { get { return mapChangeDelay; } }
+    public float MapChangeDelay => mapChangeDelay;
 
     private Coroutine moveCoroutine;
 
@@ -34,7 +34,7 @@ public class MapController : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÔÀÓ Á¾·á ÈÄ ¸ÊÀÌ ÇÑ ¹ø Èçµé¸²
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½é¸²
     /// </summary>
     private void MapShake()
     {
@@ -42,7 +42,7 @@ public class MapController : MonoBehaviour
     }
 
     /// <summary>
-    /// µô·¹ÀÌ ½Ã°£ ÀÌÈÄ ¸ÊÀÇ ¿òÁ÷ÀÓÀÌ ½ÃÀÛµÊ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ûµï¿½
     /// </summary>
     private void MapMove()
     {
@@ -51,25 +51,25 @@ public class MapController : MonoBehaviour
         if (InGameManager.Instance.CurrentMatch > 2) return;
 
         moveCoroutine = StartCoroutine(MovementCoroutine());
-
     }
 
-    IEnumerator MovementCoroutine()
+    private IEnumerator MovementCoroutine()
     {
-        WaitForSeconds delay = new WaitForSeconds(mapChangeDelay);
+        var delay = new WaitForSeconds(mapChangeDelay);
 
-        MapDynamicMovement[] movements = rounds[InGameManager.Instance.CurrentMatch].GetComponentsInChildren<MapDynamicMovement>();
+        var movements = rounds[InGameManager.Instance.CurrentMatch].GetComponentsInChildren<MapDynamicMovement>();
 
         for (int i = 0; i < movements.Length; i++)
         {
             if (movements[i] != null)
             {
-
                 movements[i].DynamicMove();
                 yield return delay;
             }
         }
 
         moveCoroutine = null;
+
+        //todo ì—¬ê¸°ì—ì„œ player ìœ„ì¹˜ ì´ˆê¸°í™” ë° ì¤‘ë ¥ 1ë¡œ ì„¤ì •í•´ì¤˜ì•¼ í•¨
     }
 }

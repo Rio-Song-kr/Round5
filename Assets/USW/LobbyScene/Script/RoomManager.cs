@@ -232,6 +232,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         isInRoom = true;
+        isLoadingScene = false;
         currentRoomCode = PhotonNetwork.CurrentRoom.Name;
         
         if(roomCodeText) 
@@ -287,6 +288,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         isInRoom = false;
+        isLoadingScene = false;
         
         if (generateCodeButton) generateCodeButton.interactable = true;
         if (joinRoomButton) joinRoomButton.interactable = true;

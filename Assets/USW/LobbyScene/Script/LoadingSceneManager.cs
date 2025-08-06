@@ -23,6 +23,8 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
     [SerializeField] private Transform player1EndPos;
     [SerializeField] private Transform player2StartPos;
     [SerializeField] private Transform player2EndPos;
+    [SerializeField] private Transform player1RealEndPos;
+    [SerializeField] private Transform player2RealEndPos;
     
     private string gameSceneName = "InGameScene"; 
     private bool isLoadingComplete = false;
@@ -34,10 +36,8 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
     
     private void InitializeLoadingScene()
     {
-        // 플레이어 닉네임 설정
         SetupPlayerNames();
         
-        // 로딩 애니메이션 시작
         StartCoroutine(LoadingSequence());
     }
     
@@ -53,7 +53,6 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
             string player1Name = players[0].NickName;
             string player2Name = players[1].NickName;
             
-            // 자신이 플레이어 1인지 2인지에 따라 위치 결정
             if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
             {
                 if (player1NameText) player1NameText.text = player1Name;
@@ -78,104 +77,60 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
     /// </summary>
     private IEnumerator LoadingSequence()
     {
-        // 1단계: 닉네임 교차 애니메이션
         yield return StartCoroutine(PlayNameCrossAnimation());
-        
-        // 2단계: 게임 씬 로딩
+       
         yield return StartCoroutine(LoadGameScene());
     }
     
     /// <summary>
-    /// 닉네임 교차 애니메이션 (DOTween pro로 대체할 예정임)
+    /// 닉네임 교차 애니메이션 
     /// </summary>
     private IEnumerator PlayNameCrossAnimation()
     {
+      
+        player1NameText.transform.position = player1StartPos.position;
+        player2NameText.transform.position = player2StartPos.position;
         
-        yield return StartCoroutine(SimpleNameAnimation());
+      
+        LoadingTextAnimation gradation1 = player1NameText.GetComponent<LoadingTextAnimation>();
+        LoadingTextAnimation gradation2 = player2NameText.GetComponent<LoadingTextAnimation>();
+        if (gradation1 != null) gradation1.BeginGradation();
+        if (gradation2 != null) gradation2.BeginGradation();
+
         
-        yield return new WaitForSeconds(nameAnimationDuration);
+        Sequence animSeq = DOTween.Sequence();
+        animSeq.Append(player1NameText.DOFade(1f, nameAnimationDuration));
+        animSeq.Join(player2NameText.DOFade(1f, nameAnimationDuration * 0.8f + 0.2f));
+        animSeq.Join(player1NameText.transform.DOMove(player1EndPos.position, nameAnimationDuration).SetEase(Ease.OutQuad));
+        animSeq.Join(player2NameText.transform.DOMove(player2EndPos.position, nameAnimationDuration).SetEase(Ease.OutQuad));
+        animSeq.AppendInterval(delayBetweenAnimations); 
+
+        
+        yield return animSeq.Play().WaitForCompletion();
+
+        yield return new WaitForSeconds(2f);
+        
+        Sequence exitSeq = DOTween.Sequence();
+        animSeq.Append(player1NameText.transform.DOMove(player1RealEndPos.position, nameAnimationDuration)
+            .SetEase(Ease.InQuad));
+        animSeq.Join(player2NameText.transform.DOMove(player2RealEndPos.position, nameAnimationDuration)
+            .SetEase(Ease.InQuad));
+        
+        yield return exitSeq.Play().WaitForCompletion();
     }
-    
-    /// <summary>
-    /// 간단한 이름 애니메이션 
-    /// </summary>
-    private IEnumerator SimpleNameAnimation()
-    {
-        float timer = 0f;
-        
-        while (timer < nameAnimationDuration)
-        {
-            timer += Time.deltaTime;
-            float progress = timer / nameAnimationDuration;
-            
-            // 알파값 애니메이션
-            if (player1NameText)
-            {
-                Color color = player1NameText.color;
-                color.a = Mathf.Lerp(0f, 1f, progress);
-                player1NameText.color = color;
-            }
-            
-            if (player2NameText)
-            {
-                Color color = player2NameText.color;
-                color.a = Mathf.Lerp(0f, 1f, progress * 0.8f + 0.2f);
-                player2NameText.color = color;
-            }
-            
-            yield return null;
-        }
-    }
-    
     /// <summary>
     /// 게임 씬 로딩
     /// </summary>
     private IEnumerator LoadGameScene()
     {
-        // 로딩 대기 시간
         yield return new WaitForSeconds(loadingDelay);
         
-        // 마스터 클라이언트만 씬 로드
         if (PhotonNetwork.IsMasterClient && !isLoadingComplete)
         {
             isLoadingComplete = true;
             PhotonNetwork.LoadLevel(gameSceneName);
         }
     }
-    
-    /// <summary>
-    /// 에디터에서 위치 시각화
-    /// </summary>
-    private void OnDrawGizmosSelected()
-    {
-        
-        if (player1StartPos != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(player1StartPos.position, 0.5f);
-        }
-        
-        if (player2StartPos != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(player2StartPos.position, 0.5f);
-        }
-        
-        
-        if (player1EndPos != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(player1EndPos.position, 0.5f);
-        }
-        
-        if (player2EndPos != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(player2EndPos.position, 0.5f);
-        }
-    }
-    
-    #region Photon Callbacks
     
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -186,5 +141,4 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
         }
     }
     
-    #endregion
 }

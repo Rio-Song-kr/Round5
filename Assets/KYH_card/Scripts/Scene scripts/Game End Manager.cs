@@ -7,45 +7,44 @@ using ExitGames.Client.Photon;
 
 public class GameEndManager : MonoBehaviourPunCallbacks
 {
-
-    void Awake()
+    private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
     }
-    void Update()
+    private void Update()
     {
-        // °ÔÀÓÀÌ ³¡³ª´Â »óÈ²À» ÀÓÀÇ·Î Ãâ·ÂÇÔ.
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // ¸¶½ºÅÍ°¡ true, ´Ù¸¥ ¾Ö´Â false
-            photonView.RPC(nameof(SetIsWinner), RpcTarget.All, PhotonNetwork.IsMasterClient);
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel("CardTest");
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Return))
-        {
-            // ¸¶½ºÅÍ°¡ false, ´Ù¸¥ ¾Ö´Â true
-            photonView.RPC(nameof(SetIsWinner), RpcTarget.All, !PhotonNetwork.IsMasterClient);
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel("CardTest");
-            }
-        }
+        // // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È²ï¿½ï¿½ ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½.
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     // ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ true, ï¿½Ù¸ï¿½ ï¿½Ö´ï¿½ false
+        //     photonView.RPC(nameof(SetIsWinner), RpcTarget.All, PhotonNetwork.IsMasterClient);
+        //     if (PhotonNetwork.IsMasterClient)
+        //     {
+        //         PhotonNetwork.LoadLevel("CardTest");
+        //     }
+        // }
+        // else if (Input.GetKeyDown(KeyCode.Return))
+        // {
+        //     // ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ false, ï¿½Ù¸ï¿½ ï¿½Ö´ï¿½ true
+        //     photonView.RPC(nameof(SetIsWinner), RpcTarget.All, !PhotonNetwork.IsMasterClient);
+        //     if (PhotonNetwork.IsMasterClient)
+        //     {
+        //         PhotonNetwork.LoadLevel("CardTest");
+        //     }
+        // }
     }
-
-    [PunRPC]
-    public void SetIsWinner(bool masterIsWinner)
-    {
-        bool isWinner = PhotonNetwork.IsMasterClient ? masterIsWinner : !masterIsWinner;
-
-        ExitGames.Client.Photon.Hashtable winnerProp = new ExitGames.Client.Photon.Hashtable
-        {
-            { "isWinner", isWinner }
-        };
-
-        PhotonNetwork.LocalPlayer.SetCustomProperties(winnerProp);
-        Debug.Log($"[GameEndManager] ³ª´Â {(isWinner ? "½ÂÀÚ" : "ÆÐÀÚ")}ÀÔ´Ï´Ù.");
-    }
+    //
+    // [PunRPC]
+    // public void SetIsWinner(bool masterIsWinner)
+    // {
+    //     bool isWinner = PhotonNetwork.IsMasterClient ? masterIsWinner : !masterIsWinner;
+    //
+    //     ExitGames.Client.Photon.Hashtable winnerProp = new ExitGames.Client.Photon.Hashtable
+    //     {
+    //         { "isWinner", isWinner }
+    //     };
+    //
+    //     PhotonNetwork.LocalPlayer.SetCustomProperties(winnerProp);
+    //     Debug.Log($"[GameEndManager] ï¿½ï¿½ï¿½ï¿½ {(isWinner ? "ï¿½ï¿½ï¿½ï¿½" : "ï¿½ï¿½ï¿½ï¿½")}ï¿½Ô´Ï´ï¿½.");
+    // }
 }
