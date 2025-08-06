@@ -5,6 +5,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using JetBrains.Annotations;
 
 public class CardSelectManager : MonoBehaviourPunCallbacks
 {
@@ -382,6 +383,9 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("모든 플레이어 선택 완료 → Game Scene 전환");
             // PhotonNetwork.LoadLevel("Game Scene");
+            PhotonView canvasView = canvasController.photonView;
+            canvasView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.All, false);
+            InGameManager.Instance.StartGame();
         }
     }
 

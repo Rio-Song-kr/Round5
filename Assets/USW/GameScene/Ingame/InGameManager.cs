@@ -98,8 +98,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private TestPlayerManager playerManager;
 
     private void Start()
-    {
-        
+    {        
         playerManager = FindFirstObjectByType<TestPlayerManager>();
     }
     
@@ -152,7 +151,10 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         InitializeScores();
         currentRound = 0;
         currentMatch = 0;
+
         SetGameState(GameState.RoundStarting);
+
+        
         OnGameStart?.Invoke();
         
         StartCoroutine(StartRoundWithDelay());
