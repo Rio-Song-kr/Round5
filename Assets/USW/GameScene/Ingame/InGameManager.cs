@@ -13,6 +13,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region Singleton
+
     public static InGameManager Instance { get; private set; }
 
     private void Awake()
@@ -27,9 +28,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         DontDestroyOnLoad(gameObject);
         Init();
     }
+
     #endregion
 
     #region Events
+
     public static event Action OnGameStart;
     public static event Action OnRoundStart;
     public static event Action OnRoundEnd;
@@ -37,24 +40,25 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public static event Action OnGameEnd;
     public static event Action OnCardSelectStart;
     public static event Action OnCardSelectEnd;
-    public static event Action<string> OnPlayerDefeated; 
+    public static event Action<string> OnPlayerDefeated;
     public static event Action<bool> OnRematchRequest;
 
     public static event Action OnPlayerDisconnected;
+
     #endregion
 
     #region 게임 status
+
     [Header("Game Settings")]
-    [SerializeField] private int roundsToWinMatch = 2; 
-    [SerializeField] private int matchesToWinGame = 2; 
+    [SerializeField] private int roundsToWinMatch = 2;
+    [SerializeField] private int matchesToWinGame = 2;
     [SerializeField] private float roundStartDelay = 3f;
-  
 
     public enum GameState
     {
         Waiting,
         RoundStarting,
-        RoundInProgress, 
+        RoundInProgress,
         RoundEnding,
         CardSelecting,
         MatchEnding,
@@ -85,33 +89,64 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private Dictionary<string, bool> rematchVotes = new Dictionary<string, bool>();
     private bool isWaitingForRematch = false;
     public bool IsWaitingForRematch => isWaitingForRematch;
+
     #endregion
 
-  
     public int CurrentRound => currentRound;
     public int CurrentMatch => currentMatch;
     public string LastRoundWinner => lastRoundWinner;
     public string LastMatchWinner => lastMatchWinner;
-    
+
+    private Dictionary<string, bool> _getIsMaster = new Dictionary<string, bool>();
+    public Dictionary<string, string> LeftRightActorNumber = new Dictionary<string, string>();
+
     public Dictionary<string, int> GetRoundScores() => new Dictionary<string, int>(roundScores);
     public Dictionary<string, int> GetMatchScores() => new Dictionary<string, int>(matchScores);
- 
-    
+
     private TestPlayerManager playerManager;
 
     private void Start()
-    {        
+    {
         playerManager = FindFirstObjectByType<TestPlayerManager>();
     }
-    
-  
+
+    public void SetPlayerActorNumber(int firstActorNumber)
+    {
+        int leftPlayerActorNumber = 0;
+        int rightPlayerActorNumber = 0;
+
+        if (firstActorNumber == PhotonNetwork.MasterClient.ActorNumber)
+            leftPlayerActorNumber = firstActorNumber;
+        else
+            rightPlayerActorNumber = firstActorNumber;
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player.ActorNumber == firstActorNumber) continue;
+
+            if (leftPlayerActorNumber == firstActorNumber)
+                rightPlayerActorNumber = player.ActorNumber;
+            else
+                leftPlayerActorNumber = player.ActorNumber;
+        }
+        string leftPlayerKey = leftPlayerActorNumber.ToString();
+        string rightPlayerKey = rightPlayerActorNumber.ToString();
+
+        LeftRightActorNumber["LeftPlayer"] = leftPlayerKey;
+        LeftRightActorNumber["RightPlayer"] = rightPlayerKey;
+        _getIsMaster[leftPlayerKey] = leftPlayerActorNumber == PhotonNetwork.MasterClient.ActorNumber;
+        _getIsMaster[rightPlayerKey] = rightPlayerActorNumber == PhotonNetwork.MasterClient.ActorNumber;
+        Debug.Log(
+            $"Left[{leftPlayerKey}] : {_getIsMaster[leftPlayerKey]}, Right[{rightPlayerKey}] : {_getIsMaster[rightPlayerKey]}");
+    }
 
     #region Initialization
+
     private void Init()
     {
         InitializeScores();
         SetGameState(GameState.Waiting);
-        
+
         // 플레이어 상태 감지 시작
         StartCoroutine(MonitorPlayerHealth());
     }
@@ -123,7 +158,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         playerAliveStatus.Clear();
         rematchVotes.Clear();
 
-        foreach (Player player in PhotonNetwork.PlayerList)
+        foreach (var player in PhotonNetwork.PlayerList)
         {
             string playerKey = GetPlayerKey(player);
             roundScores[playerKey] = 0;
@@ -133,13 +168,12 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    private string GetPlayerKey(Player player)
-    {
-        return player.ActorNumber.ToString();
-    }
+    private string GetPlayerKey(Player player) => player.ActorNumber.ToString();
+
     #endregion
 
     #region 게임 플로우
+
     public void StartGame()
     {
         if (!PhotonNetwork.IsMasterClient) return;
@@ -156,9 +190,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         SetGameState(GameState.RoundStarting);
 
-        
+
         OnGameStart?.Invoke();
-        
+
         StartCoroutine(StartRoundWithDelay());
     }
 
@@ -180,10 +214,10 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         currentRound++;
         SetGameState(GameState.RoundInProgress);
-        
+
         // 모든 플레이어 상태 초기화
         ResetPlayerStates();
-        
+
         OnRoundStart?.Invoke();
         Debug.Log($"라운드 {currentRound} 시작!");
     }
@@ -217,7 +251,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         SetGameState(GameState.RoundEnding);
         lastRoundWinner = winnerKey;
-        roundScores[winnerKey]++;        
+        roundScores[winnerKey]++;
 
         Debug.Log($"라운드 종료 승자: {winnerKey}");
 
@@ -254,13 +288,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         lastMatchWinner = winnerKey;
         matchScores[winnerKey]++;
         currentMatch++;
-        
+
         // 라운드 점수 초기화
         foreach (string key in roundScores.Keys.ToArray())
         {
             roundScores[key] = 0;
         }
-        
+
         Debug.Log($"매치 종료 승자: {winnerKey}");
 
         // 게임 승리 확인
@@ -270,6 +304,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
         else
         {
+            photonView.RPC(nameof(SetIsWinner), RpcTarget.All, _getIsMaster[winnerKey]);
+
             // 카드 선택 시작
             StartCoroutine(StartCardSelectWithDelay());
         }
@@ -305,16 +341,17 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         yield return new WaitForSeconds(3f);
         StartRematchWaiting();
     }
+
     #endregion
 
     #region Card Selection
+
     private IEnumerator StartCardSelectWithDelay()
     {
         yield return new WaitForSeconds(2f);
         StartCardSelect();
     }
 
-    
     // 시작되었을때 IngameManager 에서 StartCardSelect 호출하고
     // 카드 선택이 시작되었을때 Oncardselect Invoke 
     // 그럼 여기에서 이제 CardSelectManager 에서 하나 만들어서 이벤트 핸들러에서 캔버스 활성화 시키고 
@@ -332,10 +369,10 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void RPC_StartCardSelect()
     {
         SetGameState(GameState.CardSelecting);
-        CardSelectManager cardSelectManager = FindObjectOfType<CardSelectManager>();
+        var cardSelectManager = FindObjectOfType<CardSelectManager>();
         cardSelectManager.ResetCardSelectionState();
 
-        isCardSelectTime = true;        
+        isCardSelectTime = true;
         OnCardSelectStart?.Invoke();
         Debug.Log("카드 선택 시작");
     }
@@ -356,9 +393,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 다음 매치 시작
         StartCoroutine(StartRoundWithDelay());
     }
+
     #endregion
 
     #region 플레이어 health 모니터링
+
     private IEnumerator MonitorPlayerHealth()
     {
         while (true)
@@ -376,17 +415,17 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        List<string> alivePlayers = new List<string>();
+        var alivePlayers = new List<string>();
 
         foreach (var kvp in playerStatusDict)
         {
             string playerKey = kvp.Key;
-            PlayerStatus playerStatus = kvp.Value;
+            var playerStatus = kvp.Value;
 
             if (playerStatus != null && playerStatus.IsAlive)
             {
                 alivePlayers.Add(playerKey);
-                
+
                 if (!playerAliveStatus[playerKey])
                 {
                     playerAliveStatus[playerKey] = true;
@@ -433,9 +472,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             Debug.Log($"플레이어 {playerKey} 상태 등록 해제됨");
         }
     }
+
     #endregion
 
     #region 리매치 시스템
+
     private void StartRematchWaiting()
     {
         if (!PhotonNetwork.IsMasterClient) return;
@@ -448,13 +489,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         SetGameState(GameState.RematchWaiting);
         isWaitingForRematch = true;
-        
+
         // 투표 초기화
         foreach (string key in rematchVotes.Keys.ToArray())
         {
             rematchVotes[key] = false;
         }
-        
+
         Debug.Log("리매치 투표 시작!");
     }
 
@@ -494,14 +535,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             photonView.RPC("RPC_RematchAccepted", RpcTarget.All);
         }
     }
-    
+
     [PunRPC]
     private void RPC_RematchAccepted()
     {
         isWaitingForRematch = false;
         OnRematchRequest?.Invoke(true);
         Debug.Log("두명다 리매치 승인함");
-        
+
         // 게임 재시작
         RPC_StartGame();
     }
@@ -512,18 +553,19 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         isWaitingForRematch = false;
         OnRematchRequest?.Invoke(false);
         Debug.Log("리매치 거부됨");
-        
+
         // 메인 메뉴로 돌아가는건 gamerestartpanel EndGame 에서 처리하고있음
-        
     }
+
     #endregion
-    
+
     private void SetGameState(GameState newState)
     {
         currentGameState = newState;
     }
 
     #region Photon Callbacks
+
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         string playerKey = GetPlayerKey(newPlayer);
@@ -573,23 +615,19 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             isWaitingForRematch = (bool)stream.ReceiveNext();
         }
     }
+
     #endregion
 
     #region 퍼블릭 메서드
-    public int GetPlayerRoundScore(string playerKey)
-    {
-        return roundScores.ContainsKey(playerKey) ? roundScores[playerKey] : 0;
-    }
 
-    public int GetPlayerMatchScore(string playerKey)
-    {
-        return matchScores.ContainsKey(playerKey) ? matchScores[playerKey] : 0;
-    }
-    
+    public int GetPlayerRoundScore(string playerKey) => roundScores.ContainsKey(playerKey) ? roundScores[playerKey] : 0;
+
+    public int GetPlayerMatchScore(string playerKey) => matchScores.ContainsKey(playerKey) ? matchScores[playerKey] : 0;
+
     #endregion
-    
+
     #region (테스트용)
-    
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -613,48 +651,50 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             DebugVoteRematch(false);
         }
     }
-    
+
     /// <summary>
     /// 테스트: 왼쪽 플레이어 승리 처리
     /// </summary>
     public void DebugLeftPlayerWin()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        
+
         if (PhotonNetwork.PlayerList.Length > 0)
         {
-            string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+            // string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
+            string leftPlayerKey = LeftRightActorNumber["LeftPlayer"];
             Debug.Log("왼쪽 플레이어 승리");
             EndRound(leftPlayerKey);
         }
     }
-    
+
     /// <summary>
     /// 테스트: 오른쪽 플레이어 승리 처리
     /// </summary>
     public void DebugRightPlayerWin()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        
+
         if (PhotonNetwork.PlayerList.Length > 1)
         {
-            string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
+            // string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
+            string rightPlayerKey = LeftRightActorNumber["RightPlayer"];
             Debug.Log("오른쪽 플레이어 승리");
             EndRound(rightPlayerKey);
         }
     }
-    
+
     /// <summary>
     /// 테스트: 게임 시작
     /// </summary>
     public void DebugStartGame()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        
+
         Debug.Log("게임 시작!");
         StartGame();
     }
-    
+
     /// <summary>
     /// 테스트: 리매치 투표
     /// </summary>
@@ -663,5 +703,20 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Debug.Log($"리매치 투표 - {(vote ? "찬성" : "반대")}");
         VoteRematch(vote);
     }
+
     #endregion
+
+    [PunRPC]
+    public void SetIsWinner(bool masterIsWinner)
+    {
+        bool isWinner = PhotonNetwork.IsMasterClient ? masterIsWinner : !masterIsWinner;
+
+        var winnerProp = new Hashtable
+        {
+            { "isWinner", isWinner }
+        };
+
+        PhotonNetwork.LocalPlayer.SetCustomProperties(winnerProp);
+        Debug.Log($"[GameEndManager] ���� {(isWinner ? "����" : "����")}�Դϴ�.");
+    }
 }
