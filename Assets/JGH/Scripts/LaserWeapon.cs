@@ -11,7 +11,7 @@ public class LaserWeapon : BaseWeapon
     
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
-   
+
 
     public override void Attack(Transform firingPoint)
     {
@@ -25,11 +25,12 @@ public class LaserWeapon : BaseWeapon
     [PunRPC]
     private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
-        StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
+        // StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
         
         if (currentLaserInstance != null)
         {
             PhotonNetwork.Destroy(currentLaserInstance); // Destroy(gameObject)가 아닌 PhotonNetwork.Destroy!
+            // _poolManager.Destroy(currentLaserInstance);
             currentLaserInstance = null;
         }
         
@@ -53,10 +54,6 @@ public class LaserWeapon : BaseWeapon
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
-        if (currentLaserInstance != null)
-        {
-            Destroy(currentLaserInstance);
-        }
 
         // 1. 레이저 프리팹 생성
         currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
@@ -79,6 +76,7 @@ public class LaserWeapon : BaseWeapon
         {
             StartCoroutine(FireLaserRoutine());
         }
+        
 
     }
 
@@ -96,6 +94,7 @@ public class LaserWeapon : BaseWeapon
         if (currentLaserInstance != null)
         {
             PhotonNetwork.Destroy(currentLaserInstance);
+            // _poolManager.Destroy(currentLaserInstance);
         }
 
         currentLaserInstance = null;
@@ -131,8 +130,8 @@ public class LaserWeapon : BaseWeapon
         base.OnDisable();
         isFiring = false;
 
-        if (currentLaserInstance != null)
-        {
+        if (currentLaserInstance != null){
+            // _poolManager.Destroy(currentLaserInstance);
             PhotonNetwork.Destroy(currentLaserInstance);
             currentLaserInstance = null;
         }

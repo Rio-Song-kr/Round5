@@ -46,6 +46,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     
     protected virtual void Start()
     {
+        
         if (photonView.IsMine)
         {
             maxAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
@@ -104,6 +105,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected void ReloadSpeedFromAnimator()
     {
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
+        Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
         float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
         
         photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
@@ -129,6 +131,11 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
                 FinishReload();
             }
         }
+        
+        if (photonView.IsMine)
+        {
+            maxAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
+        } 
     }
 
     protected void StartAutoReload()
@@ -199,6 +206,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void UpdateAmmoUI()
     {
+        Debug.Log($"currentAmmo: {currentAmmo}, maxAmmo: {maxAmmo}");
+        
         ammoDisplay?.UpdateAmmoIcons(currentAmmo, maxAmmo);
         // ammoDisplay?.UpdateAmmoIcons(currentAmmo, (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo);
     }

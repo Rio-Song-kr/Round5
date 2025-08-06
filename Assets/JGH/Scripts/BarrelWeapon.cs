@@ -1,12 +1,18 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
 
 public class BarrelWeapon : BaseWeapon
 {
-    public int pelletCount = 6; // 퍼지는 총알 개수
+    public int pelletCount;
     public float spreadAngle = 30f; // 퍼지는 각도
     public WeaponType weaponType = WeaponType.Shotgun;
-    
+
+    private void FixedUpdate()
+    {
+        pelletCount =  (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption; // 퍼지는 총알 개수
+    }
+
     // 무기 발사
     public override void Attack(Transform firingPoint)
     {
@@ -52,7 +58,7 @@ public class BarrelWeapon : BaseWeapon
         lastAttackTime = Time.time;
         UpdateAmmoUI();
         
-        if (currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption)
+        if (currentAmmo < CardManager.Instance.GetCaculateCardStats().DefaultAmmo)
         {
             ReloadSpeedFromAnimator();
             StartAutoReload();

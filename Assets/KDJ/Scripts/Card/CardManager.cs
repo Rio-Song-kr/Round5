@@ -61,7 +61,7 @@ public class CardManager : MonoBehaviour
                 AmmoIncreaseSum += attackCard.AmmoIncrease;
                 AmmoConsumptionSum += attackCard.AmmoConsumption;
             }
-            Debug.Log($"{count}회차 연산 결과 - BulletSpeedMultiplierSum: {BulletSpeedMultiplierSum}, DamageMultiplierSum: {DamageMultiplierSum}, ReloadTimeMultiplierSum: {ReloadTimeMultiplierSum}, BulletSpeedMultiplier: {BulletSpeedMultiplier}, AttackSpeedMultiplier: {AttackSpeedMultiplier}, ReloadTimeAdditionSum: {ReloadTimeAdditionSum}, AmmoIncreaseSum: {AmmoIncreaseSum}, AmmoConsumptionSum: {AmmoConsumptionSum}");
+            // Debug.Log($"{count}회차 연산 결과 - BulletSpeedMultiplierSum: {BulletSpeedMultiplierSum}, DamageMultiplierSum: {DamageMultiplierSum}, ReloadTimeMultiplierSum: {ReloadTimeMultiplierSum}, BulletSpeedMultiplier: {BulletSpeedMultiplier}, AttackSpeedMultiplier: {AttackSpeedMultiplier}, ReloadTimeAdditionSum: {ReloadTimeAdditionSum}, AmmoIncreaseSum: {AmmoIncreaseSum}, AmmoConsumptionSum: {AmmoConsumptionSum}");
         }
 
         PlayerStatusDataSO playerStats = ScriptableObject.CreateInstance<PlayerStatusDataSO>();
