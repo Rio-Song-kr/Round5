@@ -1,0 +1,1240 @@
+fileFormatVersion: 2
+guid: c3fa431097980584792c099dd82af123
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b085b048551b0e7499dd29283555e07d
+      internalID: -371662244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_1
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08e8435ab15eb92429366dfe36fee1ba
+      internalID: -540806006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_2
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3caa2cc4a832fc42b5b2c55c1567bdc
+      internalID: 49899758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_3
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1806be5eb00d964cb1a2a06cc546ec6
+      internalID: -925114670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_4
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3938ac15cf3b734593449762c10dc8a
+      internalID: 1281255778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_5
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25668f50bbfffd749b3a5cbeb8960fa3
+      internalID: 1546049951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_6
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9215116f4eb8fe40a1a73ed9c942306
+      internalID: -756415787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_7
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1bcae3050fb8a243beb487fcb7279c7
+      internalID: 2084110276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_8
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36ef50be1d222b44489593d56ddbca9c
+      internalID: -667995964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_9
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 1424
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cf95e141bfcb7c45b18fcabec8da0ce
+      internalID: 1546776911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14a8ad2ca02c6a648b03860155ba799d
+      internalID: 436282642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_11
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4734e0158dc10d47a219733a933e8de
+      internalID: 1834326944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_12
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 937925fa006d23d4baf28b49c2ad3e74
+      internalID: 1028371374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_13
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 408f923e5cb85f34bb04f0de28a17396
+      internalID: 1596100044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_14
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc5df51b04dcd1446989fe48afb40baa
+      internalID: 1384649003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_15
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c7e45995ad9cf34caaa17f1820c2d9d
+      internalID: 1554322986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_16
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fbf47885e34af44b958b3011830ed73
+      internalID: -131375576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_17
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d133ed59b03abd042a1da824da6b4d78
+      internalID: 1070990181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_18
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f859ac5113570645bcc228997cf8b46
+      internalID: -752704293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_19
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 1068
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c46a2e22bbb951043abb9f39ba3dbce7
+      internalID: 871109267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bdcad3d03e12cc40a07e8282967cfe5
+      internalID: -815849937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_21
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09a9df62707abc74eb8b6bc19f10e8e7
+      internalID: 2014375464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_22
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00aed02ff188e6d409a57839cfab0e62
+      internalID: -1920448037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_23
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23bab15f69b9506498d9d676fb21001d
+      internalID: -1876905826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_24
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a23c99275cd2a5643b9d60056d5cbadc
+      internalID: 1528167742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_25
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfed1c93d0106ea4c9e49f0bbf127e49
+      internalID: -900968731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_26
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 839719bb1bc080942aeb56d744e70532
+      internalID: -862957105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_27
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9db675124e0bf4647a1411a451113bcc
+      internalID: -230203305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_28
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b353460f6b5dc2340ba40e6c2a21c9ab
+      internalID: 1016862563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_29
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 712
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8df6f436bde901458da6a2e036a7c03
+      internalID: -484189967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af9fac99109fd8c49bc3810763a01eb2
+      internalID: 1206089568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_31
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa45f6d0f3ab38b41b56404e8fdbfb38
+      internalID: 402278145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_32
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e162462aa572e9e478462df85b6a1686
+      internalID: 773939098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_33
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45532635ff7480b43ac27acfd0b909ff
+      internalID: -1791084383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_34
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c73b85d86103a1940a98f27e3002e17b
+      internalID: -615616375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_35
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03006e389ebeed94b95cb6d1ae6673f3
+      internalID: 64409004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_36
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdfdc755d32897442b85e1a04e200d5a
+      internalID: -2087485684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_37
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa84ce2ac7fba2247bbbee6ae1823456
+      internalID: 425225546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_38
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c0d3d9553045ae4d9a99f508e155b82
+      internalID: -109210355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_39
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 356
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11d54749ed50f0c43899f91d8c36e859
+      internalID: -2001891940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43c8e42bbdb3b864384bcb5b1d51b5ad
+      internalID: 454990177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_41
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35f3637b9bee87f4d9ada5a08a773a22
+      internalID: -33541881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_42
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06f2ad7e38959ba4db8c706368cf46d8
+      internalID: -1154602892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_43
+      rect:
+        serializedVersion: 2
+        x: 1362
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 379afe52611350f4d9c16a0f39839d75
+      internalID: 12868227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_44
+      rect:
+        serializedVersion: 2
+        x: 1816
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49342692cf59b3d439ba985ee1f2de0a
+      internalID: 1820390545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_45
+      rect:
+        serializedVersion: 2
+        x: 2270
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 221fb152f40d03c46a8911cf5f96cd0b
+      internalID: 898866974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_46
+      rect:
+        serializedVersion: 2
+        x: 2724
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ac6067ca89611b4ab6fddd7733c916a
+      internalID: -437901061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_47
+      rect:
+        serializedVersion: 2
+        x: 3178
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8387d2aa1334de4798b727bbd035e08
+      internalID: -1030925775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_48
+      rect:
+        serializedVersion: 2
+        x: 3632
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: def716b46c732dc45b2d9344fc3a02a9
+      internalID: -172672143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ExplosiveBullet_Image_49
+      rect:
+        serializedVersion: 2
+        x: 4086
+        y: 0
+        width: 454
+        height: 356
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c52a800e8137b441a3fbddb0ea6ebca
+      internalID: -1307558418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 7f7a29726144ce0488c8dcb8342ceb05
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      ExplosiveBullet_Image_0: -371662244
+      ExplosiveBullet_Image_1: -540806006
+      ExplosiveBullet_Image_10: 436282642
+      ExplosiveBullet_Image_11: 1834326944
+      ExplosiveBullet_Image_12: 1028371374
+      ExplosiveBullet_Image_13: 1596100044
+      ExplosiveBullet_Image_14: 1384649003
+      ExplosiveBullet_Image_15: 1554322986
+      ExplosiveBullet_Image_16: -131375576
+      ExplosiveBullet_Image_17: 1070990181
+      ExplosiveBullet_Image_18: -752704293
+      ExplosiveBullet_Image_19: 871109267
+      ExplosiveBullet_Image_2: 49899758
+      ExplosiveBullet_Image_20: -815849937
+      ExplosiveBullet_Image_21: 2014375464
+      ExplosiveBullet_Image_22: -1920448037
+      ExplosiveBullet_Image_23: -1876905826
+      ExplosiveBullet_Image_24: 1528167742
+      ExplosiveBullet_Image_25: -900968731
+      ExplosiveBullet_Image_26: -862957105
+      ExplosiveBullet_Image_27: -230203305
+      ExplosiveBullet_Image_28: 1016862563
+      ExplosiveBullet_Image_29: -484189967
+      ExplosiveBullet_Image_3: -925114670
+      ExplosiveBullet_Image_30: 1206089568
+      ExplosiveBullet_Image_31: 402278145
+      ExplosiveBullet_Image_32: 773939098
+      ExplosiveBullet_Image_33: -1791084383
+      ExplosiveBullet_Image_34: -615616375
+      ExplosiveBullet_Image_35: 64409004
+      ExplosiveBullet_Image_36: -2087485684
+      ExplosiveBullet_Image_37: 425225546
+      ExplosiveBullet_Image_38: -109210355
+      ExplosiveBullet_Image_39: -2001891940
+      ExplosiveBullet_Image_4: 1281255778
+      ExplosiveBullet_Image_40: 454990177
+      ExplosiveBullet_Image_41: -33541881
+      ExplosiveBullet_Image_42: -1154602892
+      ExplosiveBullet_Image_43: 12868227
+      ExplosiveBullet_Image_44: 1820390545
+      ExplosiveBullet_Image_45: 898866974
+      ExplosiveBullet_Image_46: -437901061
+      ExplosiveBullet_Image_47: -1030925775
+      ExplosiveBullet_Image_48: -172672143
+      ExplosiveBullet_Image_49: -1307558418
+      ExplosiveBullet_Image_5: 1546049951
+      ExplosiveBullet_Image_6: -756415787
+      ExplosiveBullet_Image_7: 2084110276
+      ExplosiveBullet_Image_8: -667995964
+      ExplosiveBullet_Image_9: 1546776911
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

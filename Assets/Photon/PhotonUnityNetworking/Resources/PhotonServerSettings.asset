@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
+  m_Name: PhotonServerSettings
+  m_EditorClassIdentifier: 
+  AppSettings:
+    AppIdRealtime: bb11766b-46e2-4a18-a0f7-0bf8b4830c17
+    AppIdFusion: 
+    AppIdChat: 
+    AppIdVoice: 
+    AppVersion: 
+    UseNameServer: 1
+    FixedRegion: 
+    Server: 
+    Port: 0
+    ProxyServer: 
+    Protocol: 0
+    EnableProtocolFallback: 1
+    AuthMode: 0
+    EnableLobbyStatistics: 0
+    NetworkLogging: 1
+  DevRegion: kr
+  PunLogging: 0
+  EnableSupportLogger: 0
+  RunInBackground: 1
+  StartInOfflineMode: 0
+  RpcList:
+  - ActivateFrostSlamEffect
+  - ActivateMapCreator
+  - AddPlayer
+  - ApplyFrostSlamEffect
+  - ApplyReduceEffect
+  - ApplyReduceSpeed
+  - BigBulletShot
+  - CardSelectUIActivate
+  - ChangeScene
+  - ClickRpc
+  - DefaultShot
+  - DestroyRpc
+  - DestroySpaceship
+  - DisableShieldEffect
+  - DisableShieldObject
+  - DisableShieldsUpEffect
+  - EndEffect
+  - ExplosiveBulletShot
+  - FillAmountInit
+  - Fire
+  - GameRestartPanelActivate
+  - InitBullet
+  - InitializeArc
+  - InitializeArcEffect
+  - InitializeComponent
+  - InitializeShieldsUpEffect
+  - OnEmergencyReset
+  - OnForceJump
+  - OnHookAttached
+  - OnHookDetached
+  - OnHookEffect
+  - OnJumpStateChanged
+  - OnNormalJump
+  - OnSetPosition
+  - OnSpriteFlip
+  - OnStatusEffectApplied
+  - OnStatusEffectRemoved
+  - OnVisualEffectChanged
+  - OnWallJump
+  - OnWallStateChanged
+  - PlayHitEffect
+  - PlayVfxArc
+  - RemoveReduceSpeed
+  - RespawnSpaceship
+  - ReturnToPool
+  - RoundActivate
+  - RoundChange
+  - RoundOverPanelActivate
+  - RoundWinImgAnimationActivate
+  - RPC_DynamicMove
+  - RPC_EndCardSelect
+  - RPC_EndGame
+  - RPC_EndMatch
+  - RPC_EndRound
+  - RPC_FinishReload
+  - RPC_FireLaser
+  - RPC_Flip
+  - RPC_FlipCardByIndex
+  - RPC_HighlightCardByIndex
+  - RPC_PlayCardSelectionAnimation
+  - RPC_PlayerDefeated
+  - RPC_PlayShrinkAnimation
+  - RPC_RematchAccepted
+  - RPC_RematchDeclined
+  - RPC_SelectCardArm
+  - RPC_SetAnimatorSpeed
+  - RPC_SetBulletType
+  - RPC_SetWeapon
+  - RPC_StartAutoReload
+  - RPC_StartCardSelect
+  - RPC_StartGame
+  - RPC_StartRematchWaiting
+  - RPC_StartRound
+  - RPC_SwitchTurnToOther
+  - RPC_SyncClientCanvas
+  - RPC_SyncMasterCanvas
+  - RPC_TextInit
+  - RPC_UnhighlightCardByIndex
+  - RPC_VoteRematch
+  - SetDisplayHookLineRenderer
+  - SetFillAmount
+  - SetIsWinner
+  - SetParentToPanel
+  - SetParentToRound
+  - SetPoolRPC
+  - Shoot
+  - StartEffect
+  - SyncTargetPosition
+  - TakeDamage
+  - UpdateFirstLine
+  - UseShieldEffect
+  - UseShieldsUpEffect
+  - WinImgUIActivate
+  - WinnerImageInit
+  - WinnerImageMove
+  - WinnerImageScaleChange
+  - SetFirstSelectorActorNumber
+  - InitPlayers
+  - AddDefenceSkills
+  - CheckPlayerHealthRPC
+  - DeactivatePassiveSkills
+  - SetCurrentHP
+  - SetStartedRPC
+  - UseActiveSkills
+  DisableAutoOpenWizard: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 1
