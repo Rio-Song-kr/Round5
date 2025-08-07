@@ -397,7 +397,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                InGameManager.Instance.StartRound();
+                InGameManager.Instance.EndCardSelect();
             }
         }
     }

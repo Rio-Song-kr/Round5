@@ -11,7 +11,7 @@ public class MapController : MonoBehaviourPunCallbacks
 {
     [Header("Offset")]
     [Tooltip("�� ��ȯ ���� ������")]
-    [SerializeField] private float mapChangeDelay = 0.8f;
+    [SerializeField] private float mapChangeDelay = 1f;
 
     [SerializeField] private GameObject[] rounds;
     public float MapChangeDelay => mapChangeDelay;
