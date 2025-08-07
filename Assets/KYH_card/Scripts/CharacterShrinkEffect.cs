@@ -8,6 +8,9 @@ public class CharacterShrinkEffect : MonoBehaviourPun
 {
     [SerializeField] private Transform characterTransform;
 
+    [SerializeField] private GameObject body;
+    [SerializeField] private Transform bodyDefaultTransform;
+
     private Vector3 originalScale;
 
     [Header("애니메이션 커브")]
@@ -25,10 +28,17 @@ public class CharacterShrinkEffect : MonoBehaviourPun
         originalScale = characterTransform.localScale;
     }
 
+    private void OnEnable()
+    {
+        gameObject.transform.localScale = originalScale;
+        body.transform.position = bodyDefaultTransform.position;
+    }
+
     [PunRPC]
     public void RPC_PlayShrinkAnimation()
     {
-        Vector3 shrinkScale = Vector3.one * 0.2f;
+        // 이형원 수정 - Vector3.one * 0.2f 로 할 이유가 있나...?
+        Vector3 shrinkScale = Vector3.zero;
 
         Sequence seq = DOTween.Sequence();
 
@@ -36,7 +46,7 @@ public class CharacterShrinkEffect : MonoBehaviourPun
         seq.Append(characterTransform.DOScale(shrinkScale, 1f).SetEase(shrinkCurve));
 
         // 커브GrowFast로 0.2초간 복원
-        seq.Append(characterTransform.DOScale(originalScale, 0.4f).SetEase(growCurve));
+        //seq.Append(characterTransform.DOScale(originalScale, 0.4f).SetEase(growCurve));
     }
 
     public void RequestShrinkEffect()
