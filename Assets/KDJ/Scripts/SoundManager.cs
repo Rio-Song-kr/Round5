@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class SoundManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private List<SoundList> _sfxList = new List<SoundList>();
     [SerializeField] private AudioSource BGMPlayer;
     [SerializeField] private AudioSource SFXPlayer;
+    [SerializeField] private AudioSource LoopPlayer;
     [SerializeField] private Dictionary<string, AudioClip> BGMDic = new Dictionary<string, AudioClip>();
     [SerializeField] private Dictionary<string, AudioClip> SFXDic = new Dictionary<string, AudioClip>();
 
@@ -64,17 +66,45 @@ public class SoundManager : MonoBehaviour
     }
 
     /// <summary>
-    /// BGM을 재생합니다.
+    /// BGM을 한번만 재생합니다.
     /// BGM이 재생 중일 경우, 새로 지정한 BGM으로 교체합니다.
     /// </summary>
     /// <param name="name">리스트에 있는 BGM의 이름</param>
-    public void PlayBGM(string name)
+    public void PlayBGMOnce(string name)
     {
         if (BGMDic.ContainsKey(name))
         {
             BGMPlayer.clip = BGMDic[name];
+            LoopPlayer.Stop();
             BGMPlayer.Play();
         }
+    }
+    
+    /// <summary>
+    /// BGM을 반복 재생합니다.
+    /// </summary>
+    /// <param name="name"></param>
+    public void PlayBGMLoop(string name)
+    {
+        if (BGMDic.ContainsKey(name))
+        {
+            LoopPlayer.clip = BGMDic[name];
+            BGMPlayer.Stop();
+            LoopPlayer.Play();
+        }
+    }
+
+    /// <summary>
+    /// 메인 메뉴 BGM을 재생합니다.
+    /// Loop를 위해 2개의 AudioSource를 사용합니다.
+    /// </summary>
+    public void PlayMainMenuBGM()
+    {
+        BGMPlayer.clip = BGMDic["MainMenuStart"];
+        BGMPlayer.Play();
+        double introLength = AudioSettings.dspTime + BGMPlayer.clip.length;
+        LoopPlayer.clip = BGMDic["MainMenuLoop"];
+        LoopPlayer.PlayScheduled(introLength);
     }
 
     /// <summary>
