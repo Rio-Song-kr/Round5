@@ -120,5 +120,9 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
     /// 플레이어 이동 상태 변경 이벤트를 처리하여 관련 로직을 업데이트
     /// </summary>
     /// <param name="value">플레이어 이동 상태 변경 여부</param>
-    public void OnPlayerMoveChanged(bool value) => PlayerMoved = value;
+    public void OnPlayerMoveChanged(bool value)
+    {
+        if (!photonView.IsMine) return;
+        PlayerMoved = value;
+    }
 }

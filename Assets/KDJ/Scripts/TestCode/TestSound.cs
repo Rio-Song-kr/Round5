@@ -8,15 +8,15 @@ public class TestSound : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SoundManager.Instance.PlayBGM("BGM1");
+            SoundManager.Instance.PlayBGMOnce("BGM1");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SoundManager.Instance.PlayBGM("BGM2");
+            SoundManager.Instance.PlayBGMOnce("BGM2");
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SoundManager.Instance.PlayBGM("BGM3");
+            SoundManager.Instance.PlayBGMOnce("BGM3");
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -31,6 +31,11 @@ public class TestSound : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             SoundManager.Instance.PlaySFX("ShotSound");
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            SoundManager.Instance.PlayMainMenuBGM();
         }
     }
 }

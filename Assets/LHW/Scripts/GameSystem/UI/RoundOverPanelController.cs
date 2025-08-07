@@ -41,15 +41,15 @@ public class RoundOverPanelController : MonoBehaviourPun
     [Tooltip("�� ���尡 ������ ������ ��, �й����� �̹����� ȭ�� �߾� �ٴ����� �̵��ϰ� Ŀ���� ũ��")]
     [SerializeField] private float loseImageExpansionScale = 3.5f;
 
-    Color textColor;
-    string leftTextColor = "#FF8400";
-    string rightTextColor = "#009EFF";
+    private Color textColor;
+    private string leftTextColor = "#FF8400";
+    private string rightTextColor = "#009EFF";
 
-    PhotonView leftBackgroundImageView;
-    PhotonView rightBackgroundImageView;
+    private PhotonView leftBackgroundImageView;
+    private PhotonView rightBackgroundImageView;
 
-    PhotonView leftImageFillView;
-    PhotonView rightImageFillView;
+    private PhotonView leftImageFillView;
+    private PhotonView rightImageFillView;
 
     private void Awake()
     {
@@ -80,10 +80,10 @@ public class RoundOverPanelController : MonoBehaviourPun
         {
             ImageInit();
             ReadScore(out int left, out int right);
-            Debug.Log("��");
+            // Debug.Log("��");
             string winner = InGameManager.Instance.LastRoundWinner;
             string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
-            string winnerSide = (!string.IsNullOrEmpty(winner) && winner == leftPlayerKey) ? "Left" : "Right";
+            string winnerSide = !string.IsNullOrEmpty(winner) && winner == leftPlayerKey ? "Left" : "Right";
             TextInit(winnerSide, left, right);
             ImageInit(left, right);
         }
@@ -92,14 +92,14 @@ public class RoundOverPanelController : MonoBehaviourPun
     /// 라운드 점수 가져오는 메서드
     /// </summary>
     private void ReadScore(out int leftScore, out int rightScore)
-    {        
+    {
         string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
         string rightPlayerKey = PhotonNetwork.PlayerList[1].ActorNumber.ToString();
 
         leftScore = InGameManager.Instance.GetPlayerRoundScore(leftPlayerKey);
-        rightScore = InGameManager.Instance.GetPlayerRoundScore(rightPlayerKey);       
+        rightScore = InGameManager.Instance.GetPlayerRoundScore(rightPlayerKey);
     }
-    
+
     /// <summary>
     /// 매치 점수를 읽어오는 메서드 
     /// </summary>
@@ -129,7 +129,7 @@ public class RoundOverPanelController : MonoBehaviourPun
     /// <param name="right"></param>
     private void TextInit(string winner, int left, int right)
     {
-        PhotonView textView = winnerText.GetComponent<PhotonView>();
+        var textView = winnerText.GetComponent<PhotonView>();
         textView.RPC(nameof(WinnerTextController.RPC_TextInit), RpcTarget.All, winner, left, right);
     }
 
@@ -155,11 +155,13 @@ public class RoundOverPanelController : MonoBehaviourPun
         }
         else
         {
-            rightImageFillView.RPC(nameof(WinnerImageFillingUI.FillAmountInit), RpcTarget.All, (float)right / 2); 
+            rightImageFillView.RPC(nameof(WinnerImageFillingUI.FillAmountInit), RpcTarget.All, (float)right / 2);
         }
 
-        leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration, gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
-        rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration, gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
+        leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration,
+            gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
+        rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.All, 0f, roundImageShrinkDuration,
+            gameUIManager.RoundOverPanelDuration - roundImageShrinkDuration);
     }
 
     /// <summary>
@@ -172,58 +174,70 @@ public class RoundOverPanelController : MonoBehaviourPun
 
         string matchWinner = InGameManager.Instance.LastRoundWinner;
         string leftPlayerKey = PhotonNetwork.PlayerList[0].ActorNumber.ToString();
-        string currentWinner = (matchWinner == leftPlayerKey) ? "Left" : "Right";
+        string currentWinner = matchWinner == leftPlayerKey ? "Left" : "Right";
 
-        Debug.Log(currentWinner);
+        // Debug.Log(currentWinner);
         if (currentWinner == "Left")
         {
-            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f, winImageShrinkDuration, winImageShrinkDelay);
+            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f,
+                winImageShrinkDuration, winImageShrinkDelay);
             float imageShrinkTime = winImageShrinkDuration + winImageShrinkDelay;
             switch (leftScore)
             {
                 case 1:
-                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, leftImageWinSpot[0].position, winImageMoveDuration, imageShrinkTime);
+                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
+                        leftImageWinSpot[0].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 2:
-                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, leftImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
+                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
+                        leftImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 3:
-                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, leftImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
+                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
+                        leftImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 default:
                     break;
             }
             float winnerImageMoveTime = imageShrinkTime + winImageMoveDuration;
-            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, losePosition.position, winImageMoveDuration, winnerImageMoveTime);
-            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, loseImageExpansionScale, winImageShrinkDuration, winnerImageMoveTime + 0.3f);
+            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, losePosition.position,
+                winImageMoveDuration, winnerImageMoveTime);
+            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered,
+                loseImageExpansionScale, winImageShrinkDuration, winnerImageMoveTime + 0.3f);
         }
         else if (currentWinner == "Right")
         {
-            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f, winImageShrinkDuration, winImageShrinkDelay);
+            rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, 0.13f,
+                winImageShrinkDuration, winImageShrinkDelay);
             float imageShrinkTime = winImageShrinkDuration + winImageShrinkDelay;
             switch (rightScore)
             {
                 case 1:
-                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, rightImageWinSpot[0].position, winImageMoveDuration, imageShrinkTime);
+                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
+                        rightImageWinSpot[0].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 2:
-                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, rightImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
+                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
+                        rightImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 case 3:
-                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, rightImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
+                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
+                        rightImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 default:
                     break;
             }
             float winnerImageMoveTime = imageShrinkTime + winImageMoveDuration;
-            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, losePosition.position, winImageMoveDuration, winnerImageMoveTime);
-            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered, loseImageExpansionScale, winImageShrinkDuration, winnerImageMoveTime + 0.3f);
+            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered, losePosition.position,
+                winImageMoveDuration, winnerImageMoveTime);
+            leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageScaleChange), RpcTarget.AllBuffered,
+                loseImageExpansionScale, winImageShrinkDuration, winnerImageMoveTime + 0.3f);
         }
     }
 
     private void RoundChange()
     {
-        PhotonView sceneChangeView = sceneChangePanel.GetComponent<PhotonView>();
+        var sceneChangeView = sceneChangePanel.GetComponent<PhotonView>();
         sceneChangeView.RPC(nameof(SceneChangePanelController.RoundChange), RpcTarget.AllBuffered);
     }
 

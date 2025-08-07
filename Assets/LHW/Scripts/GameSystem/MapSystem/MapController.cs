@@ -72,34 +72,36 @@ public class MapController : MonoBehaviourPunCallbacks
         moveCoroutine = null;
 
         //todo 여기에서 player 위치 초기화 및 중력 1로 설정해줘야 함
-        
+
         // MapController에서 직접 플레이어 제어
         photonView.RPC(nameof(InitPlayers), RpcTarget.All);
+        // InitPlayers()
     }
 
-    //# 20250807 추가작업분
+    // //# 20250807 추가작업분
     [PunRPC]
     private void InitPlayers()
     {
-        
         var allPlayers = FindObjectsOfType<PlayerController>();
-    
+
         foreach (var player in allPlayers)
         {
             // 일단 IsMine 으로 떄렸는데 혹시 의도가 맞지 않으면 수정해주시면 됩니다.
-            if (player.photonView.IsMine) 
+            if (player.photonView.IsMine)
             {
                 //플레이어 위치 초기화
                 ResetPlayerPosition(player);
-            
+
                 //중력 활성화
                 SetPlayerGravity(player, true);
-            
+
+                Debug.Log("Map Controller에서 Player Active 호출(true)");
+                
+                //todo 어떻게 처리할지 고민
                 //모든 시스템 활성화
-                InGameManager.OnplayerSystemActivate?.Invoke(true);
+                // InGameManager.Instance.SetStarted(true);
             }
         }
-        
     }
 
     /// <summary>
@@ -122,11 +124,4 @@ public class MapController : MonoBehaviourPunCallbacks
             rb.gravityScale = isActive ? 1f : 0f;
         }
     }
-    
-    
-    
-    
-    
-    
-    
 }
