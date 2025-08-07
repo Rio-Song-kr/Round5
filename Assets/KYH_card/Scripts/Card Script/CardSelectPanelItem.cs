@@ -8,12 +8,10 @@ using Photon.Realtime;
 
 public class CardSelectPanelItem : MonoBehaviour
 {
-
     [SerializeField] private bool hasSelected;
 
     [SerializeField] private TextMeshProUGUI NicknameText;
     [SerializeField] private TextMeshProUGUI currentSelect;
-    
 
     public void Init(Player player)
     {
@@ -24,23 +22,22 @@ public class CardSelectPanelItem : MonoBehaviour
         CardSelectCheckUpdate(PhotonNetwork.LocalPlayer);
     }
 
-   public void OnCardSelected()
-   {
-  
-       if (hasSelected == true)
-       {
-           return;
-       }
-  
-       hasSelected = true;
-       Debug.Log("³» Ä«µå ¼±ÅÃ ¿Ï·áµÊ");
-  
-       CardSelectCheckUpdate(PhotonNetwork.LocalPlayer);
-   }
+    public void OnCardSelected()
+    {
+        if (hasSelected == true)
+        {
+            return;
+        }
+
+        hasSelected = true;
+        // Debug.Log("ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½");
+
+        CardSelectCheckUpdate(PhotonNetwork.LocalPlayer);
+    }
 
     public void CardSelectCheckUpdate(Player player)
     {
-        ExitGames.Client.Photon.Hashtable selectProperty = new ExitGames.Client.Photon.Hashtable();
+        var selectProperty = new ExitGames.Client.Photon.Hashtable();
         selectProperty["Select"] = hasSelected;
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(selectProperty);

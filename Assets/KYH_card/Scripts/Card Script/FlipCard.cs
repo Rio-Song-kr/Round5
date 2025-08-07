@@ -2,11 +2,11 @@ using DG.Tweening;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    
     private bool isFlipped = false;
-    public bool IsFlipped { get { return isFlipped; } }
+    public bool IsFlipped => isFlipped;
     [SerializeField] private bool isSelected = false;
     private bool isHovered = false;
 
@@ -46,19 +46,19 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
         originalScale = transform.localScale;
 
         // ���� ȸ���� �����ϰ� Y�� 180���� ����
-        Vector3 rot = transform.localEulerAngles;
+        var rot = transform.localEulerAngles;
         rot.y = 180f;
         transform.localRotation = Quaternion.Euler(rot);
 
         if (frontRoot != null) frontRoot.SetActive(false);
         if (backRoot != null) backRoot.SetActive(true);
 
-        Debug.Log($"[FlipCard] Start() | isInteractable={isInteractable}");
+        // Debug.Log($"[FlipCard] Start() | isInteractable={isInteractable}");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log($"[FlipCard] OnPointerEnter()");
+        // Debug.Log($"[FlipCard] OnPointerEnter()");
         if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
 
         if (!isFlipped)
@@ -70,20 +70,20 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
             manager.photonView.RPC(nameof(CardSelectManager.RPC_SelectCardArm), RpcTarget.All, cardIndex);
         }
 
-            isHovered = true;
+        isHovered = true;
         manager.photonView.RPC(nameof(CardSelectManager.RPC_HighlightCardByIndex), RpcTarget.All, cardIndex);
     }
 
-   public void OnPointerExit(PointerEventData eventData)
-   {
-       if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
-       isHovered = false;
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
+        isHovered = false;
         manager.photonView.RPC(nameof(CardSelectManager.RPC_UnhighlightCardByIndex), RpcTarget.All, cardIndex);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log($"[FlipCard] OnPointerClick | isInteractable={isInteractable}, isHovered={isHovered}");
+        // Debug.Log($"[FlipCard] OnPointerClick | isInteractable={isInteractable}, isHovered={isHovered}");
 
         if (!isInteractable || !isHovered) return; //Ŭ�� ���� ����
 
@@ -92,14 +92,13 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
     public void OnClickCard()
     {
-        Debug.Log($"[FlipCard] OnClickCard 호출됨 | isFlipped={isFlipped}, isSelected={isSelected}");
+        // Debug.Log($"[FlipCard] OnClickCard 호출됨 | isFlipped={isFlipped}, isSelected={isSelected}");
 
         if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
 
         if (!isFlipped)
         {
-            
-            Debug.Log($"[FlipCard] ī�� Ŭ���� index = {cardIndex}");
+            // Debug.Log($"[FlipCard] ī�� Ŭ���� index = {cardIndex}");
             // ���� �ִϸ��̼� ����
             PlayFlipAnimation();
 
@@ -108,8 +107,6 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
             // �� ����ȭ RPC ȣ��
             manager.photonView.RPC(nameof(CardSelectManager.RPC_SelectCardArm), RpcTarget.All, cardIndex);
-
-
         }
         else if (!isSelected)
         {
@@ -129,9 +126,9 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
     {
         if (isFlipped) return;
 
-        Debug.Log("ī�� ������");
+        // Debug.Log("ī�� ������");
         // ���� ȸ���� ��������
-        Vector3 startEuler = transform.localEulerAngles;
+        var startEuler = transform.localEulerAngles;
 
         // Z�� ���� (360�� �̻� ���̸� -360 ���� �� ��ȣ ����)
         float z = startEuler.z;
@@ -139,7 +136,7 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
         float flippedZ = -z;
 
         // Y = 0 ���� ȸ���ϸ鼭 Z�� �����ؼ� ��ä�� ���� ����
-        Vector3 targetEuler = new Vector3(0f, 0f, flippedZ);
+        var targetEuler = new Vector3(0f, 0f, flippedZ);
 
         transform.DORotate(targetEuler, flipDuration)
             .SetEase(Ease.InOutSine)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -24,7 +23,7 @@ public class DefenceSkillManager : MonoBehaviourPun
     private Coroutine _testCoroutine;
 
     private bool _isAllJoined;
-    private bool _isStarted;
+    private bool _isFirstStarted;
 
     /// <summary>
     /// Skill 및 Skill Database 초기화
@@ -51,17 +50,6 @@ public class DefenceSkillManager : MonoBehaviourPun
         // AddSkill(DefenceSkills.AbyssalCountdown);
         // AddSkill(DefenceSkills.Emp);
         // AddSkill(DefenceSkills.FrostSlam);
-
-        // StartCoroutine(WaitForAllPlayerJoin());
-
-
-        //#20250807 0200 추가사항
-        InGameManager.OnplayerSystemActivate += SetIsStarted;
-    }
-
-    private void OnDestroy()
-    {
-        InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
     /// <summary>
@@ -70,36 +58,23 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// </summary>
     private void Update()
     {
-        if (_isAllJoined)
+        if (!InGameManager.Instance.IsStarted)
         {
-            StartCoroutine(DelayedTime());
-            _isAllJoined = false;
+            _isFirstStarted = true;
+            return;
         }
 
-        if (!Input.GetMouseButtonDown(1) || !_isStarted) return;
+        if (_isFirstStarted && photonView.IsMine)
+        {
+            SetIsStarted();
+            StartCoroutine(DelayedTime());
+            _isFirstStarted = false;
+        }
 
-        if (_photonView.IsMine) UseActiveSkills(transform.position);
+        if (!Input.GetMouseButtonDown(1)) return;
+
+        if (_photonView.IsMine) photonView.RPC(nameof(UseActiveSkills), RpcTarget.All, transform.position);
     }
-
-    /// <summary>
-    /// 모든 플레이어가 게임에 조인될 때까지 대기하는 Coroutine
-    /// </summary>
-    // private IEnumerator WaitForAllPlayerJoin()
-    // {
-    //     //# 싱글일 때는 MaxPlayers가 1, 멀티일 때는 2가 되어야 함
-    //     int maxPlayers = 2;
-    //
-    //     if (maxPlayers == 1 || PhotonNetwork.PlayerList.Length >= maxPlayers) _isAllJoined = true;
-    //     else
-    //     {
-    //         while (PhotonNetwork.PlayerList.Length < maxPlayers)
-    //         {
-    //             yield return null;
-    //         }
-    //
-    //         _isAllJoined = true;
-    //     }
-    // }
 
     /// <summary>
     /// 지연 시간 기반 스킬 활성화 코루틴 함수
@@ -120,8 +95,19 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// <param name="skillName">추가하려는 스킬</param>
     public void AddSkill(DefenceSkills skillName)
     {
+        //# 중복 체크
+        foreach (var existSkillName in _skillNames)
+        {
+            if (existSkillName == skillName) return;
+        }
+
         var skill = _skillDatabase.SkillDatabase[skillName];
+        skill.Initialize();
+
+        if (!photonView.IsMine) return;
+
         _skills.Add(skill);
+
 
         _skillNames.Add(skillName);
 
@@ -130,9 +116,6 @@ public class DefenceSkillManager : MonoBehaviourPun
             _coroutines[skill.SkillName] = null;
             _cooldowns[skill.SkillName] = null;
         }
-
-        skill.Initialize();
-
         //todo Huge, Defender Effect도 카드 선택 시 추가가 되도록 수정해야 함
         switch (skillName)
         {
@@ -178,8 +161,10 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// <summary>
     /// 마우스 우클릭 시 Defence Skill들을 실행
     /// </summary>
+    [PunRPC]
     private void UseActiveSkills(Vector3 skillPosition)
     {
+        if (!photonView.IsMine) return;
         foreach (var skill in _skills)
         {
             if (skill.IsPassive) continue;
@@ -210,14 +195,16 @@ public class DefenceSkillManager : MonoBehaviourPun
     }
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    public void SetIsStarted(bool value)
+    // public void SetIsStarted(bool value)
+    private void SetIsStarted()
     {
         if (!photonView.IsMine) return;
 
-        _isStarted = value;
         var defenceSkillsList = CardManager.Instance.GetDefenceCard();
 
         if (defenceSkillsList == null || defenceSkillsList.Count == 0) return;
+
+        photonView.RPC(nameof(DeactivatePassiveSkills), RpcTarget.All);
 
         foreach (var skill in defenceSkillsList)
         {
@@ -228,8 +215,16 @@ public class DefenceSkillManager : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void AddDefenceSkills(DefenceSkills skill)
+    private void DeactivatePassiveSkills()
     {
-        AddSkill(skill);
+        foreach (var activated in _skills)
+        {
+            if (!activated.IsPassive) continue;
+
+            activated.Deactivate();
+        }
     }
+
+    [PunRPC]
+    private void AddDefenceSkills(DefenceSkills skill) => AddSkill(skill);
 }

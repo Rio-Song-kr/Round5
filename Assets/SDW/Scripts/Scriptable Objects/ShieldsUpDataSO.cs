@@ -13,6 +13,8 @@ public class ShieldsUpDataSO : DefenceSkillDataSO
     private PoolManager _pools;
     public PoolManager Pools => _pools;
 
+    private GameObject _skillEffectObject;
+
     public override void Initialize()
     {
         _pools = FindFirstObjectByType<PoolManager>();
@@ -21,12 +23,17 @@ public class ShieldsUpDataSO : DefenceSkillDataSO
 
     public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
-        var skillEffectObject =
+        _skillEffectObject =
             PhotonNetwork.Instantiate("ShieldsUpEffect", skillPosition, Quaternion.identity);
 
-        var skillEffect = skillEffectObject.GetComponent<ShieldsUpEffect>();
+        var skillEffect = _skillEffectObject.GetComponent<ShieldsUpEffect>();
         int playerViewId = playerTransform.gameObject.GetComponent<PhotonView>().ViewID;
 
         skillEffect.Initialize(this, playerViewId);
+    }
+
+    public override void Deactivate()
+    {
+        PhotonNetwork.Destroy(_skillEffectObject);
     }
 }

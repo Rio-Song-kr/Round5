@@ -47,6 +47,8 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
 
     public Vector3 SkillPoisition;
 
+    private GameObject _skillEffectObject;
+
     public override void Initialize()
     {
         _pools = FindFirstObjectByType<PoolManager>();
@@ -58,11 +60,16 @@ public class FrostSlamSkillDataSO : DefenceSkillDataSO
     {
         SkillPoisition = skillPosition;
 
-        var skillEffectObject = PhotonNetwork.Instantiate("FrostSlamEffect", SkillPoisition, Quaternion.identity);
+        _skillEffectObject = PhotonNetwork.Instantiate("FrostSlamEffect", SkillPoisition, Quaternion.identity);
         // skillEffectObject.transform.parent = _effectTransform;
 
         int playerViewId = playerTransform.gameObject.GetComponent<PhotonView>().ViewID;
-        var skillEffect = skillEffectObject.GetComponent<FrostSlamEffect>();
+        var skillEffect = _skillEffectObject.GetComponent<FrostSlamEffect>();
         skillEffect.Initialize(this, playerViewId);
+    }
+
+    public override void Deactivate()
+    {
+        PhotonNetwork.Destroy(_skillEffectObject);
     }
 }

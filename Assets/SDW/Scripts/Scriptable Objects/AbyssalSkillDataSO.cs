@@ -28,6 +28,8 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
     private PoolManager _pools;
     public PoolManager Pools => _pools;
 
+    private GameObject _skillEffectObject;
+
     public override void Initialize()
     {
         _pools = FindFirstObjectByType<PoolManager>();
@@ -37,11 +39,17 @@ public class AbyssalSkillDataSO : DefenceSkillDataSO
 
     public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
-        var skillEffectObject = PhotonNetwork.Instantiate(SkillEffectPrefab.name, skillPosition, Quaternion.identity);
+        _skillEffectObject = PhotonNetwork.Instantiate(SkillEffectPrefab.name, skillPosition, Quaternion.identity);
 
-        var skillEffect = skillEffectObject.GetComponent<AbyssalCountdownEffect>();
+        var skillEffect = _skillEffectObject.GetComponent<AbyssalCountdownEffect>();
 
         int playerViewId = playerTransform.gameObject.GetComponent<PhotonView>().ViewID;
         skillEffect.Initialize(this, playerViewId);
+    }
+
+    public override void Deactivate()
+    {
+        if (_skillEffectObject != null && _skillEffectObject.activeSelf)
+            PhotonNetwork.Destroy(_skillEffectObject);
     }
 }
