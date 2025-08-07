@@ -78,6 +78,7 @@ public class GunControll : MonoBehaviourPun
 
         // 폭발성인 경우
         _isExplosiveBullet = weapons[1];
+        _isBigBullet= weapons[3];
 
         var weaponToEquip = WeaponType.Bullet; // 기본은 Bullet
 
