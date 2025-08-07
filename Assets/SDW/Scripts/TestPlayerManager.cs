@@ -44,6 +44,11 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
 
     private IEnumerator DelayedAddPlayer()
     {
+        while (!PhotonNetwork.InRoom)
+        {
+            yield return null; // 룸에 들어갈 때까지 대기
+        }
+        
         yield return new WaitForSeconds(1f);
 
         Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
