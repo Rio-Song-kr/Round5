@@ -370,7 +370,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     private IEnumerator CheckAllSelected()
     {
         InGameManager.Instance.SetStarted(false);
-        
+
         yield return new WaitForSeconds(1f);
 
         if (cardSelectCheckManager.AllPlayerCardSelectCheck())
@@ -394,6 +394,8 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient) // 마스터만 씬 전환
         {
+            InGameManager.Instance.IsCardSelected = true;
+
             Debug.Log("모든 플레이어 선택 완료 → Game Scene 전환");
             // PhotonNetwork.LoadLevel("Game Scene");
             var canvasView = canvasController.photonView;
