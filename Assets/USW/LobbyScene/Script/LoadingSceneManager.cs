@@ -46,22 +46,32 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
     /// </summary>
     private void SetupPlayerNames()
     {
+        Debug.Log("Setup Player Names");
         Player[] players = PhotonNetwork.PlayerList;
+        Debug.Log($"{players.Length}");
         
+        
+        Debug.Log($"플레이어 감지 ActorNumber {PhotonNetwork.LocalPlayer.ActorNumber}");
         if (players.Length >= 2)
         {
             string player1Name = players[0].NickName;
             string player2Name = players[1].NickName;
             
+            Debug.Log($"$Player1 Name{player1Name}");
+            Debug.Log($"$Player2 Name{player2Name}");
             if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
             {
                 if (player1NameText) player1NameText.text = player1Name;
                 if (player2NameText) player2NameText.text = player2Name;
+                Debug.Log($"player1NameText {player1Name}");
+                Debug.Log($"player2NameText {player2Name}");
             }
             else
             {
                 if (player1NameText) player1NameText.text = player2Name;
                 if (player2NameText) player2NameText.text = player1Name;
+                Debug.Log($"player2NameText {player2Name}");
+                Debug.Log($"player1NameText {player1Name}");
             }
         }
         else
@@ -91,7 +101,7 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
         player1NameText.transform.position = player1StartPos.position;
         player2NameText.transform.position = player2StartPos.position;
         
-      
+      Debug.Log("loadingtextAnimation 시작");
         LoadingTextAnimation gradation1 = player1NameText.GetComponent<LoadingTextAnimation>();
         LoadingTextAnimation gradation2 = player2NameText.GetComponent<LoadingTextAnimation>();
         if (gradation1 != null) gradation1.BeginGradation();
