@@ -16,7 +16,7 @@ public class AttackCard : CardBase
     public int AmmoIncrease;
     public int AmmoConsumption;
     [Header("무기 정보")]
-    // 0은 스텟 관련 카드, 1 = Laser, 2 = Explosive, 3 = Barrage
+    // 0은 스텟 관련 카드, 1 = Laser, 2 = Explosive, 3 = Barrage, 4 = Big Bullet
     public int WeaponIndex;
 }
 

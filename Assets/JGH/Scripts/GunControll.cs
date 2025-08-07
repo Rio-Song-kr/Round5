@@ -30,11 +30,11 @@ public class GunControll : MonoBehaviourPun
     /// </summary>
     private void Start()
     {
-    //    EquipWeapon(WeaponType.Bullet);
-    
+        // EquipWeapon(WeaponType.Bullet);
+
         //#20250807 0200 추가사항
         InGameManager.OnplayerSystemActivate += SetIsStarted;
-        
+
         if (photonView.IsMine)
             EquipWeapon(WeaponType.Bullet);
     }
@@ -44,11 +44,12 @@ public class GunControll : MonoBehaviourPun
         InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
-
     private void Update()
     {
-         // if (!photonView.IsMine || !_isStarted) return;
-       if (!photonView.IsMine) return;
+        // 이거 로직상 필요 없으면 주석 풀지 마세요 공격 안돼요
+        // if (!photonView.IsMine || !_isStarted) return;
+        
+        if (!photonView.IsMine) return;
 
         // 마우스 위치에 따라 총구 회전
         // RotateMuzzleToMouse();
@@ -66,7 +67,7 @@ public class GunControll : MonoBehaviourPun
 
         OnApplyCards(out bool[] weapons);
     }
-    
+
     /// <summary>
     /// 적용된 무기 카드를 확인 후 무기 변경을 담당하는 함수한테 전달하는 함수
     /// </summary>
@@ -74,11 +75,11 @@ public class GunControll : MonoBehaviourPun
     private void OnApplyCards(out bool[] weapons)
     {
         weapons = CardManager.Instance.GetWeaponCard();
-        
+
         // 폭발성인 경우
-        _isExplosiveBullet = weapons[1]; 
-        
-        WeaponType weaponToEquip = WeaponType.Bullet; // 기본은 Bullet
+        _isExplosiveBullet = weapons[1];
+
+        var weaponToEquip = WeaponType.Bullet; // 기본은 Bullet
 
         if (weapons[0])
             weaponToEquip = WeaponType.Laser;

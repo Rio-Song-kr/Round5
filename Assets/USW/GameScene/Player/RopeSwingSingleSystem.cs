@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
-public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
+public class RopeSwingSingleSystem : MonoBehaviour
 {
     [Header("후크 세팅")] [SerializeField]
     private GameObject hookCrosshairPrefab;
@@ -74,13 +74,10 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        if (photonView.IsMine)
-        {
-            HandleInput();
-            UpdateHookTrajectory();
-            HandleHookInput();
-            HandleRopeClimbing();
-        }
+        HandleInput();
+        UpdateHookTrajectory();
+        HandleHookInput();
+        HandleRopeClimbing();
 
         // 모든 플레이어에게 시각적 업데이트 적용
         UpdateRopeVisuals();
@@ -88,58 +85,12 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void FixedUpdate()
     {
-        if (photonView.IsMine && isSwinging)
-        {
-            HandleSwingPhysics();
-        }
+        HandleSwingPhysics();
     }
 
     #region RPCs
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // 데이터 전송 (로컬 플레이어)
-            stream.SendNext(isHookAttached);
-            stream.SendNext(hookPoint);
-            stream.SendNext(currentRopeLength);
-            stream.SendNext(isSwinging);
-        }
-        else
-        {
-            // 데이터 수신 (리모트 플레이어)
-            bool networkIsHookAttached = (bool)stream.ReceiveNext();
-            var networkHookPoint = (Vector2)stream.ReceiveNext();
-            float networkRopeLength = (float)stream.ReceiveNext();
-            bool networkIsSwinging = (bool)stream.ReceiveNext();
 
-
-            if (networkIsHookAttached != isHookAttached)
-            {
-                isHookAttached = networkIsHookAttached;
-                isSwinging = networkIsSwinging;
-                hookPoint = networkHookPoint;
-                currentRopeLength = networkRopeLength;
-
-                if (isHookAttached)
-                {
-                    ShowHookAttached(hookPoint);
-                }
-                else
-                {
-                    ShowHookDetached();
-                }
-            }
-            else if (isHookAttached)
-            {
-                hookPoint = Vector2.Lerp(hookPoint, networkHookPoint, Time.deltaTime * 10f);
-                currentRopeLength = Mathf.Lerp(currentRopeLength, networkRopeLength, Time.deltaTime * 10f);
-            }
-        }
-    }
-
-    [PunRPC]
     private void OnHookAttached(Vector2 hitPoint)
     {
         hookPoint = hitPoint;
@@ -147,33 +98,19 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         isSwinging = true;
         currentRopeLength = Vector2.Distance(transform.position, hookPoint);
 
-        // 물리 조인트는 오직 소유자만 생성
-        if (photonView.IsMine)
-        {
-            CreateRopeJoint();
-        }
-
         // 시각적 요소는 모든 클라이언트에서 표시
         ShowHookAttached(hitPoint);
     }
 
-    [PunRPC]
     private void OnHookDetached()
     {
         isHookAttached = false;
         isSwinging = false;
 
-        // 물리 조인트는 오직 소유자만 제거
-        if (photonView.IsMine)
-        {
-            DestroyRopeJoint();
-        }
-
         // 시각적 요소는 모든 클라이언트에서 숨김
         ShowHookDetached();
     }
 
-    [PunRPC]
     private void OnHookEffect(Vector2 effectPosition)
     {
         // 이펙트 생성
@@ -193,7 +130,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         hookLineRenderer = Instantiate(hookTestObj).GetComponent<LineRenderer>();
 
         // 궤적용 LineRenderer 설정 (로컬 플레이어만)
-        if (photonView.IsMine && trajectoryRenderer == null)
+        if (trajectoryRenderer == null)
         {
             var trajectoryObj = new GameObject("TrajectoryRenderer");
             trajectoryObj.transform.parent = transform;
@@ -225,7 +162,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         }
 
         // 크로스헤어는 로컬 플레이어만
-        if (hookCrosshairPrefab != null && !photonView.IsMine)
+        if (hookCrosshairPrefab != null )
         {
             hookCrosshairPrefab.SetActive(false);
         }
@@ -370,13 +307,13 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void AttachHook(Vector2 hitPoint)
     {
-        photonView.RPC("OnHookAttached", RpcTarget.All, hitPoint);
-        photonView.RPC("OnHookEffect", RpcTarget.All, hitPoint);
+        // photonView.RPC("OnHookAttached", RpcTarget.All, hitPoint);
+        // photonView.RPC("OnHookEffect", RpcTarget.All, hitPoint);
     }
 
     private void DetachHook()
     {
-        photonView.RPC("OnHookDetached", RpcTarget.All);
+        // photonView.RPC("OnHookDetached", RpcTarget.All);
     }
 
     private void ShowHookAttached(Vector2 hitPoint)
@@ -399,7 +336,6 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         }
     }
 
-    [PunRPC]
     private void SetDisplayHookLineRenderer(bool value) => hookLineRenderer.enabled = value;
 
     private void ShowHookDetached()
@@ -583,7 +519,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     public void ForceDetachHook()
     {
-        if (isHookAttached && photonView.IsMine)
+        if (isHookAttached)
         {
             DetachHook();
         }
@@ -614,7 +550,6 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     {
         _isStarted = value;
 
-        if (photonView.IsMine)
-            crossHairObj.SetActive(value);
+        crossHairObj.SetActive(value);
     }
 }
