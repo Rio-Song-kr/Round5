@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
@@ -11,7 +12,7 @@ public class LoadingTextAnimation : MonoBehaviour
     private Color[] colors;
     private Coroutine animationCoroutine;
 
-    void Start()
+    private void Awake()
     {
         colors = new Color[hexColors.Length];
         for (int i = 0; i < hexColors.Length; i++)
@@ -22,8 +23,22 @@ public class LoadingTextAnimation : MonoBehaviour
             else
                 colors[i] = Color.white;
         }
+    }
 
-        StartCoroutine(AnimateGradientColors());
+    private void OnEnable()
+    {
+        if (colors != null)
+        {
+            StartCoroutine(AnimateGradientColors());
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (animationCoroutine != null)
+        {
+            StopCoroutine(animationCoroutine);
+        }
     }
 
     IEnumerator AnimateGradientColors()

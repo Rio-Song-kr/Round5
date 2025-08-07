@@ -3355,6 +3355,7 @@ GameObject:
   - component: {fileID: 867352045}
   - component: {fileID: 867352047}
   - component: {fileID: 867352046}
+  - component: {fileID: 867352048}
   m_Layer: 5
   m_Name: CreateRoom_Challenger(UI)
   m_TagString: Untagged
@@ -3478,6 +3479,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867352044}
   m_CullTransparentMesh: 1
+--- !u!114 &867352048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867352044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78fa152d7bd025b4b96a1413974f7f85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tmp: {fileID: 867352046}
+  hexColors:
+  - F72585
+  - B5179E
+  - 7209B7
+  - 560BAD
+  - 480CA8
+  - 3A0CA3
+  - 3F37C9
+  - 4361EE
+  - 4895EF
+  - 4CC9F0
+  animationDuration: 3
 --- !u!1 &910532651
 GameObject:
   m_ObjectHideFlags: 0
@@ -10966,6 +10992,7 @@ GameObject:
   - component: {fileID: 2082886217}
   - component: {fileID: 2082886219}
   - component: {fileID: 2082886218}
+  - component: {fileID: 2082886220}
   m_Layer: 5
   m_Name: CreateRoom_RoomCode(UI)
   m_TagString: Untagged
@@ -11089,6 +11116,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082886216}
   m_CullTransparentMesh: 1
+--- !u!114 &2082886220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082886216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78fa152d7bd025b4b96a1413974f7f85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tmp: {fileID: 810327178}
+  hexColors:
+  - F72585
+  - B5179E
+  - 7209B7
+  - 560BAD
+  - 480CA8
+  - 3A0CA3
+  - 3F37C9
+  - 4361EE
+  - 4895EF
+  - 4CC9F0
+  animationDuration: 3
 --- !u!1 &2122116448
 GameObject:
   m_ObjectHideFlags: 0
