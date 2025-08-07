@@ -62,7 +62,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         rb = GetComponent<Rigidbody2D>();
         SetupComponents();
         InitializeHook();
-        
+
         //#20250807 0200 추가사항
         InGameManager.OnplayerSystemActivate += SetIsStarted;
     }
@@ -613,6 +613,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     public void SetIsStarted(bool value)
     {
         _isStarted = value;
-        crossHairObj.SetActive(value);
+
+        if (photonView.IsMine)
+            crossHairObj.SetActive(value);
     }
 }
