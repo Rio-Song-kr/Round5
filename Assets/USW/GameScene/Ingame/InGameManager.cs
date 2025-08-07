@@ -130,6 +130,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public bool IsMapLoaded;
     public bool IsCardSelected;
+    [SerializeField] private GameObject _backgroundObject;
 
     //#2025/08/07/02:00 추가 플레이어 시스템 활성화 하는 Action
     // public static Action<bool> OnPlayerSystemActivate;
@@ -239,7 +240,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void SetStarted(bool value)
     {
-        if (IsCardSelected && IsMapLoaded)
+        if (value && IsCardSelected && IsMapLoaded)
+            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
+        else if (value == false)
             photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
     }
 
@@ -394,6 +397,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndGame(string winnerKey)
     {
+        _backgroundObject.SetActive(true);
         SetGameState(GameState.GameEnding);
         OnGameEnd?.Invoke();
 
@@ -568,6 +572,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void StartRematchWaiting()
     {
         if (!PhotonNetwork.IsMasterClient) return;
+        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
 
         photonView.RPC("RPC_StartRematchWaiting", RpcTarget.All);
     }
