@@ -22,3 +22,4 @@ public class NetworkSetting : MonoBehaviourPunCallbacks
         Debug.Log("오프라인 모드 체크 : " + PhotonNetwork.OfflineMode);
     }
 }
+
