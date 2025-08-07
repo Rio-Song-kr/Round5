@@ -142,8 +142,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
         StartCoroutine(SafeDestroy());
     }
 
-
-
     private void OfflineExplosive()
     {
         // 오프라인 모드에서 폭발 총알 처리
@@ -158,7 +156,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
         _bigBullet.GetComponent<ParticleSystem>().Stop();
         Destroy(_bigBullet, 1f); // 1초 후 파괴
     }
-
 
     // 사용안함 무기에서 바로 호출
     // private void Start()
@@ -302,7 +299,7 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
             _explosiveBullet.SetActive(_isExplosiveBullet);
 
 
-            Debug.Log($"Big: {_isBigBullet}, Explosive: {_isExplosiveBullet}", this);
+            // Debug.Log($"Big: {_isBigBullet}, Explosive: {_isExplosiveBullet}", this);
         }
     }
 }
