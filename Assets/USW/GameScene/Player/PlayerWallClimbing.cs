@@ -112,16 +112,16 @@ public class PlayerWallClimbing : MonoBehaviourPun
         switch (newState)
         {
             case WallState.Climbing:
-                Debug.Log($"플레이어 {playerName}: 벽 오르기");
+                // Debug.Log($"플레이어 {playerName}: 벽 오르기");
                 break;
             case WallState.Holding:
-                Debug.Log($"플레이어 {playerName}: 벽 붙잡기");
+                // Debug.Log($"플레이어 {playerName}: 벽 붙잡기");
                 break;
             case WallState.Leaning:
-                Debug.Log($"플레이어 {playerName}: 벽에 기대기");
+                // Debug.Log($"플레이어 {playerName}: 벽에 기대기");
                 break;
             case WallState.None:
-                Debug.Log($"플레이어 {playerName}: 벽 상호작용 종료");
+                // Debug.Log($"플레이어 {playerName}: 벽 상호작용 종료");
                 break;
         }
     }
@@ -330,15 +330,15 @@ public class PlayerWallClimbing : MonoBehaviourPun
         {
             case WallState.Climbing:
                 isWallClimbing = true;
-                Debug.Log("벽 오르기 시작");
+                // Debug.Log("벽 오르기 시작");
                 break;
             case WallState.Holding:
                 isWallHolding = true;
-                Debug.Log("벽 붙잡기 시작");
+                // Debug.Log("벽 붙잡기 시작");
                 break;
             case WallState.Leaning:
                 isWallLeaning = true;
-                Debug.Log("벽에 기대기 시작");
+                // Debug.Log("벽에 기대기 시작");
                 break;
         }
 

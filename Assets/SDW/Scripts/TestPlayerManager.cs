@@ -48,10 +48,10 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
         {
             yield return null; // 룸에 들어갈 때까지 대기
         }
-        
+
         yield return new WaitForSeconds(1f);
 
-        Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
+        // Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
         // var player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector2(Random.Range(-8f, 0), Random.Range(-4f, 4f)),
         //     Quaternion.identity);
         var player = PhotonNetwork.Instantiate(_playerPrefab.name, new Vector2(-50f, -50f), Quaternion.identity);

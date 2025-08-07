@@ -58,7 +58,8 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// </summary>
     private void OnDisable()
     {
-        if (_vfxObject != null)
+        if (!photonView.IsMine) return;
+        if (_vfxObject != null && _vfxObject.activeSelf)
             PhotonNetwork.Destroy(_vfxObject);
     }
 
