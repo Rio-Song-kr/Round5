@@ -93,7 +93,6 @@ public class PlayerStatus : MonoBehaviourPun, IStatusEffectable, IDamagable
         _isInvincibility = false;
         _canAttack = false;
         _freezePlayer = false;
-        _isDead = false;
 
         // 기존 이벤트들 발생 (UI 업데이트)
         OnInvincibilityValueChanged?.Invoke(_isInvincibility);
