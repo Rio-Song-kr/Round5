@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class TestOutArea : MonoBehaviour
@@ -22,12 +23,14 @@ public class TestOutArea : MonoBehaviour
                         GameObject effectL = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectL.transform.LookAt(collision.transform.position + Vector3.right);
                         rb2d.AddForce(Vector2.right * 17f, ForceMode2D.Impulse);
+                        if (PhotonNetwork.OfflineMode == true) return;
                         player.TakeDamage(6, collision.transform.position, Vector2.right);
                         break;
                     case "Right":
                         GameObject effectR = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectR.transform.LookAt(collision.transform.position + Vector3.left);
                         rb2d.AddForce(Vector2.left * 17f, ForceMode2D.Impulse);
+                        if (PhotonNetwork.OfflineMode == true) return;
                         player.TakeDamage(6, collision.transform.position, Vector2.left);
                         break;
                     case "Up":
@@ -39,6 +42,7 @@ public class TestOutArea : MonoBehaviour
                         GameObject effectD = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectD.transform.LookAt(collision.transform.position + Vector3.up);
                         rb2d.AddForce(Vector2.up * 17f, ForceMode2D.Impulse);
+                        if (PhotonNetwork.OfflineMode == true) return;
                         player.TakeDamage(6, collision.transform.position, Vector2.up);
                         break;
                 }

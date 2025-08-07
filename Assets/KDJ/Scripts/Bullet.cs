@@ -76,20 +76,45 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
     //     _explosiveBullet?.SetActive(_isExplosiveBullet);
     // }
 
+    public void SetBulletType(bool isBig, bool isEx)
+    {
+        _isBigBullet = isBig;
+        _bigBullet?.SetActive(_isBigBullet);
+
+        _isExplosiveBullet = isEx;
+        _explosiveBullet?.SetActive(_isExplosiveBullet);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-         if (!photonView.IsMine) return;
-         
+        if (!photonView.IsMine && PhotonNetwork.OfflineMode == false) return;
+
         // 총알 유형에 따라 처리 
-        if (_isBigBullet)
-            BigBulletShot();
-
-        if (_isExplosiveBullet)
-            ExplosiveBulletShot();
-
-        if (!_isBigBullet && !_isExplosiveBullet)
-            DefaultShot(collision);
-
+        if (PhotonNetwork.OfflineMode == false)
+        {
+            if (_isBigBullet)
+                BigBulletShot();
+            if (_isExplosiveBullet)
+                ExplosiveBulletShot();
+            else
+            {
+                DefaultShot(collision);
+            }
+        }
+        else
+        {
+            if (_isBigBullet)
+                OfflineBigBullet();
+            if (_isExplosiveBullet)
+                OfflineExplosive();
+            else
+            {
+                // 오프라인 모드에서는 기본 이펙트 생성
+                var effect = Instantiate(_hitEffect, transform.position, Quaternion.identity);
+                effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
+                CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
+            }
+        }
 
         if (collision.gameObject.layer == 8)
         {
@@ -101,12 +126,36 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
             Attack(damagable, hitPosition, hitNormal); // 플레이어에게 공격
         }
 
+        if (PhotonNetwork.OfflineMode == true)
+        {
+            Destroy(gameObject);
+
+            return;
+        }
+
+
         // 약간의 시간 지연 후 안전하게 파괴
         // Destroy(gameObject);
         StartCoroutine(SafeDestroy());
     }
     
     
+
+    private void OfflineExplosive()
+    {
+        // 오프라인 모드에서 폭발 총알 처리
+        var effect = Instantiate(_explosiveBulletEffect, transform.position, Quaternion.identity);
+        CameraShake.Instance.ShakeCaller(0.5f, 0.2f); // 카메라 흔들기 효과
+    }
+
+    private void OfflineBigBullet()
+    {
+        // 오프라인 모드에서 대형 총알 처리
+        _bigBullet.transform.SetParent(null);
+        _bigBullet.GetComponent<ParticleSystem>().Stop();
+        Destroy(_bigBullet, 1f); // 1초 후 파괴
+    }
+
 
     // 사용안함 무기에서 바로 호출
     // private void Start()
