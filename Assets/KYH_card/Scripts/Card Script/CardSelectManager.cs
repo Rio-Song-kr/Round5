@@ -69,6 +69,11 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         InGameManager.OnCardSelectStart += InGameManagerOnOnCardSelectStart;
     }
 
+    private void OnDisable()
+    {
+        InGameManager.OnCardSelectStart -= InGameManagerOnOnCardSelectStart;
+    }
+
     // InGameManager에서 카드 선택이 시작될 때 호출하는거 
     private void InGameManagerOnOnCardSelectStart()
     {
@@ -397,7 +402,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                InGameManager.Instance.StartRound();
+                InGameManager.Instance.EndCardSelect();
             }
         }
     }

@@ -1884,6 +1884,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7042243842766175402}
   - component: {fileID: 7439425923849553118}
+  - component: {fileID: 3569135483298513841}
   m_Layer: 0
   m_Name: Maps
   m_TagString: Untagged
@@ -1926,6 +1927,28 @@ MonoBehaviour:
   - {fileID: 8825664899693812670}
   - {fileID: 5284847326306341491}
   - {fileID: 2958970940119399260}
+--- !u!114 &3569135483298513841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4521210631277813273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &4561974467191055546
 GameObject:
   m_ObjectHideFlags: 0
@@ -2609,8 +2632,8 @@ MonoBehaviour:
   - {fileID: 6077040965735311254, guid: 8831f02937920454bb5448254aed650c, type: 3}
   - {fileID: 333661759096171217, guid: 75198ab9b3688534d81c21dc67db1409, type: 3}
   - {fileID: 8909731782164389339, guid: 507ea0674f1dde54995bf4ee9b0a801d, type: 3}
-  mapController: {fileID: 7439425923849553118}
-  mapTransformOffset: 35
+  mapTransformOffset: 50
+  controller: {fileID: 7439425923849553118}
   gameCycleNum: 3
   mapListTransform:
   - {fileID: 5942931552343826983}
