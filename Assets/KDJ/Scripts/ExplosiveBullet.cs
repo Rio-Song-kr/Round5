@@ -41,8 +41,8 @@ public class ExplosiveBullet : MonoBehaviour
                 if (damagable != null)
                 {
                     // 6f은 피해량. 이후 스텟 최종 피해량으로 변경 필요
-                    float damage = 1f / distance.sqrMagnitude;
-                    damage = Mathf.Clamp(damage, 0.1f, 6f); // 최소 0.1, 최대 6으로 제한
+                    float damage = 0.5f / distance.sqrMagnitude;
+                    damage = Mathf.Clamp(damage, 0.1f, 3f); // 최소 0.1, 최대 3으로 제한
                     damagable.TakeDamage(damage, hitPosition, hitNormal);
                 }
             }
