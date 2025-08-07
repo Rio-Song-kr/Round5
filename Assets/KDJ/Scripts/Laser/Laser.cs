@@ -157,21 +157,6 @@ public class Laser : MonoBehaviourPun
                                         * 0.1f, ForceMode2D.Impulse); // 충돌한 오브젝트에 넉백 적용
                         }
 
-                        // 틱 데미지 적용 (이펙트와 동시에)
-                        if (photonView.IsMine)
-                        {
-                            var targetView = _hits[0].collider.GetComponent<PhotonView>();
-                            if (targetView != null)
-                            {
-                                float damage = _baseDamage * _damageMultiplier; // 6 * (1 - 0.7) 데미지 6에서 -70% = 6 * 0.3 = 1.8
-                                // TODO: 적한테 데미지 적용
-                                targetView.RPC("TakeDamage", RpcTarget.All, damage);
-                            }
-                        }
-
-
-
-
                         particleTimer = 0f;
                     }
                 }
@@ -194,6 +179,7 @@ public class Laser : MonoBehaviourPun
                 }
 
             }
+            
             else laserTick = 0f; // IDamagable이 아닌 경우 틱 데미지 초기화
 
             yield return null;
