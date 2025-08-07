@@ -17,24 +17,21 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
     //      PhotonNetwork.AutomaticallySyncScene = true;
     //  }
 
-
-
     public void CardSelectPanelSpawn(Player player)
     {
-        if (cardSelectPanels.TryGetValue(player.ActorNumber, out CardSelectPanelItem panel))
+        if (cardSelectPanels.TryGetValue(player.ActorNumber, out var panel))
         {
             panel.Init(player);
             return;
         }
 
         PhotonNetwork.AutomaticallySyncScene = true;
-        GameObject obj = Instantiate(cardSelectPanelPrefabs);
+        var obj = Instantiate(cardSelectPanelPrefabs);
         obj.transform.SetParent(cardSelectPanelContent1);
-        CardSelectPanelItem Panel = obj.GetComponent<CardSelectPanelItem>();
+        var Panel = obj.GetComponent<CardSelectPanelItem>();
         // �ʱ�ȭ
         Panel.Init(player);
         cardSelectPanels.Add(player.ActorNumber, Panel);
-
     }
 
     public void cardSelectPanelSpawn()
@@ -42,31 +39,28 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
 
         // ���� ���� ���� ���� �� ȣ��
-        foreach (Player player in PhotonNetwork.PlayerList)
+        foreach (var player in PhotonNetwork.PlayerList)
         {
-            GameObject obj = Instantiate(cardSelectPanelPrefabs);
+            var obj = Instantiate(cardSelectPanelPrefabs);
             obj.transform.SetParent(cardSelectPanelContent1);
-            CardSelectPanelItem Panel = obj.GetComponent<CardSelectPanelItem>();
+            var Panel = obj.GetComponent<CardSelectPanelItem>();
             // �ʱ�ȭ
             Panel.Init(player);
             cardSelectPanels.Add(player.ActorNumber, Panel);
         }
-
-
     }
-
 
     public bool AllPlayerCardSelectCheck()
     {
-        foreach (Player player in PhotonNetwork.PlayerList)
+        foreach (var player in PhotonNetwork.PlayerList)
         {
             // �������� ���� �÷��̾� �߰�
             if (!player.CustomProperties.TryGetValue("Select", out object value) || !(bool)value)
             {
-                Player other = PhotonNetwork.PlayerList
-                .FirstOrDefault(p => p != PhotonNetwork.LocalPlayer);
+                var other = PhotonNetwork.PlayerList
+                    .FirstOrDefault(p => p != PhotonNetwork.LocalPlayer);
 
-                Debug.Log($"���� ���� �� �� �÷��̾�: {other.NickName}");
+                // Debug.Log($"���� ���� �� �� �÷��̾�: {other.NickName}");
 
 
                 return false;
@@ -75,7 +69,4 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
 
         return true;
     }
-
-   
 }
-
