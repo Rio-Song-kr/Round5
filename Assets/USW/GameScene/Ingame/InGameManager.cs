@@ -90,8 +90,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool IsWaitingForRematch => isWaitingForRematch;
 
     #endregion
-    
-    
+
     //# 20250807 0900 추가작업 
     private void OnDestroy()
     {
@@ -99,7 +98,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             Instance = null;
         }
-        
+
         OnGameStart = null;
         OnRoundStart = null;
         OnRoundEnd = null;
@@ -125,7 +124,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public Dictionary<string, int> GetMatchScores() => new Dictionary<string, int>(matchScores);
 
     private TestPlayerManager playerManager;
-     
+
     //#2025/08/07/02:00 추가 플레이어 시스템 활성화 하는 Action
     public static Action<bool> OnplayerSystemActivate;
 
@@ -208,6 +207,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartGame()
     {
+        Debug.Log("RPC_StartGame");
         InitializeScores();
         currentRound = 0;
         currentMatch = 0;
@@ -216,9 +216,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
         OnGameStart?.Invoke();
-        
+
         //#20250807 02:00 추가사항
-        OnplayerSystemActivate?.Invoke(true);        
+        // OnplayerSystemActivate?.Invoke(true);
 
         StartCoroutine(StartRoundWithDelay());
     }
