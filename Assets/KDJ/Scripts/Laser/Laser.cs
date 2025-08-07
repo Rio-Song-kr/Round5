@@ -87,14 +87,14 @@ public class Laser : MonoBehaviourPun
 
         if (Physics2D.RaycastNonAlloc(transform.position, transform.up, _hits, 100f, ~_layerMask) > 0)
         {
-            Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
+            // Debug.Log($"레이저가 {_hits[0].collider.name}에 충돌했습니다.");
             _laserEffect.SetVector3("EndPos", _hits[0].point); // 레이저가 충돌한 위치로 끝 위치 설정
             _laserEffect.SetVector3("HitPos", _hits[0].point); // 파편 이펙트용 충돌 위치 설정
             _isLaserHit = true; // 레이저가 충돌했음을 표시
         }
         else
         {
-            Debug.Log("레이저가 충돌하지 않았습니다.");
+            // Debug.Log("레이저가 충돌하지 않았습니다.");
             _laserEffect.SetVector3("EndPos", transform.position + transform.up * 100); // 충돌이 없으면 기본 끝 위치 설정
             _laserEffect.SetVector3("HitPos", transform.position + transform.up * 100); // 파편 이펙트용 기본 위치 설정
             _isLaserHit = false; // 레이저가 충돌하지 않았음을 표시
@@ -125,7 +125,7 @@ public class Laser : MonoBehaviourPun
             particleTimer += Time.deltaTime;
 
             LaserBeam();
-            Debug.Log($"isLaserHit: {_isLaserHit}");
+            // Debug.Log($"isLaserHit: {_isLaserHit}");
             if (particleTimer >= _particleDelay)
             {
                 if (_isLaserHit)
@@ -134,18 +134,18 @@ public class Laser : MonoBehaviourPun
                     if (PhotonNetwork.OfflineMode == true)
                     {
                         soot = Instantiate(
-                               _laserSoot,
-                               _hits[0].point,
-                               transform.rotation)
-                           .GetComponent<LaserSoot>();
+                                _laserSoot,
+                                _hits[0].point,
+                                transform.rotation)
+                            .GetComponent<LaserSoot>();
                     }
                     else
                     {
                         soot = PhotonNetwork.Instantiate(
-                            "LaserSoot",
-                            _hits[0].point,
-                            transform.rotation)
-                        .GetComponent<LaserSoot>();
+                                "LaserSoot",
+                                _hits[0].point,
+                                transform.rotation)
+                            .GetComponent<LaserSoot>();
                     }
 
                     if (soot != null)
@@ -170,12 +170,11 @@ public class Laser : MonoBehaviourPun
 
             if (_hits[0].collider.gameObject.layer == 8)
             {
-
                 laserTick += Time.deltaTime;
 
                 if (laserTick >= 0.495f) // 0.5초마다 틱 데미지 적용
                 {
-                    IDamagable damagable = _hits[0].collider.GetComponent<IDamagable>();
+                    var damagable = _hits[0].collider.GetComponent<IDamagable>();
                     if (damagable != null)
                     {
                         float damage = _baseDamage * _damageMultiplier;
@@ -183,7 +182,6 @@ public class Laser : MonoBehaviourPun
                     }
                     laserTick = 0f;
                 }
-
             }
 
             else laserTick = 0f; // IDamagable이 아닌 경우 틱 데미지 초기화

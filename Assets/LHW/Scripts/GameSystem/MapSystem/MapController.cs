@@ -82,6 +82,7 @@ public class MapController : MonoBehaviourPunCallbacks
     [PunRPC]
     private void InitPlayers()
     {
+        Debug.Log($"InitPlayers - {PhotonNetwork.IsMasterClient}");
         var allPlayers = FindObjectsOfType<PlayerController>();
 
         foreach (var player in allPlayers)
@@ -90,16 +91,17 @@ public class MapController : MonoBehaviourPunCallbacks
             if (player.photonView.IsMine)
             {
                 //플레이어 위치 초기화
-                ResetPlayerPosition(player);
+                // ResetPlayerPosition(player);
 
                 //중력 활성화
-                SetPlayerGravity(player, true);
+                // SetPlayerGravity(player, true);
 
                 Debug.Log("Map Controller에서 Player Active 호출(true)");
-                
+
                 //todo 어떻게 처리할지 고민
                 //모든 시스템 활성화
-                // InGameManager.Instance.SetStarted(true);
+                InGameManager.Instance.IsMapLoaded = true;
+                InGameManager.Instance.SetStarted(true);
             }
         }
     }
@@ -110,7 +112,12 @@ public class MapController : MonoBehaviourPunCallbacks
     /// </summary>
     private void ResetPlayerPosition(PlayerController player)
     {
-        player.SetPosition(Vector3.zero);
+        Debug.Log($"{photonView.ViewID} - isMaster : {PhotonNetwork.IsMasterClient}");
+        //todo Left right 구분해서 지정해줘야 함
+        if (PhotonNetwork.IsMasterClient)
+            player.SetPosition(new Vector3(-10, 6, 0));
+        else
+            player.SetPosition(new Vector3(10, 6, 0));
     }
 
     /// <summary>
