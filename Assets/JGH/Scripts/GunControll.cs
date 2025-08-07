@@ -106,15 +106,30 @@ public class GunControll : MonoBehaviourPun
         currentWeapon.Initialize();
 
 
-        // 내 무기 선택 시 상대에게 전달
-        if (photonView.IsMine)
+        if (PhotonNetwork.OfflineMode){
+
+            SetSingleWeapon((int)weaponType);
+        }
+        else
         {
-            photonView.RPC(nameof(RPC_SetWeapon), RpcTarget.Others, (int)weaponType);
+            // 내 무기 선택 시 상대에게 전달
+            if (photonView.IsMine)
+            {
+                photonView.RPC(nameof(RPC_SetWeapon), RpcTarget.Others, (int)weaponType);
+            }
+            
         }
     }
 
     [PunRPC]
     private void RPC_SetWeapon(int weaponTypeInt)
+    {
+        if (photonView.IsMine) return; // 내 무기 설정은 무시
+
+        EquipWeapon((WeaponType)weaponTypeInt);
+    }
+    
+    private void SetSingleWeapon(int weaponTypeInt)
     {
         if (photonView.IsMine) return; // 내 무기 설정은 무시
 
