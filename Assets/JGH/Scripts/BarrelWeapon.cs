@@ -34,11 +34,21 @@ public class BarrelWeapon : BaseWeapon
             Vector3 spawnPos = firingPoint.position + (firingPoint.rotation * Vector3.up) * 0.2f;
         
             // PhotonNetwork.Instantiate("Bullets/Bullet", spawnPos, spreadRotation);
-            GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", spawnPos, spreadRotation);
+            // GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", spawnPos, spreadRotation);
+            // object[] data = new object[] { gunController._isBigBullet, gunController._isExplosiveBullet };
+            // GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", spawnPos, spreadRotation);
+            object[] data = new object[] { gunController._isBigBullet, gunController._isExplosiveBullet };
             
+            
+            GameObject bulletObj = PhotonNetwork.Instantiate("Bullet", spawnPos, spreadRotation, 0, data);
+
+            // if (bulletObj.TryGetComponent(out Bullet bullet))
+            // {
+            //     bullet.SetBulletType(gunController._isBigBullet, gunController._isExplosiveBullet);
+            // }
             // gunController._isBigBullet = true;
             // gunController._isExplosiveBullet= true;
-            bulletObj.GetComponent<PhotonView>()?.RPC( "RPC_SetBulletType", RpcTarget.AllViaServer, gunController._isBigBullet, gunController._isExplosiveBullet );
+            // bulletObj.GetComponent<PhotonView>()?.RPC( "RPC_SetBulletType", RpcTarget.AllViaServer, gunController._isBigBullet, gunController._isExplosiveBullet );
         
             PhotonView bulletView = bulletObj.GetComponent<PhotonView>();
             if (bulletView != null)
