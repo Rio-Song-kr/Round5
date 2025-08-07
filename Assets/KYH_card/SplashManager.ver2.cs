@@ -18,9 +18,16 @@ public class SplashManagerver2 : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(PlaySplashSequence());
+    }
+
+    private IEnumerator PlaySplashSequence()
+    {
+        yield return new WaitForSeconds(1f); // 1초 대기
+
         // 첫 로고 시작
-        logo.SetActive(true);
         logoImage.color = new Color(1, 1, 1, 0);
+        logo.SetActive(true);
 
         Sequence seq = DOTween.Sequence();
         seq.Append(logoImage.DOFade(1, fadeInTime));
@@ -31,8 +38,8 @@ public class SplashManagerver2 : MonoBehaviour
         seq.OnComplete(() =>
         {
             logo.SetActive(false); // 첫 로고 비활성화
-            Academi.SetActive(true);
             AcademiLogo.color = new Color(1, 1, 1, 0);
+            Academi.SetActive(true);
 
             Sequence seq2 = DOTween.Sequence();
             seq2.Append(AcademiLogo.DOFade(1, fadeInTime));

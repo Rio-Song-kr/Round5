@@ -537,7 +537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -822,7 +822,7 @@ MonoBehaviour:
   logo: {fileID: 576482920}
   AcademiLogo: {fileID: 393079791}
   Academi: {fileID: 393079789}
-  fadeInTime: 1
+  fadeInTime: 2
   stayTime: 1.5
   fadeOutTime: 1
   nextSceneName: LoginScene
