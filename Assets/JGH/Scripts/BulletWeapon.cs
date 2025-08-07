@@ -33,7 +33,8 @@ public class BulletWeapon : BaseWeapon
         
         // if (photonView.IsMine)
         // {
-            currentAmmo-= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
+            // currentAmmo -= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
+            currentAmmo -= 1;
             lastAttackTime = Time.time;
 
             UpdateAmmoUI();

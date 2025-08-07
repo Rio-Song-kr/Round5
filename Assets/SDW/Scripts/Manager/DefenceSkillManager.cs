@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -52,6 +53,15 @@ public class DefenceSkillManager : MonoBehaviourPun
         // AddSkill(DefenceSkills.FrostSlam);
 
         StartCoroutine(WaitForAllPlayerJoin());
+        
+        
+        //#20250807 0200 추가사항
+        InGameManager.OnplayerSystemActivate += SetIsStarted;
+    }
+
+    private void OnDestroy()
+    {
+        InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
     /// <summary>
@@ -200,7 +210,7 @@ public class DefenceSkillManager : MonoBehaviourPun
     }
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    private void SetIsStarted(bool value)
+    public void SetIsStarted(bool value)
     {
         _isStarted = value;
         var defenceSkillsList = CardManager.Instance.GetDefenceCard();

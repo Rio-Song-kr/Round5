@@ -104,8 +104,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     protected void ReloadSpeedFromAnimator()
     {
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
-        Debug.Log(
-            $"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
+        Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
         float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
 
         photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
@@ -185,7 +184,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     private IEnumerator IdleCheckRoutine()
     {
         lastAttackTime = Time.time;
-        Debug.Log($"----- lastAttackTime : {lastAttackTime}");
+        // Debug.Log($"----- lastAttackTime : {lastAttackTime}");
 
         while (true)
         {
