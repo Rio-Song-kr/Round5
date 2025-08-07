@@ -18,12 +18,14 @@ public class StaticScoreUI : MonoBehaviour
     private void OnEnable()
     {
         Init();
+        InGameManager.OnGameStart += Init;
         InGameManager.OnRoundEnd += RoundScoreChange;
         InGameManager.OnMatchEnd += GameScoreChange;
     }
 
     private void OnDisable()
     {
+        InGameManager.OnGameStart -= Init;
         InGameManager.OnRoundEnd -= RoundScoreChange;
         InGameManager.OnMatchEnd -= GameScoreChange;
     }

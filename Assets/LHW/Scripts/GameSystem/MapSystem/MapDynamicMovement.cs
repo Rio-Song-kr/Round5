@@ -45,6 +45,11 @@ public class MapDynamicMovement : MonoBehaviourPun, IPunObservable
     {
         for (int i = 0; i < mapComponents.Length; i++)
         {
+            if (mapComponents[i].activeSelf == false)
+            {
+                i += 2;
+                continue;
+            }
             float duration = moveDelay + (i * moveDurationOffset);
             mapComponents[i].transform.DOMove(mapComponents[i].transform.position + new Vector3(-randomMapPresetCreator.MapTransformOffset, 0, 0), duration)
                 .SetDelay(mapController.MapChangeDelay).SetEase(Ease.InOutCirc);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RopeFreeze : MonoBehaviour
 {
-    [SerializeField] float freezeTime = 3.5f;
+    [SerializeField] float freezeTime = 4f;
     private Rigidbody2D rigid;
 
     Coroutine freezeCoroutine;
@@ -13,16 +13,26 @@ public class RopeFreeze : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        rigid.bodyType = RigidbodyType2D.Kinematic;
+    }
+
     private void OnEnable()
     {
-        TestIngameManager.OnRoundOver += FreezeRope;
-        TestIngameManager.onCardSelectEnd += FreezeRope;
+        InGameManager.OnGameStart += FreezeRope;
+        InGameManager.OnRoundEnd += FreezeRope;
+        InGameManager.OnRoundStart += FreezeRope;
+        InGameManager.OnCardSelectEnd += FreezeRope;
     }
 
     private void OnDisable()
+
     {
-        TestIngameManager.OnRoundOver -= FreezeRope;
-        TestIngameManager.onCardSelectEnd -= FreezeRope;
+        InGameManager.OnGameStart -= FreezeRope;
+        InGameManager.OnRoundEnd -= FreezeRope;
+        InGameManager.OnRoundStart -= FreezeRope;
+        InGameManager.OnCardSelectEnd -= FreezeRope;
     }
 
     private void FreezeRope()
@@ -37,10 +47,12 @@ public class RopeFreeze : MonoBehaviour
         yield return new WaitForSeconds(freezeTime);
 
         rigid.bodyType = RigidbodyType2D.Dynamic;
-        rigid.mass = 5;
+        rigid.mass = 3;
         rigid.drag = 0.2f;
         rigid.angularDrag = 0.1f;
         rigid.gravityScale = 1f;
+        rigid.velocity = Vector3.zero;
+        rigid.angularVelocity = 0;
 
         freezeCoroutine = null;
     }

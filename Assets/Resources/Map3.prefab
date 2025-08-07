@@ -324,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3709428948263246062, guid: 020994f2693f86341be04e2e4828f054, type: 3}
       propertyPath: m_VersionIndex
-      value: 63
+      value: 66
       objectReference: {fileID: 0}
     - target: {fileID: 3762727402533167611, guid: 020994f2693f86341be04e2e4828f054, type: 3}
       propertyPath: m_LocalPosition.y
@@ -361,6 +361,14 @@ PrefabInstance:
     - target: {fileID: 4253740367255486832, guid: 020994f2693f86341be04e2e4828f054, type: 3}
       propertyPath: sceneViewId
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281483072149763841, guid: 020994f2693f86341be04e2e4828f054, type: 3}
+      propertyPath: m_Size.x
+      value: 3.6015546
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281483072149763841, guid: 020994f2693f86341be04e2e4828f054, type: 3}
+      propertyPath: m_Offset.x
+      value: -1.3007773
       objectReference: {fileID: 0}
     - target: {fileID: 4314352405522288701, guid: 020994f2693f86341be04e2e4828f054, type: 3}
       propertyPath: m_LocalPosition.y
@@ -826,7 +834,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 8480322892554924479}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
