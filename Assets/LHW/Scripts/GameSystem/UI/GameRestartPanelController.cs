@@ -1,5 +1,6 @@
 using System;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
 {
     [SerializeField] Button yesButton;
     [SerializeField] Button noButton;
+    [SerializeField] TMP_Text waitingText;
 
     private void Awake()
     {
@@ -37,6 +39,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
             InGameManager.Instance.VoteRematch(vote);
             yesButton.interactable = false;
             noButton.interactable = false;
+            waitingText.text = vote ? "Try Rematch, waiting for opponent decision..." : "Quit Game, waiting for opponent decision...";
         }
     }
     
@@ -76,6 +79,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
     {
         yesButton.interactable = true;
         noButton.interactable = true;
+        waitingText.text = "";
     }
 
     [PunRPC]
