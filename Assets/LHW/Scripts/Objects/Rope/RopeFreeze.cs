@@ -27,6 +27,7 @@ public class RopeFreeze : MonoBehaviour
     }
 
     private void OnDisable()
+
     {
         InGameManager.OnGameStart -= FreezeRope;
         InGameManager.OnRoundEnd -= FreezeRope;
