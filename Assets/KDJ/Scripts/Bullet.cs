@@ -3,7 +3,7 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPun, IPunObservable
+public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback
 // , IPunObservable
 {
     // 무기에서 조절
@@ -18,6 +18,7 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     [SerializeField] private bool _isExplosiveBullet; // 폭발 총알 여부
 
     [SerializeField] private PlayerStatusDataSO playerStatusDataSo;
+    private GameObject _owner; // 발사자
 
     // 250726 추가
     private Vector3 _networkPosition;
@@ -63,31 +64,32 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         // }
     }
 
-    [PunRPC]
-    public void RPC_SetBulletType(bool isBig, bool isEx)
-    {
-        if (!photonView.IsMine) return;
-
-        _isBigBullet = isBig;
-        _bigBullet?.SetActive(_isBigBullet);
-
-        _isExplosiveBullet = isEx;
-        _explosiveBullet?.SetActive(_isExplosiveBullet);
-    }
+    // [PunRPC]
+    // public void RPC_SetBulletType(bool isBig, bool isEx)
+    // {
+    //     if (!photonView.IsMine) return;
+    //
+    //     _isBigBullet = isBig;
+    //     _bigBullet?.SetActive(_isBigBullet);
+    //
+    //     _isExplosiveBullet = isEx;
+    //     _explosiveBullet?.SetActive(_isExplosiveBullet);
+    // }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!photonView.IsMine) return;
-
+         if (!photonView.IsMine) return;
+         
         // 총알 유형에 따라 처리 
         if (_isBigBullet)
             BigBulletShot();
+
         if (_isExplosiveBullet)
             ExplosiveBulletShot();
-        else
-        {
+
+        if (!_isBigBullet && !_isExplosiveBullet)
             DefaultShot(collision);
-        }
+
 
         if (collision.gameObject.layer == 8)
         {
@@ -103,6 +105,8 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         // Destroy(gameObject);
         StartCoroutine(SafeDestroy());
     }
+    
+    
 
     // 사용안함 무기에서 바로 호출
     // private void Start()
@@ -232,5 +236,20 @@ public class Bullet : MonoBehaviourPun, IPunObservable
             _networkPosition = (Vector3)stream.ReceiveNext();
             _networkRotation = (Quaternion)stream.ReceiveNext();
         }
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        if (info.photonView.InstantiationData is object[] data && data.Length >= 2)
+        {
+            _isBigBullet = (bool)data[0];
+            _bigBullet.SetActive(_isBigBullet);
+
+            _isExplosiveBullet = (bool)data[1];
+            _explosiveBullet.SetActive(_isExplosiveBullet);
+            
+            
+            Debug.Log($"Big: {_isBigBullet}, Explosive: {_isExplosiveBullet}", this);
+        } 
     }
 }
