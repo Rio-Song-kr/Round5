@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObservable
 {
@@ -109,12 +110,29 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
         // Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
         float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
+        
+        Debug.Log($"PhotonNetwork.OfflineMode: {PhotonNetwork.OfflineMode}");
 
-        photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
+        if (PhotonNetwork.OfflineMode){
+            SetAnimatorSingleSpeed(speed);
+        }
+        else
+        {
+            photonView.RPC(nameof(RPC_SetAnimatorSpeed), RpcTarget.All, speed);
+        }
     }
 
     [PunRPC]
     protected void RPC_SetAnimatorSpeed(float speed)
+    {
+        if (animator != null)
+        {
+            animator.speed = speed;
+            // Debug.Log($"[RPC_SetAnimatorSpeed] 애니메이터 속도 설정: {speed}");
+        }
+    }
+    
+    protected void SetAnimatorSingleSpeed(float speed)
     {
         if (animator != null)
         {

@@ -192,10 +192,6 @@ public class RoundOverPanelController : MonoBehaviourPun
                     leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
                         leftImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
                     break;
-                case 3:
-                    leftBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
-                        leftImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
-                    break;
                 default:
                     break;
             }
@@ -219,10 +215,6 @@ public class RoundOverPanelController : MonoBehaviourPun
                 case 2:
                     rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
                         rightImageWinSpot[1].position, winImageMoveDuration, imageShrinkTime);
-                    break;
-                case 3:
-                    rightBackgroundImageView.RPC(nameof(WinnerImageUI.WinnerImageMove), RpcTarget.AllBuffered,
-                        rightImageWinSpot[2].position, winImageMoveDuration, imageShrinkTime);
                     break;
                 default:
                     break;

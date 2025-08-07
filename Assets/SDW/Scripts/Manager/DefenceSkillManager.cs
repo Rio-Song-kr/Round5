@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DefenceSkillManager : MonoBehaviourPun
 {
@@ -104,7 +105,10 @@ public class DefenceSkillManager : MonoBehaviourPun
         var skill = _skillDatabase.SkillDatabase[skillName];
         skill.Initialize();
 
-        if (!photonView.IsMine) return;
+        if (!PhotonNetwork.OfflineMode){
+            if (!photonView.IsMine) return;
+        }
+        
 
         _skills.Add(skill);
 

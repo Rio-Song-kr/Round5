@@ -26,18 +26,34 @@ public class USW_PlayerStatus : MonoBehaviourPun
 
         StoreOriginalValues();
 
-        if (photonView.IsMine)
+        if (PhotonNetwork.OfflineMode)
         {
             SetupEventListeners();
+        }
+        else
+        {
+            if (photonView.IsMine)
+            {
+                SetupEventListeners();
+            }
         }
     }
 
     private void OnDestroy()
     {
-        if (photonView.IsMine)
+        if (PhotonNetwork.OfflineMode)
         {
             RemoveEventListeners();
         }
+        else
+        {
+            if (photonView.IsMine)
+            {
+                RemoveEventListeners();
+            }
+            
+        }
+
     }
 
 
