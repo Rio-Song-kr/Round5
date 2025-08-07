@@ -10,6 +10,7 @@ public class ExplosiveBullet : MonoBehaviour
     private void Start()
     {
         ExplosionShock();
+        SoundManager.Instance.PlaySFX("ExplosionSound"+ UnityEngine.Random.Range(1, 3));
         CameraShake.Instance.ShakeCaller(0.65f, 0.1f);
     }
 

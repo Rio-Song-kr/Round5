@@ -66,6 +66,7 @@ public class TestPlayer : MonoBehaviour, IDamagable
 
     public void TakeDamage(float damage, Vector2 position, Vector2 direction)
     {
+        SoundManager.Instance.PlaySFX("PlayerHitSound" + UnityEngine.Random.Range(1, 3));
         _hp -= damage;
         SetUI();
 

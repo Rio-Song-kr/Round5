@@ -96,6 +96,7 @@ public class TestWeaponSystem : MonoBehaviour
         {
             if (_curWeapon != null)
             {
+                SoundManager.Instance.PlaySFX("ShotSound");
                 _curWeapon.Attack();
             }
         }

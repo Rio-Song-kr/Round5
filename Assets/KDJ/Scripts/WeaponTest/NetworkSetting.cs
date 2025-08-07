@@ -15,6 +15,7 @@ public class NetworkSetting : MonoBehaviourPunCallbacks
 
         // _player.SetIsStarted(true);
         InGameManager.Instance.SetStartedOffline(true);
+        SoundManager.Instance.PlayBGMLoop("BGM1");
     }
 
     private void Update()

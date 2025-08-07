@@ -142,6 +142,7 @@ public class SoundManager : MonoBehaviour
     public void SetBGMVolume(float volume)
     {
         BGMPlayer.volume = volume;
+        LoopPlayer.volume = volume; // LoopPlayer의 볼륨도 동일하게 설정
     }
 
     /// <summary>

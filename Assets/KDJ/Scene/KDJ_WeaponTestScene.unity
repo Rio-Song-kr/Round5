@@ -1810,6 +1810,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
+      propertyPath: _sfxList.Array.data[4].Name
+      value: BulletHitSound1
+      objectReference: {fileID: 0}
     - target: {fileID: 2108904061945068471, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: m_Name
       value: SoundManager
