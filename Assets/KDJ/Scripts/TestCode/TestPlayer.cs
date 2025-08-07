@@ -13,6 +13,8 @@ public class TestPlayer : MonoBehaviour, IDamagable
     [SerializeField] private GameObject _testEffect;
     [SerializeField] private TMP_Text _hpText;
     [SerializeField] private Image _hpBar;
+    [SerializeField] private GameObject _deadEffect1;
+    [SerializeField] private GameObject _deadEffect2;
 
     private Vector2 _moveInput;
     private bool _isGrounded;
@@ -62,10 +64,22 @@ public class TestPlayer : MonoBehaviour, IDamagable
     }
 
     [PunRPC]
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Vector2 position, Vector2 direction)
     {
         _hp -= damage;
         SetUI();
+
+        if (_hp <= 0)
+        {
+            _hp = 0;
+
+            GameObject effect1 = Instantiate(_deadEffect1, transform.position, Quaternion.identity);
+            GameObject effect2 = Instantiate(_deadEffect2, transform.position, Quaternion.identity);
+            effect1.transform.LookAt(position + direction);
+            effect2.transform.LookAt(position + direction);
+
+            Destroy(gameObject);
+        }
     }
 
     private void PlayerHandler()
@@ -97,10 +111,5 @@ public class TestPlayer : MonoBehaviour, IDamagable
     {
         _hpText.text = $"{_maxHp.ToString("F1")} / {_hp.ToString("F1")}";
         _hpBar.fillAmount = _hp / _maxHp;
-    }
-
-    public void TakeDamage(float amount, Vector2 position, Vector2 direction)
-    {
-        throw new NotImplementedException();
     }
 }

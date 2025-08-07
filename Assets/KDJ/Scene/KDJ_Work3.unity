@@ -1212,8 +1212,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 7030079410466946597, guid: 99aecaddd73bfbf4ea7f85eecf501510, type: 3}
   _laserPrefab: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
+  _borderEffect: {fileID: 0}
+  _deadFragEffect: {fileID: 0}
+  _deadSmokeEffect: {fileID: 0}
+  _jumpEffect: {fileID: 0}
+  _landEffect: {fileID: 0}
   _camera: {fileID: 1156368901}
   _pools: {fileID: 545955793}
+  PlayerList: []
+  PlayerViewIdList: 
 --- !u!1 &1156368899
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,6 +1366,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4354226905612051274, guid: b9604d0627c32a64c8efbc83469e7445, type: 3}
+      propertyPath: sceneViewId
+      value: 123
+      objectReference: {fileID: 0}
     - target: {fileID: 7831794487274680551, guid: b9604d0627c32a64c8efbc83469e7445, type: 3}
       propertyPath: m_Name
       value: PlayerDummy
@@ -1754,6 +1765,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 88
       objectReference: {fileID: 0}
+    - target: {fileID: 234581997374195018, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 122
+      objectReference: {fileID: 0}
     - target: {fileID: 264257164945951713, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 67
@@ -1778,9 +1793,17 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 631997941735845296, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 111
+      objectReference: {fileID: 0}
     - target: {fileID: 882144677796413909, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.y
       value: 0.9979999
+      objectReference: {fileID: 0}
+    - target: {fileID: 971893087215594672, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 976224045346079100, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -1801,6 +1824,10 @@ PrefabInstance:
     - target: {fileID: 1108667319340133216, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 104
+      objectReference: {fileID: 0}
+    - target: {fileID: 1111426404002974039, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 121
       objectReference: {fileID: 0}
     - target: {fileID: 1122035096961710192, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -2086,6 +2113,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 42
       objectReference: {fileID: 0}
+    - target: {fileID: 4263457549696126846, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 4293738332218135638, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 46
@@ -2117,6 +2148,10 @@ PrefabInstance:
     - target: {fileID: 4466684242413821563, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 4509032692218433150, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 114
       objectReference: {fileID: 0}
     - target: {fileID: 4510134322218530662, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
@@ -2178,6 +2213,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 5230157011070489763, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 5260224519406676592, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 38
@@ -2229,6 +2268,10 @@ PrefabInstance:
     - target: {fileID: 5484047504410971599, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_ConnectedAnchor.y
       value: 1.0079999
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561054170019386787, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 118
       objectReference: {fileID: 0}
     - target: {fileID: 5579375477231922927, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: m_Layer
@@ -2482,6 +2525,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 8450840142311939991, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 116
+      objectReference: {fileID: 0}
     - target: {fileID: 8479391056559411516, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 26
@@ -2506,6 +2553,10 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.y
       value: -2.154
       objectReference: {fileID: 0}
+    - target: {fileID: 8748973647705396106, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 115
+      objectReference: {fileID: 0}
     - target: {fileID: 8760708235733885613, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 70
@@ -2518,9 +2569,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8897660261705004653, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 119
+      objectReference: {fileID: 0}
     - target: {fileID: 8990597916793775864, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
       propertyPath: sceneViewId
       value: 92
+      objectReference: {fileID: 0}
+    - target: {fileID: 9134218717408589677, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
+      propertyPath: sceneViewId
+      value: 117
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8554987692258084758, guid: 49144ffdcdb719148b2b672634a52887, type: 3}
