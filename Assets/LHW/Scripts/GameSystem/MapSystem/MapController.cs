@@ -20,18 +20,49 @@ public class MapController : MonoBehaviourPunCallbacks
 
     private void OnEnable()
     {
-        InGameManager.OnRoundEnd += GoToNextStage;
+        InGameManager.OnRoundEnd += OnRoundEndHandler;
+        InGameManager.OnCardSelectStart += OnCardSelectEndHandler;
     }
 
     private void OnDisable()
     {
-        InGameManager.OnRoundEnd -= GoToNextStage;
+        InGameManager.OnRoundEnd -= OnRoundEndHandler;
+        InGameManager.OnCardSelectStart -= OnCardSelectEndHandler;
     }
 
     public void GoToNextStage()
     {
         MapShake();
         MapMove();
+    }
+
+    void OnRoundEndHandler()
+    {
+        var roundScores = InGameManager.Instance.GetRoundScores();
+        bool matchEnded = false;
+
+        // 매치 끝나는지 확인한후
+        foreach (var score in roundScores.Values)
+        {
+            
+            if (score >= 2)
+            {
+                matchEnded = true;
+                break;
+            }
+        }
+
+        // 매치가 끝나지 않은 일반 라운드에서는 맵이동하고 
+        if (!matchEnded)
+        {
+            GoToNextStage();
+        }
+        
+    }
+
+    void OnCardSelectEndHandler()
+    {
+        GoToNextStage();
     }
 
     /// <summary>
