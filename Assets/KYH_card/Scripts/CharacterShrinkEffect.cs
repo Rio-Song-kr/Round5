@@ -12,7 +12,7 @@ public class CharacterShrinkEffect : MonoBehaviourPun
 
     [Header("애니메이션 커브")]
     [SerializeField] private AnimationCurve shrinkCurve;   // 1초간 축소
-    [SerializeField] private AnimationCurve growCurve;     // 0.2초간 복원
+
 
     private void Awake()
     {
@@ -25,6 +25,12 @@ public class CharacterShrinkEffect : MonoBehaviourPun
         originalScale = characterTransform.localScale;
     }
 
+    private void OnEnable()
+    {
+        // 캐릭터가 다시 등장할 때 스케일 복원
+        characterTransform.localScale = originalScale;
+    }
+
     [PunRPC]
     public void RPC_PlayShrinkAnimation()
     {
@@ -35,8 +41,7 @@ public class CharacterShrinkEffect : MonoBehaviourPun
         // 커브Shrink로 1초간 줄어듦
         seq.Append(characterTransform.DOScale(shrinkScale, 1f).SetEase(shrinkCurve));
 
-        // 커브GrowFast로 0.2초간 복원
-        seq.Append(characterTransform.DOScale(originalScale, 0.4f).SetEase(growCurve));
+        
     }
 
     public void RequestShrinkEffect()
