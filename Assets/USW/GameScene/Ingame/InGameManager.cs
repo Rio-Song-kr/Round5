@@ -128,13 +128,16 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private bool _isStarted = false;
     public bool IsStarted => _isStarted;
 
+    public bool IsMapLoaded;
+    public bool IsCardSelected;
+
     //#2025/08/07/02:00 추가 플레이어 시스템 활성화 하는 Action
     // public static Action<bool> OnPlayerSystemActivate;
 
     private void Start()
     {
         if (PhotonNetwork.OfflineMode) return;
-        
+
         playerManager = FindFirstObjectByType<TestPlayerManager>();
     }
 
@@ -236,7 +239,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void SetStarted(bool value)
     {
-        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
+        if (IsCardSelected && IsMapLoaded)
+            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
     }
 
     [PunRPC]
@@ -302,6 +306,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
+        IsMapLoaded = false;
         photonView.RPC("RPC_EndRound", RpcTarget.All, winnerKey);
     }
 
@@ -428,6 +433,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartCardSelect(string winnerKey)
     {
+        IsCardSelected = false;
         SetGameState(GameState.CardSelecting);
         var cardSelectManager = FindObjectOfType<CardSelectManager>();
         cardSelectManager.ResetCardSelectionState(winnerKey);
@@ -494,8 +500,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        Debug.Log("Check Health에서 Player Active 호출(false)");
-        // OnPlayerSystemActivate?.Invoke(false);
         photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
 
         var alivePlayers = new List<string>();
@@ -715,7 +719,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void Update()
     {
         if (PhotonNetwork.OfflineMode) return;
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             DebugLeftPlayerWin();

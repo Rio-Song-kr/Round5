@@ -80,9 +80,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool _isFreeze = false;
     private bool _isPlayerMoved;
     private bool _prevPlayerMoveState;
-    // private bool _isStarted;
 
     private Coroutine _bounceCoroutine;
+
+    private bool _isFirstStarted = true;
 
     //# 플레이어 움직임 여부에 따라 Skill 사용 시간/Abyssal Countdown의 증감 여부를 위해 필요
     public Action<bool> OnPlayerMoveStateChanged;
@@ -130,7 +131,33 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        if (!InGameManager.Instance.IsStarted) return;
+        if (!InGameManager.Instance.IsStarted)
+        {
+            // rb.gravityScale = 0f;
+            photonView.RPC(nameof(SetGravity), RpcTarget.All, 0f);
+            transform.position = new Vector3(0f, 50f);
+            _isFirstStarted = true;
+            return;
+        }
+
+        if (_isFirstStarted)
+        {
+            // if (photonView.IsMine && PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
+            {
+                // SetPosition(new Vector3(-10, 6, 0));
+                StartCoroutine(DelayedPlayerSetup(new Vector3(-10, 6, 0)));
+            }
+            // else if (photonView.IsMine && !PhotonNetwork.IsMasterClient)
+            else if (!PhotonNetwork.IsMasterClient)
+            {
+                // SetPosition(new Vector3(10, 6, 0));
+                StartCoroutine(DelayedPlayerSetup(new Vector3(10, 6, 0)));
+            }
+            photonView.RPC(nameof(SetGravity), RpcTarget.All, 1f);
+
+            _isFirstStarted = false;
+        }
 
         if (photonView.IsMine)
         {
@@ -147,6 +174,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             SmoothMoveRemotePlayer();
             UpdateRemotePlayerState();
         }
+    }
+
+    private IEnumerator DelayedPlayerSetup(Vector3 position)
+    {
+        yield return new WaitForSeconds(1f);
+
+        SetPosition(position);
     }
 
     private void FixedUpdate()
@@ -297,6 +331,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void OnSetPosition(Vector3 newPosition)
     {
+        Debug.Log($"Set Position : {newPosition}, {photonView.ViewID} - {PhotonNetwork.IsMasterClient}");
         if (!photonView.IsMine)
         {
             // 위치 업데이트
@@ -757,6 +792,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (!photonView.IsMine) return;
 
         photonView.RPC("OnSetPosition", RpcTarget.All, newPosition);
+    }
+
+    [PunRPC]
+    private void SetGravity(float value)
+    {
+        if (!photonView.IsMine) return;
+
+        rb.gravityScale = value;
     }
 
     /// <summary>
