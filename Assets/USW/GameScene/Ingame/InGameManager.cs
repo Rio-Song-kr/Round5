@@ -243,6 +243,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         _isStarted = value;
     }
 
+    public void SetStartedOffline(bool value)
+    {
+        _isStarted = value;
+    }
+
     private IEnumerator StartRoundWithDelay()
     {
         yield return new WaitForSeconds(roundStartDelay);

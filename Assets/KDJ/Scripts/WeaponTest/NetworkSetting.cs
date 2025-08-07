@@ -11,10 +11,11 @@ public class NetworkSetting : MonoBehaviourPunCallbacks
     private void Start()
     {
         PhotonNetwork.OfflineMode = true; // 오프라인 모드로 설정
-        _player.SetIsStarted(true);
+        // _player.SetIsStarted(true);
+        InGameManager.Instance.SetStartedOffline(true);
     }
 
-    void Update()
+    private void Update()
     {
         Debug.Log("오프라인 모드 체크 : " + PhotonNetwork.OfflineMode);
     }
