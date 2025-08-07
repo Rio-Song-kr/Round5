@@ -133,6 +133,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Start()
     {
+        if (PhotonNetwork.OfflineMode) return;
+        
         playerManager = FindFirstObjectByType<TestPlayerManager>();
     }
 
@@ -239,6 +241,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     [PunRPC]
     public void SetStartedRPC(bool value)
+    {
+        _isStarted = value;
+    }
+
+    public void SetStartedOffline(bool value)
     {
         _isStarted = value;
     }
@@ -707,6 +714,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
+        if (PhotonNetwork.OfflineMode) return;
+        
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             DebugLeftPlayerWin();
