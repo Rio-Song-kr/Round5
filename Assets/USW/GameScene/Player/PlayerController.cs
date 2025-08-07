@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
@@ -89,6 +90,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public Action<bool> OnPlayerMoveStateChanged;
     //# --- 추가사항 ---
 
+    // ----------- 250807 추가사항 -----------
+    [SerializeField] private GameObject LandEffect;
+    
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -185,9 +190,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void FixedUpdate()
     {
-        if (photonView.IsMine)
-        {
+        if (PhotonNetwork.OfflineMode){
             HandleMovement();
+        }
+        else
+        {
+            if (photonView.IsMine)
+            {
+                HandleMovement();
+            }
         }
     }
 
@@ -300,8 +311,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private IEnumerator ReturnToPool(GameObject effectObj, ParticleSystem particle)
     {
-        yield return new WaitForSeconds(particle.main.duration);
-        PhotonNetwork.Destroy(effectObj);
+        if (PhotonNetwork.OfflineMode){
+            yield return new WaitForSeconds(particle.main.duration);
+            Destroy(effectObj);
+        }
+        else
+        {
+            yield return new WaitForSeconds(particle.main.duration);
+            PhotonNetwork.Destroy(effectObj);
+        }
     }
 
     [PunRPC]
@@ -383,6 +401,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
         var landEffectObj = PhotonNetwork.Instantiate(
             "LandEffect",
+            transform.position + new Vector3(0, _jumpEffectOffset, 0),
+            Quaternion.Euler(-90, 0, 0)
+        );
+
+
+        var landEffect = landEffectObj.GetComponentInChildren<ParticleSystem>();
+        landEffect.Play();
+        StartCoroutine(ReturnToPool(landEffectObj, landEffect));
+    }
+
+    private void OnJumpSingleStateChanged(bool newCanJump, bool newHasJumpedInAir)
+    {
+        // 점프 상태 시각적 동기화 (추후 추가할 이펙트, 애니메이션 등)
+        // if (!photonView.IsMine)
+        // {
+            // canJump = newCanJump;
+            // hasJumpedInAir = newHasJumpedInAir;
+            // return;
+        // }
+
+        // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
+        var landEffectObj = Instantiate( LandEffect,
             transform.position + new Vector3(0, _jumpEffectOffset, 0),
             Quaternion.Euler(-90, 0, 0)
         );
@@ -487,8 +527,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             hasJumpedInAir = false;
             // rb.velocity = new Vector2(rb.velocity.x, 0f);
 
-            // 점프 상태 변경을 다른 클라이언트에 알림
-            photonView.RPC("OnJumpStateChanged", RpcTarget.All, canJump, hasJumpedInAir);
+            if (PhotonNetwork.OfflineMode){
+                OnJumpSingleStateChanged(canJump, hasJumpedInAir);
+            }
+            else
+            {
+                // 점프 상태 변경을 다른 클라이언트에 알림
+                photonView.RPC("OnJumpStateChanged", RpcTarget.All, canJump, hasJumpedInAir);
+            }
         }
         else if (isGrounded && wasGrounded)
         {
@@ -725,7 +771,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 상태가 변경되었으면 네트워크 동기화
         if (prevCanJump != canJump || prevHasJumpedInAir != hasJumpedInAir)
         {
-            photonView.RPC("OnJumpStateChanged", RpcTarget.Others, canJump, hasJumpedInAir);
+            if (PhotonNetwork.OfflineMode){
+                OnJumpSingleStateChanged(canJump, hasJumpedInAir);
+            }
+            else
+            {
+                photonView.RPC("OnJumpStateChanged", RpcTarget.Others, canJump, hasJumpedInAir);
+            }
         }
     }
 

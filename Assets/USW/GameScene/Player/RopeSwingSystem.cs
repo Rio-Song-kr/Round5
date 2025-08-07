@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 {
@@ -57,7 +58,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     // private bool _isStarted;
     private bool _isFirstStarted = true;
-
+    
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -69,25 +70,47 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        if (!InGameManager.Instance.IsStarted && photonView.IsMine)
-        {
-            _isFirstStarted = true;
-            crossHairObj.SetActive(false);
-            return;
-        }
+        if (PhotonNetwork.OfflineMode){
+            if (!InGameManager.Instance.IsStarted)
+            {
+                _isFirstStarted = true;
+                crossHairObj.SetActive(false);
+                return;
+            }
 
-        if (_isFirstStarted && photonView.IsMine)
-        {
-            crossHairObj.SetActive(true);
-            _isFirstStarted = false;
-        }
+            if (_isFirstStarted)
+            {
+                crossHairObj.SetActive(true);
+                _isFirstStarted = false;
+            }
 
-        if (photonView.IsMine)
-        {
             HandleInput();
             UpdateHookTrajectory();
             HandleHookInput();
             HandleRopeClimbing();
+        }
+        else
+        {
+            if (!InGameManager.Instance.IsStarted && photonView.IsMine)
+            {
+                _isFirstStarted = true;
+                crossHairObj.SetActive(false);
+                return;
+            }
+
+            if (_isFirstStarted && photonView.IsMine)
+            {
+                crossHairObj.SetActive(true);
+                _isFirstStarted = false;
+            }
+
+            if (photonView.IsMine)
+            {
+                HandleInput();
+                UpdateHookTrajectory();
+                HandleHookInput();
+                HandleRopeClimbing();
+            }
         }
 
         // 모든 플레이어에게 시각적 업데이트 적용
@@ -96,9 +119,15 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void FixedUpdate()
     {
-        if (photonView.IsMine && isSwinging)
-        {
+        if (PhotonNetwork.OfflineMode){
             HandleSwingPhysics();
+        }
+        else
+        {
+            if (photonView.IsMine && isSwinging)
+            {
+                HandleSwingPhysics();
+            }
         }
     }
 
@@ -201,7 +230,25 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         hookLineRenderer = Instantiate(hookTestObj).GetComponent<LineRenderer>();
 
         // 궤적용 LineRenderer 설정 (로컬 플레이어만)
-        if (photonView.IsMine && trajectoryRenderer == null)
+        if (!PhotonNetwork.OfflineMode)
+        {
+            if (photonView.IsMine && trajectoryRenderer == null)
+            {
+                var trajectoryObj = new GameObject("TrajectoryRenderer");
+                trajectoryObj.transform.parent = transform;
+                trajectoryRenderer = trajectoryObj.AddComponent<LineRenderer>();
+
+                trajectoryRenderer.material = hookLineRenderer.material;
+                trajectoryRenderer.startWidth = 0.02f;
+                trajectoryRenderer.endWidth = 0.02f;
+                trajectoryRenderer.positionCount = 2;
+                trajectoryRenderer.enabled = true;
+
+                crossHairObj = Instantiate(hookCrosshairPrefab);
+                crossHairObj.SetActive(false);
+            }
+        }
+        else
         {
             var trajectoryObj = new GameObject("TrajectoryRenderer");
             trajectoryObj.transform.parent = transform;
@@ -233,10 +280,19 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         }
 
         // 크로스헤어는 로컬 플레이어만
-        if (hookCrosshairPrefab != null && !photonView.IsMine)
+        if (PhotonNetwork.OfflineMode)
         {
-            hookCrosshairPrefab.SetActive(false);
+            if(hookCrosshairPrefab != null)
+                hookCrosshairPrefab.SetActive(false);
         }
+        else
+        {
+            if (hookCrosshairPrefab != null && !photonView.IsMine)
+            {
+                hookCrosshairPrefab.SetActive(false);
+            }
+        }
+
 
         // 초기 궤적 설정 (로컬 플레이어만)
         if (trajectoryRenderer != null)

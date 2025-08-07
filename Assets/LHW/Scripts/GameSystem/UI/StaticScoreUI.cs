@@ -94,6 +94,9 @@ public class StaticScoreUI : MonoBehaviour
         if (winnerSide == "Left")
         {
             int matchWin = InGameManager.Instance.GetPlayerMatchScore(leftPlayerKey);
+
+            if (matchWin > 2) matchWin = 2;
+
             var leftImgView = leftWinImages[matchWin - 1].GetComponent<PhotonView>();
             leftImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
 
@@ -107,6 +110,9 @@ public class StaticScoreUI : MonoBehaviour
         else if (winnerSide == "Right")
         {
             int matchWin = InGameManager.Instance.GetPlayerMatchScore(rightPlayerKey);
+
+            if (matchWin > 2) matchWin = 2;
+
             var rightImgView = rightWinImages[matchWin - 1].GetComponent<PhotonView>();
             rightImgView.RPC(nameof(WinimgUIController.RoundWinImgAnimationActivate), RpcTarget.AllBuffered, scoreObtainDelay);
 
