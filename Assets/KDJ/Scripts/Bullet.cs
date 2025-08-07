@@ -3,7 +3,7 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPun, IPunObservable
+public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback
 // , IPunObservable
 {
     // 무기에서 조절
@@ -18,6 +18,7 @@ public class Bullet : MonoBehaviourPun, IPunObservable
     [SerializeField] private bool _isExplosiveBullet; // 폭발 총알 여부
 
     [SerializeField] private PlayerStatusDataSO playerStatusDataSo;
+    private GameObject _owner; // 발사자
 
     // 250726 추가
     private Vector3 _networkPosition;
@@ -63,17 +64,17 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         // }
     }
 
-    [PunRPC]
-    public void RPC_SetBulletType(bool isBig, bool isEx)
-    {
-        if (!photonView.IsMine) return;
-
-        _isBigBullet = isBig;
-        _bigBullet?.SetActive(_isBigBullet);
-
-        _isExplosiveBullet = isEx;
-        _explosiveBullet?.SetActive(_isExplosiveBullet);
-    }
+    // [PunRPC]
+    // public void RPC_SetBulletType(bool isBig, bool isEx)
+    // {
+    //     if (!photonView.IsMine) return;
+    //
+    //     _isBigBullet = isBig;
+    //     _bigBullet?.SetActive(_isBigBullet);
+    //
+    //     _isExplosiveBullet = isEx;
+    //     _explosiveBullet?.SetActive(_isExplosiveBullet);
+    // }
 
     public void SetBulletType(bool isBig, bool isEx)
     {
@@ -137,6 +138,8 @@ public class Bullet : MonoBehaviourPun, IPunObservable
         // Destroy(gameObject);
         StartCoroutine(SafeDestroy());
     }
+    
+    
 
     private void OfflineExplosive()
     {
@@ -282,5 +285,20 @@ public class Bullet : MonoBehaviourPun, IPunObservable
             _networkPosition = (Vector3)stream.ReceiveNext();
             _networkRotation = (Quaternion)stream.ReceiveNext();
         }
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        if (info.photonView.InstantiationData is object[] data && data.Length >= 2)
+        {
+            _isBigBullet = (bool)data[0];
+            _bigBullet.SetActive(_isBigBullet);
+
+            _isExplosiveBullet = (bool)data[1];
+            _explosiveBullet.SetActive(_isExplosiveBullet);
+            
+            
+            Debug.Log($"Big: {_isBigBullet}, Explosive: {_isExplosiveBullet}", this);
+        } 
     }
 }

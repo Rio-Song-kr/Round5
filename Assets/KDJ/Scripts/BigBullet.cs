@@ -34,7 +34,7 @@ public class BigBullet : MonoBehaviour
             }
 
             // Instantiate(_explosionEffect, hitPoint, Quaternion.identity);
-            transform.SetParent(null);
+            // PhotonNetwork.Instantiate("Explosive", hitPoint, Quaternion.identity);
             Destroy(gameObject, 1f);
             Destroy(_bullet);
         }
