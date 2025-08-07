@@ -469,6 +469,8 @@ MonoBehaviour:
   _testEffect: {fileID: 6265120235051190796, guid: 3439566e93c20b0489e85bcc252a9409, type: 3}
   _hpText: {fileID: 4241938658765092792}
   _hpBar: {fileID: 2159498377660022809}
+  _deadEffect1: {fileID: 0}
+  _deadEffect2: {fileID: 0}
 --- !u!50 &8410487137453203621
 Rigidbody2D:
   serializedVersion: 4
@@ -495,7 +497,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!114 &4354226905612051274
 MonoBehaviour:
   m_ObjectHideFlags: 0
