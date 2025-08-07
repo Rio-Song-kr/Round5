@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
+public class PlayerStatus : MonoBehaviourPun, IStatusEffectable, IDamagable
 {
     [SerializeField] private PlayerStatusDataSO _playerData;
     [SerializeField] private List<StatusEffect> _activeEffect = new List<StatusEffect>();
@@ -46,13 +46,19 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
             return;
         }
 
+        photonView.RPC(nameof(SetCurrentHP), RpcTarget.All, amount, position, direction);
+    }
+
+    [PunRPC]
+    private void SetCurrentHP(float amount, Vector2 position, Vector2 direction)
+    {
         float previousHp = _currentHp;
         _currentHp = Mathf.Max(0, _currentHp - amount);
-
 
         // 기존 이벤트 발생 (추후 UI 업데이트용)
         OnPlayerHpValueChanged?.Invoke(_currentHp, _currentMaxHp);
 
+        if (!photonView.IsMine) return;
         if (_currentHp <= 0 && !_isDead)
         {
             HandleDeath(position, direction);
@@ -75,25 +81,34 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         var rotation = Quaternion.Euler(0, 0, angle + 90);
 
-        Debug.Log(angle);
-
-        // gameObject.SetActive(false);
-
-        //todo 사망 Effect
+        //todo 사망 Effect 반환 기능 추가해야 함
         var deadFragEffect = PhotonNetwork.Instantiate("DeadFragWrap", position, rotation);
         var deadSmokeEffect = PhotonNetwork.Instantiate("DeadSmokeWrap", position, rotation);
+
+        //# 사망 처리
+        // InGameManager.Instance.CheckPlayerHealth();
+        photonView.RPC(nameof(CheckPlayerHealthRPC), RpcTarget.All);
 
         // 사망 시 모든 상태 초기화
         _activeEffect.Clear();
         _isInvincibility = false;
         _canAttack = false;
         _freezePlayer = false;
+        _isDead = false;
 
         // 기존 이벤트들 발생 (UI 업데이트)
         OnInvincibilityValueChanged?.Invoke(_isInvincibility);
         OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
         OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
         OnPlayerHpValueChanged?.Invoke(_currentHp, _currentMaxHp);
+    }
+
+    [PunRPC]
+    private void CheckPlayerHealthRPC()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        InGameManager.Instance.CheckPlayerHealth();
     }
 
     // 나중에 UI용 추가 
@@ -121,18 +136,6 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
 
         _canAttack = true;
         _isDead = false;
-    }
-
-    /// <summary>
-    /// InGameManager 연동 
-    /// </summary>
-    private void Start()
-    {
-        if (InGameManager.Instance != null)
-        {
-            string playerKey = PhotonNetwork.LocalPlayer.ActorNumber.ToString();
-            InGameManager.Instance.RegisterPlayerStatus(playerKey, this);
-        }
     }
 
     /// <summary>
@@ -233,25 +236,25 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
         if (Mathf.Abs(prevSpeed - _calculatedGroundSpeed) > 0.05f)
         {
             OnPlayerSpeedValueChanged?.Invoke(_calculatedGroundSpeed, _calculatedAirSpeed);
-            Debug.Log($"Move Speed Changed : {_calculatedGroundSpeed}");
+            // Debug.Log($"Move Speed Changed : {_calculatedGroundSpeed}");
         }
 
         if (prevCanAttack != _canAttack)
         {
             OnPlayerCanAttackValueChanged?.Invoke(_canAttack);
-            Debug.Log($"Can Attack Changed : {_canAttack}");
+            // Debug.Log($"Can Attack Changed : {_canAttack}");
         }
 
         if (prevInvincibility != _isInvincibility)
         {
             OnInvincibilityValueChanged?.Invoke(_isInvincibility);
-            Debug.Log($"Is Invincibility Changed : {_isInvincibility}");
+            // Debug.Log($"Is Invincibility Changed : {_isInvincibility}");
         }
 
         if (prevPlayerFreeze != _freezePlayer)
         {
             OnPlayerFreezeValueChanged?.Invoke(_freezePlayer);
-            Debug.Log($"Freeze Player Changed : {_freezePlayer}");
+            // Debug.Log($"Freeze Player Changed : {_freezePlayer}");
         }
     }
 
@@ -299,7 +302,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
                     break;
             }
         }
-        Debug.Log($"Multiply : {multiplyMaxHp}");
+        // Debug.Log($"Multiply : {multiplyMaxHp}");
 
         if (multiplyCooldown == 1f) multiplyCooldown = 0f;
 
@@ -309,12 +312,12 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
         {
             case StatusEffectType.IncreaseMaxHp:
                 _calculatedMaxHp *= 1 + multiplyMaxHp;
-                Debug.Log($"Max Hp Changed : {_calculatedMaxHp}");
+                // Debug.Log($"Max Hp Changed : {_calculatedMaxHp}");
                 break;
             case StatusEffectType.IncreaseCooldown:
                 _calculatedInvincibilityCooldown =
                     (_calculatedInvincibilityCooldown + additionalCooldown) * (1 + multiplyCooldown);
-                Debug.Log($"Shield CoolTime Changed : {_calculatedInvincibilityCooldown}");
+                // Debug.Log($"Shield CoolTime Changed : {_calculatedInvincibilityCooldown}");
                 break;
         }
 

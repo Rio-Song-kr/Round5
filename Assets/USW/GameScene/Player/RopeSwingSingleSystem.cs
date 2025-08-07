@@ -64,12 +64,12 @@ public class RopeSwingSingleSystem : MonoBehaviour
         InitializeHook();
 
         //#20250807 0200 추가사항
-        InGameManager.OnplayerSystemActivate += SetIsStarted;
+        InGameManager.OnPlayerSystemActivate += SetIsStarted;
     }
 
     private void OnDestroy()
     {
-        InGameManager.OnplayerSystemActivate -= SetIsStarted;
+        InGameManager.OnPlayerSystemActivate -= SetIsStarted;
     }
 
     private void Update()
@@ -89,7 +89,6 @@ public class RopeSwingSingleSystem : MonoBehaviour
     }
 
     #region RPCs
-
 
     private void OnHookAttached(Vector2 hitPoint)
     {
@@ -162,7 +161,7 @@ public class RopeSwingSingleSystem : MonoBehaviour
         }
 
         // 크로스헤어는 로컬 플레이어만
-        if (hookCrosshairPrefab != null )
+        if (hookCrosshairPrefab != null)
         {
             hookCrosshairPrefab.SetActive(false);
         }

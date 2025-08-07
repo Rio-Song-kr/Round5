@@ -109,7 +109,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         OnPlayerDefeated = null;
         OnRematchRequest = null;
         OnPlayerDisconnected = null;
-        OnplayerSystemActivate = null;
+        OnPlayerSystemActivate = null;
     }
 
     public int CurrentRound => currentRound;
@@ -126,7 +126,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private TestPlayerManager playerManager;
 
     //#2025/08/07/02:00 추가 플레이어 시스템 활성화 하는 Action
-    public static Action<bool> OnplayerSystemActivate;
+    public static Action<bool> OnPlayerSystemActivate;
 
     private void Start()
     {
@@ -159,8 +159,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         LeftRightActorNumber["RightPlayer"] = rightPlayerKey;
         _getIsMaster[leftPlayerKey] = leftPlayerActorNumber == PhotonNetwork.MasterClient.ActorNumber;
         _getIsMaster[rightPlayerKey] = rightPlayerActorNumber == PhotonNetwork.MasterClient.ActorNumber;
-        Debug.Log(
-            $"Left[{leftPlayerKey}] : {_getIsMaster[leftPlayerKey]}, Right[{rightPlayerKey}] : {_getIsMaster[rightPlayerKey]}");
+        // Debug.Log(
+        //     $"Left[{leftPlayerKey}] : {_getIsMaster[leftPlayerKey]}, Right[{rightPlayerKey}] : {_getIsMaster[rightPlayerKey]}");
     }
 
     #region Initialization
@@ -171,7 +171,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         SetGameState(GameState.Waiting);
 
         // 플레이어 상태 감지 시작
-        StartCoroutine(MonitorPlayerHealth());
+        // StartCoroutine(MonitorPlayerHealth());
     }
 
     private void InitializeScores()
@@ -218,7 +218,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         OnGameStart?.Invoke();
 
         //#20250807 02:00 추가사항
-        // OnplayerSystemActivate?.Invoke(true);
+        // OnPlayerSystemActivate?.Invoke(true);
 
         StartCoroutine(StartRoundWithDelay());
     }
@@ -251,6 +251,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 모든 플레이어 상태 초기화
         ResetPlayerStates();
 
+        OnPlayerSystemActivate?.Invoke(true);
         OnRoundStart?.Invoke();
         Debug.Log($"라운드 {currentRound} 시작!");
     }
@@ -291,6 +292,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 매치 승리 확인
         if (roundScores[winnerKey] >= roundsToWinMatch)
         {
+            OnPlayerSystemActivate?.Invoke(false);
             StartCoroutine(EndMatchWithDelay(winnerKey));
         }
         else
@@ -366,14 +368,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         OnGameEnd?.Invoke();
 
         // 리매치 대기 시작
-        StartCoroutine(StartRematchWaitingWithDelay());
+        // StartCoroutine(StartRematchWaitingWithDelay());
     }
 
-    private IEnumerator StartRematchWaitingWithDelay()
-    {
-        yield return new WaitForSeconds(3f);
-        StartRematchWaiting();
-    }
+    // private IEnumerator StartRematchWaitingWithDelay()
+    // {
+    //     yield return new WaitForSeconds(3f);
+    //     StartRematchWaiting();
+    // }
 
     #endregion
 
@@ -431,22 +433,25 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     #region 플레이어 health 모니터링
 
-    private IEnumerator MonitorPlayerHealth()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(0.1f);
+    //# 해당 기능을 제거하고 플레이어 사망시 별도로 실행할 수 있도록 변경
+    // private IEnumerator MonitorPlayerHealth()
+    // {
+    //     while (true)
+    //     {
+    //         yield return new WaitForSeconds(0.1f);
+    //
+    //         if (currentGameState != GameState.RoundInProgress)
+    //             continue;
+    //
+    //         CheckPlayerHealth();
+    //     }
+    // }
 
-            if (currentGameState != GameState.RoundInProgress)
-                continue;
-
-            CheckPlayerHealth();
-        }
-    }
-
-    private void CheckPlayerHealth()
+    public void CheckPlayerHealth()
     {
         if (!PhotonNetwork.IsMasterClient) return;
+
+        OnPlayerSystemActivate?.Invoke(false);
 
         var alivePlayers = new List<string>();
 
@@ -454,7 +459,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             string playerKey = kvp.Key;
             var playerStatus = kvp.Value;
+            int viewId = playerStatus.GetComponent<PhotonView>().ViewID;
 
+            //todo 사망과 다시 시작 시의 상태 초기화를 분리해야 함
             if (playerStatus != null && playerStatus.IsAlive)
             {
                 alivePlayers.Add(playerKey);
@@ -464,7 +471,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                     playerAliveStatus[playerKey] = true;
                 }
             }
-            else if (playerAliveStatus[playerKey])
+            else if (playerAliveStatus[playerKey] && !playerStatus.IsAlive)
             {
                 playerAliveStatus[playerKey] = false;
                 photonView.RPC("RPC_PlayerDefeated", RpcTarget.All, playerKey);
@@ -494,7 +501,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public void RegisterPlayerStatus(string playerKey, PlayerStatus playerStatus)
     {
         playerStatusDict[playerKey] = playerStatus;
-        Debug.Log($"플레이어 {playerKey} 상태 등록됨");
     }
 
     public void UnregisterPlayerStatus(string playerKey)
@@ -502,7 +508,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (playerStatusDict.ContainsKey(playerKey))
         {
             playerStatusDict.Remove(playerKey);
-            Debug.Log($"플레이어 {playerKey} 상태 등록 해제됨");
+            // Debug.Log($"플레이어 {playerKey} 상태 등록 해제됨");
         }
     }
 
@@ -750,6 +756,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         };
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(winnerProp);
-        Debug.Log($"[GameEndManager] ���� {(isWinner ? "����" : "����")}�Դϴ�.");
+        // Debug.Log($"[GameEndManager] ���� {(isWinner ? "����" : "����")}�Դϴ�.");
     }
 }

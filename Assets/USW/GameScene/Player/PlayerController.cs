@@ -119,12 +119,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _bounceCoroutine = StartCoroutine(ChangeBounce());
 
         //#20250807 0200 추가사항
-        InGameManager.OnplayerSystemActivate += SetIsStarted;
+        InGameManager.OnPlayerSystemActivate += SetIsStarted;
     }
 
     private void OnDestroy()
     {
-        InGameManager.OnplayerSystemActivate -= SetIsStarted;
+        InGameManager.OnPlayerSystemActivate -= SetIsStarted;
     }
 
     private void OnDisable()
@@ -451,7 +451,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 땅에 착지했을 때 점프 상태 활성화
         if (isGrounded && !wasGrounded)
         {
-            Debug.Log($"canJump : {canJump}, isGrounded : {isGrounded}");
+            // Debug.Log($"canJump : {canJump}, isGrounded : {isGrounded}");
             canJump = true;
             canSecondJump = true;
             hasJumpedInAir = false;
@@ -618,20 +618,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             // 로프 시스템에서 점프 처리
             if (ropeSystem != null && ropeSystem.TryHandleJump())
             {
-                Debug.Log("로프 시스템 점프");
+                // Debug.Log("로프 시스템 점프");
                 jumpHandled = true;
             }
             // 벽 시스템에서 점프 처리
             else if (wallSystem != null && wallSystem.TryHandleJump())
             {
-                Debug.Log("벽 시스템 점프");
+                // Debug.Log("벽 시스템 점프");
                 jumpHandled = true;
             }
 
             // 아무도 처리하지 않았으면 일반 점프
             if (!jumpHandled)
             {
-                Debug.Log("일반 점프");
+                // Debug.Log("일반 점프");
                 ExecuteNormalJump();
             }
         }
@@ -841,5 +841,4 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         _isStarted = value;
     }
-    
 }

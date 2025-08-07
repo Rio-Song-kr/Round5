@@ -56,12 +56,12 @@ public class DefenceSkillManager : MonoBehaviourPun
 
 
         //#20250807 0200 추가사항
-        InGameManager.OnplayerSystemActivate += SetIsStarted;
+        InGameManager.OnPlayerSystemActivate += SetIsStarted;
     }
 
     private void OnDestroy()
     {
-        InGameManager.OnplayerSystemActivate -= SetIsStarted;
+        InGameManager.OnPlayerSystemActivate -= SetIsStarted;
     }
 
     /// <summary>
@@ -120,6 +120,16 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// <param name="skillName">추가하려는 스킬</param>
     public void AddSkill(DefenceSkills skillName)
     {
+        //# 중복 체크
+        foreach (var existSkillName in _skillNames)
+        {
+            if (existSkillName == skillName)
+            {
+                Debug.Log($"{skillName}은 중복");
+                return;
+            }
+        }
+
         var skill = _skillDatabase.SkillDatabase[skillName];
         _skills.Add(skill);
 
@@ -172,6 +182,7 @@ public class DefenceSkillManager : MonoBehaviourPun
             if (!skill.IsPassive) continue;
 
             skill.Activate(transform.position, transform);
+            Debug.Log($"====== Added SKill : {skill.SkillName}");
         }
     }
 
@@ -215,21 +226,36 @@ public class DefenceSkillManager : MonoBehaviourPun
         if (!photonView.IsMine) return;
 
         _isStarted = value;
+
         var defenceSkillsList = CardManager.Instance.GetDefenceCard();
 
         if (defenceSkillsList == null || defenceSkillsList.Count == 0) return;
 
+        DeactivatePassiveSkills();
+
         foreach (var skill in defenceSkillsList)
         {
             photonView.RPC(nameof(AddDefenceSkills), RpcTarget.All, skill);
+            // AddSkill(skill);
         }
 
         _isAllJoined = true;
     }
 
+    private void DeactivatePassiveSkills()
+    {
+        foreach (var activated in _skills)
+        {
+            if (!activated.IsPassive) continue;
+
+            activated.Deactivate();
+        }
+    }
+
     [PunRPC]
     private void AddDefenceSkills(DefenceSkills skill)
     {
+        // if (!photonView.IsMine) return;
         AddSkill(skill);
     }
 }

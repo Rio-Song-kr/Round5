@@ -30,6 +30,8 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
 
     public Vector3 SkillPosition;
 
+    private GameObject _skillEffectObject;
+
     public override void Initialize()
     {
         _pools = FindFirstObjectByType<PoolManager>();
@@ -42,9 +44,14 @@ public class EmpEffectSkillDataSO : DefenceSkillDataSO
     {
         SkillPosition = skillPosition;
 
-        var skillEffectObject = PhotonNetwork.Instantiate("EmpEffect", SkillPosition, Quaternion.identity);
+        _skillEffectObject = PhotonNetwork.Instantiate("EmpEffect", SkillPosition, Quaternion.identity);
 
-        var skillEffect = skillEffectObject.GetComponent<EmpEffect>();
+        var skillEffect = _skillEffectObject.GetComponent<EmpEffect>();
         skillEffect.Initialize(this);
+    }
+
+    public override void Deactivate()
+    {
+        PhotonNetwork.Destroy(_skillEffectObject);
     }
 }

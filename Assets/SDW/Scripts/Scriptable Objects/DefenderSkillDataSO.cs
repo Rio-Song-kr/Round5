@@ -10,4 +10,8 @@ public class DefenderSkillDataSO : DefenceSkillDataSO
     public override void Activate(Vector3 skillPosition, Transform playerTransform)
     {
     }
+
+    public override void Deactivate()
+    {
+    }
 }

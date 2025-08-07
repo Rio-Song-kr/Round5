@@ -64,12 +64,12 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         InitializeHook();
 
         //#20250807 0200 추가사항
-        InGameManager.OnplayerSystemActivate += SetIsStarted;
+        InGameManager.OnPlayerSystemActivate += SetIsStarted;
     }
 
     private void OnDestroy()
     {
-        InGameManager.OnplayerSystemActivate -= SetIsStarted;
+        InGameManager.OnPlayerSystemActivate -= SetIsStarted;
     }
 
     private void Update()
