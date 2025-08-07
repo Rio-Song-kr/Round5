@@ -106,7 +106,7 @@ public class CardManager : MonoBehaviour
     {
         // 무기 인덱스에 따라 무기 설정
         // 예시: 무기 인덱스에 따른 로직 구현
-        bool[] weaponCards = new bool[3];
+        bool[] weaponCards = new bool[4];
         foreach (var card in _cards)
         {
             if (card is AttackCard attackCard)
@@ -121,6 +121,9 @@ public class CardManager : MonoBehaviour
                         break;
                     case 3:
                         weaponCards[2] = true; // Barrage
+                        break;
+                    case 4:
+                        weaponCards[3] = true; // Barrage
                         break;
                     default:
                         break;

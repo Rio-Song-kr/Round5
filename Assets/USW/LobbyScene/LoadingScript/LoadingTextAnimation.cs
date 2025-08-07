@@ -9,10 +9,10 @@ public class LoadingTextAnimation : MonoBehaviour
     [SerializeField] private float animationDuration = 3f;
 
     private Color[] colors;
+    private Coroutine animationCoroutine;
 
     void Start()
     {
-        // HEX -> Color 배열 변환
         colors = new Color[hexColors.Length];
         for (int i = 0; i < hexColors.Length; i++)
         {
@@ -75,6 +75,13 @@ public class LoadingTextAnimation : MonoBehaviour
 
     public void BeginGradation()
     {
-        StartCoroutine(AnimateGradientColors());
+        if (animationCoroutine != null)
+        {
+            StopCoroutine(animationCoroutine);
+            Debug.Log("기존애니메이션");
+        }
+        // 애니메이션 코루틴이 있으면 실행중지 떄리면 끝아님 ? 
+        animationCoroutine = StartCoroutine(AnimateGradientColors());
     }
+    
 }
