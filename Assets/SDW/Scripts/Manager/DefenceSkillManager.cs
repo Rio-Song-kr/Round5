@@ -52,9 +52,9 @@ public class DefenceSkillManager : MonoBehaviourPun
         // AddSkill(DefenceSkills.Emp);
         // AddSkill(DefenceSkills.FrostSlam);
 
-        StartCoroutine(WaitForAllPlayerJoin());
-        
-        
+        // StartCoroutine(WaitForAllPlayerJoin());
+
+
         //#20250807 0200 추가사항
         InGameManager.OnplayerSystemActivate += SetIsStarted;
     }
@@ -84,22 +84,22 @@ public class DefenceSkillManager : MonoBehaviourPun
     /// <summary>
     /// 모든 플레이어가 게임에 조인될 때까지 대기하는 Coroutine
     /// </summary>
-    private IEnumerator WaitForAllPlayerJoin()
-    {
-        //# 싱글일 때는 MaxPlayers가 1, 멀티일 때는 2가 되어야 함
-        int maxPlayers = 2;
-
-        if (maxPlayers == 1 || PhotonNetwork.PlayerList.Length >= maxPlayers) _isAllJoined = true;
-        else
-        {
-            while (PhotonNetwork.PlayerList.Length < maxPlayers)
-            {
-                yield return null;
-            }
-
-            _isAllJoined = true;
-        }
-    }
+    // private IEnumerator WaitForAllPlayerJoin()
+    // {
+    //     //# 싱글일 때는 MaxPlayers가 1, 멀티일 때는 2가 되어야 함
+    //     int maxPlayers = 2;
+    //
+    //     if (maxPlayers == 1 || PhotonNetwork.PlayerList.Length >= maxPlayers) _isAllJoined = true;
+    //     else
+    //     {
+    //         while (PhotonNetwork.PlayerList.Length < maxPlayers)
+    //         {
+    //             yield return null;
+    //         }
+    //
+    //         _isAllJoined = true;
+    //     }
+    // }
 
     /// <summary>
     /// 지연 시간 기반 스킬 활성화 코루틴 함수
@@ -212,6 +212,8 @@ public class DefenceSkillManager : MonoBehaviourPun
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
     public void SetIsStarted(bool value)
     {
+        if (!photonView.IsMine) return;
+
         _isStarted = value;
         var defenceSkillsList = CardManager.Instance.GetDefenceCard();
 
@@ -219,7 +221,15 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         foreach (var skill in defenceSkillsList)
         {
-            AddSkill(skill);
+            photonView.RPC(nameof(AddDefenceSkills), RpcTarget.All, skill);
         }
+
+        _isAllJoined = true;
+    }
+
+    [PunRPC]
+    private void AddDefenceSkills(DefenceSkills skill)
+    {
+        AddSkill(skill);
     }
 }

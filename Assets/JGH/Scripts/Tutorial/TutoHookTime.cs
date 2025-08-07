@@ -15,7 +15,7 @@ public class TutoHookTIme : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        // PhotonNetwork.OfflineMode = true;
+        PhotonNetwork.OfflineMode = true;
         playerLayer = LayerMask.NameToLayer("Player");
     }
 
