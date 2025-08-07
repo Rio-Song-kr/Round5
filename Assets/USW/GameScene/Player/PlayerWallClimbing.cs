@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerWallClimbing : MonoBehaviourPun
 {
@@ -44,7 +45,7 @@ public class PlayerWallClimbing : MonoBehaviourPun
 
     // 입력 캐시
     private bool upInput;
-
+    
     private enum WallState
     {
         None,
@@ -55,7 +56,9 @@ public class PlayerWallClimbing : MonoBehaviourPun
 
     private void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!PhotonNetwork.OfflineMode){
+            if (!photonView.IsMine) return;
+        }
 
         HandleInput();
         UpdateWallCheck();
@@ -64,7 +67,9 @@ public class PlayerWallClimbing : MonoBehaviourPun
 
     private void FixedUpdate()
     {
-        if (!photonView.IsMine) return;
+        if (!PhotonNetwork.OfflineMode){
+            if (!photonView.IsMine) return;
+        }
 
         ApplyWallPhysics();
     }

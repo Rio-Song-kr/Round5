@@ -7,6 +7,7 @@ public class TutoHookTIme : MonoBehaviourPunCallbacks
     public TMP_Text H;
     public TMP_Text M;
     public TMP_Text S;
+    
 
     private bool isTimerRunning = false;
     private float elapsedTime = 0f;
@@ -15,7 +16,6 @@ public class TutoHookTIme : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        PhotonNetwork.OfflineMode = true;
         playerLayer = LayerMask.NameToLayer("Player");
     }
 
@@ -34,12 +34,13 @@ public class TutoHookTIme : MonoBehaviourPunCallbacks
         S.text = seconds.ToString("00");
     }
 
-    private void OnTriggerEnter(Collider other)
+    // 2D 충돌 감지
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("dsfsdf");
         if (other.gameObject.layer == playerLayer)
         {
             isTimerRunning = true;
+            Debug.Log("타이머 시작됨");
         }
     }
 }

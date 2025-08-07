@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class RopeSystem : MonoBehaviourPun
 {
@@ -15,10 +16,11 @@ public class RopeSystem : MonoBehaviourPun
     private bool wasSwingingLastFrame;
     private Vector2 ropeReleaseVelocity;
 
-
     private void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!PhotonNetwork.OfflineMode){
+            if (!photonView.IsMine) return;
+        }
 
         HandleRopeIntegration();
         HandleRopeMovement();

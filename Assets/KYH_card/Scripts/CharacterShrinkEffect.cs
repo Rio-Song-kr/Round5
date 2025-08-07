@@ -8,35 +8,45 @@ public class CharacterShrinkEffect : MonoBehaviourPun
 {
     [SerializeField] private Transform characterTransform;
 
+    [SerializeField] private GameObject body;
+    [SerializeField] private Transform bodyDefaultTransform;
+
     private Vector3 originalScale;
 
-    [Header("¾Ö´Ï¸ÞÀÌ¼Ç Ä¿ºê")]
-    [SerializeField] private AnimationCurve shrinkCurve;   // 1ÃÊ°£ Ãà¼Ò
-    [SerializeField] private AnimationCurve growCurve;     // 0.2ÃÊ°£ º¹¿ø
+    [Header("ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Ä¿ï¿½ï¿½")]
+    [SerializeField] private AnimationCurve shrinkCurve;   // 1ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½
+
 
     private void Awake()
     {
         if (characterTransform == null)
         {
-            Debug.LogError("Character TransformÀÌ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogError("Character Transformï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
         originalScale = characterTransform.localScale;
     }
 
+    private void OnEnable()
+    {
+        gameObject.transform.localScale = originalScale;
+        body.transform.position = bodyDefaultTransform.position;
+    }
+
     [PunRPC]
     public void RPC_PlayShrinkAnimation()
     {
-        Vector3 shrinkScale = Vector3.one * 0.2f;
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - Vector3.one * 0.2f ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö³ï¿½...?
+        Vector3 shrinkScale = Vector3.zero;
 
         Sequence seq = DOTween.Sequence();
 
-        // Ä¿ºêShrink·Î 1ÃÊ°£ ÁÙ¾îµê
+        // Ä¿ï¿½ï¿½Shrinkï¿½ï¿½ 1ï¿½Ê°ï¿½ ï¿½Ù¾ï¿½ï¿½
         seq.Append(characterTransform.DOScale(shrinkScale, 1f).SetEase(shrinkCurve));
 
-        // Ä¿ºêGrowFast·Î 0.2ÃÊ°£ º¹¿ø
-        seq.Append(characterTransform.DOScale(originalScale, 0.4f).SetEase(growCurve));
+        // Ä¿ï¿½ï¿½GrowFastï¿½ï¿½ 0.2ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //seq.Append(characterTransform.DOScale(originalScale, 0.4f).SetEase(growCurve));
     }
 
     public void RequestShrinkEffect()
