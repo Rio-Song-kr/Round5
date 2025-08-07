@@ -416,7 +416,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        photonView.RPC("RPC_EndCardSelect", RpcTarget.All);
+        photonView.RPC("RPC_EndCardSelect", RpcTarget.AllBuffered);
     }
 
     [PunRPC]

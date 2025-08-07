@@ -35,8 +35,11 @@ public class Laser : MonoBehaviourPun
         _laserEffect.enabled = false;
         transform.localScale = Vector3.one; // 레이저 오브젝트의 스케일을 초기화
 
-        _poolManager = FindFirstObjectByType<PoolManager>();
-        _poolManager.InitializePool("LaserSoot", _laserSoot, 100, 200);
+        if (PhotonNetwork.OfflineMode == false)
+        {
+            _poolManager = FindFirstObjectByType<PoolManager>();
+            _poolManager.InitializePool("LaserSoot", _laserSoot, 100, 200);
+        }
     }
 
     private void OnDisable()
@@ -48,38 +51,26 @@ public class Laser : MonoBehaviourPun
         _laserCoroutine = null;
     }
 
-    private void Update()
-    {
-        Debug.Log("canShoot: " + CanShoot);
-    }
-
     public void ShootLaser()
     {
-        Debug.Log($"ShootLaser 호출, CanShoot: {CanShoot}");
-        Debug.Log("레이저 발사 요청");
+        if (PhotonNetwork.OfflineMode == true)
+        {
+            Shoot();
+            return;
+        }
+
         if (!photonView.IsMine) return;
         // photonView.RPC(nameof(Shoot), RpcTarget.All);
 
-        Debug.Log("레이저 발사 요청 2");
-        Debug.Log($"코루틴 상태:{_laserCoroutine}");
 
         if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
         {
-            Debug.Log("레이저 코루틴 시작");
             _laserCoroutine = StartCoroutine(LaserCoroutine());
-            Debug.Log($"코루틴 시작 후 상태: {_laserCoroutine}");
-        }
-        else
-        {
-            Debug.Log("CanShoot 조건이 false라서 코루틴 시작 안함");
         }
     }
 
-    [PunRPC]
     private void Shoot()
     {
-        _canShoot = true;
-
         if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
         {
             _laserCoroutine = StartCoroutine(LaserCoroutine());
@@ -91,7 +82,6 @@ public class Laser : MonoBehaviourPun
     /// </summary>
     private void LaserBeam()
     {
-        Debug.Log("레이저 빔 발사");
         CameraShake.Instance.ShakeCaller(0.15f, 0.02f); // 카메라 흔들기 효과
         _laserEffect.SetVector3("StartPos", transform.position); // 레이저 시작 위치 설정
 
@@ -140,14 +130,30 @@ public class Laser : MonoBehaviourPun
             {
                 if (_isLaserHit)
                 {
-                    var soot = PhotonNetwork.Instantiate(
+                    LaserSoot soot = null;
+                    if (PhotonNetwork.OfflineMode == true)
+                    {
+                        soot = Instantiate(
+                               _laserSoot,
+                               _hits[0].point,
+                               transform.rotation)
+                           .GetComponent<LaserSoot>();
+                    }
+                    else
+                    {
+                        soot = PhotonNetwork.Instantiate(
                             "LaserSoot",
                             _hits[0].point,
                             transform.rotation)
                         .GetComponent<LaserSoot>();
+                    }
+
                     if (soot != null)
                     {
-                        soot.SetPool();
+                        if (PhotonNetwork.OfflineMode == false)
+                        {
+                            soot.SetPool();
+                        }
                         // soot.transform.position = _hits[0].point;
                         soot.gameObject.transform.SetParent(_hits[0].transform);
                         var rb = _hits[0].transform.GetComponent<Rigidbody2D>();
@@ -179,7 +185,7 @@ public class Laser : MonoBehaviourPun
                 }
 
             }
-            
+
             else laserTick = 0f; // IDamagable이 아닌 경우 틱 데미지 초기화
 
             yield return null;

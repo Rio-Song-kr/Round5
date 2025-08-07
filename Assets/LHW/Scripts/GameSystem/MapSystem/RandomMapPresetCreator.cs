@@ -10,7 +10,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
     [SerializeField] GameObject[] mapResources;
 
     // �� ��ġ ������
-    [SerializeField] private float mapTransformOffset = 35;
+    [SerializeField] private float mapTransformOffset = 50;
 
     [SerializeField] private MapController controller;
 
