@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 
 public class GunControll : MonoBehaviourPun
 {
@@ -23,7 +19,6 @@ public class GunControll : MonoBehaviourPun
     // private WeaponType? lastWeapon = null;
     public IWeapon currentWeapon;
     private WeaponType? lastWeapon = null;
-    private bool _isStarted;
 
     /// <summary>
     /// 처음 시작 시 기본 무기 적용
@@ -32,24 +27,14 @@ public class GunControll : MonoBehaviourPun
     {
         // EquipWeapon(WeaponType.Bullet);
 
-        //#20250807 0200 추가사항
-        InGameManager.OnplayerSystemActivate += SetIsStarted;
-
         if (photonView.IsMine)
             EquipWeapon(WeaponType.Bullet);
-    }
-
-    private void OnDestroy()
-    {
-        InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
     private void Update()
     {
         // 이거 로직상 필요 없으면 주석 풀지 마세요 공격 안돼요
-        // if (!photonView.IsMine || !_isStarted) return;
-        
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !InGameManager.Instance.IsStarted) return;
 
         // 마우스 위치에 따라 총구 회전
         // RotateMuzzleToMouse();
@@ -159,10 +144,4 @@ public class GunControll : MonoBehaviourPun
     //        muzzle.parent.rotation = Quaternion.Euler(0, 0, angle); // 부모 회전
     //    }
     //}
-
-    //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    public void SetIsStarted(bool value)
-    {
-        _isStarted = value;
-    }
 }

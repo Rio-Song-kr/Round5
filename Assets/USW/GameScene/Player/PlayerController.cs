@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private bool _isFreeze = false;
     private bool _isPlayerMoved;
     private bool _prevPlayerMoveState;
-    private bool _isStarted;
+    // private bool _isStarted;
 
     private Coroutine _bounceCoroutine;
 
@@ -119,12 +119,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _bounceCoroutine = StartCoroutine(ChangeBounce());
 
         //#20250807 0200 추가사항
-        InGameManager.OnplayerSystemActivate += SetIsStarted;
-    }
-
-    private void OnDestroy()
-    {
-        InGameManager.OnplayerSystemActivate -= SetIsStarted;
     }
 
     private void OnDisable()
@@ -136,7 +130,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        if (!_isStarted) return;
+        if (!InGameManager.Instance.IsStarted) return;
 
         if (photonView.IsMine)
         {
@@ -230,6 +224,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             float velX = (float)stream.ReceiveNext();
             float velY = (float)stream.ReceiveNext();
             remoteVelocity = new Vector2(velX, velY);
+
 
             // 불상태들
             remoteFacingRight = (float)stream.ReceiveNext() > 0.5f;
@@ -451,7 +446,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 땅에 착지했을 때 점프 상태 활성화
         if (isGrounded && !wasGrounded)
         {
-            Debug.Log($"canJump : {canJump}, isGrounded : {isGrounded}");
+            // Debug.Log($"canJump : {canJump}, isGrounded : {isGrounded}");
             canJump = true;
             canSecondJump = true;
             hasJumpedInAir = false;
@@ -618,20 +613,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             // 로프 시스템에서 점프 처리
             if (ropeSystem != null && ropeSystem.TryHandleJump())
             {
-                Debug.Log("로프 시스템 점프");
+                // Debug.Log("로프 시스템 점프");
                 jumpHandled = true;
             }
             // 벽 시스템에서 점프 처리
             else if (wallSystem != null && wallSystem.TryHandleJump())
             {
-                Debug.Log("벽 시스템 점프");
+                // Debug.Log("벽 시스템 점프");
                 jumpHandled = true;
             }
 
             // 아무도 처리하지 않았으면 일반 점프
             if (!jumpHandled)
             {
-                Debug.Log("일반 점프");
+                // Debug.Log("일반 점프");
                 ExecuteNormalJump();
             }
         }
@@ -837,9 +832,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     //# --- 추가사항 ---
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    public void SetIsStarted(bool value)
-    {
-        _isStarted = value;
-    }
-    
+    // public void SetIsStarted(bool value)
+    // {
+    //     _isStarted = value;
+    //
+    //     Debug.Log($"Player Controller({photonView.ViewID} : {_isStarted}");
+    // }
 }
