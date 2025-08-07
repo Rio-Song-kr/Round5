@@ -55,7 +55,7 @@ public class RopeSwingSingleSystem : MonoBehaviour
     private bool climbDownInput;
     private float moveInput;
 
-    private bool _isStarted;
+    // private bool _isStarted;
 
     private void Start()
     {
@@ -64,12 +64,12 @@ public class RopeSwingSingleSystem : MonoBehaviour
         InitializeHook();
 
         //#20250807 0200 추가사항
-        InGameManager.OnPlayerSystemActivate += SetIsStarted;
+        // InGameManager.OnPlayerSystemActivate += SetIsStarted;
     }
 
     private void OnDestroy()
     {
-        InGameManager.OnPlayerSystemActivate -= SetIsStarted;
+        // InGameManager.OnPlayerSystemActivate -= SetIsStarted;
     }
 
     private void Update()
@@ -545,10 +545,10 @@ public class RopeSwingSingleSystem : MonoBehaviour
     #endregion
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    public void SetIsStarted(bool value)
-    {
-        _isStarted = value;
-
-        crossHairObj.SetActive(value);
-    }
+    // public void SetIsStarted(bool value)
+    // {
+    //     _isStarted = value;
+    //
+    //     crossHairObj.SetActive(value);
+    // }
 }

@@ -82,8 +82,8 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         canvasController.ResetCardSelectionState();
 
         // 이형원 임시 시도
-        if(InGameManager.Instance.CurrentGameState != InGameManager.GameState.GameEnding)
-        canvasController.TryStartCardSelection();
+        if (InGameManager.Instance.CurrentGameState != InGameManager.GameState.GameEnding)
+            canvasController.TryStartCardSelection();
 
         // 캔버스 컨트롤러 초기화 및 시작하는부분 
         // DOVirtual.DelayedCall(0.2f, () =>
@@ -146,7 +146,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     public void ActivateClientCharacter()
     {
-        Debug.Log("ActivateMasterCharacter()");
+        Debug.Log("ActivateClientCharacter()");
         masterCharacter.SetActive(false);
         clientCharacter.SetActive(true);
 
@@ -164,7 +164,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SelectCardArm(int index)
     {
-        Debug.Log($"[CardSelectManager] 셀렉트 카드 암 index = {index} 호출됨");
+        // Debug.Log($"[CardSelectManager] 셀렉트 카드 암 index = {index} 호출됨");
         armController.SelectCard(index);
     }
 
@@ -195,14 +195,14 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         //      return; // 선택이 끝났다면 카드 다시 띄우지 않음
         //  }
 
-        Debug.Log("카드 생성 시작");
+        // Debug.Log("카드 생성 시작");
         currentCards.Clear();
 
         float centerIndex = (indexes.Length - 1) / 2f;
 
         for (int i = 0; i < indexes.Length; i++)
         {
-            Debug.Log("포 문 안으로 들어왔음");
+            // Debug.Log("포 문 안으로 들어왔음");
             var card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent1);
             var rt = card.GetComponent<RectTransform>();
             var cg = card.GetComponent<CanvasGroup>();
@@ -244,14 +244,14 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         //     return; // 선택이 끝났다면 카드 다시 띄우지 않음
         // }
 
-        Debug.Log("카드 생성 시작");
+        // Debug.Log("카드 생성 시작");
         currentCards.Clear();
 
         float centerIndex = (indexes.Length - 1) / 2f;
 
         for (int i = 0; i < indexes.Length; i++)
         {
-            Debug.Log("포 문 안으로 들어왔음");
+            // Debug.Log("포 문 안으로 들어왔음");
             var card = Instantiate(allCardPrefabs[indexes[i]], cardSpawnParent2);
             var rt = card.GetComponent<RectTransform>();
             var cg = card.GetComponent<CanvasGroup>();
@@ -295,7 +295,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             var flip = currentCards[index].GetComponent<FlipCard>();
             if (flip != null)
             {
-                Debug.Log("카드 뒤집힘 애니메이션 실행");
+                // Debug.Log("카드 뒤집힘 애니메이션 실행");
                 flip.PlayFlipAnimation();
             }
         }
@@ -332,12 +332,12 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     // 카드 하나가 선택되었을 때 호출됨
     public void OnCardSelected(GameObject selected)
     {
-        Debug.Log($"[OnCardSelected] called | hasSelect: {hasSelect}");
+        // Debug.Log($"[OnCardSelected] called | hasSelect: {hasSelect}");
         if (hasSelect) return;
 
         hasSelect = true;
 
-        Debug.Log("내 카드 선택 완료됨");
+        // Debug.Log("내 카드 선택 완료됨");
 
         PhotonNetwork.AutomaticallySyncScene = true;
 
@@ -358,7 +358,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         int selectedIndex = currentCards.IndexOf(selected);
         photonView.RPC(nameof(RPC_PlayCardSelectionAnimation), RpcTarget.All, selectedIndex);
 
-        Debug.Log("선택된 카드: " + selected.name);
+        // Debug.Log("선택된 카드: " + selected.name);
         // Debug.Log("게임 씬으로 넘어가기 위해 로딩 진행");
 
         // if (canvasController.IsMyTurn())
@@ -369,7 +369,8 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     private IEnumerator CheckAllSelected()
     {
-        Debug.Log("Check All Selected");
+        InGameManager.Instance.SetStarted(false);
+        
         yield return new WaitForSeconds(1f);
 
         if (cardSelectCheckManager.AllPlayerCardSelectCheck())
@@ -390,11 +391,12 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         canvasController.ResetCardSelectionState();
         masterCharacter.SetActive(false);
         clientCharacter.SetActive(false);
+
         if (PhotonNetwork.IsMasterClient) // 마스터만 씬 전환
         {
             Debug.Log("모든 플레이어 선택 완료 → Game Scene 전환");
             // PhotonNetwork.LoadLevel("Game Scene");
-            PhotonView canvasView = canvasController.photonView;
+            var canvasView = canvasController.photonView;
             canvasView.RPC(nameof(CardSelectUIPanelController.CardSelectUIActivate), RpcTarget.All, false);
             if (InGameManager.Instance.CurrentRound == 0 && InGameManager.Instance.CurrentMatch == 0)
             {
@@ -485,7 +487,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     public bool HasSelected() => hasSelect;
 
-    public void ResetCardSelectionState()
+    public void ResetCardSelectionState(string winnerKey = null)
     {
         Debug.Log("카드선택상황 초기화");
         hasSelect = false;
@@ -501,6 +503,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             Destroy(t.gameObject);
         }
 
+        //todo Select가 언제 변경되는지 확인 필요함
         var props = new Hashtable();
         props["Select"] = false;
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);

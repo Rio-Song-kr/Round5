@@ -7,24 +7,21 @@ using UnityEngine;
 public class RandomMapPresetCreator : MonoBehaviourPun
 {
     // ���� Resources�� ������ �Ÿ� �ش� ������� ���� �ʿ�
-    [SerializeField] GameObject[] mapResources;
+    [SerializeField] private GameObject[] mapResources;
 
     // �� ��ġ ������
     [SerializeField] private float mapTransformOffset = 50;
 
     [SerializeField] private MapController controller;
 
-    Coroutine mapUpdateCoroutine;
+    private Coroutine mapUpdateCoroutine;
 
-    public float MapTransformOffset
-    {
-        get { return mapTransformOffset; }
-    }
+    public float MapTransformOffset => mapTransformOffset;
 
     // ���� ���� ��
-    [SerializeField] int gameCycleNum = 3;
+    [SerializeField] private int gameCycleNum = 3;
 
-    [SerializeField] Transform[] mapListTransform;
+    [SerializeField] private Transform[] mapListTransform;
 
     private WeightedRandom<GameObject> mapWeightedRandom = new WeightedRandom<GameObject>();
 
@@ -51,7 +48,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
         InGameManager.OnGameStart -= OnGameStart;
     }
 
-    void OnGameStart()
+    private void OnGameStart()
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -60,9 +57,9 @@ public class RandomMapPresetCreator : MonoBehaviourPun
                 RandomInit();
                 RandomMapSelect(i);
                 mapWeightedRandom.ClearList();
-                Debug.Log("�ݺ�");
+                // Debug.Log("�ݺ�");
             }
-            MapUpdate(InGameManager.Instance.CurrentMatch);            
+            MapUpdate(InGameManager.Instance.CurrentMatch);
         }
     }
 
@@ -84,35 +81,32 @@ public class RandomMapPresetCreator : MonoBehaviourPun
     {
         for (int i = 0; i < gameCycleNum; i++)
         {
-            GameObject selectedMap = mapWeightedRandom.GetRandomItemBySub();
-            Vector3 selectedMapPosition = new Vector3((i + 1) * mapTransformOffset, 0, 5);
-            GameObject map = PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
+            var selectedMap = mapWeightedRandom.GetRandomItemBySub();
+            var selectedMapPosition = new Vector3((i + 1) * mapTransformOffset, 0, 5);
+            var map = PhotonNetwork.Instantiate(selectedMap.name, selectedMapPosition, Quaternion.identity);
             //GameObject map = Instantiate(selectedMap, selectedMapPosition, Quaternion.identity);
             map.transform.SetParent(mapListTransform[round]);
 
-            PhotonView mapView = map.GetComponent<PhotonView>();
+            var mapView = map.GetComponent<PhotonView>();
             mapView.RPC(nameof(MapDynamicMovement.SetParentToRound), RpcTarget.OthersBuffered, round);
-            Debug.Log("����");
+            // Debug.Log("����");
         }
     }
 
-    public Transform GetRoundTransform(int round)
-    {
-        return mapListTransform[round];
-    }
+    public Transform GetRoundTransform(int round) => mapListTransform[round];
 
     public void MapUpdate(int match)
     {
         mapUpdateCoroutine = StartCoroutine(MapUpdateCoroutine(match));
     }
 
-    IEnumerator MapUpdateCoroutine(int match)
+    private IEnumerator MapUpdateCoroutine(int match)
     {
         yield return new WaitForSeconds(2f);
 
         for (int i = 0; i < mapListTransform.Length; i++)
         {
-            PhotonView MapView = mapListTransform[i].GetComponent<PhotonView>();
+            var MapView = mapListTransform[i].GetComponent<PhotonView>();
             if (match == i)
             {
                 MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, true);

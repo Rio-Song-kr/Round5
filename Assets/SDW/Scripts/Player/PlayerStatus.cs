@@ -86,7 +86,6 @@ public class PlayerStatus : MonoBehaviourPun, IStatusEffectable, IDamagable
         var deadSmokeEffect = PhotonNetwork.Instantiate("DeadSmokeWrap", position, rotation);
 
         //# 사망 처리
-        // InGameManager.Instance.CheckPlayerHealth();
         photonView.RPC(nameof(CheckPlayerHealthRPC), RpcTarget.All);
 
         // 사망 시 모든 상태 초기화

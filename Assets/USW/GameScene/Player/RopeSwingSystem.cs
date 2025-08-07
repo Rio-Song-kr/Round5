@@ -55,7 +55,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     private bool climbDownInput;
     private float moveInput;
 
-    private bool _isStarted;
+    // private bool _isStarted;
+    private bool _isFirstStarted = true;
 
     private void Start()
     {
@@ -64,16 +65,23 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         InitializeHook();
 
         //#20250807 0200 추가사항
-        InGameManager.OnPlayerSystemActivate += SetIsStarted;
-    }
-
-    private void OnDestroy()
-    {
-        InGameManager.OnPlayerSystemActivate -= SetIsStarted;
     }
 
     private void Update()
     {
+        if (!InGameManager.Instance.IsStarted && photonView.IsMine)
+        {
+            _isFirstStarted = true;
+            crossHairObj.SetActive(false);
+            return;
+        }
+
+        if (_isFirstStarted && photonView.IsMine)
+        {
+            crossHairObj.SetActive(true);
+            _isFirstStarted = false;
+        }
+
         if (photonView.IsMine)
         {
             HandleInput();
@@ -608,13 +616,4 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     public Vector2 GetHookPoint() => hookPoint;
 
     #endregion
-
-    //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
-    public void SetIsStarted(bool value)
-    {
-        _isStarted = value;
-
-        if (photonView.IsMine)
-            crossHairObj.SetActive(value);
-    }
 }
