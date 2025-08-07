@@ -49,6 +49,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
         {
             Debug.Log("리매치 승인");
             gameObject.SetActive(false);
+            SceneManager.LoadScene("TempLoadingScene");
         }
         else
         {

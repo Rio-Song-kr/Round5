@@ -8,10 +8,19 @@ public class RopeCreator : MonoBehaviour
     [SerializeField] int links = 7;
 
     private GameObject link;
+    private bool IsCreated = false;
 
     private void Awake()
     {
         GenerateRope();
+    }
+
+    private void OnEnable()
+    {
+        if(IsCreated == false)
+        {
+            GenerateRope();
+        }
     }
 
     /// <summary>
@@ -29,5 +38,6 @@ public class RopeCreator : MonoBehaviour
             previousRB = link.GetComponent<Rigidbody2D>();
         }
         objectWeight.ConnectRopeEnd(link.GetComponent<Rigidbody2D>());
+        IsCreated = true;
     }
 }
