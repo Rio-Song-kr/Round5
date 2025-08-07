@@ -44,15 +44,7 @@ public class PlayerDisconnectedPopup : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         base.OnLeftRoom();
-        
                 
-        //카드 상태 초기화.
-        CardManager.Instance.ClearLists();
-
-        var inGameManager = FindAnyObjectByType<InGameManager>();
-        if(inGameManager != null)
-            Destroy(inGameManager.gameObject);
-        
         //카드 상태 초기화.
         CardManager.Instance.ClearLists();
 

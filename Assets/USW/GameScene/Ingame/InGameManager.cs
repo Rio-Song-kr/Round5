@@ -25,7 +25,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
         Init();
     }
 
@@ -91,6 +90,28 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public bool IsWaitingForRematch => isWaitingForRematch;
 
     #endregion
+    
+    
+    //# 20250807 0900 추가작업 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+        
+        OnGameStart = null;
+        OnRoundStart = null;
+        OnRoundEnd = null;
+        OnMatchEnd = null;
+        OnGameEnd = null;
+        OnCardSelectStart = null;
+        OnCardSelectEnd = null;
+        OnPlayerDefeated = null;
+        OnRematchRequest = null;
+        OnPlayerDisconnected = null;
+        OnplayerSystemActivate = null;
+    }
 
     public int CurrentRound => currentRound;
     public int CurrentMatch => currentMatch;

@@ -77,7 +77,7 @@ public class PlayerStatus : MonoBehaviour, IStatusEffectable, IDamagable
 
         Debug.Log(angle);
 
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
 
         //todo 사망 Effect
         var deadFragEffect = PhotonNetwork.Instantiate("DeadFragWrap", position, rotation);
