@@ -75,6 +75,7 @@ public class SoundManager : MonoBehaviour
         if (BGMDic.ContainsKey(name))
         {
             BGMPlayer.clip = BGMDic[name];
+            LoopPlayer.Stop();
             BGMPlayer.Play();
         }
     }
@@ -88,6 +89,7 @@ public class SoundManager : MonoBehaviour
         if (BGMDic.ContainsKey(name))
         {
             LoopPlayer.clip = BGMDic[name];
+            BGMPlayer.Stop();
             LoopPlayer.Play();
         }
     }

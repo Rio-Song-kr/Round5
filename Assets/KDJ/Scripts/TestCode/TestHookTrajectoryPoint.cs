@@ -52,7 +52,7 @@ public class TestHookTrajectoryPoint : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             // 테스트용 음원 재상
-            SoundManager.Instance.PlayBGM("TestBGM");
+            SoundManager.Instance.PlayBGMOnce("TestBGM");
         }
     }
 
