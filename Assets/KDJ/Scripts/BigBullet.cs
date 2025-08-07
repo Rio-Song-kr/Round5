@@ -19,7 +19,11 @@ public class BigBullet : MonoBehaviour
         if (collision.gameObject.layer == 8)
         {
             Vector2 hitPoint = collision.ClosestPoint(transform.position);
-            GameObject effect = PhotonNetwork.Instantiate("Fragment", hitPoint, Quaternion.identity);
+            GameObject effect = null;
+            if (PhotonNetwork.OfflineMode == false)
+                effect = PhotonNetwork.Instantiate("Fragment", hitPoint, Quaternion.identity);
+            else
+                effect = Instantiate(_hitEffect, hitPoint, Quaternion.identity);
             effect.transform.LookAt(hitPoint + (hitPoint - new Vector2(collision.transform.position.x, collision.transform.position.y)).normalized);
             _particleSystem.Stop();
             IDamagable damagable = collision.GetComponent<IDamagable>();

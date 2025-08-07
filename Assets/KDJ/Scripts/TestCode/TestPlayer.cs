@@ -33,7 +33,7 @@ public class TestPlayer : MonoBehaviour, IDamagable
 
     private void Update()
     {
-        PlayerHandler();
+        //PlayerHandler();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -63,7 +63,7 @@ public class TestPlayer : MonoBehaviour, IDamagable
 
     }
 
-    [PunRPC]
+
     public void TakeDamage(float damage, Vector2 position, Vector2 direction)
     {
         _hp -= damage;
@@ -86,7 +86,6 @@ public class TestPlayer : MonoBehaviour, IDamagable
     {
         InputHandler();
         MoveHandler();
-        JumpHandler();
     }
 
     private void InputHandler()
@@ -97,14 +96,6 @@ public class TestPlayer : MonoBehaviour, IDamagable
     private void MoveHandler()
     {
 
-    }
-
-    private void JumpHandler()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _rb2d.AddForce(Vector2.up * 5f, ForceMode2D.Impulse);
-        }
     }
 
     private void SetUI()
