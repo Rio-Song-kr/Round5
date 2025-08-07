@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.Splines;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using System.Collections.Generic;
 
 public class PlayerArmMove : MonoBehaviourPun, IPunObservable
 {
@@ -10,53 +12,105 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     [SerializeField] private SplineContainer _rightArmSpline;
     [SerializeField] private Transform _gunPos;
     [SerializeField] private Transform _gunAxis;
+
+    private Vector3 _prevLArmEndPos;
+    private Vector3 _prevRArmEndPos;
     private bool _isGunInRight => _gunPos.position.x > _gunAxis.position.x;
     private bool _isFlipped => transform.right.x < 0;
     private bool _prevFlipped;
     private bool _prevGunInRight;
+    private float _lag;
 
     // 동기화 변수
     private Vector3 _networkGunPos;
     private Vector3 _networkGunAxisUp;
+// <<<<<<< HEAD
     
+// =======
+    private Vector3 _LArmSpeed;
+    private Vector3 _RArmSpeed;
+
+    private Vector3 _networkLArmStartPos;
+    private Vector3 _networkRArmStartPos;
+    private Vector3 _networkLArmMiddlePos;
+    private Vector3 _networkRArmMiddlePos;
+    private Vector3 _networkLArmEndPos;
+    private Vector3 _networkRArmEndPos;
+
+    private Vector3 _networkPrevLArmEndPos;
+    private Vector3 _networkPrevRArmEndPos;
+    private Vector3 _networkLArmSpeed;
+    private Vector3 _networkRArmSpeed;
+
+// >>>>>>> Develops
     private void Update()
     {
 
         // Debug.Log("플립 상태:" + _isFlipped + ", 마우스 위치 오른쪽:" + _isGunInRight);
+        CaculateArmSpeed();
 
         if (PhotonNetwork.OfflineMode){
             LookAtMouse();
-            _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
-            _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
-        }
-        else
-        {
-            if (photonView.IsMine)
+// <<<<<<< HEAD
+            // _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
+            // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+        // }
+        // else
+        // {
+            // if (photonView.IsMine)
+            // {
+                // LookAtMouse();
+            // }
+            // else
+            // {
+                // _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
+                // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+            // }
+        // }
+
+        // if (_isGunInRight)
+        // {
+            // if (_isFlipped)
+                // SetLeftArmPosition();
+            // else
+                // SetRightArmPosition();
+// =======
+// >>>>>>> Develops
+
+            if (_isGunInRight)
             {
-                LookAtMouse();
+                if (_isFlipped)
+                    SetLeftArmPosition();
+                else
+                    SetRightArmPosition();
+
             }
             else
             {
-                _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
-                _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+                if (_isFlipped)
+                    SetRightArmPosition();
+                else
+                    SetLeftArmPosition();
             }
-        }
-
-        if (_isGunInRight)
-        {
-            if (_isFlipped)
-                SetLeftArmPosition();
-            else
-                SetRightArmPosition();
-
         }
         else
         {
-            if (_isFlipped)
-                SetRightArmPosition();
-            else
-                SetLeftArmPosition();
+            _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 20f);
+            // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+
+
+            List<BezierKnot> leftKnots = _leftArmSpline.Spline.Knots.ToList();
+            List<BezierKnot> rightKnots = _rightArmSpline.Spline.Knots.ToList();
+
+            _leftArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(leftKnots[0].Position, _networkLArmStartPos, Time.deltaTime * 10f)));
+            _leftArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(leftKnots[1].Position, _networkLArmMiddlePos, Time.deltaTime * 10f)));
+            _leftArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(leftKnots[2].Position, _networkLArmEndPos + _networkLArmSpeed * _lag, Time.deltaTime * 10f)));
+            _rightArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(rightKnots[0].Position, _networkRArmStartPos, Time.deltaTime * 10f)));
+            _rightArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(rightKnots[1].Position, _networkRArmMiddlePos, Time.deltaTime * 10f)));
+            _rightArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(rightKnots[2].Position, _networkRArmEndPos + _networkRArmSpeed * _lag, Time.deltaTime * 10f)));
         }
+
+        SetPrevPositions();
     }
 
     void LateUpdate()
@@ -65,6 +119,22 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
         FlipCheck();
     }
 
+
+    private void SetPrevPositions()
+    {
+        _prevLArmEndPos = _leftArmSpline.Spline.Knots.ToList()[2].Position;
+        _prevRArmEndPos = _rightArmSpline.Spline.Knots.ToList()[2].Position;
+    }
+
+    private void CaculateArmSpeed()
+    {
+        _LArmSpeed = (new Vector3(_leftArmSpline.Spline.Knots.ToList()[2].Position.x,
+         _leftArmSpline.Spline.Knots.ToList()[2].Position.y,
+         _leftArmSpline.Spline.Knots.ToList()[2].Position.z) - _prevLArmEndPos) / Time.deltaTime;
+        _RArmSpeed = (new Vector3(_rightArmSpline.Spline.Knots.ToList()[2].Position.x,
+         _rightArmSpline.Spline.Knots.ToList()[2].Position.y,
+         _rightArmSpline.Spline.Knots.ToList()[2].Position.z) - _prevRArmEndPos) / Time.deltaTime;
+    }
 
 
     /// <summary>
@@ -131,19 +201,21 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
             }
         }
 
-        if (_isGunInRight)
+        if (photonView.IsMine)
         {
-            _gunPos.localRotation = Quaternion.Euler(0, 0, 0); // 오른팔 회전
-            _leftArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(-0.12f, -0.1f, 0))); // 왼팔 위치 초기화
-            _leftArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(-0.3f, 0, 0))); // 왼팔 위치 초기화
+            if (_isGunInRight)
+            {
+                _gunPos.localRotation = Quaternion.Euler(0, 0, 0); // 오른팔 회전
+                _leftArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(-0.12f, -0.1f, 0))); // 왼팔 위치 초기화
+                _leftArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(-0.3f, 0, 0))); // 왼팔 위치 초기화
+            }
+            else
+            {
+                _gunPos.localRotation = Quaternion.Euler(0, 180, 0); // 왼팔 회전
+                _rightArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(0.12f, -0.1f, 0))); // 오른팔 위치 초기화
+                _rightArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(0.3f, 0, 0))); // 오른팔 위치 초기화
+            }
         }
-        else
-        {
-            _gunPos.localRotation = Quaternion.Euler(0, 180, 0); // 왼팔 회전
-            _rightArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(0.12f, -0.1f, 0))); // 오른팔 위치 초기화
-            _rightArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(0.3f, 0, 0))); // 오른팔 위치 초기화
-        }
-
         _prevGunInRight = _isGunInRight;
     }
 
@@ -208,17 +280,38 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+        float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
+
         if (stream.IsWriting)
         {
             // 로컬 플레이어가 데이터를 보냄
             stream.SendNext(_gunPos.position);
             stream.SendNext(_gunAxis.up);
+            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[0].Position.x, _leftArmSpline.Spline.Knots.ToList()[0].Position.y, 0));
+            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[0].Position.x, _rightArmSpline.Spline.Knots.ToList()[0].Position.y, 0));
+            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[1].Position.x, _leftArmSpline.Spline.Knots.ToList()[1].Position.y, 0));
+            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[1].Position.x, _rightArmSpline.Spline.Knots.ToList()[1].Position.y, 0));
+            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[2].Position.x, _leftArmSpline.Spline.Knots.ToList()[2].Position.y, 0));
+            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[2].Position.x, _rightArmSpline.Spline.Knots.ToList()[2].Position.y, 0));
+            stream.SendNext(_LArmSpeed);
+            stream.SendNext(_RArmSpeed);
+            stream.SendNext(lag);
         }
         else
         {
             // 리모트 플레이어가 데이터를 받음
             _networkGunPos = (Vector3)stream.ReceiveNext();
             _networkGunAxisUp = (Vector3)stream.ReceiveNext();
+
+            _networkLArmStartPos = (Vector3)stream.ReceiveNext();
+            _networkRArmStartPos = (Vector3)stream.ReceiveNext();
+            _networkLArmMiddlePos = (Vector3)stream.ReceiveNext();
+            _networkRArmMiddlePos = (Vector3)stream.ReceiveNext();
+            _networkLArmEndPos = (Vector3)stream.ReceiveNext();
+            _networkRArmEndPos = (Vector3)stream.ReceiveNext();
+            _networkLArmSpeed = (Vector3)stream.ReceiveNext();
+            _networkRArmSpeed = (Vector3)stream.ReceiveNext();
+            _lag = (float)stream.ReceiveNext();
         }
     }
 }
