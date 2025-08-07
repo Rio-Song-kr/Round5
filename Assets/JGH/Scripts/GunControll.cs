@@ -30,7 +30,7 @@ public class GunControll : MonoBehaviourPun
     /// </summary>
     private void Start()
     {
-        //    EquipWeapon(WeaponType.Bullet);
+        // EquipWeapon(WeaponType.Bullet);
 
         //#20250807 0200 추가사항
         InGameManager.OnplayerSystemActivate += SetIsStarted;
@@ -46,8 +46,10 @@ public class GunControll : MonoBehaviourPun
 
     private void Update()
     {
-        if (!photonView.IsMine || !_isStarted) return;
-        // if (!photonView.IsMine) return;
+        // 이거 로직상 필요 없으면 주석 풀지 마세요 공격 안돼요
+        // if (!photonView.IsMine || !_isStarted) return;
+        
+        if (!photonView.IsMine) return;
 
         // 마우스 위치에 따라 총구 회전
         // RotateMuzzleToMouse();
