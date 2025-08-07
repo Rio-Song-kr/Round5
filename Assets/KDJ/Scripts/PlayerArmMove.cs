@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Splines;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class PlayerArmMove : MonoBehaviourPun, IPunObservable
 {
@@ -17,21 +18,30 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     // 동기화 변수
     private Vector3 _networkGunPos;
     private Vector3 _networkGunAxisUp;
-
+    
     private void Update()
     {
 
         // Debug.Log("플립 상태:" + _isFlipped + ", 마우스 위치 오른쪽:" + _isGunInRight);
 
-        if (photonView.IsMine)
-        {
+        if (PhotonNetwork.OfflineMode){
             LookAtMouse();
-        }
-        else
-        {
             _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
             _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
         }
+        else
+        {
+            if (photonView.IsMine)
+            {
+                LookAtMouse();
+            }
+            else
+            {
+                _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
+                _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+            }
+        }
+
         if (_isGunInRight)
         {
             if (_isFlipped)
