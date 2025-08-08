@@ -68,7 +68,12 @@ public class MapController : MonoBehaviourPunCallbacks
     /// </summary>
     private void MapShake()
     {
-        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90);
+        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90).OnComplete(ReturnToOriginalPosition);
+    }
+
+    private void ReturnToOriginalPosition()
+    {
+        gameObject.transform.position = Vector3.zero;
     }
 
     /// <summary>
@@ -127,8 +132,6 @@ public class MapController : MonoBehaviourPunCallbacks
                 //todo 어떻게 처리할지 고민
                 //모든 시스템 활성화
                 InGameManager.Instance.IsMapLoaded = true;
-                Debug.Log(
-                    $"Map Controller에서 Player Active 호출 {InGameManager.Instance.IsMapLoaded}, {InGameManager.Instance.IsCardSelected}");
 
                 if (!InGameManager.Instance.IsRematch)
                     InGameManager.Instance.SetStarted(true);

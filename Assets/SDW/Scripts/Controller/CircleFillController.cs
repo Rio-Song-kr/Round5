@@ -38,6 +38,17 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
         _chargeTime = chargeTime;
     }
 
+    private void OnDisable()
+    {
+        CurrentFillAmount = 0f;
+        _targetFillAmount = 1f;
+        CanIncrese = true;
+        StartEffect = false;
+        _applyEffect = false;
+
+        photonView.RPC(nameof(SetFillAmount), RpcTarget.All, CurrentFillAmount);
+    }
+
     /// <summary>
     /// 게임 객체의 채움 효과를 업데이트하는 메서드.
     /// 활성화 시간과 충전 시간을 고려하여 채움량을 조절하고, 플레이어의 움직임에 따라 채움 모드를 전환

@@ -68,6 +68,8 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// </summary>
     private void Update()
     {
+        if (InGameManager.Instance.IsGameOver) return;
+
         if (!photonView.IsMine || !_isStarted) return;
 
         // 끌어당김 로직
@@ -343,6 +345,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// <param name="other">충돌 감지를 벗어난 Collider2D 객체</param>
     private void OnTriggerExit2D(Collider2D other)
     {
+        if (InGameManager.Instance.IsGameOver) return;
         if (photonView.IsMine && other.CompareTag("Player"))
         {
             _targetViewId = other.GetComponent<PhotonView>().ViewID;

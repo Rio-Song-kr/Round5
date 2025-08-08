@@ -89,6 +89,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private bool isWaitingForRematch = false;
     public bool IsWaitingForRematch => isWaitingForRematch;
 
+    private bool _isGameOver;
+    public bool IsGameOver => _isGameOver;
+
     #endregion
 
     //# 20250807 0900 추가작업 
@@ -418,6 +421,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             var props = new Hashtable();
             props["Select"] = false;
+            props["isWinner"] = false;
 
             player.SetCustomProperties(props);
         }
@@ -607,6 +611,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         SetGameState(GameState.RematchWaiting);
         isWaitingForRematch = true;
+        _isGameOver = true;
 
         // 투표 초기화
         foreach (string key in rematchVotes.Keys.ToArray())
