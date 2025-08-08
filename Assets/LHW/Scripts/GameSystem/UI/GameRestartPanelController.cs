@@ -9,6 +9,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
 {
     [SerializeField] Button yesButton;
     [SerializeField] Button noButton;
+    [SerializeField] TMP_Text winnerText;
     [SerializeField] TMP_Text waitingText;
 
     private void Awake()
@@ -79,6 +80,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
     {
         yesButton.interactable = true;
         noButton.interactable = true;
+        winnerText.text = $"Winner : {InGameManager.Instance.LastMatchWinner.ToString()}";
         waitingText.text = "";
     }
 
