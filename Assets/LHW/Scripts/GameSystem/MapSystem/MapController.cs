@@ -68,7 +68,12 @@ public class MapController : MonoBehaviourPunCallbacks
     /// </summary>
     private void MapShake()
     {
-        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90);
+        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90).OnComplete(ReturnToOriginalPosition);
+    }
+
+    private void ReturnToOriginalPosition()
+    {
+        gameObject.transform.position = Vector3.zero;
     }
 
     /// <summary>
