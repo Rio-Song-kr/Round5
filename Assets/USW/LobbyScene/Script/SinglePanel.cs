@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Random = UnityEngine.Random;
 
 public class SinglePanel : MonoBehaviourPunCallbacks
 {
@@ -85,6 +87,7 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     /// <summary>
     /// 싱글플레이어 방 생성 후 씬 로드
     /// </summary>
+    // 아주 간단한 버전 (확실하게 작동)
     IEnumerator CreateSinglePlayerRoomAndLoadScene(string sceneName)
     {
         isLoadingSinglePlayer = true;
@@ -98,24 +101,12 @@ public class SinglePanel : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom();
-            
-            while (PhotonNetwork.InRoom)
-            {
-                yield return null;
-            }
         }
+
+       
+        yield return new WaitForSeconds(0.5f);
         
-        if (!PhotonNetwork.IsConnectedAndReady)
-        {
-            PhotonNetwork.ConnectUsingSettings();
-            
-            while (!PhotonNetwork.IsConnectedAndReady)
-            {
-                yield return null;
-            }
-        }
-        // 싱글플레이어 방 생성
-        CreateSinglePlayerRoom();
+        TryCreateSinglePlayerRoom();
 
         yield return new WaitForSeconds(animationLength);
     }
@@ -125,7 +116,7 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     /// </summary>
     private void CreateSinglePlayerRoom()
     {
-        string singlePlayerRoomName = "SM_" + Random.Range(100000, 999999);
+        string singlePlayerRoomName = "SM_" + Random.Range(100000, 999999).ToString();
         
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 1; 
@@ -137,7 +128,7 @@ public class SinglePanel : MonoBehaviourPunCallbacks
         props["SinglePlayer"] = true;
         props["SceneName"] = pendingSceneName;
         roomOptions.CustomRoomProperties = props;
-        
+
         PhotonNetwork.CreateRoom(singlePlayerRoomName, roomOptions);
     }
 
@@ -152,6 +143,21 @@ public class SinglePanel : MonoBehaviourPunCallbacks
         }
     }
 
+    private bool CanCreateRoom()
+    {
+        return PhotonNetwork.IsConnectedAndReady && 
+               !PhotonNetwork.InRoom && 
+               (PhotonNetwork.InLobby || PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.ConnectedToMasterServer);
+    }
+
+    void TryCreateSinglePlayerRoom()
+    {
+        if (CanCreateRoom())
+        {
+            CreateSinglePlayerRoom();
+        }
+    }
+    
     #region Photon Callbacks
 
     public override void OnCreatedRoom()
@@ -182,6 +188,14 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     {
         isLoadingSinglePlayer = false;
         pendingSceneName = "";
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        if (isLoadingSinglePlayer)
+        {
+            TryCreateSinglePlayerRoom();
+        }
     }
 
     #endregion
