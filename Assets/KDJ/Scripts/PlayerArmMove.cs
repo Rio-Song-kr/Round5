@@ -12,6 +12,7 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     [SerializeField] private SplineContainer _rightArmSpline;
     [SerializeField] private Transform _gunPos;
     [SerializeField] private Transform _gunAxis;
+    [SerializeField] private Transform _ballPos;
 
     private Vector3 _prevLArmEndPos;
     private Vector3 _prevRArmEndPos;
@@ -24,6 +25,7 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     // 동기화 변수
     private Vector3 _networkGunPos;
     private Vector3 _networkGunAxisUp;
+    private Vector3 _networkBallPos;
     // <<<<<<< HEAD
 
     // =======
@@ -115,6 +117,7 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     {
         CheckMousePos();
         FlipCheck();
+        SetBallPos();
     }
 
 
@@ -283,6 +286,7 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
         if (stream.IsWriting)
         {
             // 로컬 플레이어가 데이터를 보냄
+            stream.SendNext(_ballPos.localPosition);
             stream.SendNext(_gunPos.position);
             stream.SendNext(_gunAxis.up);
             stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[0].Position.x, _leftArmSpline.Spline.Knots.ToList()[0].Position.y, 0));
@@ -298,6 +302,7 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
         else
         {
             // 리모트 플레이어가 데이터를 받음
+            _networkBallPos = (Vector3)stream.ReceiveNext();
             _networkGunPos = (Vector3)stream.ReceiveNext();
             _networkGunAxisUp = (Vector3)stream.ReceiveNext();
 
@@ -310,6 +315,32 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
             _networkLArmSpeed = (Vector3)stream.ReceiveNext();
             _networkRArmSpeed = (Vector3)stream.ReceiveNext();
             _lag = (float)stream.ReceiveNext();
+        }
+    }
+
+    private void SetBallPos()
+    {
+        if (_isGunInRight)
+        {
+            if (_isFlipped)
+            {
+                _ballPos.localPosition = new Vector3(1.1f, 0.2f, 0);
+            }
+            else
+            {
+                _ballPos.localPosition = new Vector3(-1.1f, 0.2f, 0);
+            }
+        }
+        else
+        {
+            if (_isFlipped)
+            {
+                _ballPos.localPosition = new Vector3(-1.1f, 0.2f, 0);
+            }
+            else
+            {
+                _ballPos.localPosition = new Vector3(1.1f, 0.2f, 0);
+            }
         }
     }
 }
