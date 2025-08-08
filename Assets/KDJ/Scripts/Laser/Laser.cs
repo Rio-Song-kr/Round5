@@ -116,8 +116,6 @@ public class Laser : MonoBehaviourPun
         float Timer = 0f;
         float particleTimer = 0f;
         float laserTick = 0f;
-        int laserTickCount = 0;
-
 
         while (Timer <= Duration)
         {
