@@ -692,7 +692,7 @@ MonoBehaviour:
   groundCheckSize: {x: 0.5, y: 0.1}
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 3136
   positionLerpRate: 10
   rotationLerpRate: 15
   velocityLerpRate: 8
@@ -775,7 +775,7 @@ MonoBehaviour:
   wallDetectionDistance: 0.3
   wallJumpCooldown: 0.1
   wallJumpHorizontalForce: 1.2
-  wallJumpVerticalForce: 1.6
+  wallJumpVerticalForce: 1.2
   wallCheckLeft: {fileID: 0}
   _wallJumpOffset: 0.2
   wallCheckRight: {fileID: 0}
