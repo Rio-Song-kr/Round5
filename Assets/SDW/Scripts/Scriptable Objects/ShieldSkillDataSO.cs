@@ -21,7 +21,10 @@ public class ShieldSkillDataSO : DefenceSkillDataSO
     public override void Initialize()
     {
         _pools = FindFirstObjectByType<PoolManager>();
-        _pools.InitializePool("ShieldEffect", SkillEffectPrefab, 1, 3);
+        if (!PhotonNetwork.OfflineMode)
+        {
+            _pools.InitializePool("ShieldEffect", SkillEffectPrefab, 1, 3);
+        }
     }
 
     public override void Activate(Vector3 skillPosition, Transform playerTransform)

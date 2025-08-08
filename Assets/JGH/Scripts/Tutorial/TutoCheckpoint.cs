@@ -21,14 +21,10 @@ public class TutoCheckpoint : MonoBehaviour
         // 초기 색상: 회색
         if (spriteRenderer != null)
             spriteRenderer.color = Color.red;
-        else
-            Debug.LogWarning("SpriteRenderer가 없습니다.");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"[DEBUG] Trigger 감지: {other.name}");
-
         if (isActivated) return;
 
         if (other.gameObject.layer == playerLayer)
@@ -38,8 +34,6 @@ public class TutoCheckpoint : MonoBehaviour
 
             if (spriteRenderer != null)
                 spriteRenderer.color = Color.green;
-
-            Debug.Log($"체크포인트 {checkpointID} 도달 - 색상 초록으로 변경됨");
         }
     }
 }
