@@ -11,7 +11,6 @@ public class TutoCheckpointManager : MonoBehaviour
         {
             lastCheckpointID = id;
             lastCheckpointPosition = position;
-            Debug.Log($"TutoCheckpoint {id} activated at {position}");
         }
     }
 
