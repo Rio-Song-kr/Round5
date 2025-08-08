@@ -90,7 +90,6 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     /// <summary>
     /// 싱글플레이어 방 생성 후 씬 로드
     /// </summary>
-    // 아주 간단한 버전 (확실하게 작동)
     IEnumerator CreateSinglePlayerRoomAndLoadScene(string sceneName)
     {
         isLoadingSinglePlayer = true;
