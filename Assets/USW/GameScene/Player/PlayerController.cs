@@ -92,6 +92,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     // ----------- 250807 추가사항 -----------
     [SerializeField] private GameObject LandEffect;
+    // ----------- 250808 추가사항 -----------
+    [SerializeField] private GameObject JumpEffectWrap;
     
     
     private void Awake()
@@ -309,9 +311,33 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    private void OffNormalJump(float jumpPower)
+    {
+        if (!photonView.IsMine) return;
+
+        // 플레이어 시각적 피드백
+        PlayJumpEffect(Quaternion.identity, new Vector3(0, _jumpEffectOffset, 0));
+
+        ResetVelocityForJump(true);
+        rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
+        if (canSecondJump)
+        {
+            canSecondJump = false;
+        }
+        else
+            canJump = false;
+
+        if (!isGrounded)
+        {
+            hasJumpedInAir = true;
+        }
+    }
+
     private IEnumerator ReturnToPool(GameObject effectObj, ParticleSystem particle)
     {
-        if (PhotonNetwork.OfflineMode){
+        if (PhotonNetwork.OfflineMode)
+        {
             yield return new WaitForSeconds(particle.main.duration);
             Destroy(effectObj);
         }
@@ -439,6 +465,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void PlayJumpEffect(Quaternion rotation, Vector3 jumpEffectOffset)
     {
         // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
+        if (PhotonNetwork.OfflineMode)
+        {
+            var offJumpEffectObj = Instantiate(
+                JumpEffectWrap,
+                transform.position + jumpEffectOffset,
+                rotation
+            );
+
+            var offJumpEffect = offJumpEffectObj.GetComponentInChildren<ParticleSystem>();
+            offJumpEffect.Play();
+            StartCoroutine(ReturnToPool(offJumpEffectObj, offJumpEffect));
+            return;
+        }
+
         var jumpEffectObj = PhotonNetwork.Instantiate(
             "JumpEffectWrap",
             transform.position + jumpEffectOffset,
@@ -731,7 +771,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void ExecuteNormalJump()
     {
         // 네트워크 RPC로 일반 점프 실행
-        photonView.RPC("OnNormalJump", RpcTarget.All, jumpForce);
+        if (!PhotonNetwork.OfflineMode)
+            photonView.RPC("OnNormalJump", RpcTarget.All, jumpForce);
+        else
+            OffNormalJump(jumpForce);
     }
 
     /// <summary>
