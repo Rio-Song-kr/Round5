@@ -87,6 +87,9 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!_isExplosiveBullet && collision.gameObject.layer != 8)
+            SoundManager.Instance.PlaySFX("BulletHitSound1");
+
         if (!photonView.IsMine && PhotonNetwork.OfflineMode == false) return;
 
         // 총알 유형에 따라 처리 
@@ -194,6 +197,7 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
 
     public void BulletMove(float speed)
     {
+        SoundManager.Instance.PlaySFX("ShotSound");
         // if (!photonView.IsMine) return;
         // _rb.AddForce(transform.up * speed, ForceMode2D.Impulse);
         // _rb.velocity = transform.up * speed;
