@@ -19,6 +19,16 @@ public class SplashManagerver2 : MonoBehaviour
     private void Start()
     {
         StartCoroutine(PlaySplashSequence());
+
+        
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(nextSceneName);
+            SoundManager.Instance.PlayBGMLoop("LoginBGM");
+        }
     }
 
     private IEnumerator PlaySplashSequence()
@@ -26,6 +36,7 @@ public class SplashManagerver2 : MonoBehaviour
         yield return new WaitForSeconds(1f); // 1초 대기
 
         // 첫 로고 시작
+        SoundManager.Instance.PlaySFX("TeamLogoIntro");
         logoImage.color = new Color(1, 1, 1, 0);
         logo.SetActive(true);
 
@@ -41,6 +52,9 @@ public class SplashManagerver2 : MonoBehaviour
             AcademiLogo.color = new Color(1, 1, 1, 0);
             Academi.SetActive(true);
 
+            SoundManager.Instance.PlaySFX("Drum");
+
+            SoundManager.Instance.PlaySFX("KYUNGIL");
             Sequence seq2 = DOTween.Sequence();
             seq2.Append(AcademiLogo.DOFade(1, fadeInTime));
             seq2.AppendInterval(stayTime);
@@ -48,6 +62,7 @@ public class SplashManagerver2 : MonoBehaviour
             seq2.OnComplete(() =>
             {
                 SceneManager.LoadScene(nextSceneName);
+                SoundManager.Instance.PlayBGMLoop("LoginBGM");
             });
         });
     }
