@@ -24,6 +24,7 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     private void Start()
     {
         Init();
+        PhotonNetwork.AutomaticallySyncScene = false;
     }
 
     void Init()

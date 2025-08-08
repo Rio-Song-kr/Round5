@@ -6980,6 +6980,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1013469960}
   - component: {fileID: 1013469959}
+  - component: {fileID: 1013469961}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -7042,6 +7043,18 @@ Transform:
   - {fileID: 979254203}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1013469961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013469958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc0713f727274c4aadc1e7a3d58dcb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1013731111 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8538611758538891358, guid: 21982c96d234d2745a6f52d045906da4, type: 3}
@@ -14990,7 +15003,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1628421772145328876
 MeshFilter:
-  m_ObjectHideFlags: 8
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -15441,6 +15454,7 @@ MonoBehaviour:
   _rightArmSpline: {fileID: 8637652938569988453}
   _gunPos: {fileID: 7714517300242953078}
   _gunAxis: {fileID: 2563877215899392523}
+  _ballPos: {fileID: 0}
 --- !u!114 &2310087159563595641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17099,6 +17113,7 @@ MonoBehaviour:
   _rightArmSpline: {fileID: 5983329171954219011}
   _gunPos: {fileID: 5753750015001801232}
   _gunAxis: {fileID: 523170745751444333}
+  _ballPos: {fileID: 0}
 --- !u!114 &4392630561219181403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17278,6 +17293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   yesButton: {fileID: 6691927501079067161}
   noButton: {fileID: 3889924213318527902}
+  winnerText: {fileID: 0}
   waitingText: {fileID: 0}
 --- !u!114 &4675061955592738123
 MonoBehaviour:
@@ -17397,7 +17413,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4852285321795746974
 MeshFilter:
-  m_ObjectHideFlags: 8
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -20100,7 +20116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &8456953815152547133
 GameObject:
   m_ObjectHideFlags: 0
@@ -20702,3 +20718,4 @@ SceneRoots:
   - {fileID: 1948280232}
   - {fileID: 1872396292}
   - {fileID: 1748658428}
+  - {fileID: 38239025}
