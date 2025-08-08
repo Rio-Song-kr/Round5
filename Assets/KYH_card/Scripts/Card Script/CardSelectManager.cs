@@ -96,6 +96,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     public void UpdateCharacterVisibility()
     {
+        InGameManager.Instance.SetStarted(false);
         bool isMaster = PhotonNetwork.IsMasterClient;
         bool masterCanvasActive = canvasController.IsMasterCanvasActive();
         bool clientCanvasActive = canvasController.IsClientCanvasActive();

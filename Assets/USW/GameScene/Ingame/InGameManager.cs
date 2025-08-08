@@ -130,6 +130,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public bool IsMapLoaded;
     public bool IsCardSelected;
+    public bool IsRematch => isWaitingForRematch;
     [SerializeField] private GameObject _backgroundObject;
 
     //#2025/08/07/02:00 추가 플레이어 시스템 활성화 하는 Action
@@ -197,6 +198,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             matchScores[playerKey] = 0;
             playerAliveStatus[playerKey] = true;
             rematchVotes[playerKey] = false;
+
+            var props = new Hashtable();
+            props["Select"] = false;
+
+            player.SetCustomProperties(props);
         }
     }
 
@@ -250,6 +256,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public void SetStartedRPC(bool value)
     {
         _isStarted = value;
+        _backgroundObject.SetActive(!value);
     }
 
     public void SetStartedOffline(bool value)
@@ -437,6 +444,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartCardSelect(string winnerKey)
     {
+        _backgroundObject.SetActive(true);
+
         IsCardSelected = false;
         SetGameState(GameState.CardSelecting);
         var cardSelectManager = FindObjectOfType<CardSelectManager>();
@@ -475,6 +484,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndCardSelect()
     {
+        _backgroundObject.SetActive(false);
         isCardSelectTime = false;
         OnCardSelectEnd?.Invoke();
 
@@ -572,7 +582,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void StartRematchWaiting()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
 
         photonView.RPC("RPC_StartRematchWaiting", RpcTarget.All);
     }
@@ -589,6 +598,15 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             rematchVotes[key] = false;
         }
 
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            var props = new Hashtable();
+            props["Select"] = false;
+
+            player.SetCustomProperties(props);
+        }
+
+        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
         Debug.Log("리매치 투표 시작!");
     }
 
@@ -624,6 +642,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         if (allAgree)
         {
+            CardManager.Instance.ClearLists();
             // 모든 플레이어가 리매치에 동의
             photonView.RPC("RPC_RematchAccepted", RpcTarget.All);
         }
@@ -637,7 +656,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         Debug.Log("두명다 리매치 승인함");
 
         // 게임 재시작
-        RPC_StartGame();
+        // RPC_StartGame();
     }
 
     [PunRPC]

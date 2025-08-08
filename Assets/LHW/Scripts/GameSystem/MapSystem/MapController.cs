@@ -36,15 +36,14 @@ public class MapController : MonoBehaviourPunCallbacks
         MapMove();
     }
 
-    void OnRoundEndHandler()
+    private void OnRoundEndHandler()
     {
         var roundScores = InGameManager.Instance.GetRoundScores();
         bool matchEnded = false;
 
         // 매치 끝나는지 확인한후
-        foreach (var score in roundScores.Values)
+        foreach (int score in roundScores.Values)
         {
-            
             if (score >= 2)
             {
                 matchEnded = true;
@@ -57,10 +56,9 @@ public class MapController : MonoBehaviourPunCallbacks
         {
             GoToNextStage();
         }
-        
     }
 
-    void OnCardSelectEndHandler()
+    private void OnCardSelectEndHandler()
     {
         GoToNextStage();
     }
@@ -132,7 +130,9 @@ public class MapController : MonoBehaviourPunCallbacks
                 //todo 어떻게 처리할지 고민
                 //모든 시스템 활성화
                 InGameManager.Instance.IsMapLoaded = true;
-                InGameManager.Instance.SetStarted(true);
+
+                if (!InGameManager.Instance.IsRematch)
+                    InGameManager.Instance.SetStarted(true);
             }
         }
     }
