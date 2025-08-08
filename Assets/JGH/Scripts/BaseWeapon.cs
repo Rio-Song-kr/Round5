@@ -86,7 +86,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // StartCoroutine(DelayedReloadSpeed());
         DelayedReloadSpeed();
     }
-    
+
     public override void OnDisable()
     {
         base.OnDisable();
@@ -110,10 +110,10 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
         // Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
         float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
-        
-        Debug.Log($"PhotonNetwork.OfflineMode: {PhotonNetwork.OfflineMode}");
 
-        if (PhotonNetwork.OfflineMode){
+
+        if (PhotonNetwork.OfflineMode)
+        {
             SetAnimatorSingleSpeed(speed);
         }
         else
@@ -131,7 +131,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
             // Debug.Log($"[RPC_SetAnimatorSpeed] 애니메이터 속도 설정: {speed}");
         }
     }
-    
+
     protected void SetAnimatorSingleSpeed(float speed)
     {
         if (animator != null)

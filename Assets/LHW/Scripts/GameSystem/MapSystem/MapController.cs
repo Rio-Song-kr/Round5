@@ -111,7 +111,6 @@ public class MapController : MonoBehaviourPunCallbacks
     [PunRPC]
     private void InitPlayers()
     {
-        Debug.Log($"InitPlayers - {PhotonNetwork.IsMasterClient}");
         var allPlayers = FindObjectsOfType<PlayerController>();
 
         foreach (var player in allPlayers)
@@ -125,11 +124,11 @@ public class MapController : MonoBehaviourPunCallbacks
                 //중력 활성화
                 // SetPlayerGravity(player, true);
 
-                Debug.Log("Map Controller에서 Player Active 호출(true)");
-
                 //todo 어떻게 처리할지 고민
                 //모든 시스템 활성화
                 InGameManager.Instance.IsMapLoaded = true;
+                Debug.Log(
+                    $"Map Controller에서 Player Active 호출 {InGameManager.Instance.IsMapLoaded}, {InGameManager.Instance.IsCardSelected}");
 
                 if (!InGameManager.Instance.IsRematch)
                     InGameManager.Instance.SetStarted(true);
