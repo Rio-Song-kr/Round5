@@ -61,14 +61,12 @@ public class SinglePanel : MonoBehaviour
 
     public void OnRopeButtonClick()
     {
-        Debug.Log("찍힘");
-        StartCoroutine(PlayAnimationAndLoadScene("USW_SandBoxScene"));
+        StartCoroutine(PlayAnimationAndLoadScene("USW_RopePlayMode"));
     }
 
     public void OnWeaponButtonClick()
     {
-        Debug.Log("이것도찍힘");
-        StartCoroutine(PlayAnimationAndLoadScene("USW_SandBox"));
+        StartCoroutine(PlayAnimationAndLoadScene("KDJ_WeaponTestScene"));
     }
 
     IEnumerator PlayAnimationAndLoadScene(string sceneName)
