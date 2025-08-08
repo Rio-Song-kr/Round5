@@ -17,10 +17,5 @@ public class NetworkSetting : MonoBehaviourPunCallbacks
         InGameManager.Instance.SetStartedOffline(true);
         SoundManager.Instance.PlayBGMLoop("BGM1");
     }
-
-    private void Update()
-    {
-        Debug.Log("서버 연결 상태 : " + PhotonNetwork.NetworkClientState);
-    }
 }
 

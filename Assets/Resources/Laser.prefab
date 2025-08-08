@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _laserSoot: {fileID: 63926126280430481, guid: d8581ee95c56d884b90da9f234f5b3e8, type: 3}
-  _particleDelay: 0.01
+  _particleDelay: 0.05
   _layerMask:
     serializedVersion: 2
     m_Bits: 36864
@@ -150,8 +150,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 0}
+  ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
