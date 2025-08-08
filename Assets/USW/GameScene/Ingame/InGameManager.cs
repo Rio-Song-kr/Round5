@@ -656,7 +656,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         if (allAgree)
         {
-            CardManager.Instance.ClearLists();
             // 모든 플레이어가 리매치에 동의
             photonView.RPC("RPC_RematchAccepted", RpcTarget.All);
         }
@@ -665,6 +664,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_RematchAccepted()
     {
+        CardManager.Instance.ClearLists();
         isWaitingForRematch = false;
         OnRematchRequest?.Invoke(true);
         Debug.Log("두명다 리매치 승인함");
