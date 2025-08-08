@@ -836,11 +836,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: _bgmList.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: _sfxList.Array.size
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: _bgmList.Array.data[3].Clip
@@ -849,6 +849,22 @@ PrefabInstance:
     - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: _bgmList.Array.data[3].Name
       value: LoginBGM
+      objectReference: {fileID: 0}
+    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
+      propertyPath: _bgmList.Array.data[4].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 43046b76472832d46afdc052570e06cd, type: 3}
+    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
+      propertyPath: _bgmList.Array.data[4].Name
+      value: IngameBGM
+      objectReference: {fileID: 0}
+    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
+      propertyPath: _bgmList.Array.data[5].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 43046b76472832d46afdc052570e06cd, type: 3}
+    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
+      propertyPath: _bgmList.Array.data[5].Name
+      value: IngameBGM
       objectReference: {fileID: 0}
     - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: _sfxList.Array.data[9].Clip
@@ -881,6 +897,14 @@ PrefabInstance:
     - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: _sfxList.Array.data[12].Name
       value: KYUNGIL
+      objectReference: {fileID: 0}
+    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
+      propertyPath: _sfxList.Array.data[13].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 11fd3345f8d3ec04d9bfe2245de87ba4, type: 3}
+    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
+      propertyPath: _sfxList.Array.data[13].Name
+      value: ClickSound
       objectReference: {fileID: 0}
     - target: {fileID: 2108904061945068471, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: m_Name

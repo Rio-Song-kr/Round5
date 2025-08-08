@@ -557,6 +557,8 @@ public class LoginPanel : MonoBehaviourPun
         yield return new WaitForSeconds(0.5f);
         
         SceneManager.LoadScene("LobbyScene");
+        
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
     }
     #endregion
 
