@@ -89,7 +89,6 @@ public class CanvasController : MonoBehaviourPunCallbacks
                 return;
             }
 
-            Debug.Log("1");
             // ���� ���� �����ϴ� ��� (���� or ù ����)
             int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
             photonView.RPC(nameof(RPC_SyncMasterCanvas), RpcTarget.All, selectedIndexes);
@@ -103,12 +102,10 @@ public class CanvasController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SyncMasterCanvas(int[] indexes)
     {
-        Debug.Log("Master Canvas에서 Player Active 호출");
         // Debug.Log("SyncMasterCanvas 호출");
         MasterCanvas.gameObject.SetActive(true);
         ClientCanvas.gameObject.SetActive(false);
 
-        Debug.Log("2");
         cardSelectManager.UpdateCharacterVisibility();
         bool canInteract = PhotonNetwork.LocalPlayer.ActorNumber ==
                            (int)PhotonNetwork.CurrentRoom.CustomProperties["IsFirstSelector"];
@@ -147,7 +144,6 @@ public class CanvasController : MonoBehaviourPunCallbacks
                 return;
             }
 
-            Debug.Log("3");
             // ���� ���ڰų� ù �� �� ���� ����
             int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
             photonView.RPC(nameof(RPC_SyncClientCanvas), RpcTarget.All, selectedIndexes);
@@ -157,8 +153,6 @@ public class CanvasController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SyncClientCanvas(int[] indexes)
     {
-        Debug.Log("Client Canvas에서 Player Active 호출");
-        Debug.Log("4");
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(true);
         cardSelectManager.UpdateCharacterVisibility();

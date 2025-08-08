@@ -244,19 +244,23 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
      * }
      */
 
-    public void SetStarted(bool value)
+    public void SetStarted(bool value, bool showBackground = true)
     {
         if (value && IsCardSelected && IsMapLoaded)
-            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
+            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value, showBackground);
         else if (value == false)
-            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
+            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value, showBackground);
     }
 
     [PunRPC]
-    public void SetStartedRPC(bool value)
+    public void SetStartedRPC(bool value, bool showBackground = true)
     {
         _isStarted = value;
-        _backgroundObject.SetActive(!value);
+
+        if (!showBackground)
+            _backgroundObject.SetActive(false);
+        else
+            _backgroundObject.SetActive(!value);
     }
 
     public void SetStartedOffline(bool value)
@@ -332,7 +336,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 매치 승리 확인
         if (roundScores[winnerKey] >= roundsToWinMatch)
         {
-            Debug.Log("End Round 시작에서 Player Active 호출");
+            IsCardSelected = false;
+            Debug.Log($"End RoundPlayer Active 호출 {Instance.IsMapLoaded}, {Instance.IsCardSelected}");
+            SetStarted(false, false);
             StartCoroutine(EndMatchWithDelay(winnerKey));
         }
         else
@@ -375,6 +381,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 게임 승리 확인
         if (matchScores[winnerKey] >= matchesToWinGame)
         {
+            IsCardSelected = false;
+            SetStarted(false);
             StartCoroutine(EndGameWithDelay(winnerKey));
         }
         else
@@ -404,8 +412,17 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndGame(string winnerKey)
     {
-        _backgroundObject.SetActive(true);
         SetGameState(GameState.GameEnding);
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            var props = new Hashtable();
+            props["Select"] = false;
+
+            player.SetCustomProperties(props);
+        }
+
+
         OnGameEnd?.Invoke();
 
         // 리매치 대기 시작
@@ -444,8 +461,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartCardSelect(string winnerKey)
     {
-        _backgroundObject.SetActive(true);
-
         IsCardSelected = false;
         SetGameState(GameState.CardSelecting);
         var cardSelectManager = FindObjectOfType<CardSelectManager>();
@@ -469,6 +484,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             player.SetCustomProperties(props);
         }
 
+        SetStarted(false, true);
         isCardSelectTime = true;
         OnCardSelectStart?.Invoke();
         Debug.Log("카드 선택 시작");
@@ -484,7 +500,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndCardSelect()
     {
-        _backgroundObject.SetActive(false);
         isCardSelectTime = false;
         OnCardSelectEnd?.Invoke();
 
@@ -514,7 +529,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
+        // photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
+        SetStarted(false, false);
 
         var alivePlayers = new List<string>();
 
@@ -598,15 +614,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             rematchVotes[key] = false;
         }
 
-        foreach (var player in PhotonNetwork.PlayerList)
-        {
-            var props = new Hashtable();
-            props["Select"] = false;
-
-            player.SetCustomProperties(props);
-        }
-
-        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
+        // photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
+        SetStarted(false, false);
         Debug.Log("리매치 투표 시작!");
     }
 

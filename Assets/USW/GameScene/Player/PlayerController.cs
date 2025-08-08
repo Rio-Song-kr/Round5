@@ -94,8 +94,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [SerializeField] private GameObject LandEffect;
     // ----------- 250808 추가사항 -----------
     [SerializeField] private GameObject JumpEffectWrap;
-    
-    
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -200,7 +199,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void FixedUpdate()
     {
-        if (PhotonNetwork.OfflineMode){
+        if (PhotonNetwork.OfflineMode)
+        {
             HandleMovement();
         }
         else
@@ -383,7 +383,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void OnSetPosition(Vector3 newPosition)
     {
-        Debug.Log($"Set Position : {newPosition}, {photonView.ViewID} - {PhotonNetwork.IsMasterClient}");
         if (!photonView.IsMine)
         {
             // 위치 업데이트
@@ -450,13 +449,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 점프 상태 시각적 동기화 (추후 추가할 이펙트, 애니메이션 등)
         // if (!photonView.IsMine)
         // {
-            // canJump = newCanJump;
-            // hasJumpedInAir = newHasJumpedInAir;
-            // return;
+        // canJump = newCanJump;
+        // hasJumpedInAir = newHasJumpedInAir;
+        // return;
         // }
 
         // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
-        var landEffectObj = Instantiate( LandEffect,
+        var landEffectObj = Instantiate(LandEffect,
             transform.position + new Vector3(0, _jumpEffectOffset, 0),
             Quaternion.Euler(-90, 0, 0)
         );
@@ -575,7 +574,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             hasJumpedInAir = false;
             // rb.velocity = new Vector2(rb.velocity.x, 0f);
 
-            if (PhotonNetwork.OfflineMode){
+            if (PhotonNetwork.OfflineMode)
+            {
                 OnJumpSingleStateChanged(canJump, hasJumpedInAir);
             }
             else
@@ -822,7 +822,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 상태가 변경되었으면 네트워크 동기화
         if (prevCanJump != canJump || prevHasJumpedInAir != hasJumpedInAir)
         {
-            if (PhotonNetwork.OfflineMode){
+            if (PhotonNetwork.OfflineMode)
+            {
                 OnJumpSingleStateChanged(canJump, hasJumpedInAir);
             }
             else
