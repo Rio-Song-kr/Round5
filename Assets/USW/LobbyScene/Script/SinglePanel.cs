@@ -23,6 +23,8 @@ public class SinglePanel : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        
+        PhotonNetwork.AutomaticallySyncScene = false;
         Init();
     }
 
@@ -169,10 +171,18 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     {
         if (isLoadingSinglePlayer && PhotonNetwork.CurrentRoom.Name.StartsWith("SM_"))
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel(pendingSceneName);
-            }
+            StartCoroutine(LoadSceneAfterDelay());
+        }
+    }
+    
+    IEnumerator LoadSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        
+        // 연결 상태 재확인
+        if (PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient && !string.IsNullOrEmpty(pendingSceneName))
+        {
+            SceneManager.LoadScene(pendingSceneName);
         }
     }
 
