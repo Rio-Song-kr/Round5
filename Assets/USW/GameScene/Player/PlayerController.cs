@@ -140,7 +140,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        if (InGameManager.Instance.IsGameOver) return;
+        if (InGameManager.Instance == null || InGameManager.Instance.IsGameOver) return;
+
         if (!InGameManager.Instance.IsStarted)
         {
             // rb.gravityScale = 0f;
@@ -308,6 +309,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         PlayJumpEffect(Quaternion.identity, new Vector3(0, _jumpEffectOffset, 0));
 
         ResetVelocityForJump(true);
+
+        Debug.Log($"Normal Jump Power : {Vector2.up * jumpPower}");
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
 
         if (canSecondJump)
@@ -460,8 +463,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             landEffect.Play();
             StartCoroutine(ReturnToPool(landEffectObj, landEffect));
         }
-
-
     }
 
     private void OnJumpSingleStateChanged(bool newCanJump, bool newHasJumpedInAir)
@@ -530,8 +531,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             jumpEffect.Play();
             StartCoroutine(ReturnToPool(jumpEffectObj, jumpEffect));
         }
-
-
     }
 
     #endregion
@@ -623,6 +622,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
         else if (isGrounded && wasGrounded)
         {
+            canJump = true;
+            canSecondJump = true;
+            hasJumpedInAir = false;
         }
     }
 
@@ -931,6 +933,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void SetPosition(Vector3 newPosition)
     {
         if (!photonView.IsMine) return;
+
+        if (photonView == null) return;
 
         photonView.RPC("OnSetPosition", RpcTarget.All, newPosition);
     }

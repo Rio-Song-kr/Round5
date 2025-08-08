@@ -160,7 +160,19 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void StartAutoReload()
     {
-        photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
+        isReloading = true;
+        ammoDisplay?.SetReloading(true);
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Reload");
+            ReloadSpeedFromAnimator();
+        }
+
+        // 리로드 시간 후 자동 완료 호출
+        // Invoke(nameof(FinishReload), reloadTime);
+        Invoke(nameof(FinishReload), CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
+        // photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
     }
 
     protected void FinishReload()
