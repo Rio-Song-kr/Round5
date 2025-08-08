@@ -236,7 +236,7 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
     public void Attack(IDamagable damagable, Vector2 position, Vector2 direction)
     {
         // 데미지 전달 부분은 임시데미지. 최종 데미지를 전달하도록 수정해야함.
-        damagable.TakeDamage(6f, position, direction);
+        damagable.TakeDamage(CardManager.Instance.GetCaculateCardStats().DefaultDamage, position, direction);
     }
 
     // private void Update()
