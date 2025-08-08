@@ -287,7 +287,7 @@ PrefabInstance:
     - target: {fileID: 2642352871634618931, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: waitingText
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 305934934}
     - target: {fileID: 2866687788502435318, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
       value: 10
@@ -421,6 +421,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+--- !u!114 &305934934 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2929970272769497018, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+  m_PrefabInstance: {fileID: 305934933}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &360575321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1148,63 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1001 &1039498991
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2579164895626074979, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408432199807048713, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
+      propertyPath: m_Name
+      value: OutArea
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 07ebf39d1d896e847bafd1f3f8701bcb, type: 3}
 --- !u!1 &1054416793
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,7 +1861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c29a66fc0b5a240a3992c3b67cfd5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 6285512379662976336, guid: 2bf37d1008d58634e9099407333a5de0, type: 3}
+  _playerPrefab: {fileID: 6285512379662976336, guid: 08ed2d52c858a894eadbd0ad775b1eb2, type: 3}
   _laserPrefab: {fileID: 8178970973988269926, guid: 90fa87452009448fea2696ca31741193, type: 3}
   _borderEffect: {fileID: 6265120235051190796, guid: 3439566e93c20b0489e85bcc252a9409, type: 3}
   _deadFragEffect: {fileID: 4345827622763085008, guid: 59e715d435bd09d40a4073c4e62ff3b8, type: 3}
@@ -2168,3 +2236,4 @@ SceneRoots:
   - {fileID: 1956717960}
   - {fileID: 1986909886}
   - {fileID: 739071315}
+  - {fileID: 1039498991}

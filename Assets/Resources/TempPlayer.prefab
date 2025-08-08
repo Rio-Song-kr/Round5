@@ -609,7 +609,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -697,6 +697,7 @@ MonoBehaviour:
   _bounceMat: {fileID: 6200000, guid: f279f0ce4e5b79646a5c8b7183a0df8d, type: 2}
   _unBounceMat: {fileID: 6200000, guid: 357895fbe146396468e011e2a3be4def, type: 2}
   _jumpEffectOffset: -0.2
+  LandEffect: {fileID: 0}
 --- !u!114 &9191272727559089292
 MonoBehaviour:
   m_ObjectHideFlags: 0
