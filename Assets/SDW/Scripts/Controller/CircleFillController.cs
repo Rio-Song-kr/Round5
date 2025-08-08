@@ -27,6 +27,19 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
 
     public bool PlayerMoved;
 
+    private void Start()
+    {
+        var photonView = GetComponent<PhotonView>();
+
+        Debug.Log("Circle");
+        if (PhotonNetwork.IsConnected)
+        {
+            int newViewID = PhotonNetwork.AllocateViewID(0);
+            photonView.ViewID = newViewID;
+            Debug.Log($"Circle newID : {newViewID}");
+        }
+    }
+
     /// <summary>
     /// 초기화 설정을 수행하여 효과의 활성화 및 충전 시간을 설정
     /// </summary>
@@ -36,6 +49,8 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
     {
         _activateTime = activateTime;
         _chargeTime = chargeTime;
+
+        photonView.RPC(nameof(SetFillAmount), RpcTarget.All, CurrentFillAmount);
     }
 
     private void OnDisable()
@@ -45,8 +60,6 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
         CanIncrese = true;
         StartEffect = false;
         _applyEffect = false;
-
-        photonView.RPC(nameof(SetFillAmount), RpcTarget.All, CurrentFillAmount);
     }
 
     /// <summary>
