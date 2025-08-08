@@ -71,6 +71,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene("LobbyScene");
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
     }
     
     /// <summary>

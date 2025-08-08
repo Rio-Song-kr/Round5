@@ -189,6 +189,8 @@ public class SettingPanels : MonoBehaviour
         // UI 업데이트
         UpdateTabHighlights();
         OnTabSwitched(newTab);
+
+        
     }
 
     /// <summary>
@@ -241,6 +243,7 @@ public class SettingPanels : MonoBehaviour
     /// </summary>
     private void UpdateTabHighlights()
     {
+        
         for (int i = 0; i < tabHighlights.Length; i++)
         {
             tabHighlights[i].color = (i == (int)currentTab) ? activeTabColor : inactiveTabColor;
@@ -283,6 +286,7 @@ public class SettingPanels : MonoBehaviour
     /// </summary>
     private void OnQualityButtonClick(QualityLevel quality)
     {
+        SoundManager.Instance.PlaySFX("ClickSound");
         currentQuality = quality;
         QualitySettings.SetQualityLevel((int)quality);
         PlayerPrefs.SetInt("QualityLevel", (int)quality);
