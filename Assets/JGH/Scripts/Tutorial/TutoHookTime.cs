@@ -40,7 +40,6 @@ public class TutoHookTIme : MonoBehaviourPunCallbacks
         if (other.gameObject.layer == playerLayer)
         {
             isTimerRunning = true;
-            Debug.Log("타이머 시작됨");
         }
     }
 }
