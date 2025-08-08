@@ -496,7 +496,10 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         }
     }
 
-    private void DetachHook()
+    
+    // 튜도리얼에서 로프 연결 후 리스폰시 후크가 해제되지 않는 문제를 해결하기 위해
+    // private -> public으로 변경
+    public void DetachHook()
     {
         if (PhotonNetwork.OfflineMode)
         {
