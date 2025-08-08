@@ -127,8 +127,6 @@ public class MapController : MonoBehaviourPunCallbacks
                 //todo 어떻게 처리할지 고민
                 //모든 시스템 활성화
                 InGameManager.Instance.IsMapLoaded = true;
-                Debug.Log(
-                    $"Map Controller에서 Player Active 호출 {InGameManager.Instance.IsMapLoaded}, {InGameManager.Instance.IsCardSelected}");
 
                 if (!InGameManager.Instance.IsRematch)
                     InGameManager.Instance.SetStarted(true);

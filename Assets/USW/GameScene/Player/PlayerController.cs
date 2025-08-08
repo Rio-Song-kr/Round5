@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
+        if (InGameManager.Instance.IsGameOver) return;
         if (!InGameManager.Instance.IsStarted)
         {
             // rb.gravityScale = 0f;
