@@ -53,61 +53,59 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
         {
             LookAtMouse();
 
-            _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
-            // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+            if (_isGunInRight)
+                {
+                    if (_isFlipped)
+                        SetLeftArmPosition();
+                    else
+                        SetRightArmPosition();
+                }
+                else
+                {
+                    if (_isFlipped)
+                        SetRightArmPosition();
+                    else
+                        SetLeftArmPosition();
+                }
         }
         else
         {
             if (photonView.IsMine)
             {
                 LookAtMouse();
-            }
-            else
-            {
-                _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
-                _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
-            }
-        }
 
-        if (_isGunInRight)
-        {
-            if (_isFlipped)
-                SetLeftArmPosition();
-            else
-                SetRightArmPosition();
-
-
-            if (_isGunInRight)
-            {
-                if (_isFlipped)
-                    SetLeftArmPosition();
+                if (_isGunInRight)
+                {
+                    if (_isFlipped)
+                        SetLeftArmPosition();
+                    else
+                        SetRightArmPosition();
+                }
                 else
-                    SetRightArmPosition();
+                {
+                    if (_isFlipped)
+                        SetRightArmPosition();
+                    else
+                        SetLeftArmPosition();
+                }
 
             }
             else
             {
-                if (_isFlipped)
-                    SetRightArmPosition();
-                else
-                    SetLeftArmPosition();
+                _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 20f);
+                // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+
+
+                List<BezierKnot> leftKnots = _leftArmSpline.Spline.Knots.ToList();
+                List<BezierKnot> rightKnots = _rightArmSpline.Spline.Knots.ToList();
+
+                _leftArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(leftKnots[0].Position, _networkLArmStartPos, Time.deltaTime * 10f)));
+                _leftArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(leftKnots[1].Position, _networkLArmMiddlePos, Time.deltaTime * 10f)));
+                _leftArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(leftKnots[2].Position, _networkLArmEndPos + _networkLArmSpeed * _lag, Time.deltaTime * 10f)));
+                _rightArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(rightKnots[0].Position, _networkRArmStartPos, Time.deltaTime * 10f)));
+                _rightArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(rightKnots[1].Position, _networkRArmMiddlePos, Time.deltaTime * 10f)));
+                _rightArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(rightKnots[2].Position, _networkRArmEndPos + _networkRArmSpeed * _lag, Time.deltaTime * 10f)));
             }
-        }
-        else
-        {
-            _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 20f);
-            // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
-
-
-            List<BezierKnot> leftKnots = _leftArmSpline.Spline.Knots.ToList();
-            List<BezierKnot> rightKnots = _rightArmSpline.Spline.Knots.ToList();
-
-            _leftArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(leftKnots[0].Position, _networkLArmStartPos, Time.deltaTime * 10f)));
-            _leftArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(leftKnots[1].Position, _networkLArmMiddlePos, Time.deltaTime * 10f)));
-            _leftArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(leftKnots[2].Position, _networkLArmEndPos + _networkLArmSpeed * _lag, Time.deltaTime * 10f)));
-            _rightArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(rightKnots[0].Position, _networkRArmStartPos, Time.deltaTime * 10f)));
-            _rightArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(rightKnots[1].Position, _networkRArmMiddlePos, Time.deltaTime * 10f)));
-            _rightArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(rightKnots[2].Position, _networkRArmEndPos + _networkRArmSpeed * _lag, Time.deltaTime * 10f)));
         }
 
         SetPrevPositions();
