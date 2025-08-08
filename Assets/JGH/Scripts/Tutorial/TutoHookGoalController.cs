@@ -58,8 +58,6 @@ public class TutoHookGoalController : MonoBehaviour
         Time.timeScale = 0f;
 
         GoalUiTimeText.text = $"{H.text} : {M.text} : {S.text}";
-
-        Debug.Log("✔ 골인! UI 활성 + 오브젝트 비활성 + 게임 일시정지");
     }
 
     private void OnClickOK()
@@ -67,7 +65,6 @@ public class TutoHookGoalController : MonoBehaviour
         // 게임 다시 재개
         Time.timeScale = 1f;
 
-        Debug.Log("✔ OK 클릭 → 로비 씬으로 이동");
         SceneManager.LoadScene("LobbyScene");
     }
 }

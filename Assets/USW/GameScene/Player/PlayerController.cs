@@ -161,7 +161,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 // SetPosition(new Vector3(10, 6, 0));
                 StartCoroutine(DelayedPlayerSetup(new Vector3(10, 6, 0)));
             }
-            photonView.RPC(nameof(SetGravity), RpcTarget.All, 1f);
+            
+            if (PhotonNetwork.OfflineMode)
+            {
+                SetSingleGravity(0.5f);
+            }
+            else
+            {
+                photonView.RPC(nameof(SetGravity), RpcTarget.All, 1f);
+            }
 
             _isFirstStarted = false;
         }
@@ -896,6 +904,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine) return;
 
+        rb.gravityScale = value;
+    }
+    
+    private void SetSingleGravity(float value)
+    {
         rb.gravityScale = value;
     }
 
