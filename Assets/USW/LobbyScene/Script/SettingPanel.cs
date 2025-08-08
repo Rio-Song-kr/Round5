@@ -328,6 +328,7 @@ public class SettingPanels : MonoBehaviour
     /// </summary>
     private void OnBGMVolumeChanged(float value)
     {
+        Debug.Log($"BGM Volume Changed: {value}");
         bgmVolume = value;
         SoundManager.Instance.SetBGMVolume(bgmVolume);
         SaveAudioSettings();

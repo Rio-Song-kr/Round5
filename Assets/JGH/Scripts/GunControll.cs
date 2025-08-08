@@ -1,5 +1,6 @@
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GunControll : MonoBehaviourPun
 {
@@ -19,6 +20,7 @@ public class GunControll : MonoBehaviourPun
     // private WeaponType? lastWeapon = null;
     public IWeapon currentWeapon;
     private WeaponType? lastWeapon = null;
+    private Scene curScene;
 
     /// <summary>
     /// 처음 시작 시 기본 무기 적용
@@ -26,6 +28,7 @@ public class GunControll : MonoBehaviourPun
     private void Start()
     {
         // EquipWeapon(WeaponType.Bullet);
+        curScene = SceneManager.GetActiveScene();
 
         if (photonView.IsMine)
             EquipWeapon(WeaponType.Bullet);
@@ -42,6 +45,8 @@ public class GunControll : MonoBehaviourPun
         // 마우스 왼쪽 버튼 클릭 시 공격
         if (!Input.GetKey(KeyCode.E) && Input.GetMouseButtonDown(0) && photonView.IsMine)
         {
+            if (curScene.name == "USW_RopePlayMode") return; // 로프 플레이 모드에서는 공격 안함
+
             if (currentWeapon != null)
             {
                 var weapon = currentWeaponObject.GetComponent<IWeapon>();
