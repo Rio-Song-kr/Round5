@@ -27,7 +27,7 @@ public class TestOutArea : MonoBehaviourPun
                     case "Left":
                         GameObject effectL = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectL.transform.LookAt(collision.transform.position + Vector3.right);
-                        rb2d.AddForce(Vector2.right * 17f, ForceMode2D.Impulse);
+                        rb2d.AddForce(Vector2.right * 20f, ForceMode2D.Impulse);
                         if (PhotonNetwork.OfflineMode || !playerPhotonView.IsMine) break;
                         Debug.Log("경계면 데미지 호출");
                         damagable.TakeDamage(6, collision.transform.position, Vector2.right);
@@ -35,7 +35,7 @@ public class TestOutArea : MonoBehaviourPun
                     case "Right":
                         GameObject effectR = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectR.transform.LookAt(collision.transform.position + Vector3.left);
-                        rb2d.AddForce(Vector2.left * 17f, ForceMode2D.Impulse);
+                        rb2d.AddForce(Vector2.left * 20f, ForceMode2D.Impulse);
                         if (PhotonNetwork.OfflineMode || !playerPhotonView.IsMine) break;
                         Debug.Log("경계면 데미지 호출");
                         damagable.TakeDamage(6, collision.transform.position, Vector2.left);
@@ -48,7 +48,7 @@ public class TestOutArea : MonoBehaviourPun
                     case "Down":
                         GameObject effectD = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectD.transform.LookAt(collision.transform.position + Vector3.up);
-                        rb2d.AddForce(Vector2.up * 17f, ForceMode2D.Impulse);
+                        rb2d.AddForce(Vector2.up * 20f, ForceMode2D.Impulse);
                         if (PhotonNetwork.OfflineMode || !playerPhotonView.IsMine) break;
                         Debug.Log("경계면 데미지 호출");
                         damagable.TakeDamage(6, collision.transform.position, Vector2.up);
