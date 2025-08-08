@@ -1116,6 +1116,9 @@ MonoBehaviour:
   matchesToWinGame: 2
   roundStartDelay: 3
   currentGameState: 0
+  IsMapLoaded: 0
+  IsCardSelected: 0
+  _backgroundObject: {fileID: 0}
 --- !u!4 &1539779632
 Transform:
   m_ObjectHideFlags: 0
@@ -1810,10 +1813,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1434797974313348206, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
-      propertyPath: _sfxList.Array.data[4].Name
-      value: BulletHitSound1
-      objectReference: {fileID: 0}
     - target: {fileID: 2108904061945068471, guid: 1b57a6ae0c35caa49a5551b3ac7339df, type: 3}
       propertyPath: m_Name
       value: SoundManager
@@ -1935,6 +1934,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WeaponTestPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 9003564856555118431, guid: 89a0e68cb2142924887c6cfb94f033ca, type: 3}
+      propertyPath: LandEffect
+      value: 
+      objectReference: {fileID: 7999343042322015455, guid: d741884b73767764bb95b0e9d63a9556, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

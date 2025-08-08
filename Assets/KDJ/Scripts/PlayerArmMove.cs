@@ -24,9 +24,9 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     // 동기화 변수
     private Vector3 _networkGunPos;
     private Vector3 _networkGunAxisUp;
-// <<<<<<< HEAD
-    
-// =======
+    // <<<<<<< HEAD
+
+    // =======
     private Vector3 _LArmSpeed;
     private Vector3 _RArmSpeed;
 
@@ -42,40 +42,40 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     private Vector3 _networkLArmSpeed;
     private Vector3 _networkRArmSpeed;
 
-// >>>>>>> Develops
+    // >>>>>>> Develops
     private void Update()
     {
 
         // Debug.Log("플립 상태:" + _isFlipped + ", 마우스 위치 오른쪽:" + _isGunInRight);
         CaculateArmSpeed();
 
-        if (PhotonNetwork.OfflineMode){
+        if (PhotonNetwork.OfflineMode)
+        {
             LookAtMouse();
-// <<<<<<< HEAD
-            // _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
-            // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
-        // }
-        // else
-        // {
-            // if (photonView.IsMine)
-            // {
-                // LookAtMouse();
-            // }
-            // else
-            // {
-                // _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
-                // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
-            // }
-        // }
 
-        // if (_isGunInRight)
-        // {
-            // if (_isFlipped)
-                // SetLeftArmPosition();
-            // else
-                // SetRightArmPosition();
-// =======
-// >>>>>>> Develops
+            _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
+            // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+        }
+        else
+        {
+            if (photonView.IsMine)
+            {
+                LookAtMouse();
+            }
+            else
+            {
+                _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 10f);
+                _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
+            }
+        }
+
+        if (_isGunInRight)
+        {
+            if (_isFlipped)
+                SetLeftArmPosition();
+            else
+                SetRightArmPosition();
+
 
             if (_isGunInRight)
             {
