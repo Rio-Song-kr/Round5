@@ -173,8 +173,6 @@ public class SettingPanels : MonoBehaviour
     /// </summary>
     private IEnumerator SwitchTabWithAnimation(SettingTab newTab)
     {
-        SoundManager.Instance.PlaySFX("ClickSound");
-
         GameObject currentPanel = GetCurrentPanel();
         yield return StartCoroutine(FadePanel(currentPanel, 1f, 0f));
         currentPanel.SetActive(false);
