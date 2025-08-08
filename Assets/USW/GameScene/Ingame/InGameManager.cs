@@ -756,28 +756,28 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
-        if (PhotonNetwork.OfflineMode) return;
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            DebugLeftPlayerWin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            DebugRightPlayerWin();
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            DebugStartGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            DebugVoteRematch(true);
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            DebugVoteRematch(false);
-        }
+        //if (PhotonNetwork.OfflineMode) return;
+        //
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    DebugLeftPlayerWin();
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    DebugRightPlayerWin();
+        //}
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    DebugStartGame();
+        //}
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    DebugVoteRematch(true);
+        //}
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    DebugVoteRematch(false);
+        //}
     }
 
     /// <summary>

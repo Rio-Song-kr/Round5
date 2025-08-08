@@ -42,6 +42,7 @@ public class SettingPanels : MonoBehaviour
     private Slider bgmSlider;
 
     [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Slider masterSlider;
 
     [Header("Account Settings")] [SerializeField]
     private TextMeshProUGUI uidText;
@@ -91,6 +92,7 @@ public class SettingPanels : MonoBehaviour
     // 사운드 볼륨 설정
     private float bgmVolume = 1f;
     private float sfxVolume = 1f;
+    private float masterVolume = 1f;
 
     // 중복 처리 방지 플래그
     private bool isProcessingLogout = false;
@@ -145,6 +147,7 @@ public class SettingPanels : MonoBehaviour
         // 사운드 슬라이더 이벤트
         bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
         sfxSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
+        masterSlider.onValueChanged.AddListener(OnMasterVolumeChanged);
 
         // 닉네임 변경 버튼 이벤트
         editNicknameButton.onClick.AddListener(OnEditNicknameClick);
@@ -328,12 +331,25 @@ public class SettingPanels : MonoBehaviour
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    private void OnMasterVolumeChanged(float value)
+    {
+        Debug.Log($"Master Volume Changed: {value}");
+        masterVolume = value / 100f;
+        SoundManager.Instance.SetBGMVolume(bgmVolume * masterVolume);
+        SoundManager.Instance.SetSFXVolume(sfxVolume * masterVolume);
+        SaveAudioSettings();
+    }
+
+    /// <summary>
     /// BGM 볼륨 변경 처리
     /// </summary>
     private void OnBGMVolumeChanged(float value)
     {
-        bgmVolume = value;
-        SoundManager.Instance.SetBGMVolume(bgmVolume);
+        Debug.Log($"BGM Volume Changed: {value}");
+        bgmVolume = value / 100f;
+        SoundManager.Instance.SetBGMVolume(bgmVolume * masterVolume);
         SaveAudioSettings();
     }
 
@@ -342,8 +358,8 @@ public class SettingPanels : MonoBehaviour
     /// </summary>
     private void OnSFXVolumeChanged(float value)
     {
-        sfxVolume = value;
-        SoundManager.Instance.SetSFXVolume(sfxVolume);
+        sfxVolume = value / 100f;
+        SoundManager.Instance.SetSFXVolume(sfxVolume * masterVolume);
         SaveAudioSettings();
     }
 
@@ -354,6 +370,7 @@ public class SettingPanels : MonoBehaviour
     {
         PlayerPrefs.SetFloat("BGMVolume", bgmVolume);
         PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
+        PlayerPrefs.SetFloat("MasterVolume", masterVolume);
         PlayerPrefs.Save();
     }
 

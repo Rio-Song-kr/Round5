@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutoPlayerRespawn : MonoBehaviour
 {
@@ -9,7 +10,15 @@ public class TutoPlayerRespawn : MonoBehaviour
     private void Start()
     {
         // 처음 위치 저장
-        initialPosition = transform.position;
+        if (SceneManager.GetActiveScene().name == "USW_RopePlayMode")
+        {
+            if (checkpointManager == null)
+            {
+                checkpointManager = FindObjectOfType<TutoCheckpointManager>();
+            }
+        }
+
+        initialPosition = new Vector3(0, -1.65f, 0); // 초기 위치 설정
     }
 
     public void Respawn()
