@@ -14,6 +14,8 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _deadSmokeEffect;
     [SerializeField] private GameObject _jumpEffect;
     [SerializeField] private GameObject _landEffect;
+    [SerializeField] private GameObject _jumpEffect2;
+    [SerializeField] private GameObject _landEffect2;
     [SerializeField] private Camera _camera;
     [SerializeField] private PoolManager _pools;
     public List<GameObject> PlayerList = new List<GameObject>();
@@ -30,8 +32,10 @@ public class TestPlayerManager : MonoBehaviourPunCallbacks
         _pools.InitializePool("BorderEffect", _borderEffect, 1, 2);
         _pools.InitializePool("DeadFragWrap", _deadFragEffect, 1, 2);
         _pools.InitializePool("DeadSmokeWrap", _deadSmokeEffect, 1, 2);
-        _pools.InitializePool("JumpEffectWrap", _jumpEffect, 2, 10);
-        _pools.InitializePool("LandEffect", _landEffect, 1, 2);
+        _pools.InitializePool("JumpEffectWrap1", _jumpEffect, 2, 10);
+        _pools.InitializePool("LandEffect1", _landEffect, 1, 2);
+        _pools.InitializePool("JumpEffectWrap2", _jumpEffect2, 2, 10);
+        _pools.InitializePool("LandEffect2", _landEffect2, 1, 2);
     }
 
     /// <summary>
