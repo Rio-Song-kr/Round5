@@ -25,6 +25,12 @@ public class GameManager : MonoBehaviour
     public bool IsLoggedIn { get; private set; }
     public bool IsFirebaseLoggedIn { get; private set; }
     public bool IsPhotonConnected { get; private set; }
+
+    // 250809 김동진 추가
+    public float MasterVolume { get; set; } = 1f;
+    public float BGMVolume { get; set; } = 1f;
+    public float SFXVolume { get; set; } = 1f;
+
     #endregion
 
     #region 내부 상태 변수
@@ -49,6 +55,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        GetSoundValue();
         StartCoroutine(SetupFirebaseAuthListener());
         FirebaseManager.OnUserLoggedOut += OnFirebaseUserLoggedOut;
     }
@@ -166,6 +173,16 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    private void GetSoundValue()
+    {
+        MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        BGMVolume = PlayerPrefs.GetFloat("BGMVolume", 1f);
+        SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        SoundManager.Instance.SetBGMVolume(BGMVolume * MasterVolume);
+        SoundManager.Instance.SetSFXVolume(SFXVolume * MasterVolume);
+    }
+
     #endregion
 
     #region 로그아웃 처리
@@ -175,12 +192,12 @@ public class GameManager : MonoBehaviour
     private void PerformLogoutCleanup()
     {
         if (isCleaningUp) return;
-        
+
         isCleaningUp = true;
-        
+
         // 사용자 정보 초기화
         ClearUserInfo();
-        
+
         // Photon 연결 해제 및 커스텀 프로퍼티 정리
         if (PhotonNetwork.IsConnected)
         {
@@ -193,13 +210,13 @@ public class GameManager : MonoBehaviour
                 emptyProps["loginTime"] = null;
                 PhotonNetwork.LocalPlayer.SetCustomProperties(emptyProps);
             }
-            
+
             PhotonNetwork.Disconnect();
         }
-        
+
         // 게임 상태 리셋
         ResetGameState();
-        
+
         isCleaningUp = false;
     }
     

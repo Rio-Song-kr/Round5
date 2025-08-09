@@ -330,6 +330,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndRound(string winnerKey)
     {
+        Cursor.visible = false;
         SetGameState(GameState.RoundEnding);
         lastRoundWinner = winnerKey;
         roundScores[winnerKey]++;
@@ -465,6 +466,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartCardSelect(string winnerKey)
     {
+        Cursor.visible = true;
         IsCardSelected = false;
         SetGameState(GameState.CardSelecting);
         var cardSelectManager = FindObjectOfType<CardSelectManager>();
