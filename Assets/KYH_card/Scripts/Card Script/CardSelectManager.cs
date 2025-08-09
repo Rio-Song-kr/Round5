@@ -83,14 +83,13 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
         // 이형원 임시 시도
         if (InGameManager.Instance.CurrentGameState != InGameManager.GameState.GameEnding)
-            canvasController.TryStartCardSelection();
+            canvasController.TryStartCardSelection(canvasController.CurrentSelectorNumber);
 
         // 캔버스 컨트롤러 초기화 및 시작하는부분 
         // DOVirtual.DelayedCall(0.2f, () =>
         // {
         //     canvasController.DecideNextSelector();
         // });
-
         // 캔버스 컨트롤러 
     }
 
