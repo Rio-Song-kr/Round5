@@ -668,9 +668,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         isWaitingForRematch = false;
         OnRematchRequest?.Invoke(true);
         Debug.Log("두명다 리매치 승인함");
-
-        // 게임 재시작
-        // RPC_StartGame();
     }
 
     [PunRPC]

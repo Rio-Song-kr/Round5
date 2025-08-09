@@ -26,7 +26,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     
     private string currentRoomCode = "0000";
     private bool isInRoom = false;
-    private bool hasGeneratedCode = false;
     private bool isLoadingScene = false;
     private bool isQuickMatching = false;
     
@@ -342,7 +341,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            hasGeneratedCode = true;
+         
             currentRoomCode = PhotonNetwork.CurrentRoom.Name;
             
             if(roomCodeText) 

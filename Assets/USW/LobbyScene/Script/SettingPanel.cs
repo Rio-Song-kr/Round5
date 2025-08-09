@@ -531,7 +531,7 @@ public class SettingPanels : MonoBehaviour
             {
                 SceneManager.LoadScene("LoginScene");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 PopupManager.Instance.ShowPopup("Scene 전환 중 오류가 발생했습니다.");
                 isProcessingAccountDeletion = false;
