@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Photon.Realtime;
 
 public class SettingPanels : MonoBehaviour
 {
@@ -107,6 +108,7 @@ public class SettingPanels : MonoBehaviour
         SetupEvents();
         LoadSettings();
         SwitchTab(SettingTab.Sound);
+        SoundInit(); // 250809 김동진 추가
     }
 
     /// <summary>
@@ -320,14 +322,28 @@ public class SettingPanels : MonoBehaviour
 
     #region 사운드 설정
 
+    // 250809 김동진 추가
+    /// <summary>
+    /// 사운드 초기화. 로그인 씬에서 설정한 볼륨을 가져옵니다.
+    /// </summary>
+    private void SoundInit()
+    {
+        masterVolume = GameManager.Instance.MasterVolume;
+        bgmVolume = GameManager.Instance.BGMVolume;
+        sfxVolume = GameManager.Instance.SFXVolume;
+        SaveAudioSettings();
+    }
+
     /// <summary>
     /// 사운드 설정 UI 업데이트
     /// </summary>
     private void UpdateSoundSettings()
     {
-        bgmSlider.value = bgmVolume;
+        masterSlider.value = PlayerPrefs.GetFloat("MasterVolume", masterVolume) * 100f;
 
-        sfxSlider.value = sfxVolume;
+        bgmSlider.value = PlayerPrefs.GetFloat("BGMVolume", bgmVolume) * 100f;
+
+        sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", sfxVolume) * 100f;
     }
 
     /// <summary>
@@ -337,6 +353,7 @@ public class SettingPanels : MonoBehaviour
     {
         Debug.Log($"Master Volume Changed: {value}");
         masterVolume = value / 100f;
+        GameManager.Instance.MasterVolume = masterVolume;
         SoundManager.Instance.SetBGMVolume(bgmVolume * masterVolume);
         SoundManager.Instance.SetSFXVolume(sfxVolume * masterVolume);
         SaveAudioSettings();
@@ -349,6 +366,7 @@ public class SettingPanels : MonoBehaviour
     {
         Debug.Log($"BGM Volume Changed: {value}");
         bgmVolume = value / 100f;
+        GameManager.Instance.BGMVolume = bgmVolume;
         SoundManager.Instance.SetBGMVolume(bgmVolume * masterVolume);
         SaveAudioSettings();
     }
@@ -359,6 +377,7 @@ public class SettingPanels : MonoBehaviour
     private void OnSFXVolumeChanged(float value)
     {
         sfxVolume = value / 100f;
+        GameManager.Instance.SFXVolume = sfxVolume;
         SoundManager.Instance.SetSFXVolume(sfxVolume * masterVolume);
         SaveAudioSettings();
     }
