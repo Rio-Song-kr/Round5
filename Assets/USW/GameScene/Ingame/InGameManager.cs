@@ -646,11 +646,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         bool allVoted = true;
         bool allAgree = true;
 
+
         foreach (var kvp in rematchVotes)
         {
             if (!kvp.Value)
             {
                 allAgree = false;
+                photonView.RPC("RPC_RematchDeclined", RpcTarget.All);
+                break;
             }
         }
 
@@ -673,6 +676,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_RematchDeclined()
     {
+        CardManager.Instance.ClearLists();
         isWaitingForRematch = false;
         OnRematchRequest?.Invoke(false);
         Debug.Log("리매치 거부됨");

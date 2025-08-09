@@ -1,5 +1,7 @@
+using System.Data;
 using System.Linq;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +13,8 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
     [SerializeField] Button noButton;
     [SerializeField] TMP_Text winnerText;
     [SerializeField] TMP_Text waitingText;
+
+    private bool isLeaving = false;
 
     private void Awake()
     {
@@ -65,16 +69,21 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
 
     private void EndGame()
     {
+        if (isLeaving) return;
+        isLeaving = true;
+
         Debug.Log("방에나감.");
+        SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
         PhotonNetwork.LeaveRoom();
-        gameObject.SetActive(false);
+
     }
 
     public override void OnLeftRoom()
     {
-        SceneManager.LoadScene("LobbyScene");
-        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
+        Debug.Log("씬 전환");
     }
+
 
     //#  20250809 추가사항
     private string GetPlayerNickName(string actorNumberString)
