@@ -60,7 +60,8 @@ public class SplashManagerver2 : MonoBehaviour
         AcademiLogo.color = new Color(1, 1, 1, 0);
         Academi.SetActive(true);
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.8f);
+
         SoundManager.Instance.PlaySFX("KYUNGIL");
 
         Sequence seq2 = DOTween.Sequence();
