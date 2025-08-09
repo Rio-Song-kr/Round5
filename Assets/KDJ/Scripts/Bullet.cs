@@ -90,7 +90,6 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
         if (!_isExplosiveBullet && collision.gameObject.layer != 8)
             SoundManager.Instance.PlaySFX("BulletHitSound1");
 
-        Debug.Log($"포톤 상태 : " + photonView.IsMine);
         if (!photonView.IsMine && PhotonNetwork.OfflineMode == false) return;
 
         // 총알 유형에 따라 처리 

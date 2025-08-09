@@ -31,12 +31,10 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
     {
         var photonView = GetComponent<PhotonView>();
 
-        Debug.Log("Circle");
         if (PhotonNetwork.IsConnected)
         {
             int newViewID = PhotonNetwork.AllocateViewID(0);
             photonView.ViewID = newViewID;
-            Debug.Log($"Circle newID : {newViewID}");
         }
     }
 

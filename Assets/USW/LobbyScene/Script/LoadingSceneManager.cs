@@ -119,7 +119,7 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
         {
             isLoadingComplete = true;
             PhotonNetwork.LoadLevel(gameSceneName);
-            SoundManager.Instance.PlayBGMLoop("IngameBGM");
+            SoundManager.Instance.PlayBGMLoop("IngameBGM", 1);
         }
     }
 

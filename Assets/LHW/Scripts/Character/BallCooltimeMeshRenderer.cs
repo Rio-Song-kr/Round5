@@ -57,6 +57,6 @@ public class BallCooltimeMeshRenderer : MonoBehaviourPun
     private void RPC_MeshChange(bool isCooldownZero)
     {
         meshRenderer.material = isCooldownZero ? materials[0] : materials[1];
-        Debug.Log(isCooldownZero);
+        // Debug.Log(isCooldownZero);
     }
 }

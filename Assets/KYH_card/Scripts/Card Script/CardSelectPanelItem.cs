@@ -13,44 +13,52 @@ public class CardSelectPanelItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI NicknameText;
     [SerializeField] private TextMeshProUGUI currentSelect;
 
-    public void Init(Player player)
+    public bool Init(Player player)
     {
         NicknameText.text = player.NickName;
 
         hasSelected = false;
 
-        CardSelectCheckUpdate(PhotonNetwork.LocalPlayer);
+        return false;
+        // CardSelectCheckUpdate(PhotonNetwork.LocalPlayer);
     }
 
-    public void OnCardSelected()
+    public bool OnCardSelected()
     {
         if (hasSelected == true)
         {
-            return;
+            return true;
         }
 
         hasSelected = true;
+
+        return true;
         // Debug.Log("�� ī�� ���� �Ϸ��");
 
-        CardSelectCheckUpdate(PhotonNetwork.LocalPlayer);
+        // CardSelectCheckUpdate(PhotonNetwork.LocalPlayer);
     }
 
-    public void CardSelectCheckUpdate(Player player)
-    {
-        var selectProperty = new ExitGames.Client.Photon.Hashtable();
-        selectProperty["Select"] = hasSelected;
-
-        PhotonNetwork.LocalPlayer.SetCustomProperties(selectProperty);
-    }
+    // public void CardSelectCheckUpdate(Player player)
+    // {
+    //     // var selectProperty = new ExitGames.Client.Photon.Hashtable();
+    //     // selectProperty["Select"] = hasSelected;
+    //     //
+    //     // PhotonNetwork.LocalPlayer.SetCustomProperties(selectProperty);
+    // }
 
     public void SelectCheck(Player player)
     {
-        if (player.CustomProperties.TryGetValue("Select", out object value))
-        {
-            currentSelect.text = (bool)value ? "Select" : "Please Selcet Card";
+        // if (player.CustomProperties.TryGetValue("Select", out object value))
+        // {
+        //     currentSelect.text = (bool)value ? "Select" : "Please Selcet Card";
+        //
+        //     currentSelect.color = (bool)value ? Color.green : Color.red;
+        // }
 
-            currentSelect.color = (bool)value ? Color.green : Color.red;
-        }
+        bool selected = InGameManager.Instance.PlayerSelection[player.ActorNumber];
+        currentSelect.text = selected ? "Select" : "Please Selcet Card";
+
+        currentSelect.color = selected ? Color.green : Color.red;
     }
 
     public void ResethasSelected()
