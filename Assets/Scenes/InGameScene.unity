@@ -656,6 +656,18 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 5308079896013678906, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8cddd722330739348aba23af6b87d441, type: 2}
+    - target: {fileID: 5308079896013678906, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 6013088027890978420, guid: 8cddd722330739348aba23af6b87d441, type: 2}
+    - target: {fileID: 5308079896013678906, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5890842974326709222, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -679,6 +691,14 @@ PrefabInstance:
     - target: {fileID: 8610452466027670519, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
       propertyPath: sceneViewId
       value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133105420020292952, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -242.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133105420020292952, guid: 64dceeaa78c4e5144889eb52ad0aa6a8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 189.32
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
