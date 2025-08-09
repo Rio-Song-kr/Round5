@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
+
 //using Managers;
 
 public class TestNetwork : MonoBehaviourPunCallbacks
@@ -14,7 +12,7 @@ public class TestNetwork : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// OnConnectedToMaster 있고
+    /// OnConnectedToMaster 있고g
     /// OnDisconnectedFromServer
     /// OnJoinRoom
     /// OnLeftRoom
