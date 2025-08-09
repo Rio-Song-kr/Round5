@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Unity.VisualScripting;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : MonoBehaviourPun
 {
     [Serializable]
     public struct SoundList
@@ -26,6 +28,8 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         Init();
+        SetBGMVolume(PlayerPrefs.GetFloat("BGMVolume", 1f));
+        SetSFXVolume(PlayerPrefs.GetFloat("SFXVolume", 1f));
     }
 
     private void Init()
@@ -79,12 +83,62 @@ public class SoundManager : MonoBehaviour
             BGMPlayer.Play();
         }
     }
-    
+
+    /// <summary>
+    /// RPC용 오버라이드 메서드 입니다. 뒤의 int값은 아무거나 넣으면 됩니다.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    public void PlayBGMOnce(string name, int value)
+    {
+        photonView.RPC("RPC_PlayBGMOnce", RpcTarget.All, name);
+    }
+
+    /// <summary>
+    /// RPC를 통해 BGM을 한번만 재생합니다.
+    /// </summary>
+    /// <param name="name"></param>
+    [PunRPC]
+    public void RPC_PlayBGMOnce(string name)
+    {
+        if (BGMDic.ContainsKey(name))
+        {
+            BGMPlayer.clip = BGMDic[name];
+            LoopPlayer.Stop();
+            BGMPlayer.Play();
+        }
+    }
+
     /// <summary>
     /// BGM을 반복 재생합니다.
     /// </summary>
     /// <param name="name"></param>
     public void PlayBGMLoop(string name)
+    {
+        if (BGMDic.ContainsKey(name))
+        {
+            LoopPlayer.clip = BGMDic[name];
+            BGMPlayer.Stop();
+            LoopPlayer.Play();
+        }
+    }
+
+    /// <summary>
+    /// RPC용 오버라이드 메서드 입니다. 뒤의 int값은 아무거나 넣으면 됩니다.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    public void PlayBGMLoop(string name, int value)
+    {
+        photonView.RPC("RPC_PlayBGMLoop", RpcTarget.All, name);
+    }
+
+    /// <summary>
+    /// RPC를 통해 BGM을 반복 재생합니다.
+    /// </summary>
+    /// <param name="name"></param>
+    [PunRPC]
+    public void RPC_PlayBGMLoop(string name)
     {
         if (BGMDic.ContainsKey(name))
         {
@@ -112,6 +166,19 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     /// <param name="name">리스트에 있는 SFX의 이름</param>
     public void PlaySFX(string name)
+    {
+        if (SFXDic.ContainsKey(name))
+        {
+            SFXPlayer.PlayOneShot(SFXDic[name]);
+        }
+    }
+
+    /// <summary>
+    /// RPC를 통해 SFX를 재생합니다.
+    /// </summary>
+    /// <param name="name"></param>
+    [PunRPC]
+    public void RPC_PlaySFX(string name)
     {
         if (SFXDic.ContainsKey(name))
         {

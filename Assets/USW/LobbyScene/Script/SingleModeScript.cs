@@ -14,6 +14,8 @@ public class SingleModeScript : MonoBehaviour
             if (IsSinglePlayerMode())
             {
                 ReturnToLobby();
+                Cursor.visible = true;
+                SoundManager.Instance.PlayMainMenuBGM(); 
             }
         }
     }

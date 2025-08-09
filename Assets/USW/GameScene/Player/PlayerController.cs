@@ -310,7 +310,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         ResetVelocityForJump(true);
 
-        Debug.Log($"Normal Jump Power : {Vector2.up * jumpPower}");
+        // Debug.Log($"Normal Jump Power : {Vector2.up * jumpPower}");
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
 
         if (canSecondJump)
