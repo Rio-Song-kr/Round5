@@ -55,24 +55,36 @@ public class SplashManagerver2 : MonoBehaviour
 
     IEnumerator NextSequence()
     {
-        SoundManager.Instance.PlaySFX("Pop");
         logo.SetActive(false);
         AcademiLogo.color = new Color(1, 1, 1, 0);
         Academi.SetActive(true);
 
-        yield return new WaitForSeconds(0.8f);
+        Sequence seq = DOTween.Sequence();
 
-        SoundManager.Instance.PlaySFX("KYUNGIL");
-
-        Sequence seq2 = DOTween.Sequence();
-        seq2.Append(AcademiLogo.DOFade(1, fadeInTime));
-        seq2.AppendInterval(stayTime);
         
-        seq2.Append(AcademiLogo.DOFade(0, fadeOutTime));
-        seq2.OnComplete(() =>
+        
+        seq.AppendCallback(() => SoundManager.Instance.PlaySFX("Pop"));
+
+
+        seq.AppendInterval(0.6f);
+        // 페이드 인 → 유지 → 페이드 아웃
+        seq.Append(AcademiLogo.DOFade(1, 0.2f));
+        seq.AppendInterval(stayTime);
+        seq.Append(AcademiLogo.DOFade(0, fadeOutTime));
+
+        // 시작 후 0.8초 지점에 KYUNGIL 재생을 "삽입"
+        seq.Insert(0.8f, DOVirtual.DelayedCall(0f, () =>
+        {
+            SoundManager.Instance.PlaySFX("KYUNGIL");
+        }));
+
+        seq.OnComplete(() =>
         {
             SceneManager.LoadScene(nextSceneName);
             SoundManager.Instance.PlayBGMLoop("LoginBGM");
         });
+
+        // 필요하면 완료까지 대기
+        yield return seq.WaitForCompletion();
     }
 }
