@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -29,7 +29,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
     {
         InGameManager.OnRematchRequest -= OnRematchResult;
     }
-    
+
     /// <summary>
     /// 리매치 투표
     /// </summary>
@@ -40,10 +40,11 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
             InGameManager.Instance.VoteRematch(vote);
             yesButton.interactable = false;
             noButton.interactable = false;
-            waitingText.text = vote ? "Try Rematch, waiting for opponent decision..." : "Quit Game, waiting for opponent decision...";
+            waitingText.text =
+                vote ? "Try Rematch, waiting for opponent decision..." : "Quit Game, waiting for opponent decision...";
         }
     }
-    
+
     /// <summary>
     /// InGameManager에서 전달하는 리매치 결과 처리
     /// </summary>
@@ -61,10 +62,11 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
             EndGame();
         }
     }
-    
+
     private void EndGame()
     {
-        PhotonNetwork.LeaveRoom(); 
+        Debug.Log("방에나감.");
+        PhotonNetwork.LeaveRoom();
         gameObject.SetActive(false);
     }
 
@@ -73,7 +75,19 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("LobbyScene");
         SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
     }
-    
+
+    //#  20250809 추가사항
+    private string GetPlayerNickName(string actorNumberString)
+    {
+        if (int.TryParse(actorNumberString, out int actorNumber))
+        {
+            var player = PhotonNetwork.PlayerList.FirstOrDefault(p => p.ActorNumber == actorNumber);
+            return player?.NickName ?? "Unknown Player";
+        }
+        return "Unknown Player";
+    }
+
+
     /// <summary>
     /// 패널 활성화 시 버튼 상태 초기화
     /// </summary>
@@ -81,7 +95,9 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
     {
         yesButton.interactable = true;
         noButton.interactable = true;
-        winnerText.text = $"Winner : {InGameManager.Instance.LastMatchWinner.ToString()}";
+        string winnerNickName = GetPlayerNickName(InGameManager.Instance.LastMatchWinner);
+        winnerText.text = $"Winner : {winnerNickName}";
+
         waitingText.text = "";
     }
 
