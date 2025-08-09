@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4160812767046685031}
   - component: {fileID: 1434797974313348206}
+  - component: {fileID: -5557516703865694704}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -76,6 +77,28 @@ MonoBehaviour:
   BGMPlayer: {fileID: 482567777773125013}
   SFXPlayer: {fileID: 3162069499046408510}
   LoopPlayer: {fileID: 3498923804346917052}
+--- !u!114 &-5557516703865694704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108904061945068471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &3817431404092177287
 GameObject:
   m_ObjectHideFlags: 0
