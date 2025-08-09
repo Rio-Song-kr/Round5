@@ -102,7 +102,7 @@ public class RandomMapPresetCreator : MonoBehaviourPun
 
     private IEnumerator MapUpdateCoroutine(int match)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.8f);
 
         for (int i = 0; i < mapListTransform.Length; i++)
         {

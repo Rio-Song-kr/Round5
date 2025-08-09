@@ -29,14 +29,8 @@ public class CanvasController : MonoBehaviourPunCallbacks
                 ? PhotonNetwork.PlayerList[0].ActorNumber
                 : PhotonNetwork.PlayerList[1].ActorNumber;
 
-            // var props = new Hashtable();
-            // props["IsFirstSelector"] = firstSelectorActorNum;
-            // PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-            // InGameManager.Instance.SetPlayerActorNumber(firstSelectorActorNum);
             photonView.RPC(nameof(SetFirstSelectorActorNumber), RpcTarget.All, firstSelectorActorNum);
-
-            _currentSelectorNumber = firstSelectorActorNum;
-            photonView.RPC(nameof(TryStartCardSelection), RpcTarget.All, _currentSelectorNumber);
+            photonView.RPC(nameof(TryStartCardSelection), RpcTarget.All, firstSelectorActorNum);
         }
 
         // ������/Ŭ���̾�Ʈ ���� ���� �ʱ�ȭ �õ�
@@ -46,18 +40,11 @@ public class CanvasController : MonoBehaviourPunCallbacks
     [PunRPC]
     private void SetFirstSelectorActorNumber(int actorNumber) => InGameManager.Instance.SetPlayerActorNumber(actorNumber);
 
-    // public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
-    // {
-    //     if (propertiesThatChanged.ContainsKey("IsFirstSelector"))
-    //     {
-    //         // Debug.Log("�·�������Ƽ������Ʈ ����");
-    //         TryStartCardSelection();
-    //     }
-    // }
-
     [PunRPC]
     public void TryStartCardSelection(int currentSelector)
     {
+
+        _currentSelectorNumber = currentSelector;
         // Debug.Log($"[TryStartCardSelection] ȣ��� | alreadyStarted={alreadyStarted}");
 
 
@@ -70,13 +57,11 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
             return;
         }
-        // if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("IsFirstSelector", out object selectorObj)) return;
 
         alreadyStarted = true;
 
-        // int selectorActorNum = (int)selectorObj;
-
         isMyTurn = PhotonNetwork.LocalPlayer.ActorNumber == currentSelector;
+        Debug.Log($"AtorNumber : {PhotonNetwork.LocalPlayer.ActorNumber} - myTurn{isMyTurn}");
 
         if (isMyTurn)
         {
@@ -88,9 +73,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
             {
                 // Debug.Log("���� ���� �� ī�� ���� ����");
 
-                var props = new Hashtable();
-                props["Select"] = true;
-                PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+                InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, true);
 
                 DOVirtual.DelayedCall(2f, () => { photonView.RPC(nameof(RPC_SwitchTurnToOther), RpcTarget.All); });
                 return;
@@ -145,9 +128,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
             {
                 Debug.Log("���� ���� �� ī�� ���� ����");
 
-                var props = new Hashtable();
-                props["Select"] = true;
-                PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+                InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, true);
                 return;
             }
 
@@ -186,17 +167,8 @@ public class CanvasController : MonoBehaviourPunCallbacks
     public void DecideNextSelector()
     {
         // Debug.Log("�ӽ� �׽�Ʈ�� ��,�� ���� ���� �ʱ�ȭ");
-        // int nextSelector = Random.Range(0, 2) == 0
-        //     ? PhotonNetwork.PlayerList[0].ActorNumber
-        //     : PhotonNetwork.PlayerList[1].ActorNumber;
         int nextSelector = PhotonNetwork.PlayerList[0].ActorNumber;
 
-
-        // var props = new Hashtable();
-        // props["IsFirstSelector"] = nextSelector;
-        // PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-
-        _currentSelectorNumber = nextSelector;
-        photonView.RPC(nameof(TryStartCardSelection), RpcTarget.All, _currentSelectorNumber);
+        photonView.RPC(nameof(TryStartCardSelection), RpcTarget.All, nextSelector);
     }
 }
