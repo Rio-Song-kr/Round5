@@ -403,6 +403,12 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             roundScores[key] = 0;
         }
 
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            _playerSelection[player.ActorNumber] = false;
+            Debug.Log($"RPC_EndMatch {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
+        }
+
         Debug.Log($"매치 종료 승자: {winnerKey}");
 
         // 게임 승리 확인
@@ -447,6 +453,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         foreach (var player in PhotonNetwork.PlayerList)
         {
             _playerSelection[player.ActorNumber] = false;
+            Debug.Log($"{player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
 
             var props = new Hashtable();
             // props["Select"] = false;
@@ -510,12 +517,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         //     props["Select"] = true;
         // PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
+        Debug.Log($"Winner : {winnerKey}");
         foreach (var player in PhotonNetwork.PlayerList)
         {
             if (winnerKey == player.ActorNumber.ToString())
                 _playerSelection[player.ActorNumber] = true;
             else
-                _playerSelection[player.ActorNumber] = true;
+                _playerSelection[player.ActorNumber] = false;
+            Debug.Log($"StartCard : {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
         }
 
         SetStarted(false, true);
@@ -650,13 +659,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         rematchVotes[playerKey] = vote;
         _playerRematchVoted[playerKey] = true;
-        
+
         if (!PhotonNetwork.IsMasterClient) return;
-        
+
         //# 1명이라도 vote가 false인 경우는 게임을 종료 시켜야 함
-        if(!vote)
+        if (!vote)
             photonView.RPC("RPC_RematchDeclined", RpcTarget.All);
-        
+
         //# 모두 투표를 완료했는지 확인
         foreach (var votedPlayer in _playerRematchVoted)
         {

@@ -83,6 +83,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void OnGenerateCodeClick()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
+        Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
+
         if (isLoadingScene || isQuickMatching) return;
 
         if (isInRoom)
@@ -108,6 +111,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void OnJoinRoomClick()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
+        Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
+
         if (isLoadingScene || isQuickMatching) return;
 
         if (isInRoom)
@@ -128,6 +134,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void OnQuickMatchClick()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
+        Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
+
         if (isLoadingScene || isQuickMatching) return;
 
         if (isInRoom)
@@ -339,11 +348,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel("TempLoadingScene");
         }
     }
-    
+
     private IEnumerator LoadSceneAfterDelay()
     {
         var panel = singlePanel.GetComponent<SinglePanel>();
-        
+
         yield return new WaitForSeconds(1f);
 
         // 연결 상태 재확인
@@ -528,9 +537,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void ShowRoomCodePanel()
     {
         var props = new ExitGames.Client.Photon.Hashtable();
-        props = PhotonNetwork.CurrentRoom.CustomProperties;
+        props = PhotonNetwork.CurrentRoom?.CustomProperties;
 
-        if (props.ContainsKey("SinglePlayer") && (bool)props["SinglePlayer"])
+        if (props != null && props.ContainsKey("SinglePlayer") && (bool)props["SinglePlayer"])
         {
             if (singlePanel)
             {
