@@ -163,11 +163,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         else
             rightPlayerActorNumber = firstActorNumber;
 
-        Debug.Log($"{PhotonNetwork.LocalPlayer.ActorNumber}Player List Count - {PhotonNetwork.PlayerList.Length}");
-
         foreach (var player in PhotonNetwork.PlayerList)
         {
-            Debug.Log($"{player.ActorNumber}의 player Rematch Voted : false 초기화");
             _playerRematchVoted[player.ActorNumber.ToString()] = false;
 
             if (player.ActorNumber == firstActorNumber) continue;
@@ -364,7 +361,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (roundScores[winnerKey] >= roundsToWinMatch)
         {
             IsCardSelected = false;
-            Debug.Log($"End RoundPlayer Active 호출 {Instance.IsMapLoaded}, {Instance.IsCardSelected}");
+            // Debug.Log($"End RoundPlayer Active 호출 {Instance.IsMapLoaded}, {Instance.IsCardSelected}");
             SetStarted(false, false);
             StartCoroutine(EndMatchWithDelay(winnerKey));
         }
@@ -406,7 +403,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         foreach (var player in PhotonNetwork.PlayerList)
         {
             _playerSelection[player.ActorNumber] = false;
-            Debug.Log($"RPC_EndMatch {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
+            // Debug.Log($"RPC_EndMatch {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
         }
 
         Debug.Log($"매치 종료 승자: {winnerKey}");
@@ -447,13 +444,13 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndGame(string winnerKey)
     {
-        Debug.Log("RPC_EndGame");
+        // Debug.Log("RPC_EndGame");
         SetGameState(GameState.GameEnding);
 
         foreach (var player in PhotonNetwork.PlayerList)
         {
             _playerSelection[player.ActorNumber] = false;
-            Debug.Log($"{player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
+            // Debug.Log($"{player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
 
             var props = new Hashtable();
             // props["Select"] = false;
@@ -481,7 +478,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator StartCardSelectWithDelay(string winnerKey)
     {
-        Debug.Log("StartCardSelectWithDelay");
+        // Debug.Log("StartCardSelectWithDelay");
         yield return new WaitForSeconds(2f);
         // yield return null;
         StartCardSelect(winnerKey);
@@ -503,7 +500,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartCardSelect(string winnerKey)
     {
-        Debug.Log("RPC_StartCardSelect");
+        // Debug.Log("RPC_StartCardSelect");
         Cursor.visible = true;
         IsCardSelected = false;
         SetGameState(GameState.CardSelecting);
@@ -524,7 +521,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 _playerSelection[player.ActorNumber] = true;
             else
                 _playerSelection[player.ActorNumber] = false;
-            Debug.Log($"StartCard : {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
+            // Debug.Log($"StartCard : {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
         }
 
         SetStarted(false, true);
@@ -666,6 +663,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         if (!vote)
             photonView.RPC("RPC_RematchDeclined", RpcTarget.All);
 
+
         //# 모두 투표를 완료했는지 확인
         foreach (var votedPlayer in _playerRematchVoted)
         {
@@ -710,13 +708,22 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_RematchDeclined()
     {
+        // if (!photonView.IsMine) return;
+        Debug.Log("리매치 거부됨");
         isLeaving = true;
         CardManager.Instance.ClearLists();
         isWaitingForRematch = false;
-        OnRematchRequest?.Invoke(false);
-        Debug.Log("리매치 거부됨");
+        // OnRematchRequest?.Invoke(false);
 
         // 메인 메뉴로 돌아가는건 gamerestartpanel EndGame 에서 처리하고있음
+        // StartCoroutine(WaitLeaveRoom());
+        PhotonNetwork.LeaveRoom();
+    }
+
+    private IEnumerator WaitLeaveRoom()
+    {
+        yield return new WaitForSeconds(1f);
+        PhotonNetwork.LeaveRoom();
     }
 
     #endregion
@@ -905,6 +912,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     public override void OnLeftRoom()
     {
         Debug.Log("씬 전환 - OnLeftRoom");
+        CardManager.Instance.ClearLists();
         SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
         SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
     }

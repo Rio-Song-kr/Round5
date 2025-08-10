@@ -76,6 +76,10 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
     //     _explosiveBullet?.SetActive(_isExplosiveBullet);
     // }
 
+    private void Start()
+    {
+    }
+
     public void SetBulletType(bool isBig, bool isEx)
     {
         _isBigBullet = isBig;
@@ -139,6 +143,7 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
 
         // 약간의 시간 지연 후 안전하게 파괴
         // Destroy(gameObject);
+        if (!gameObject.activeSelf) return;
         StartCoroutine(SafeDestroy());
     }
 
@@ -177,9 +182,9 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
 
     private IEnumerator SafeDestroy()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.1f);
 
-        if (PhotonView.Get(this).IsMine)
+        if (PhotonView.Get(this).IsMine && gameObject.activeSelf)
         {
             PhotonNetwork.Destroy(gameObject);
         }
@@ -188,10 +193,15 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
     [PunRPC]
     public void DefaultShot(Collision2D collision)
     {
+        if (!photonView.IsMine) return;
         // 기본 이펙트 생성
         var effect = PhotonNetwork.Instantiate("Fragment", transform.position, Quaternion.identity);
         // GameObject effect = Instantiate(_hitEffect.name, transform.position, Quaternion.identity);
         effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
+
+        var vfxEffect = effect.GetComponent<VfxFragmentEffect>();
+        vfxEffect.Play();
+
         CameraShake.Instance.ShakeCaller(0.3f, 0.1f);
     }
 
@@ -252,6 +262,8 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
     public void BigBulletShot()
     {
         // _bigBullet.transform.SetParent(null);
+
+        if (!_bigBullet.activeSelf || !gameObject.activeSelf) return;
         _bigBullet.GetComponent<ParticleSystem>().Stop();
         StartCoroutine(DestroyBigBulletAfterDelay(_bigBullet, 1f));
     }
@@ -265,13 +277,16 @@ public class Bullet : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCall
     private IEnumerator DestroyBigBulletAfterDelay(GameObject bullet, float delay)
     {
         yield return new WaitForSeconds(delay);
-        PhotonNetwork.Destroy(bullet);
+        // PhotonNetwork.Destroy(bullet);
+        bullet.SetActive(false);
     }
 
     [PunRPC]
     public void ExplosiveBulletShot()
     {
-        PhotonNetwork.Instantiate("Explosive", transform.position, Quaternion.identity);
+        var explosiveObj = PhotonNetwork.Instantiate("Explosive", transform.position, Quaternion.identity);
+        var explosiveEffect = explosiveObj.GetComponent<VfxExplosiveEffect>();
+        explosiveEffect.Play();
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

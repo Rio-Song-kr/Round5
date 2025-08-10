@@ -43,7 +43,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void TryStartCardSelection(int currentSelector)
     {
-
+        // Debug.Log($"TryStartCardSelection - currentSelectorNumber: {currentSelector}");
         _currentSelectorNumber = currentSelector;
         // Debug.Log($"[TryStartCardSelection] ȣ��� | alreadyStarted={alreadyStarted}");
 
@@ -61,17 +61,18 @@ public class CanvasController : MonoBehaviourPunCallbacks
         alreadyStarted = true;
 
         isMyTurn = PhotonNetwork.LocalPlayer.ActorNumber == currentSelector;
-        Debug.Log($"AtorNumber : {PhotonNetwork.LocalPlayer.ActorNumber} - myTurn{isMyTurn}");
+        // Debug.Log($"ActorNumber : {currentSelector} - myTurn : {isMyTurn}");
 
         if (isMyTurn)
         {
             // Debug.Log("���� ���� ������ �� ī�� ���� ����");
-            Debug.Log($"LocalPlayer : {PhotonNetwork.LocalPlayer.ActorNumber}, Selector : {currentSelector}");
+            // Debug.Log($"LocalPlayer : {PhotonNetwork.LocalPlayer.ActorNumber}, Selector : {currentSelector}");
 
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("isWinner", out object isWinnerObj)
                 && (bool)isWinnerObj == true)
             {
                 // Debug.Log("���� ���� �� ī�� ���� ����");
+                // Debug.Log($"Winner : {PhotonNetwork.LocalPlayer.ActorNumber}");
 
                 InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, true);
 
@@ -83,6 +84,10 @@ public class CanvasController : MonoBehaviourPunCallbacks
             int[] selectedIndexes = cardSelectManager.GetRandomCardIndexes().ToArray();
             photonView.RPC(nameof(RPC_SyncMasterCanvas), RpcTarget.All, selectedIndexes, currentSelector);
         }
+        // else
+        // {
+        //     Debug.Log("Not my turn");
+        // }
         // else
         // {
         //     Debug.Log("������ ���� ������ �� ���� ���");
@@ -113,6 +118,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
         // }
 
         // Debug.Log("���� �ݴ� �÷��̾�� ��ȯ��");
+        // Debug.Log($"RPC_SwitchTurnToOther - Master -> Client : {PhotonNetwork.LocalPlayer.ActorNumber} - {isMyTurn}");
 
         MasterCanvas.gameObject.SetActive(false);
         ClientCanvas.gameObject.SetActive(true);
@@ -156,7 +162,7 @@ public class CanvasController : MonoBehaviourPunCallbacks
 
     public void ResetCardSelectionState()
     {
-        // Debug.Log("ĵ���� ��Ʈ�ѷ��� ���� ī�弱�� �ʱ�ȭ");
+        // Debug.Log("ResetCardSelectionState");
         alreadyStarted = false;
         isMyTurn = false;
 
