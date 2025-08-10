@@ -111,12 +111,13 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
         // Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
         // float speed += 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
-        float speed = (2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2); // 애니메이션 속도 계산
+        float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
 
         int i = 0;
         int count = CardManager.Instance.GetLists().Count;
-        List<CardBase> cardList = CardManager.Instance.GetLists();
-        do
+        var cardList = CardManager.Instance.GetLists();
+
+        while (i < count)
         {
             if (cardList[i].CardName == "QUICK RELOAD")
             {
@@ -124,7 +125,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
             }
 
             i++;
-        } while (i > count);
+        }
 
         if (PhotonNetwork.OfflineMode)
         {
@@ -202,8 +203,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
         // if (animator != null)
         // {
-            animator.SetTrigger("Reload");
-            // ReloadSpeedFromAnimator();
+        animator.SetTrigger("Reload");
+        // ReloadSpeedFromAnimator();
         // }
 
         // 리로드 시간 후 자동 완료 호출

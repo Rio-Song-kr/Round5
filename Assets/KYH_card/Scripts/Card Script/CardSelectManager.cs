@@ -53,7 +53,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         cardSelectCheckManager.cardSelectPanelSpawn();
         cardSelectCheckManager.CardSelectPanelSpawn(PhotonNetwork.LocalPlayer);
 
-        UpdateCharacterVisibility();
+        // UpdateCharacterVisibility();
         // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
         // Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
 
@@ -79,6 +79,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     // InGameManager에서 카드 선택이 시작될 때 호출하는거 
     private void InGameManagerOnOnCardSelectStart()
     {
+        Debug.Log("InGameManagerOnOnCardSelectStart");
         canvasActivation.SetActive(true);
 
         canvasController.ResetCardSelectionState();

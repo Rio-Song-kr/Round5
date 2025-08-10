@@ -31,8 +31,9 @@ public class CircleFillController : MonoBehaviourPun, IPunObservable
     {
         var photonView = GetComponent<PhotonView>();
 
-        if (PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected && photonView.ViewID == 0)
         {
+            
             int newViewID = PhotonNetwork.AllocateViewID(0);
             photonView.ViewID = newViewID;
         }

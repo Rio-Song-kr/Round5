@@ -9,12 +9,10 @@ using UnityEngine.UI;
 
 public class GameRestartPanelController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] Button yesButton;
-    [SerializeField] Button noButton;
-    [SerializeField] TMP_Text winnerText;
-    [SerializeField] TMP_Text waitingText;
-
-    private bool isLeaving = false;
+    [SerializeField] private Button yesButton;
+    [SerializeField] private Button noButton;
+    [SerializeField] private TMP_Text winnerText;
+    [SerializeField] private TMP_Text waitingText;
 
     private void Awake()
     {
@@ -41,6 +39,7 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
     {
         if (InGameManager.Instance != null)
         {
+            Debug.Log($"Rematch Voted - {PhotonNetwork.PlayerList.Length}");
             InGameManager.Instance.VoteRematch(vote);
             yesButton.interactable = false;
             noButton.interactable = false;
@@ -69,21 +68,26 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
 
     private void EndGame()
     {
-        if (isLeaving) return;
-        isLeaving = true;
+        // if (isLeaving) return;
+        // isLeaving = true;
 
         Debug.Log("방에나감.");
-        SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
-        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
         PhotonNetwork.LeaveRoom();
-
     }
 
-    public override void OnLeftRoom()
-    {
-        Debug.Log("씬 전환");
-    }
-
+    // public override void OnLeftRoom()
+    // {
+    //     Debug.Log("씬 전환 - OnLeftRoom");
+    //     SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
+    //     SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
+    // }
+    //
+    // public override void OnPlayerLeftRoom(Player otherPlayer)
+    // {
+    //     Debug.Log("씬 전환 - OnPlayerLeftROom");
+    //     SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
+    //     SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
+    // }
 
     //#  20250809 추가사항
     private string GetPlayerNickName(string actorNumberString)
@@ -95,7 +99,6 @@ public class GameRestartPanelController : MonoBehaviourPunCallbacks
         }
         return "Unknown Player";
     }
-
 
     /// <summary>
     /// 패널 활성화 시 버튼 상태 초기화

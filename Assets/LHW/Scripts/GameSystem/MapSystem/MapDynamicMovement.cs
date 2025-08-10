@@ -10,12 +10,12 @@ public class MapDynamicMovement : MonoBehaviourPun, IPunObservable
     private MapController mapController;
     private RandomMapPresetCreator randomMapPresetCreator;
 
-    [SerializeField] GameObject[] mapComponents;
+    [SerializeField] private GameObject[] mapComponents;
 
     // 첫 번째 플랫폼이 움직이기 시작하는 시점(딜레이)
-    [SerializeField] float moveDelay = 1f;
+    [SerializeField] private float moveDelay = 0.5f;
     // 각 플랫폼이 이동하기 시작하는 간격
-    [SerializeField] float moveDurationOffset = 0.2f;
+    [SerializeField] private float moveDurationOffset = 0.2f;
 
     private Vector3 networkPos;
     private Quaternion networkRot;
@@ -54,8 +54,10 @@ public class MapDynamicMovement : MonoBehaviourPun, IPunObservable
     {
         for (int i = 0; i < mapComponents.Length; i++)
         {
-            float duration = moveDelay + (i * moveDurationOffset);
-            mapComponents[i].transform.DOMove(mapComponents[i].transform.position + new Vector3(-randomMapPresetCreator.MapTransformOffset, 0, 0), duration)
+            float duration = moveDelay + i * moveDurationOffset;
+            mapComponents[i].transform
+                .DOMove(mapComponents[i].transform.position + new Vector3(-randomMapPresetCreator.MapTransformOffset, 0, 0),
+                    duration)
                 .SetDelay(mapController.MapChangeDelay).SetEase(Ease.InOutCirc);
         }
     }
@@ -75,7 +77,7 @@ public class MapDynamicMovement : MonoBehaviourPun, IPunObservable
     [PunRPC]
     public void SetParentToRound(int round)
     {
-        Transform roundParent = FindObjectOfType<RandomMapPresetCreator>().GetRoundTransform(round);
+        var roundParent = FindObjectOfType<RandomMapPresetCreator>().GetRoundTransform(round);
         transform.SetParent(roundParent);
     }
 }
