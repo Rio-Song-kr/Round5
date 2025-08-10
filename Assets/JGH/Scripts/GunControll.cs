@@ -39,9 +39,6 @@ public class GunControll : MonoBehaviourPun
         // 이거 로직상 필요 없으면 주석 풀지 마세요 공격 안돼요
         if (!photonView.IsMine || !InGameManager.Instance.IsStarted) return;
 
-        // 마우스 위치에 따라 총구 회전
-        // RotateMuzzleToMouse();
-
         // 마우스 왼쪽 버튼 클릭 시 공격
         if (!Input.GetKey(KeyCode.E) && Input.GetMouseButtonDown(0) && photonView.IsMine)
         {

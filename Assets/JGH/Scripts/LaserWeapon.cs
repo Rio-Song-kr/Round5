@@ -26,12 +26,12 @@ public class LaserWeapon : BaseWeapon
     [PunRPC]
     private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
-        // 이거 주석하지 마세요 타이밍 꼬여요
+        // 이거 주석 해제 하지 마세요 타이밍 꼬여요
         StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
         
         if (currentLaserInstance != null)
         {
-            PhotonNetwork.Destroy(currentLaserInstance); // Destroy(gameObject)가 아닌 PhotonNetwork.Destroy!
+            PhotonNetwork.Destroy(currentLaserInstance); 
             currentLaserInstance = null;
         }
         
@@ -55,16 +55,9 @@ public class LaserWeapon : BaseWeapon
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
-        // if (currentLaserInstance != null)
-        // {
-        //     Destroy(currentLaserInstance);
-        // }
-
         // 1. 레이저 프리팹 생성
         currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
-        // currentLaserInstance = _poolManager.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
-        // currentLaserInstance = PhotonNetwork.Instantiate("Laser", position, rotation);
-
+        
         // 2. muzzle에 붙임
         currentLaserInstance.transform.SetParent(gunController.muzzle);
 
