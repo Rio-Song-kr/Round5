@@ -12,6 +12,7 @@ public class LaserWeapon : BaseWeapon
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
    
+    protected override bool ApplyQuickReload => false;
 
     public override void Attack(Transform firingPoint)
     {
@@ -91,7 +92,7 @@ public class LaserWeapon : BaseWeapon
         yield return new WaitForSeconds(laserDuration);
 
         isFiring = false;
-        StartAutoReload();
+        // StartAutoReload();
 
         // 레이저 정리
         if (currentLaserInstance != null)
@@ -109,10 +110,12 @@ public class LaserWeapon : BaseWeapon
         // 애니메이션 트리거 실행
         animator?.SetTrigger("Reload");
 
-        yield return null;
-        ReloadSpeedFromAnimator();
+        // yield return null;
+        SetAnimatorSingleSpeed(0.333f);
+        //ReloadSpeedFromAnimator();
         // yield return new WaitForSeconds(reloadTime);
-        yield return new WaitForSeconds(CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
+        // yield return new WaitForSeconds(CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
+        yield return new WaitForSeconds(3f);
 
         // currentAmmo = maxAmmo;
         currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
