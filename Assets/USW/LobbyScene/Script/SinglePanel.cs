@@ -20,6 +20,7 @@ public class SinglePanel : MonoBehaviourPunCallbacks
 
     private bool isLoadingSinglePlayer = false;
     private string pendingSceneName = "";
+    public string PendingSceneName => pendingSceneName;
 
     private void OnEnable()
     {
@@ -29,13 +30,13 @@ public class SinglePanel : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = false;
     }
 
-    private void OnDisable()
-    {
-        // InGameManager.Instance.SetStartedOffline(false);
-        PhotonNetwork.AutomaticallySyncScene = true;
-        Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
-        Debug.Log($"Is OfflineMode : {PhotonNetwork.OfflineMode}");
-    }
+    // private void OnDisable()
+    // {
+    //     // InGameManager.Instance.SetStartedOffline(false);
+    //     PhotonNetwork.AutomaticallySyncScene = true;
+    //     Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
+    //     Debug.Log($"Is OfflineMode : {PhotonNetwork.OfflineMode}");
+    // }
 
     private void Init()
     {
@@ -172,13 +173,13 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     {
     }
 
-    public override void OnJoinedRoom()
-    {
-        if (isLoadingSinglePlayer && PhotonNetwork.CurrentRoom.Name.StartsWith("SM_"))
-        {
-            StartCoroutine(LoadSceneAfterDelay());
-        }
-    }
+    // public override void OnJoinedRoom()
+    // {
+    //     if (isLoadingSinglePlayer && PhotonNetwork.CurrentRoom.Name.StartsWith("SM_"))
+    //     {
+    //         StartCoroutine(LoadSceneAfterDelay());
+    //     }
+    // }
 
     private IEnumerator LoadSceneAfterDelay()
     {
