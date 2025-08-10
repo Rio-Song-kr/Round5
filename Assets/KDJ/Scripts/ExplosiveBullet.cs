@@ -1,25 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
+using System;
+using Photon.Pun;
 using UnityEngine;
 
-public class ExplosiveBullet : MonoBehaviour
+public class ExplosiveBullet : MonoBehaviourPun
 {
     private Collider2D[] _colls = new Collider2D[20];
+    private int _count = 0;
 
     private void Start()
     {
         ExplosionShock();
-        SoundManager.Instance.PlaySFX("ExplosionSound"+ UnityEngine.Random.Range(1, 3));
+        SoundManager.Instance.PlaySFX("ExplosionSound" + UnityEngine.Random.Range(1, 3));
         CameraShake.Instance.ShakeCaller(0.65f, 0.1f);
     }
 
     public void ExplosionShock()
     {
+        Array.Clear(_colls, 0, _colls.Length); // Clear the array before use
         // Radius는 폭발 범위
         int count = Physics2D.OverlapCircleNonAlloc(transform.position, 1f, _colls);
 
-        if (count > 0)
+        if (count > 0 && photonView.IsMine)
         {
             for (int i = 0; i < count; i++)
             {

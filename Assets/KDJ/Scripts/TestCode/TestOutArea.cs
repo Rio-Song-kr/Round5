@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TestOutArea : MonoBehaviourPun
 {
@@ -28,7 +27,7 @@ public class TestOutArea : MonoBehaviourPun
                         var effectL = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectL.transform.LookAt(collision.transform.position + Vector3.right);
                         rb2d.AddForce(Vector2.right * 20f, ForceMode2D.Impulse);
-                        if (PhotonNetwork.OfflineMode || !playerPhotonView.IsMine) break;
+                        if (SceneManager.GetActiveScene().name == "KDJ_WeaponTestScene" || !playerPhotonView.IsMine) break;
                         // Debug.Log("경계면 데미지 호출");
                         damagable.TakeDamage(6, collision.transform.position, Vector2.right);
                         break;
@@ -36,7 +35,7 @@ public class TestOutArea : MonoBehaviourPun
                         var effectR = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectR.transform.LookAt(collision.transform.position + Vector3.left);
                         rb2d.AddForce(Vector2.left * 20f, ForceMode2D.Impulse);
-                        if (PhotonNetwork.OfflineMode || !playerPhotonView.IsMine) break;
+                        if (SceneManager.GetActiveScene().name == "KDJ_WeaponTestScene" || !playerPhotonView.IsMine) break;
                         // Debug.Log("경계면 데미지 호출");
                         damagable.TakeDamage(6, collision.transform.position, Vector2.left);
                         break;
@@ -49,7 +48,7 @@ public class TestOutArea : MonoBehaviourPun
                         var effectD = Instantiate(_borderEffect, collision.transform.position, Quaternion.identity);
                         effectD.transform.LookAt(collision.transform.position + Vector3.up);
                         rb2d.AddForce(Vector2.up * 20f, ForceMode2D.Impulse);
-                        if (PhotonNetwork.OfflineMode || !playerPhotonView.IsMine) break;
+                        if (SceneManager.GetActiveScene().name == "KDJ_WeaponTestScene" || !playerPhotonView.IsMine) break;
                         // Debug.Log("경계면 데미지 호출");
                         damagable.TakeDamage(6, collision.transform.position, Vector2.up);
                         break;
