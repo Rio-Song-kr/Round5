@@ -66,14 +66,14 @@ public class SplashManagerver2 : MonoBehaviour
         seq.AppendCallback(() => SoundManager.Instance.PlaySFX("Pop"));
 
 
-        seq.AppendInterval(0.6f);
+        seq.AppendInterval(1.1f);
         // 페이드 인 → 유지 → 페이드 아웃
-        seq.Append(AcademiLogo.DOFade(1, 0.2f));
+        seq.Append(AcademiLogo.DOFade(1, 1.3f));
         seq.AppendInterval(stayTime);
         seq.Append(AcademiLogo.DOFade(0, fadeOutTime));
 
         // 시작 후 0.8초 지점에 KYUNGIL 재생을 "삽입"
-        seq.Insert(0.8f, DOVirtual.DelayedCall(0f, () =>
+        seq.Insert(0.7f, DOVirtual.DelayedCall(0f, () =>
         {
             SoundManager.Instance.PlaySFX("KYUNGIL");
         }));
