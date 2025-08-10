@@ -13,17 +13,18 @@ public class SingleModeScript : MonoBehaviour
         {
             if (IsSinglePlayerMode())
             {
+                CardManager.Instance?.ClearLists();
                 ReturnToLobby();
                 Cursor.visible = true;
-                SoundManager.Instance.PlayMainMenuBGM(); 
+                SoundManager.Instance.PlayMainMenuBGM();
             }
         }
     }
-    
+
     public static bool IsSinglePlayerMode()
     {
         if (!PhotonNetwork.InRoom) return false;
-        
+
         string roomName = PhotonNetwork.CurrentRoom.Name;
         return roomName.StartsWith("SM_") && PhotonNetwork.CurrentRoom.PlayerCount == 1;
     }
@@ -45,5 +46,4 @@ public class SingleModeScript : MonoBehaviour
             SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
         }
     }
-    
 }
