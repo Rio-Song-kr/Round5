@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class ExplosiveBullet : MonoBehaviourPun
@@ -47,7 +44,6 @@ public class ExplosiveBullet : MonoBehaviourPun
                     // 6f은 피해량. 이후 스텟 최종 피해량으로 변경 필요
                     float damage = 0.5f / distance.sqrMagnitude;
                     damage = Mathf.Clamp(damage, 0.1f, 3f); // 최소 0.1, 최대 3으로 제한
-                    Debug.Log($"폭발 데미지 : {damage}, 호출 시간 : {Time.time}");
                     damagable.TakeDamage(damage, hitPosition, hitNormal);
                 }
             }
