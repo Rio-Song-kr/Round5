@@ -146,7 +146,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             // rb.gravityScale = 0f;
             photonView.RPC(nameof(SetGravity), RpcTarget.All, 0f);
-            transform.position = new Vector3(0f, 50f);
+
+            if (PhotonNetwork.IsMasterClient)
+                transform.position = new Vector3(-10f, 50f);
+            else
+                transform.position = new Vector3(10f, 50f);
+
             _isFirstStarted = true;
             return;
         }
@@ -197,7 +202,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private IEnumerator DelayedPlayerSetup(Vector3 position)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         SetPosition(position);
     }
