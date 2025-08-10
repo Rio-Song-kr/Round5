@@ -112,7 +112,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void OnJoinRoomClick()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
-        Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
 
         if (isLoadingScene || isQuickMatching) return;
 
@@ -135,7 +134,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void OnQuickMatchClick()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
-        Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
 
         if (isLoadingScene || isQuickMatching) return;
 
@@ -294,6 +292,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         roomOptions.MaxPlayers = 2;
         roomOptions.IsVisible = false;
         roomOptions.IsOpen = true;
+        // if (PhotonNetwork.InRoom)
+        // {
+        //     PhotonNetwork.LeaveRoom();
+        // }
 
         PhotonNetwork.CreateRoom(currentRoomCode, roomOptions);
     }

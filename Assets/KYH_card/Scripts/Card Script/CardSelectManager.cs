@@ -79,7 +79,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     // InGameManager에서 카드 선택이 시작될 때 호출하는거 
     private void InGameManagerOnOnCardSelectStart()
     {
-        Debug.Log("InGameManagerOnOnCardSelectStart");
+        // Debug.Log("InGameManagerOnOnCardSelectStart");
         canvasActivation.SetActive(true);
 
         canvasController.ResetCardSelectionState();
@@ -474,14 +474,14 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
                 {
                     DOVirtual.DelayedCall(1f, () =>
                     {
-                        Debug.Log("라운드 종료됨 → 다음 카드 선택 준비");
-
-                        Debug.Log("카드 선택 상태 비활성화");
+                        // Debug.Log("라운드 종료됨 → 다음 카드 선택 준비");
+                        //
+                        // Debug.Log("카드 선택 상태 비활성화");
                         // 1. 카드 선택 상태 리셋 하는부분
                         ResetCardSelectionState();
 
 
-                        Debug.Log("캔버스 비활성화");
+                        // Debug.Log("캔버스 비활성화");
                         // 2. CanvasController 양쪽 캔버스 비활성화
                         canvasController.ResetCardSelectionState();
                     });
@@ -495,7 +495,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
     public void ResetCardSelectionState()
     {
-        Debug.Log("카드선택상황 초기화");
+        // Debug.Log("카드선택상황 초기화");
         hasSelect = false;
 
         // 양쪽 Canvas의 자식 카드 오브젝트 제거

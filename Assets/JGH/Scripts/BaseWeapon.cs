@@ -40,7 +40,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
-    
+
     protected virtual bool ApplyQuickReload => true;
 
     protected PoolManager _poolManager;
@@ -62,10 +62,10 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
         _poolManager = FindFirstObjectByType<PoolManager>();
 
-        _poolManager.InitializePool("Bullet", bulletPrefab, 1, 1);
-        _poolManager.InitializePool("Fragment", fragmentPrefab, 1, 1);
-        _poolManager.InitializePool("Laser", laserPrefab, 1, 1);
-        _poolManager.InitializePool("Explosive", explosivePrefab, 1, 1);
+        _poolManager.InitializePool("Bullet", bulletPrefab, 2, 20);
+        _poolManager.InitializePool("Fragment", fragmentPrefab, 2, 40);
+        _poolManager.InitializePool("Laser", laserPrefab, 2, 40);
+        _poolManager.InitializePool("Explosive", explosivePrefab, 2, 40);
 
 
         gunController = GetComponentInParent<GunControll>();
@@ -125,7 +125,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         {
             int count = CardManager.Instance.GetLists().Count;
             var cardList = CardManager.Instance.GetLists();
-            for (int i = 0; i <count; i++)
+            for (int i = 0; i < count; i++)
             {
                 if (cardList[i].CardName == "QUICK RELOAD")
                 {

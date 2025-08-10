@@ -26,7 +26,7 @@ public class DefenceSkillManager : MonoBehaviourPun
     //# Test용
     private Coroutine _testCoroutine;
 
-    private bool _isAllJoined;
+    // private bool _isAllJoined;
     private bool _isFirstStarted;
 
     /// <summary>
@@ -227,7 +227,7 @@ public class DefenceSkillManager : MonoBehaviourPun
             photonView.RPC(nameof(AddDefenceSkills), RpcTarget.All, skill);
         }
 
-        _isAllJoined = true;
+        // _isAllJoined = true;
     }
 
     [PunRPC]

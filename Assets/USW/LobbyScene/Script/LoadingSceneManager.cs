@@ -101,12 +101,11 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
         yield return animSeq.Play().WaitForCompletion();
 
         yield return new WaitForSeconds(2f);
-        
+
         animSeq.Append(player1NameText.transform.DOMove(player1RealEndPos.position, nameAnimationDuration)
             .SetEase(Ease.InQuad));
         animSeq.Join(player2NameText.transform.DOMove(player2RealEndPos.position, nameAnimationDuration)
             .SetEase(Ease.InQuad));
-        
     }
     /// <summary>
     /// 게임 씬 로딩
@@ -125,10 +124,11 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel("LobbyScene");
-            
-        }
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        PhotonNetwork.LoadLevel("LobbyScene");
+
+        PhotonNetwork.LeaveRoom();
+        // }
     }
 }

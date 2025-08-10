@@ -5814,6 +5814,7 @@ GameObject:
   - component: {fileID: 3653238233248735743}
   - component: {fileID: 1416134753598318658}
   - component: {fileID: 6978429564180515410}
+  - component: {fileID: 8471719066271803257}
   m_Layer: 7
   m_Name: BigBullet
   m_TagString: Untagged
@@ -10692,3 +10693,25 @@ MonoBehaviour:
   _bullet: {fileID: 4718549699714053276}
   _hitEffect: {fileID: 2555893828798284621, guid: aa9f328b04169a941a2f8540d2d3f473, type: 3}
   _explosionEffect: {fileID: 2555893828798284621, guid: 153e5c4a5f0fb1d4da297023a330fd74, type: 3}
+--- !u!114 &8471719066271803257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8734541828447896232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

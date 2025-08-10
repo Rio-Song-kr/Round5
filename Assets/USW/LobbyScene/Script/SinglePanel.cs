@@ -24,7 +24,6 @@ public class SinglePanel : MonoBehaviourPunCallbacks
 
     private void OnEnable()
     {
-        Debug.Log("AutomaticallySyncScene = false");
         PhotonNetwork.AutomaticallySyncScene = false;
         Init();
         PhotonNetwork.AutomaticallySyncScene = false;
