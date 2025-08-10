@@ -17,19 +17,27 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     [SerializeField] private Animator singleAnimator;
     [SerializeField] private Animator mainMenuAnimator;
     [SerializeField] private float animationLength = 1f;
-    
+
     private bool isLoadingSinglePlayer = false;
     private string pendingSceneName = "";
 
-    private void Start()
+    private void OnEnable()
     {
-        
+        Debug.Log("AutomaticallySyncScene = false");
         PhotonNetwork.AutomaticallySyncScene = false;
         Init();
         PhotonNetwork.AutomaticallySyncScene = false;
     }
 
-    void Init()
+    private void OnDisable()
+    {
+        // InGameManager.Instance.SetStartedOffline(false);
+        PhotonNetwork.AutomaticallySyncScene = true;
+        Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
+        Debug.Log($"Is OfflineMode : {PhotonNetwork.OfflineMode}");
+    }
+
+    private void Init()
     {
         if (backButton)
         {
@@ -68,8 +76,8 @@ public class SinglePanel : MonoBehaviourPunCallbacks
             mainMenuAnimator.SetTrigger("PlayWelcomeAgain");
         }
     }
-    
-    void OnBackButtonClicked()
+
+    private void OnBackButtonClicked()
     {
         if (singlePanel)
         {
@@ -90,7 +98,7 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     /// <summary>
     /// 싱글플레이어 방 생성 후 씬 로드
     /// </summary>
-    IEnumerator CreateSinglePlayerRoomAndLoadScene(string sceneName)
+    private IEnumerator CreateSinglePlayerRoomAndLoadScene(string sceneName)
     {
         isLoadingSinglePlayer = true;
         pendingSceneName = sceneName;
@@ -99,15 +107,15 @@ public class SinglePanel : MonoBehaviourPunCallbacks
         {
             singleAnimator.SetTrigger("SingleButton_SceneTrigger");
         }
-        
+
         if (PhotonNetwork.InRoom)
         {
             PhotonNetwork.LeaveRoom();
         }
 
-       
+
         yield return new WaitForSeconds(0.5f);
-        
+
         TryCreateSinglePlayerRoom();
 
         yield return new WaitForSeconds(animationLength);
@@ -119,14 +127,14 @@ public class SinglePanel : MonoBehaviourPunCallbacks
     private void CreateSinglePlayerRoom()
     {
         string singlePlayerRoomName = "SM_" + Random.Range(100000, 999999).ToString();
-        
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 1; 
-        roomOptions.IsVisible = false; 
-        roomOptions.IsOpen = false; 
-        
+
+        var roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 1;
+        roomOptions.IsVisible = false;
+        roomOptions.IsOpen = false;
+
         // 싱글플레이어 식별용 커스텀 프로퍼티
-        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+        var props = new ExitGames.Client.Photon.Hashtable();
         props["SinglePlayer"] = true;
         props["SceneName"] = pendingSceneName;
         roomOptions.CustomRoomProperties = props;
@@ -145,26 +153,23 @@ public class SinglePanel : MonoBehaviourPunCallbacks
         }
     }
 
-    private bool CanCreateRoom()
-    {
-        return PhotonNetwork.IsConnectedAndReady && 
-               !PhotonNetwork.InRoom && 
-               (PhotonNetwork.InLobby || PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.ConnectedToMasterServer);
-    }
+    private bool CanCreateRoom() => PhotonNetwork.IsConnectedAndReady &&
+                                    !PhotonNetwork.InRoom &&
+                                    (PhotonNetwork.InLobby ||
+                                     PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer);
 
-    void TryCreateSinglePlayerRoom()
+    private void TryCreateSinglePlayerRoom()
     {
         if (CanCreateRoom())
         {
             CreateSinglePlayerRoom();
         }
     }
-    
+
     #region Photon Callbacks
 
     public override void OnCreatedRoom()
     {
-        
     }
 
     public override void OnJoinedRoom()
@@ -174,11 +179,11 @@ public class SinglePanel : MonoBehaviourPunCallbacks
             StartCoroutine(LoadSceneAfterDelay());
         }
     }
-    
-    IEnumerator LoadSceneAfterDelay()
+
+    private IEnumerator LoadSceneAfterDelay()
     {
         yield return new WaitForSeconds(1f);
-        
+
         // 연결 상태 재확인
         if (PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient && !string.IsNullOrEmpty(pendingSceneName))
         {
