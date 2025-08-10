@@ -40,6 +40,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
+    
+    protected virtual bool ApplyQuickReload => true;
 
     protected PoolManager _poolManager;
     // protected CardManager cardManager;
@@ -108,24 +110,30 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     /// </summary>
     protected void ReloadSpeedFromAnimator()
     {
-        // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
-        // Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
-        // float speed += 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
         float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
 
-        int i = 0;
-        int count = CardManager.Instance.GetLists().Count;
-        var cardList = CardManager.Instance.GetLists();
-
-        while (i < count)
+        // 무기 타입으로 레이저 예외 처리
+        if (GetWeaponType() == WeaponType.Laser)
         {
-            if (cardList[i].CardName == "QUICK RELOAD")
-            {
-                speed *= 1.7f; // 애니메이션 속도 계산
-            }
-
-            i++;
+            // 레이저는 퀵리로드 영향 없음 (필요시 상수 조절)
+            SetAnimatorSingleSpeed(0.333f);
+            return;
         }
+
+        // 레이저 외 무기만 퀵리로드 적용
+        if (ApplyQuickReload)
+        {
+            int count = CardManager.Instance.GetLists().Count;
+            var cardList = CardManager.Instance.GetLists();
+            for (int i = 0; i <count; i++)
+            {
+                if (cardList[i].CardName == "QUICK RELOAD")
+                {
+                    speed *= 1.7f;
+                }
+            }
+        }
+
 
         if (PhotonNetwork.OfflineMode)
         {
