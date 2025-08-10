@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -109,8 +110,21 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     {
         // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
         // Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
-        float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
+        // float speed += 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
+        float speed = (2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2); // 애니메이션 속도 계산
 
+        int i = 0;
+        int count = CardManager.Instance.GetLists().Count;
+        List<CardBase> cardList = CardManager.Instance.GetLists();
+        do
+        {
+            if (cardList[i].CardName == "QUICK RELOAD")
+            {
+                speed *= 1.7f; // 애니메이션 속도 계산
+            }
+
+            i++;
+        } while (i > count);
 
         if (PhotonNetwork.OfflineMode)
         {
