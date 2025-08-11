@@ -5,51 +5,53 @@ using UnityEngine.SceneManagement;
 
 public class GlobalCursorManager : MonoBehaviour
 {
-    private static GlobalCursorManager _instance;
-
-    void Awake()
-    {
-        // ½Ì±ÛÅæ: Áßº¹ »ý¼º ¹æÁö
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        ApplyCursorSettings();
-        // ¾ÀÀÌ ¹Ù²ð ¶§¸¶´Ù È¤½Ã ´Ù¸¥ ½ºÅ©¸³Æ®°¡ ¹Ù²ã³ùÀ» ¼³Á¤À» ÀçÀû¿ë
-        SceneManager.activeSceneChanged += OnActiveSceneChanged;
-    }
-
-    void OnDestroy()
-    {
-        if (_instance == this)
-            SceneManager.activeSceneChanged -= OnActiveSceneChanged;
-    }
-
-    void OnApplicationFocus(bool hasFocus)
-    {
-        // Alt+Tab µî Æ÷Ä¿½º º¯È­ ½Ã Ä¿¼­ ÀçÀû¿ë (ÇÃ·§Æûº° ÀÌ½´ ¹æÁö)
-        if (hasFocus) ApplyCursorSettings();
-    }
-
-    void Update()
-    {
-        // È¤½Ã ´Ù¸¥ ÄÚµå°¡ ¼û°å´Ù¸é Áï½Ã µÇµ¹¸²
-        if (!Cursor.visible || Cursor.lockState != CursorLockMode.None)
-            ApplyCursorSettings();
-    }
-
-    private void OnActiveSceneChanged(Scene oldScene, Scene newScene)
-    {
-        ApplyCursorSettings();
-    }
-
-    private void ApplyCursorSettings()
-    {
-        Cursor.visible = true;                 // Ä¿¼­ Ç¥½Ã
-        Cursor.lockState = CursorLockMode.None; // Àá±Ý ÇØÁ¦ (ÀÚÀ¯ ÀÌµ¿)
-    }
+    // private static GlobalCursorManager _instance;
+    //
+    // void Awake()
+    // {
+    //     // ï¿½Ì±ï¿½ï¿½ï¿½: ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    //     if (_instance != null)
+    //     {
+    //         Destroy(gameObject);
+    //         return;
+    //     }
+    //     _instance = this;
+    //     DontDestroyOnLoad(gameObject);
+    //
+    //     ApplyCursorSettings();
+    //     // ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¤ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //     SceneManager.activeSceneChanged += OnActiveSceneChanged;
+    //
+    //     Cursor.lockState = CursorLockMode.Confined;
+    // }
+    //
+    // void OnDestroy()
+    // {
+    //     if (_instance == this)
+    //         SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+    // }
+    //
+    // void OnApplicationFocus(bool hasFocus)
+    // {
+    //     // Alt+Tab ï¿½ï¿½ ï¿½ï¿½Ä¿ï¿½ï¿½ ï¿½ï¿½È­ ï¿½ï¿½ Ä¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+    //     if (hasFocus) ApplyCursorSettings();
+    // }
+    //
+    // void Update()
+    // {
+    //     // È¤ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½Úµå°¡ ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½
+    //     if (!Cursor.visible || Cursor.lockState != CursorLockMode.None)
+    //         ApplyCursorSettings();
+    // }
+    //
+    // private void OnActiveSceneChanged(Scene oldScene, Scene newScene)
+    // {
+    //     ApplyCursorSettings();
+    // }
+    //
+    // private void ApplyCursorSettings()
+    // {
+    //     Cursor.visible = true;                 // Ä¿ï¿½ï¿½ Ç¥ï¿½ï¿½
+    //     Cursor.lockState = CursorLockMode.None; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½)
+    // }
 }
