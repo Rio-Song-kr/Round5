@@ -305,6 +305,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartRound()
     {
+        Debug.Log("Cursor 모드 변경");
         Cursor.visible = false;
         //# 여러 번 호출됨
         currentRound++;
@@ -718,6 +719,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 메인 메뉴로 돌아가는건 gamerestartpanel EndGame 에서 처리하고있음
         // StartCoroutine(WaitLeaveRoom());
         PhotonNetwork.LeaveRoom();
+
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
     }
 
     private IEnumerator WaitLeaveRoom()
@@ -746,6 +749,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Cursor.visible = true;
         Debug.Log("Player left room");
         string playerKey = GetPlayerKey(otherPlayer);
         roundScores.Remove(playerKey);
@@ -753,6 +757,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         playerAliveStatus.Remove(playerKey);
         rematchVotes.Remove(playerKey);
         UnregisterPlayerStatus(playerKey);
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
 
         if (PhotonNetwork.PlayerList.Length < 2)
         {
@@ -911,6 +916,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public override void OnLeftRoom()
     {
+        Cursor.visible = true;
         Debug.Log("씬 전환 - OnLeftRoom");
         CardManager.Instance.ClearLists();
         SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
