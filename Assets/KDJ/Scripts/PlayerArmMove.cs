@@ -44,10 +44,22 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     private Vector3 _networkLArmSpeed;
     private Vector3 _networkRArmSpeed;
 
+    private List<BezierKnot> _leftKnotsCache;
+    private List<BezierKnot> _rightKnotsCache;
+    private Vector3 _tempVector3 = Vector3.zero;
+    private BezierKnot _cachedKnot0 = new BezierKnot(Vector3.zero);
+    private BezierKnot _cachedKnot1 = new BezierKnot();
+    private BezierKnot _cachedKnot2 = new BezierKnot();
+
+    private BezierKnot _cachedGunRightLeftKnot1 = new BezierKnot(new Vector3(-0.12f, -0.1f, 0));
+    private BezierKnot _cachedGunRightLeftKnot2 = new BezierKnot(new Vector3(-0.3f, 0, 0));
+
+    private BezierKnot _cachedGunLeftRightKnot1 = new BezierKnot(new Vector3(0.12f, -0.1f, 0));
+    private BezierKnot _cachedGunLeftRightKnot2 = new BezierKnot(new Vector3(0.3f, 0, 0));
+
     // >>>>>>> Develops
     private void Update()
     {
-
         // Debug.Log("플립 상태:" + _isFlipped + ", 마우스 위치 오른쪽:" + _isGunInRight);
         CaculateArmSpeed();
 
@@ -56,19 +68,19 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
             LookAtMouse();
 
             if (_isGunInRight)
-                {
-                    if (_isFlipped)
-                        SetLeftArmPosition();
-                    else
-                        SetRightArmPosition();
-                }
+            {
+                if (_isFlipped)
+                    SetLeftArmPosition();
                 else
-                {
-                    if (_isFlipped)
-                        SetRightArmPosition();
-                    else
-                        SetLeftArmPosition();
-                }
+                    SetRightArmPosition();
+            }
+            else
+            {
+                if (_isFlipped)
+                    SetRightArmPosition();
+                else
+                    SetLeftArmPosition();
+            }
         }
         else
         {
@@ -90,36 +102,44 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
                     else
                         SetLeftArmPosition();
                 }
-
             }
             else
             {
                 _gunAxis.up = Vector3.Lerp(_gunAxis.up, _networkGunAxisUp, Time.deltaTime * 20f);
                 // _gunPos.position = Vector3.Lerp(_gunPos.position, _networkGunPos, Time.deltaTime * 10f);
 
+                if (_leftKnotsCache == null) _leftKnotsCache = _leftArmSpline.Spline.Knots.ToList();
+                if (_rightKnotsCache == null) _rightKnotsCache = _rightArmSpline.Spline.Knots.ToList();
 
-                List<BezierKnot> leftKnots = _leftArmSpline.Spline.Knots.ToList();
-                List<BezierKnot> rightKnots = _rightArmSpline.Spline.Knots.ToList();
+                // List<BezierKnot> leftKnots = _leftArmSpline.Spline.Knots.ToList();
+                // List<BezierKnot> rightKnots = _rightArmSpline.Spline.Knots.ToList();
 
-                _leftArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(leftKnots[0].Position, _networkLArmStartPos, Time.deltaTime * 10f)));
-                _leftArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(leftKnots[1].Position, _networkLArmMiddlePos, Time.deltaTime * 10f)));
-                _leftArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(leftKnots[2].Position, _networkLArmEndPos + _networkLArmSpeed * _lag, Time.deltaTime * 10f)));
-                _rightArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.Lerp(rightKnots[0].Position, _networkRArmStartPos, Time.deltaTime * 10f)));
-                _rightArmSpline.Spline.SetKnot(1, new BezierKnot(Vector3.Lerp(rightKnots[1].Position, _networkRArmMiddlePos, Time.deltaTime * 10f)));
-                _rightArmSpline.Spline.SetKnot(2, new BezierKnot(Vector3.Lerp(rightKnots[2].Position, _networkRArmEndPos + _networkRArmSpeed * _lag, Time.deltaTime * 10f)));
+                _leftArmSpline.Spline.SetKnot(0,
+                    new BezierKnot(Vector3.Lerp(_leftKnotsCache[0].Position, _networkLArmStartPos, Time.deltaTime * 10f)));
+                _leftArmSpline.Spline.SetKnot(1,
+                    new BezierKnot(Vector3.Lerp(_leftKnotsCache[1].Position, _networkLArmMiddlePos, Time.deltaTime * 10f)));
+                _leftArmSpline.Spline.SetKnot(2,
+                    new BezierKnot(Vector3.Lerp(_leftKnotsCache[2].Position, _networkLArmEndPos + _networkLArmSpeed * _lag,
+                        Time.deltaTime * 10f)));
+                _rightArmSpline.Spline.SetKnot(0,
+                    new BezierKnot(Vector3.Lerp(_rightKnotsCache[0].Position, _networkRArmStartPos, Time.deltaTime * 10f)));
+                _rightArmSpline.Spline.SetKnot(1,
+                    new BezierKnot(Vector3.Lerp(_rightKnotsCache[1].Position, _networkRArmMiddlePos, Time.deltaTime * 10f)));
+                _rightArmSpline.Spline.SetKnot(2,
+                    new BezierKnot(Vector3.Lerp(_rightKnotsCache[2].Position, _networkRArmEndPos + _networkRArmSpeed * _lag,
+                        Time.deltaTime * 10f)));
             }
         }
 
         SetPrevPositions();
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         CheckMousePos();
         FlipCheck();
         SetBallPos();
     }
-
 
     private void SetPrevPositions()
     {
@@ -129,14 +149,26 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
 
     private void CaculateArmSpeed()
     {
-        _LArmSpeed = (new Vector3(_leftArmSpline.Spline.Knots.ToList()[2].Position.x,
-         _leftArmSpline.Spline.Knots.ToList()[2].Position.y,
-         _leftArmSpline.Spline.Knots.ToList()[2].Position.z) - _prevLArmEndPos) / Time.deltaTime;
-        _RArmSpeed = (new Vector3(_rightArmSpline.Spline.Knots.ToList()[2].Position.x,
-         _rightArmSpline.Spline.Knots.ToList()[2].Position.y,
-         _rightArmSpline.Spline.Knots.ToList()[2].Position.z) - _prevRArmEndPos) / Time.deltaTime;
-    }
+        _tempVector3.Set(_leftArmSpline.Spline.Knots.ToList()[2].Position.x,
+            _leftArmSpline.Spline.Knots.ToList()[2].Position.y,
+            _leftArmSpline.Spline.Knots.ToList()[2].Position.z
+        );
 
+        _LArmSpeed = (_tempVector3 - _prevLArmEndPos) / Time.deltaTime;
+
+        _tempVector3.Set(_rightArmSpline.Spline.Knots.ToList()[2].Position.x,
+            _rightArmSpline.Spline.Knots.ToList()[2].Position.y,
+            _rightArmSpline.Spline.Knots.ToList()[2].Position.z
+        );
+        _RArmSpeed = (_tempVector3 - _prevRArmEndPos) / Time.deltaTime;
+
+        // _LArmSpeed = (new Vector3(_leftArmSpline.Spline.Knots.ToList()[2].Position.x,
+        //     _leftArmSpline.Spline.Knots.ToList()[2].Position.y,
+        //     _leftArmSpline.Spline.Knots.ToList()[2].Position.z) - _prevLArmEndPos) / Time.deltaTime;
+        // _RArmSpeed = (new Vector3(_rightArmSpline.Spline.Knots.ToList()[2].Position.x,
+        //     _rightArmSpline.Spline.Knots.ToList()[2].Position.y,
+        //     _rightArmSpline.Spline.Knots.ToList()[2].Position.z) - _prevRArmEndPos) / Time.deltaTime;
+    }
 
     /// <summary>
     /// 오른팔의 위치를 설정합니다.
@@ -144,17 +176,20 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     private void SetRightArmPosition()
     {
         if (_rightArmSpline == null || _gunPos == null) return;
-        Vector3 pos = _gunPos.position - _rightArmSpline.transform.position;
-        Vector3 middlePos = Vector3.Lerp(_rightArmSpline.transform.position, _gunPos.position, 0.5f);
+        var pos = _gunPos.position - _rightArmSpline.transform.position;
+        var middlePos = Vector3.Lerp(_rightArmSpline.transform.position, _gunPos.position, 0.5f);
+
         // 먼저 어깨에서 총으로 향하는 방향 벡터를 계산
-        Vector3 dir = (_gunPos.position - _rightArmSpline.transform.position).normalized;
+        var dir = (_gunPos.position - _rightArmSpline.transform.position).normalized;
+
         // 방향 벡터가 얼마나 수직에 가까운지 계산 후 절대값을 사용
         float dot = Mathf.Abs(Vector3.Dot(Vector3.up, dir));
+
         // 중간 위치를 계산하고, 방향 벡터에 수직인 벡터를 사용하여 중간 위치를 조정
         float flipMultiplier = _isFlipped ? -1 : 1; // 플립 상태에 따라 방향을 조정
         if (_isFlipped) pos.x *= -1; // 플립 상태일 때 x위치를 반전
-        Vector3 middleFinalPos = Vector3.Lerp(middlePos, middlePos + new Vector3(-dir.y, dir.x, 0) * -0.1f * flipMultiplier, 1 - dot);
-        Vector3 localMiddlePos = _rightArmSpline.transform.InverseTransformPoint(middleFinalPos); // 중간 위치를 Spline 기준으로 변환
+        var middleFinalPos = Vector3.Lerp(middlePos, middlePos + new Vector3(-dir.y, dir.x, 0) * -0.1f * flipMultiplier, 1 - dot);
+        var localMiddlePos = _rightArmSpline.transform.InverseTransformPoint(middleFinalPos); // 중간 위치를 Spline 기준으로 변환
         _rightArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.zero));
         _rightArmSpline.Spline.SetKnot(1, new BezierKnot(localMiddlePos));
         _rightArmSpline.Spline.SetKnot(2, new BezierKnot(pos));
@@ -166,17 +201,23 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     private void SetLeftArmPosition()
     {
         if (_leftArmSpline == null || _gunPos == null) return;
-        Vector3 pos = _gunPos.position - _leftArmSpline.transform.position;
-        Vector3 middlePos = Vector3.Lerp(_leftArmSpline.transform.position, _gunPos.position, 0.5f);
-        Vector3 dir = (_gunPos.position - _leftArmSpline.transform.position).normalized;
+        var pos = _gunPos.position - _leftArmSpline.transform.position;
+        var middlePos = Vector3.Lerp(_leftArmSpline.transform.position, _gunPos.position, 0.5f);
+        var dir = (_gunPos.position - _leftArmSpline.transform.position).normalized;
         float dot = Mathf.Abs(Vector3.Dot(Vector3.up, dir));
         float flipMultiplier = _isFlipped ? -1 : 1; // 플립 상태에 따라 방향을 조정
         if (_isFlipped) pos.x *= -1; // 플립 상태일 때 x위치를 반전
-        Vector3 middleFinalPos = Vector3.Lerp(middlePos, middlePos + new Vector3(-dir.y, dir.x, 0) * 0.1f * flipMultiplier, 1 - dot);
-        Vector3 localMiddlePos = _leftArmSpline.transform.InverseTransformPoint(middleFinalPos); // 중간 위치를 Spline 기준으로 변환
-        _leftArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.zero)); // 시작점은 (0,0,0)
-        _leftArmSpline.Spline.SetKnot(1, new BezierKnot(localMiddlePos));
-        _leftArmSpline.Spline.SetKnot(2, new BezierKnot(pos));
+        var middleFinalPos = Vector3.Lerp(middlePos, middlePos + new Vector3(-dir.y, dir.x, 0) * 0.1f * flipMultiplier, 1 - dot);
+        var localMiddlePos = _leftArmSpline.transform.InverseTransformPoint(middleFinalPos); // 중간 위치를 Spline 기준으로 변환
+
+        _cachedKnot1.Position = localMiddlePos;
+        _cachedKnot2.Position = pos;
+        _leftArmSpline.Spline.SetKnot(0, _cachedKnot0); // 시작점은 (0,0,0)
+        _leftArmSpline.Spline.SetKnot(1, _cachedKnot1);
+        _leftArmSpline.Spline.SetKnot(2, _cachedKnot2);
+        // _leftArmSpline.Spline.SetKnot(0, new BezierKnot(Vector3.zero)); // 시작점은 (0,0,0)
+        // _leftArmSpline.Spline.SetKnot(1, new BezierKnot(localMiddlePos));
+        // _leftArmSpline.Spline.SetKnot(2, new BezierKnot(pos));
     }
 
     /// <summary>
@@ -207,14 +248,14 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
             if (_isGunInRight)
             {
                 _gunPos.localRotation = Quaternion.Euler(0, 0, 0); // 오른팔 회전
-                _leftArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(-0.12f, -0.1f, 0))); // 왼팔 위치 초기화
-                _leftArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(-0.3f, 0, 0))); // 왼팔 위치 초기화
+                _leftArmSpline.Spline.SetKnot(1, _cachedGunRightLeftKnot1); // 왼팔 위치 초기화
+                _leftArmSpline.Spline.SetKnot(2, _cachedGunRightLeftKnot2); // 왼팔 위치 초기화
             }
             else
             {
                 _gunPos.localRotation = Quaternion.Euler(0, 180, 0); // 왼팔 회전
-                _rightArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(0.12f, -0.1f, 0))); // 오른팔 위치 초기화
-                _rightArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(0.3f, 0, 0))); // 오른팔 위치 초기화
+                _rightArmSpline.Spline.SetKnot(1, _cachedGunLeftRightKnot1); // 오른팔 위치 초기화
+                _rightArmSpline.Spline.SetKnot(2, _cachedGunLeftRightKnot2); // 오른팔 위치 초기화
             }
         }
         _prevGunInRight = _isGunInRight;
@@ -235,15 +276,15 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
         {
             if (_isFlipped)
             {
-                _gunAxis.localRotation = Quaternion.Euler(0, 180, 0); // 왼팔 회전
-                _rightArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(0.12f, -0.1f, 0))); // 오른팔 위치 초기화
-                _rightArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(0.3f, 0, 0))); // 오른팔 위치 초기화
+                _gunPos.localRotation = Quaternion.Euler(0, 0, 0); // 오른팔 회전
+                _leftArmSpline.Spline.SetKnot(1, _cachedGunLeftRightKnot1); // 왼팔 위치 초기화
+                _leftArmSpline.Spline.SetKnot(2, _cachedGunLeftRightKnot2); // 왼팔 위치 초기화
             }
             else
             {
-                _gunAxis.localRotation = Quaternion.Euler(0, 0, 0); // 오른팔 회전
-                _leftArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(-0.12f, -0.1f, 0))); // 왼팔 위치 초기화
-                _leftArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(-0.3f, 0, 0))); // 왼팔 위치 초기화
+                _gunPos.localRotation = Quaternion.Euler(0, 180, 0); // 왼팔 회전
+                _rightArmSpline.Spline.SetKnot(1, _cachedGunRightLeftKnot1); // 오른팔 위치 초기화
+                _rightArmSpline.Spline.SetKnot(2, _cachedGunRightLeftKnot2); // 오른팔 위치 초기화
             }
         }
         else
@@ -251,14 +292,14 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
             if (_isFlipped)
             {
                 _gunAxis.localRotation = Quaternion.Euler(0, 0, 0); // 오른팔 회전
-                _leftArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(-0.12f, -0.1f, 0))); // 왼팔 위치 초기화
-                _leftArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(-0.3f, 0, 0))); // 왼팔 위치 초기화
+                _leftArmSpline.Spline.SetKnot(1, _cachedGunLeftRightKnot1); // 왼팔 위치 초기화
+                _leftArmSpline.Spline.SetKnot(2, _cachedGunLeftRightKnot2); // 왼팔 위치 초기화
             }
             else
             {
                 _gunAxis.localRotation = Quaternion.Euler(0, 180, 0); // 왼팔 회전
-                _rightArmSpline.Spline.SetKnot(1, new BezierKnot(new Vector3(0.12f, -0.1f, 0))); // 오른팔 위치 초기화
-                _rightArmSpline.Spline.SetKnot(2, new BezierKnot(new Vector3(0.3f, 0, 0))); // 오른팔 위치 초기화
+                _rightArmSpline.Spline.SetKnot(1, _cachedGunRightLeftKnot1); // 오른팔 위치 초기화
+                _rightArmSpline.Spline.SetKnot(2, _cachedGunRightLeftKnot2); // 오른팔 위치 초기화
             }
         }
 
@@ -272,10 +313,10 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
     {
         if (_gunPos == null || _gunAxis == null) return;
 
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0; // 2D 게임이므로 z축은 0으로 설정
 
-        Vector3 direction = (mousePosition - _gunAxis.transform.position).normalized;
+        var direction = (mousePosition - _gunAxis.transform.position).normalized;
         _gunAxis.transform.up = direction;
     }
 
@@ -289,12 +330,18 @@ public class PlayerArmMove : MonoBehaviourPun, IPunObservable
             stream.SendNext(_ballPos.localPosition);
             stream.SendNext(_gunPos.position);
             stream.SendNext(_gunAxis.up);
-            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[0].Position.x, _leftArmSpline.Spline.Knots.ToList()[0].Position.y, 0));
-            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[0].Position.x, _rightArmSpline.Spline.Knots.ToList()[0].Position.y, 0));
-            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[1].Position.x, _leftArmSpline.Spline.Knots.ToList()[1].Position.y, 0));
-            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[1].Position.x, _rightArmSpline.Spline.Knots.ToList()[1].Position.y, 0));
-            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[2].Position.x, _leftArmSpline.Spline.Knots.ToList()[2].Position.y, 0));
-            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[2].Position.x, _rightArmSpline.Spline.Knots.ToList()[2].Position.y, 0));
+            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[0].Position.x,
+                _leftArmSpline.Spline.Knots.ToList()[0].Position.y, 0));
+            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[0].Position.x,
+                _rightArmSpline.Spline.Knots.ToList()[0].Position.y, 0));
+            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[1].Position.x,
+                _leftArmSpline.Spline.Knots.ToList()[1].Position.y, 0));
+            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[1].Position.x,
+                _rightArmSpline.Spline.Knots.ToList()[1].Position.y, 0));
+            stream.SendNext(new Vector3(_leftArmSpline.Spline.Knots.ToList()[2].Position.x,
+                _leftArmSpline.Spline.Knots.ToList()[2].Position.y, 0));
+            stream.SendNext(new Vector3(_rightArmSpline.Spline.Knots.ToList()[2].Position.x,
+                _rightArmSpline.Spline.Knots.ToList()[2].Position.y, 0));
             stream.SendNext(_LArmSpeed);
             stream.SendNext(_RArmSpeed);
             stream.SendNext(lag);
