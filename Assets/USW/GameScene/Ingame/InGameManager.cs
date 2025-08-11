@@ -305,7 +305,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartRound()
     {
-        Debug.Log("Cursor 모드 변경");
         Cursor.visible = false;
         //# 여러 번 호출됨
         currentRound++;
