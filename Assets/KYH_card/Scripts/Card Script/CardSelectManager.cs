@@ -53,7 +53,7 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         cardSelectCheckManager.cardSelectPanelSpawn();
         cardSelectCheckManager.CardSelectPanelSpawn(PhotonNetwork.LocalPlayer);
 
-        UpdateCharacterVisibility();
+        // UpdateCharacterVisibility();
         // SceneLoadingManager.Instance.LoadSceneAsync("Game Scene");
         // Debug.Log("게임 씬 으로 넘어가기 위해 로딩 진행");
 
@@ -67,42 +67,44 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     private void OnEnable()
     {
         InGameManager.OnCardSelectStart += InGameManagerOnOnCardSelectStart;
+        InGameManager.OnCardSelected += EndCardSelection;
     }
 
     private void OnDisable()
     {
         InGameManager.OnCardSelectStart -= InGameManagerOnOnCardSelectStart;
+        InGameManager.OnCardSelected -= EndCardSelection;
     }
 
     // InGameManager에서 카드 선택이 시작될 때 호출하는거 
     private void InGameManagerOnOnCardSelectStart()
     {
+        // Debug.Log("InGameManagerOnOnCardSelectStart");
         canvasActivation.SetActive(true);
 
         canvasController.ResetCardSelectionState();
 
         // 이형원 임시 시도
         if (InGameManager.Instance.CurrentGameState != InGameManager.GameState.GameEnding)
-            canvasController.TryStartCardSelection();
+            canvasController.TryStartCardSelection(canvasController.CurrentSelectorNumber);
 
         // 캔버스 컨트롤러 초기화 및 시작하는부분 
         // DOVirtual.DelayedCall(0.2f, () =>
         // {
         //     canvasController.DecideNextSelector();
         // });
-
         // 캔버스 컨트롤러 
     }
 
     public void UpdateCharacterVisibility()
     {
+        InGameManager.Instance.SetStarted(false);
         bool isMaster = PhotonNetwork.IsMasterClient;
         bool masterCanvasActive = canvasController.IsMasterCanvasActive();
         bool clientCanvasActive = canvasController.IsClientCanvasActive();
 
         if (masterCanvasActive)
         {
-            Debug.Log("이거 발동되면 Master캐릭터 남는거 맞음.");
             if (canvasController.IsMyTurn())
             {
                 if (isMaster) ActivateMasterCharacter(); // 마스터 → 선택자
@@ -116,7 +118,6 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         }
         else if (clientCanvasActive)
         {
-            Debug.Log("이거 발동되면 Client캐릭터 남는거 맞음.");
             if (canvasController.IsMyTurn())
             {
                 if (isMaster) ActivateClientCharacter(); // 마스터 → 선택자
@@ -343,8 +344,10 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
 
         if (cardSelectCheckManager.cardSelectPanels.TryGetValue(PhotonNetwork.LocalPlayer.ActorNumber, out var panel))
         {
-            panel.OnCardSelected();
+            bool isSelected = panel.OnCardSelected();
             panel.SelectCheck(PhotonNetwork.LocalPlayer);
+
+            InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, isSelected);
         }
 
         // 카드 효과 적용
@@ -371,16 +374,23 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
     {
         InGameManager.Instance.SetStarted(false);
 
-        yield return new WaitForSeconds(1f);
+        // yield return new WaitForSeconds(1f);
+        yield return null;
 
         if (cardSelectCheckManager.AllPlayerCardSelectCheck())
         {
-            Debug.Log("AllPlayerCardSelectCheck");
+            // Debug.Log("AllPlayerCardSelectCheck");
             DOVirtual.DelayedCall(1f, () => { photonView.RPC(nameof(ChangeScene), RpcTarget.All); });
+            // photonView.RPC(nameof(ChangeScene), RpcTarget.All);
+
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, false);
+            }
         }
         else
         {
-            Debug.Log($"Switch Turn");
+            // Debug.Log($"Switch Turn");
             canvasController.photonView.RPC("RPC_SwitchTurnToOther", RpcTarget.All);
         }
     }
@@ -449,49 +459,43 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
         shrinkEffect.RequestShrinkEffect();
     }
 
-    public override void OnPlayerPropertiesUpdate(Player target, Hashtable propertiesThatChanged)
+    private void EndCardSelection()
     {
-        base.OnPlayerPropertiesUpdate(target, propertiesThatChanged);
+        if (!PhotonNetwork.IsMasterClient) return;
 
-        if (propertiesThatChanged.ContainsKey("Select"))
+        foreach (var player in PhotonNetwork.PlayerList)
         {
-            cardSelectCheckManager.cardSelectPanels[target.ActorNumber].SelectCheck(target);
-
-            // 모든 플레이어 카드 선택 완료 → 게임 씬 전환 (2초 후)
-            if (cardSelectCheckManager.AllPlayerCardSelectCheck())
+            if (InGameManager.Instance.PlayerSelection[player.ActorNumber])
             {
-                Debug.Log("모든 플레이어 카드 선택 완료 ");
+                cardSelectCheckManager.cardSelectPanels[player.ActorNumber].SelectCheck(player);
 
-                DOVirtual.DelayedCall(1f, () =>
+                // 모든 플레이어 카드 선택 완료 → 게임 씬 전환 (2초 후)
+                if (cardSelectCheckManager.AllPlayerCardSelectCheck())
                 {
-                    Debug.Log("라운드 종료됨 → 다음 카드 선택 준비");
-
-                    Debug.Log("카드 선택 상태 비활성화");
-                    // 1. 카드 선택 상태 리셋 하는부분
-                    ResetCardSelectionState();
-
-
-                    Debug.Log("캔버스 비활성화");
-                    // 2. CanvasController 양쪽 캔버스 비활성화
-                    canvasController.ResetCardSelectionState();
-
-
-                    Debug.Log("종료시작");
-                    // 3. 카드 선택이 종료된걸 알려야함
-                    if (InGameManager.Instance)
+                    DOVirtual.DelayedCall(1f, () =>
                     {
-                        InGameManager.Instance.EndCardSelect();
-                    }
-                });
+                        // Debug.Log("라운드 종료됨 → 다음 카드 선택 준비");
+                        //
+                        // Debug.Log("카드 선택 상태 비활성화");
+                        // 1. 카드 선택 상태 리셋 하는부분
+                        ResetCardSelectionState();
+
+
+                        // Debug.Log("캔버스 비활성화");
+                        // 2. CanvasController 양쪽 캔버스 비활성화
+                        canvasController.ResetCardSelectionState();
+                    });
+                    break;
+                }
             }
         }
     }
 
     public bool HasSelected() => hasSelect;
 
-    public void ResetCardSelectionState(string winnerKey = null)
+    public void ResetCardSelectionState()
     {
-        Debug.Log("카드선택상황 초기화");
+        // Debug.Log("카드선택상황 초기화");
         hasSelect = false;
 
         // 양쪽 Canvas의 자식 카드 오브젝트 제거
@@ -505,10 +509,11 @@ public class CardSelectManager : MonoBehaviourPunCallbacks
             Destroy(t.gameObject);
         }
 
+
         //todo Select가 언제 변경되는지 확인 필요함
-        var props = new Hashtable();
-        props["Select"] = false;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        // var props = new Hashtable();
+        // props["Select"] = false;
+        // PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
         // 캐릭터 꺼두기
         masterCharacter.SetActive(false);

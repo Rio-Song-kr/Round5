@@ -68,6 +68,8 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// </summary>
     private void Update()
     {
+        if (InGameManager.Instance == null || InGameManager.Instance.IsGameOver) return;
+
         if (!photonView.IsMine || !_isStarted) return;
 
         // 끌어당김 로직
@@ -78,6 +80,9 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
                 Vector2 direction = (_playerTransform.position - _targetPlayer.transform.position).normalized;
                 var moveAmount = _pullRate * Time.deltaTime * direction;
                 _targetPlayer.transform.Translate(moveAmount, Space.World);
+
+                if (InGameManager.Instance == null || InGameManager.Instance.IsGameOver) return;
+
                 photonView.RPC(nameof(SyncTargetPosition), RpcTarget.Others, _targetViewId, _targetPlayer.transform.position);
             }
         }
@@ -333,6 +338,7 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
 
         float duration = SkillData.ActivateTime * _circleFill.CurrentFillAmount;
 
+        if (photonView == null) return;
         //# 다른 클라이언트에 동기화
         photonView.RPC(nameof(ApplyReduceSpeed), RpcTarget.Others, _targetViewId, duration);
     }
@@ -343,9 +349,19 @@ public class AbyssalCountdownEffect : MonoBehaviourPun, IPunObservable
     /// <param name="other">충돌 감지를 벗어난 Collider2D 객체</param>
     private void OnTriggerExit2D(Collider2D other)
     {
+        if (InGameManager.Instance == null || InGameManager.Instance.IsGameOver) return;
         if (photonView.IsMine && other.CompareTag("Player"))
         {
-            _targetViewId = other.GetComponent<PhotonView>().ViewID;
+            if (photonView == null) return;
+
+            var targetView = other.GetComponent<PhotonView>();
+
+            if (targetView == null) return;
+
+            _targetViewId = targetView.ViewID;
+
+            if (InGameManager.Instance == null || InGameManager.Instance.IsGameOver) return;
+
             photonView.RPC(nameof(RemoveReduceSpeed), RpcTarget.Others, _targetViewId);
 
             _targetPlayer = null;

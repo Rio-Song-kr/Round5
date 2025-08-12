@@ -45,7 +45,7 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
         originalScale = transform.localScale;
 
-        // ���� ȸ���� �����ϰ� Y�� 180���� ����
+        
         var rot = transform.localEulerAngles;
         rot.y = 180f;
         transform.localRotation = Quaternion.Euler(rot);
@@ -53,17 +53,16 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
         if (frontRoot != null) frontRoot.SetActive(false);
         if (backRoot != null) backRoot.SetActive(true);
 
-        // Debug.Log($"[FlipCard] Start() | isInteractable={isInteractable}");
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Debug.Log($"[FlipCard] OnPointerEnter()");
-        if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
+        
+        if (!isInteractable) return; 
 
         if (!isFlipped)
         {
-            OnClickCard(); // �ڵ� ������
+            OnClickCard(); 
         }
         else
         {
@@ -76,36 +75,36 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
+        if (!isInteractable) return; 
         isHovered = false;
         manager.photonView.RPC(nameof(CardSelectManager.RPC_UnhighlightCardByIndex), RpcTarget.All, cardIndex);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // Debug.Log($"[FlipCard] OnPointerClick | isInteractable={isInteractable}, isHovered={isHovered}");
+        
 
-        if (!isInteractable || !isHovered) return; //Ŭ�� ���� ����
+        if (!isInteractable || !isHovered) return; 
 
-        OnClickCard(); // ���� ���� �״�� ȣ��
+        OnClickCard();
     }
 
     public void OnClickCard()
     {
-        // Debug.Log($"[FlipCard] OnClickCard 호출됨 | isFlipped={isFlipped}, isSelected={isSelected}");
+        
 
-        if (!isInteractable) return; // ��ȣ�ۿ� �Ұ� �� ����
+        if (!isInteractable) return; 
 
         if (!isFlipped)
         {
-            // Debug.Log($"[FlipCard] ī�� Ŭ���� index = {cardIndex}");
-            // ���� �ִϸ��̼� ����
+            
+           
             PlayFlipAnimation();
 
-            // RPC�� ��� Ŭ���̾�Ʈ���Ե� flip �ִϸ��̼� ����ȭ
+            
             manager.photonView.RPC(nameof(CardSelectManager.RPC_FlipCardByIndex), RpcTarget.All, cardIndex);
 
-            // �� ����ȭ RPC ȣ��
+            
             manager.photonView.RPC(nameof(CardSelectManager.RPC_SelectCardArm), RpcTarget.All, cardIndex);
         }
         else if (!isSelected)
@@ -126,16 +125,16 @@ public class FlipCard : MonoBehaviourPun, IPointerEnterHandler, IPointerExitHand
     {
         if (isFlipped) return;
 
-        // Debug.Log("ī�� ������");
-        // ���� ȸ���� ��������
+        
+        
         var startEuler = transform.localEulerAngles;
 
-        // Z�� ���� (360�� �̻� ���̸� -360 ���� �� ��ȣ ����)
+        
         float z = startEuler.z;
         if (z > 180f) z -= 360f;
         float flippedZ = -z;
 
-        // Y = 0 ���� ȸ���ϸ鼭 Z�� �����ؼ� ��ä�� ���� ����
+        
         var targetEuler = new Vector3(0f, 0f, flippedZ);
 
         transform.DORotate(targetEuler, flipDuration)

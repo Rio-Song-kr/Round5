@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Realtime;
+using Random = UnityEngine.Random;
 
-public class SinglePanel : MonoBehaviour
+public class SinglePanel : MonoBehaviourPunCallbacks
 {
-     
     [SerializeField] private GameObject singlePanel;
     [SerializeField] private Button backButton;
     [SerializeField] private Button weaponSceneButton;
@@ -15,12 +17,27 @@ public class SinglePanel : MonoBehaviour
     [SerializeField] private Animator singleAnimator;
     [SerializeField] private Animator mainMenuAnimator;
     [SerializeField] private float animationLength = 1f;
-    private void Start()
+
+    private bool isLoadingSinglePlayer = false;
+    private string pendingSceneName = "";
+    public string PendingSceneName => pendingSceneName;
+
+    private void OnEnable()
     {
+        PhotonNetwork.AutomaticallySyncScene = false;
         Init();
+        PhotonNetwork.AutomaticallySyncScene = false;
     }
 
-    void Init()
+    // private void OnDisable()
+    // {
+    //     // InGameManager.Instance.SetStartedOffline(false);
+    //     PhotonNetwork.AutomaticallySyncScene = true;
+    //     Debug.Log($"Automatically SyncScene : {PhotonNetwork.AutomaticallySyncScene}");
+    //     Debug.Log($"Is OfflineMode : {PhotonNetwork.OfflineMode}");
+    // }
+
+    private void Init()
     {
         if (backButton)
         {
@@ -40,6 +57,15 @@ public class SinglePanel : MonoBehaviour
 
     public void OnBackButtonClick()
     {
+        if (PhotonNetwork.InRoom)
+        {
+            string roomName = PhotonNetwork.CurrentRoom.Name;
+            if (roomName.StartsWith("SM_"))
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+        }
+
         if (singleAnimator)
         {
             singleAnimator.SetTrigger("SingleButton_BackTrigger");
@@ -50,8 +76,8 @@ public class SinglePanel : MonoBehaviour
             mainMenuAnimator.SetTrigger("PlayWelcomeAgain");
         }
     }
-    
-    void OnBackButtonClicked()
+
+    private void OnBackButtonClicked()
     {
         if (singlePanel)
         {
@@ -61,31 +87,61 @@ public class SinglePanel : MonoBehaviour
 
     public void OnRopeButtonClick()
     {
-        Debug.Log("찍힘");
-        StartCoroutine(PlayAnimationAndLoadScene("USW_SandBoxScene"));
+        StartCoroutine(CreateSinglePlayerRoomAndLoadScene("USW_RopePlayMode"));
     }
 
     public void OnWeaponButtonClick()
     {
-        Debug.Log("이것도찍힘");
-        StartCoroutine(PlayAnimationAndLoadScene("USW_SandBox"));
+        StartCoroutine(CreateSinglePlayerRoomAndLoadScene("KDJ_WeaponTestScene"));
     }
 
-    IEnumerator PlayAnimationAndLoadScene(string sceneName)
+    /// <summary>
+    /// 싱글플레이어 방 생성 후 씬 로드
+    /// </summary>
+    private IEnumerator CreateSinglePlayerRoomAndLoadScene(string sceneName)
     {
+        isLoadingSinglePlayer = true;
+        pendingSceneName = sceneName;
+
         if (singleAnimator)
         {
             singleAnimator.SetTrigger("SingleButton_SceneTrigger");
         }
-        
-        yield return new WaitForSeconds(animationLength);
-        
-        SceneManager.LoadScene(sceneName);
-    }
-    
 
-   
-    
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
+
+        yield return new WaitForSeconds(0.5f);
+
+        TryCreateSinglePlayerRoom();
+
+        yield return new WaitForSeconds(animationLength);
+    }
+
+    /// <summary>
+    /// 싱글플레이어 전용 방 생성
+    /// </summary>
+    private void CreateSinglePlayerRoom()
+    {
+        string singlePlayerRoomName = "SM_" + Random.Range(100000, 999999).ToString();
+
+        var roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 1;
+        roomOptions.IsVisible = false;
+        roomOptions.IsOpen = false;
+
+        // 싱글플레이어 식별용 커스텀 프로퍼티
+        var props = new ExitGames.Client.Photon.Hashtable();
+        props["SinglePlayer"] = true;
+        props["SceneName"] = pendingSceneName;
+        roomOptions.CustomRoomProperties = props;
+
+        PhotonNetwork.CreateRoom(singlePlayerRoomName, roomOptions);
+    }
+
     /// <summary>
     /// 퍼블릭 메서드
     /// </summary>
@@ -96,4 +152,66 @@ public class SinglePanel : MonoBehaviour
             singlePanel.SetActive(true);
         }
     }
+
+    private bool CanCreateRoom() => PhotonNetwork.IsConnectedAndReady &&
+                                    !PhotonNetwork.InRoom &&
+                                    (PhotonNetwork.InLobby ||
+                                     PhotonNetwork.NetworkClientState == ClientState.ConnectedToMasterServer);
+
+    private void TryCreateSinglePlayerRoom()
+    {
+        if (CanCreateRoom())
+        {
+            CreateSinglePlayerRoom();
+        }
+    }
+
+    #region Photon Callbacks
+
+    public override void OnCreatedRoom()
+    {
+    }
+
+    // public override void OnJoinedRoom()
+    // {
+    //     if (isLoadingSinglePlayer && PhotonNetwork.CurrentRoom.Name.StartsWith("SM_"))
+    //     {
+    //         StartCoroutine(LoadSceneAfterDelay());
+    //     }
+    // }
+
+    private IEnumerator LoadSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+
+        // 연결 상태 재확인
+        if (PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient && !string.IsNullOrEmpty(pendingSceneName))
+        {
+            SceneManager.LoadScene(pendingSceneName);
+        }
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        if (isLoadingSinglePlayer)
+        {
+            Invoke("CreateSinglePlayerRoom", 1f);
+        }
+    }
+
+    public override void OnLeftRoom()
+    {
+        isLoadingSinglePlayer = false;
+        pendingSceneName = "";
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        if (isLoadingSinglePlayer)
+        {
+            TryCreateSinglePlayerRoom();
+        }
+    }
+
+    #endregion
 }

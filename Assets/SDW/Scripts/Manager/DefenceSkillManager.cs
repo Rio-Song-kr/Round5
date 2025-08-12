@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -20,10 +21,12 @@ public class DefenceSkillManager : MonoBehaviourPun
 
     private PhotonView _photonView;
 
+    public Action<bool> OnCanUseActiveSkill;
+
     //# Test용
     private Coroutine _testCoroutine;
 
-    private bool _isAllJoined;
+    // private bool _isAllJoined;
     private bool _isFirstStarted;
 
     /// <summary>
@@ -105,10 +108,11 @@ public class DefenceSkillManager : MonoBehaviourPun
         var skill = _skillDatabase.SkillDatabase[skillName];
         skill.Initialize();
 
-        if (!PhotonNetwork.OfflineMode){
+        if (!PhotonNetwork.OfflineMode)
+        {
             if (!photonView.IsMine) return;
         }
-        
+
 
         _skills.Add(skill);
 
@@ -146,6 +150,9 @@ public class DefenceSkillManager : MonoBehaviourPun
             // case DefenceSkills.FrostSlam:
             //     break;
         }
+
+        if (skillName == DefenceSkills.Shield)
+            OnCanUseActiveSkill?.Invoke(true);
     }
 
     /// <summary>
@@ -178,7 +185,10 @@ public class DefenceSkillManager : MonoBehaviourPun
             skill.Activate(skillPosition, transform);
 
             if (skill.SkillName == DefenceSkills.Shield)
+            {
                 _cooldowns[skill.SkillName] = new WaitForSeconds(_status.InvincibilityCooldown);
+                OnCanUseActiveSkill?.Invoke(false);
+            }
             else
                 _cooldowns[skill.SkillName] = new WaitForSeconds(skill.Cooldown);
 
@@ -196,6 +206,8 @@ public class DefenceSkillManager : MonoBehaviourPun
 
         _coroutines[skillName] = null;
         _cooldowns[skillName] = null;
+
+        if (skillName == DefenceSkills.Shield) OnCanUseActiveSkill?.Invoke(true);
     }
 
     //todo 추후 맵 생성 및 플레이어 스폰(스폰할 위치로 변경) 후 호출해야 함(Action)
@@ -215,7 +227,7 @@ public class DefenceSkillManager : MonoBehaviourPun
             photonView.RPC(nameof(AddDefenceSkills), RpcTarget.All, skill);
         }
 
-        _isAllJoined = true;
+        // _isAllJoined = true;
     }
 
     [PunRPC]

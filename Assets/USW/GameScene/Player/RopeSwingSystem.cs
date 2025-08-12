@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 {
-    [Header("후크 세팅")] [SerializeField]
+    [Header("후크 세팅")]
+    [SerializeField]
     private GameObject hookCrosshairPrefab;
     private GameObject crossHairObj;
 
@@ -17,7 +18,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     [SerializeField] private LayerMask hookableLayerMask = -1;
     [SerializeField] private float maxHookDistance = 15f;
 
-    [Header("로프 물리")] [SerializeField]
+    [Header("로프 물리")]
+    [SerializeField]
     private float ropeMaxLength = 10f;
 
     [SerializeField] private float ropeSpringForce = 150f;
@@ -25,7 +27,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
     [SerializeField] private float ropeClimbSpeed = 5f;
     [SerializeField] private float swingForce = 300f;
 
-    [Header("입력 세팅")] [SerializeField]
+    [Header("입력 세팅")]
+    [SerializeField]
     private KeyCode hookKey = KeyCode.E;
 
     [SerializeField] private KeyCode ropeClimbUpKey = KeyCode.W;
@@ -58,7 +61,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     // private bool _isStarted;
     private bool _isFirstStarted = true;
-    
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -70,7 +73,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
-        if (PhotonNetwork.OfflineMode){
+        if (PhotonNetwork.OfflineMode)
+        {
             if (!InGameManager.Instance.IsStarted)
             {
                 _isFirstStarted = true;
@@ -119,7 +123,8 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void FixedUpdate()
     {
-        if (PhotonNetwork.OfflineMode){
+        if (PhotonNetwork.OfflineMode)
+        {
             HandleSwingPhysics();
         }
         else
@@ -194,6 +199,23 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         ShowHookAttached(hitPoint);
     }
 
+    /// <summary>
+    /// 오프라인용 후크 부착 메서드.
+    /// 250808 김동진 추가
+    /// </summary>
+    /// <param name="hitPoint"></param>
+    private void OffHookAttached(Vector2 hitPoint)
+    {
+        hookPoint = hitPoint;
+        isHookAttached = true;
+        isSwinging = true;
+        currentRopeLength = Vector2.Distance(transform.position, hookPoint);
+
+        CreateRopeJoint();
+        // 시각적 요소는 모든 클라이언트에서 표시
+        ShowHookAttached(hitPoint);
+    }
+
     [PunRPC]
     private void OnHookDetached()
     {
@@ -210,8 +232,36 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         ShowHookDetached();
     }
 
+    /// <summary>
+    /// 오프라인용 후크 해제 메서드.
+    /// 250808 김동진 추가
+    /// </summary>
+    private void OffHookDetached()
+    {
+        isHookAttached = false;
+        isSwinging = false;
+
+        DestroyRopeJoint();
+
+        ShowHookDetached();
+    }
+
     [PunRPC]
     private void OnHookEffect(Vector2 effectPosition)
+    {
+        // 이펙트 생성
+        if (hookHitEffect != null)
+        {
+            var effect = Instantiate(hookHitEffect, effectPosition, Quaternion.identity);
+            Destroy(effect, 2f);
+        }
+    }
+
+    /// <summary>
+    /// 오프라인용 후크 이펙트 메서드.
+    /// 250808 김동진 추가
+    /// </summary>
+    private void OffHookEffect(Vector2 effectPosition)
     {
         // 이펙트 생성
         if (hookHitEffect != null)
@@ -282,7 +332,7 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
         // 크로스헤어는 로컬 플레이어만
         if (PhotonNetwork.OfflineMode)
         {
-            if(hookCrosshairPrefab != null)
+            if (hookCrosshairPrefab != null)
                 hookCrosshairPrefab.SetActive(false);
         }
         else
@@ -434,13 +484,31 @@ public class RopeSwingSystem : MonoBehaviourPun, IPunObservable
 
     private void AttachHook(Vector2 hitPoint)
     {
-        photonView.RPC("OnHookAttached", RpcTarget.All, hitPoint);
-        photonView.RPC("OnHookEffect", RpcTarget.All, hitPoint);
+        if (PhotonNetwork.OfflineMode)
+        {
+            OffHookAttached(hitPoint);
+            OffHookEffect(hitPoint);
+        }
+        else
+        {
+            photonView.RPC("OnHookAttached", RpcTarget.All, hitPoint);
+            photonView.RPC("OnHookEffect", RpcTarget.All, hitPoint);
+        }
     }
 
-    private void DetachHook()
+    
+    // 튜도리얼에서 로프 연결 후 리스폰시 후크가 해제되지 않는 문제를 해결하기 위해
+    // private -> public으로 변경
+    public void DetachHook()
     {
-        photonView.RPC("OnHookDetached", RpcTarget.All);
+        if (PhotonNetwork.OfflineMode)
+        {
+            OffHookDetached();
+        }
+        else
+        {
+            photonView.RPC("OnHookDetached", RpcTarget.All);
+        }
     }
 
     private void ShowHookAttached(Vector2 hitPoint)

@@ -11,13 +11,14 @@ public class LaserWeapon : BaseWeapon
     
     private bool isFiring = false;
     private WeaponType weaponType = WeaponType.Laser;
-
+   
+    protected override bool ApplyQuickReload => false;
 
     public override void Attack(Transform firingPoint)
     {
         if (!photonView.IsMine) return;
-        if (isFiring || isReloading || currentAmmo < CardManager.Instance.GetCaculateCardStats().AmmoConsumption) return;
-        currentAmmo -= (int)CardManager.Instance.GetCaculateCardStats().AmmoConsumption;
+        if (isFiring || isReloading || currentAmmo < 3) return;
+        currentAmmo -= 3;
         
         photonView.RPC(nameof(RPC_FireLaser), RpcTarget.All, PhotonNetwork.Time);
     }
@@ -25,14 +26,12 @@ public class LaserWeapon : BaseWeapon
     [PunRPC]
     private IEnumerator RPC_FireLaser(double fireTime, PhotonMessageInfo info)
     {
-
-        // StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
-
+        // 이거 주석 해제 하지 마세요 타이밍 꼬여요
+        StopAllCoroutines(); // 이전 발사나 리로드 코루틴 종료
         
         if (currentLaserInstance != null)
         {
-            PhotonNetwork.Destroy(currentLaserInstance); // Destroy(gameObject)가 아닌 PhotonNetwork.Destroy!
-            // _poolManager.Destroy(currentLaserInstance);
+            PhotonNetwork.Destroy(currentLaserInstance); 
             currentLaserInstance = null;
         }
         
@@ -56,18 +55,9 @@ public class LaserWeapon : BaseWeapon
 
         ammoDisplay.reloadIndicator.SetActive(false);
 
-
-        // if (currentLaserInstance != null)
-        // {
-        //     Destroy(currentLaserInstance);
-        // }
-
-
         // 1. 레이저 프리팹 생성
         currentLaserInstance = PhotonNetwork.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
-        // currentLaserInstance = _poolManager.Instantiate("Laser", gunController.muzzle.position, gunController.muzzle.rotation);
-        // currentLaserInstance = PhotonNetwork.Instantiate("Laser", position, rotation);
-
+        
         // 2. muzzle에 붙임
         currentLaserInstance.transform.SetParent(gunController.muzzle);
 
@@ -84,7 +74,6 @@ public class LaserWeapon : BaseWeapon
         {
             StartCoroutine(FireLaserRoutine());
         }
-        
 
     }
 
@@ -93,17 +82,15 @@ public class LaserWeapon : BaseWeapon
         isFiring = true;
         isReloading = false;
 
-        // yield return new WaitForSeconds(laserDuration);
-        yield return new WaitUntil(() => currentLaser.CanShoot);
+        yield return new WaitForSeconds(laserDuration);
 
         isFiring = false;
-        StartAutoReload();
+        // StartAutoReload();
 
         // 레이저 정리
         if (currentLaserInstance != null)
         {
             PhotonNetwork.Destroy(currentLaserInstance);
-            // _poolManager.Destroy(currentLaserInstance);
         }
 
         currentLaserInstance = null;
@@ -116,10 +103,12 @@ public class LaserWeapon : BaseWeapon
         // 애니메이션 트리거 실행
         animator?.SetTrigger("Reload");
 
-        yield return null;
-        ReloadSpeedFromAnimator();
+        // yield return null;
+        SetAnimatorSingleSpeed(0.333f);
+        //ReloadSpeedFromAnimator();
         // yield return new WaitForSeconds(reloadTime);
-        yield return new WaitForSeconds(CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
+        // yield return new WaitForSeconds(CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
+        yield return new WaitForSeconds(3f);
 
         // currentAmmo = maxAmmo;
         currentAmmo = (int)CardManager.Instance.GetCaculateCardStats().DefaultAmmo;
@@ -139,8 +128,8 @@ public class LaserWeapon : BaseWeapon
         base.OnDisable();
         isFiring = false;
 
-        if (currentLaserInstance != null){
-            // _poolManager.Destroy(currentLaserInstance);
+        if (currentLaserInstance != null)
+        {
             PhotonNetwork.Destroy(currentLaserInstance);
             currentLaserInstance = null;
         }

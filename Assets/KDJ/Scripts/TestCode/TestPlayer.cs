@@ -45,7 +45,7 @@ public class TestPlayer : MonoBehaviour, IDamagable
 
         if (collision.gameObject.layer == 11)
         {
-            GameObject effect = Instantiate(_testEffect, collision.contacts[0].point, Quaternion.identity);
+            var effect = Instantiate(_testEffect, collision.contacts[0].point, Quaternion.identity);
             effect.transform.LookAt(collision.contacts[0].point + collision.contacts[0].normal);
         }
     }
@@ -60,12 +60,11 @@ public class TestPlayer : MonoBehaviour, IDamagable
 
     private void OnTriggerExit2D(Collider2D other)
     {
-
     }
-
 
     public void TakeDamage(float damage, Vector2 position, Vector2 direction)
     {
+        SoundManager.Instance.PlaySFX("PlayerHitSound" + UnityEngine.Random.Range(1, 3));
         _hp -= damage;
         SetUI();
 
@@ -73,8 +72,8 @@ public class TestPlayer : MonoBehaviour, IDamagable
         {
             _hp = 0;
 
-            GameObject effect1 = Instantiate(_deadEffect1, transform.position, Quaternion.identity);
-            GameObject effect2 = Instantiate(_deadEffect2, transform.position, Quaternion.identity);
+            var effect1 = Instantiate(_deadEffect1, transform.position, Quaternion.identity);
+            var effect2 = Instantiate(_deadEffect2, transform.position, Quaternion.identity);
             effect1.transform.LookAt(position + direction);
             effect2.transform.LookAt(position + direction);
 
@@ -95,12 +94,11 @@ public class TestPlayer : MonoBehaviour, IDamagable
 
     private void MoveHandler()
     {
-
     }
 
     private void SetUI()
     {
-        _hpText.text = $"{_maxHp.ToString("F1")} / {_hp.ToString("F1")}";
+        _hpText.text = $"{_hp.ToString("F1")} / {_maxHp.ToString("F1")}";
         _hpBar.fillAmount = _hp / _maxHp;
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 3판 2선승 라운드 시스템과 3판 2선승 매치 시스템 관리
@@ -51,7 +52,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [Header("Game Settings")]
     [SerializeField] private int roundsToWinMatch = 2;
     [SerializeField] private int matchesToWinGame = 2;
-    [SerializeField] private float roundStartDelay = 3f;
+    // [SerializeField] private float roundStartDelay = 3f;
 
     public enum GameState
     {
@@ -79,6 +80,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     // 플레이어 상태 관리 
     private Dictionary<string, PlayerStatus> playerStatusDict = new Dictionary<string, PlayerStatus>();
     private Dictionary<string, bool> playerAliveStatus = new Dictionary<string, bool>();
+    private Dictionary<int, bool> _playerSelection = new Dictionary<int, bool>();
+    public Dictionary<int, bool> PlayerSelection => _playerSelection;
+    public static Action OnCardSelected;
 
     // 카드 선택 관리
     private bool isCardSelectTime = false;
@@ -86,8 +90,14 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     // 리매치 관리
     private Dictionary<string, bool> rematchVotes = new Dictionary<string, bool>();
+    private Dictionary<string, bool> _playerRematchVoted = new Dictionary<string, bool>();
     private bool isWaitingForRematch = false;
     public bool IsWaitingForRematch => isWaitingForRematch;
+
+    private bool _isGameOver;
+    public bool IsGameOver => _isGameOver;
+
+    private bool isLeaving = false;
 
     #endregion
 
@@ -130,6 +140,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public bool IsMapLoaded;
     public bool IsCardSelected;
+    public bool IsRematch => isWaitingForRematch;
     [SerializeField] private GameObject _backgroundObject;
 
     //#2025/08/07/02:00 추가 플레이어 시스템 활성화 하는 Action
@@ -154,6 +165,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         foreach (var player in PhotonNetwork.PlayerList)
         {
+            _playerRematchVoted[player.ActorNumber.ToString()] = false;
+
             if (player.ActorNumber == firstActorNumber) continue;
 
             if (leftPlayerActorNumber == firstActorNumber)
@@ -178,9 +191,18 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         InitializeScores();
         SetGameState(GameState.Waiting);
+        InitializePlayerSelect();
 
         // 플레이어 상태 감지 시작
         // StartCoroutine(MonitorPlayerHealth());
+    }
+
+    private void InitializePlayerSelect()
+    {
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            photonView.RPC(nameof(SetPlayerSelectsRPC), RpcTarget.All, player.ActorNumber, false);
+        }
     }
 
     private void InitializeScores()
@@ -197,6 +219,10 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             matchScores[playerKey] = 0;
             playerAliveStatus[playerKey] = true;
             rematchVotes[playerKey] = false;
+
+            // var props = new Hashtable();
+            // props["Select"] = false;
+            // player.SetCustomProperties(props);
         }
     }
 
@@ -216,7 +242,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartGame()
     {
-        Debug.Log("RPC_StartGame");
         InitializeScores();
         currentRound = 0;
         currentMatch = 0;
@@ -238,18 +263,23 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
      * }
      */
 
-    public void SetStarted(bool value)
+    public void SetStarted(bool value, bool showBackground = true)
     {
         if (value && IsCardSelected && IsMapLoaded)
-            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
+            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value, showBackground);
         else if (value == false)
-            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value);
+            photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, value, showBackground);
     }
 
     [PunRPC]
-    public void SetStartedRPC(bool value)
+    public void SetStartedRPC(bool value, bool showBackground = true)
     {
         _isStarted = value;
+
+        if (!showBackground)
+            _backgroundObject.SetActive(false);
+        else
+            _backgroundObject.SetActive(!value);
     }
 
     public void SetStartedOffline(bool value)
@@ -259,7 +289,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator StartRoundWithDelay()
     {
-        yield return new WaitForSeconds(roundStartDelay);
+        // Debug.Log("StartRoundWthDelay");
+        // yield return new WaitForSeconds(roundStartDelay);
+        yield return null;
         StartRound();
     }
 
@@ -273,13 +305,15 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartRound()
     {
+        Cursor.visible = false;
+        //# 여러 번 호출됨
         currentRound++;
         SetGameState(GameState.RoundInProgress);
 
         // 모든 플레이어 상태 초기화
         ResetPlayerStates();
 
-        Debug.Log("Round 시작에서 Player Active 호출(true)");
+        // Debug.Log("Round 시작에서 Player Active 호출(true)");
         // OnPlayerSystemActivate?.Invoke(true);
 
         if (_isStarted == false)
@@ -316,6 +350,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndRound(string winnerKey)
     {
+        Cursor.visible = true;
         SetGameState(GameState.RoundEnding);
         lastRoundWinner = winnerKey;
         roundScores[winnerKey]++;
@@ -325,7 +360,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         // 매치 승리 확인
         if (roundScores[winnerKey] >= roundsToWinMatch)
         {
-            Debug.Log("End Round 시작에서 Player Active 호출");
+            IsCardSelected = false;
+            // Debug.Log($"End RoundPlayer Active 호출 {Instance.IsMapLoaded}, {Instance.IsCardSelected}");
+            SetStarted(false, false);
             StartCoroutine(EndMatchWithDelay(winnerKey));
         }
         else
@@ -363,11 +400,19 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             roundScores[key] = 0;
         }
 
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            _playerSelection[player.ActorNumber] = false;
+            // Debug.Log($"RPC_EndMatch {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
+        }
+
         Debug.Log($"매치 종료 승자: {winnerKey}");
 
         // 게임 승리 확인
         if (matchScores[winnerKey] >= matchesToWinGame)
         {
+            IsCardSelected = false;
+            SetStarted(false);
             StartCoroutine(EndGameWithDelay(winnerKey));
         }
         else
@@ -383,6 +428,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator EndGameWithDelay(string winnerKey)
     {
+        //# 라운드가 끝나고 씬이 전환 후 Card 선택창이 나오기 위해서 필요함
+        //# 다만 시간 조절은 필요해 보임(기존 : 2f)
         yield return new WaitForSeconds(2f);
         EndGame(winnerKey);
     }
@@ -397,8 +444,22 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_EndGame(string winnerKey)
     {
-        _backgroundObject.SetActive(true);
+        // Debug.Log("RPC_EndGame");
         SetGameState(GameState.GameEnding);
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            _playerSelection[player.ActorNumber] = false;
+            // Debug.Log($"{player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
+
+            var props = new Hashtable();
+            // props["Select"] = false;
+            props["isWinner"] = false;
+
+            player.SetCustomProperties(props);
+        }
+
+
         OnGameEnd?.Invoke();
 
         // 리매치 대기 시작
@@ -417,7 +478,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator StartCardSelectWithDelay(string winnerKey)
     {
+        // Debug.Log("StartCardSelectWithDelay");
         yield return new WaitForSeconds(2f);
+        // yield return null;
         StartCardSelect(winnerKey);
     }
 
@@ -437,10 +500,12 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_StartCardSelect(string winnerKey)
     {
+        // Debug.Log("RPC_StartCardSelect");
+        Cursor.visible = true;
         IsCardSelected = false;
         SetGameState(GameState.CardSelecting);
         var cardSelectManager = FindObjectOfType<CardSelectManager>();
-        cardSelectManager.ResetCardSelectionState(winnerKey);
+        cardSelectManager.ResetCardSelectionState();
 
 
         //todo 이긴 사람은 true, 진 사람은 false가 되어야 함
@@ -449,17 +514,17 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
         //     props["Select"] = true;
         // PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
+        Debug.Log($"Winner : {winnerKey}");
         foreach (var player in PhotonNetwork.PlayerList)
         {
-            var props = new Hashtable();
             if (winnerKey == player.ActorNumber.ToString())
-                props["Select"] = true;
+                _playerSelection[player.ActorNumber] = true;
             else
-                props["Select"] = false;
-
-            player.SetCustomProperties(props);
+                _playerSelection[player.ActorNumber] = false;
+            // Debug.Log($"StartCard : {player.ActorNumber} - {_playerSelection[player.ActorNumber]}");
         }
 
+        SetStarted(false, true);
         isCardSelectTime = true;
         OnCardSelectStart?.Invoke();
         Debug.Log("카드 선택 시작");
@@ -486,25 +551,11 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     #region 플레이어 health 모니터링
 
-    //# 해당 기능을 제거하고 플레이어 사망시 별도로 실행할 수 있도록 변경
-    // private IEnumerator MonitorPlayerHealth()
-    // {
-    //     while (true)
-    //     {
-    //         yield return new WaitForSeconds(0.1f);
-    //
-    //         if (currentGameState != GameState.RoundInProgress)
-    //             continue;
-    //
-    //         CheckPlayerHealth();
-    //     }
-    // }
-
     public void CheckPlayerHealth()
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
+        SetStarted(false, false);
 
         var alivePlayers = new List<string>();
 
@@ -572,7 +623,6 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void StartRematchWaiting()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
 
         photonView.RPC("RPC_StartRematchWaiting", RpcTarget.All);
     }
@@ -582,6 +632,7 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         SetGameState(GameState.RematchWaiting);
         isWaitingForRematch = true;
+        _isGameOver = true;
 
         // 투표 초기화
         foreach (string key in rematchVotes.Keys.ToArray())
@@ -589,6 +640,8 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
             rematchVotes[key] = false;
         }
 
+        // photonView.RPC(nameof(SetStartedRPC), RpcTarget.All, false);
+        SetStarted(false, false);
         Debug.Log("리매치 투표 시작!");
     }
 
@@ -602,23 +655,37 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     private void RPC_VoteRematch(string playerKey, bool vote)
     {
         rematchVotes[playerKey] = vote;
-        Debug.Log($"플레이어 {playerKey}의 리매치 투표: {vote}");
+        _playerRematchVoted[playerKey] = true;
+
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        //# 1명이라도 vote가 false인 경우는 게임을 종료 시켜야 함
+        if (!vote)
+            photonView.RPC("RPC_RematchDeclined", RpcTarget.All);
+
+
+        //# 모두 투표를 완료했는지 확인
+        foreach (var votedPlayer in _playerRematchVoted)
+        {
+            if (votedPlayer.Value == false) return;
+        }
 
         CheckRematchVotes();
     }
 
     private void CheckRematchVotes()
     {
+        Debug.Log("CheckRematchVotes");
         if (!PhotonNetwork.IsMasterClient) return;
 
-        bool allVoted = true;
         bool allAgree = true;
 
         foreach (var kvp in rematchVotes)
         {
             if (!kvp.Value)
             {
-                allAgree = false;
+                photonView.RPC("RPC_RematchDeclined", RpcTarget.All);
+                return;
             }
         }
 
@@ -632,22 +699,33 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void RPC_RematchAccepted()
     {
+        CardManager.Instance.ClearLists();
         isWaitingForRematch = false;
         OnRematchRequest?.Invoke(true);
         Debug.Log("두명다 리매치 승인함");
-
-        // 게임 재시작
-        RPC_StartGame();
     }
 
     [PunRPC]
     private void RPC_RematchDeclined()
     {
-        isWaitingForRematch = false;
-        OnRematchRequest?.Invoke(false);
+        // if (!photonView.IsMine) return;
         Debug.Log("리매치 거부됨");
+        isLeaving = true;
+        CardManager.Instance.ClearLists();
+        isWaitingForRematch = false;
+        // OnRematchRequest?.Invoke(false);
 
         // 메인 메뉴로 돌아가는건 gamerestartpanel EndGame 에서 처리하고있음
+        // StartCoroutine(WaitLeaveRoom());
+        PhotonNetwork.LeaveRoom();
+
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
+    }
+
+    private IEnumerator WaitLeaveRoom()
+    {
+        yield return new WaitForSeconds(1f);
+        PhotonNetwork.LeaveRoom();
     }
 
     #endregion
@@ -670,12 +748,15 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Cursor.visible = true;
+        Debug.Log("Player left room");
         string playerKey = GetPlayerKey(otherPlayer);
         roundScores.Remove(playerKey);
         matchScores.Remove(playerKey);
         playerAliveStatus.Remove(playerKey);
         rematchVotes.Remove(playerKey);
         UnregisterPlayerStatus(playerKey);
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
 
         if (PhotonNetwork.PlayerList.Length < 2)
         {
@@ -684,7 +765,9 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
                 StopAllCoroutines();
                 SetGameState(GameState.Waiting);
 
-                OnPlayerDisconnected?.Invoke();
+                Debug.Log("Invoke Player Disconnected");
+                if (!isLeaving)
+                    OnPlayerDisconnected?.Invoke();
             }
         }
     }
@@ -723,28 +806,28 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
-        if (PhotonNetwork.OfflineMode) return;
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            DebugLeftPlayerWin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            DebugRightPlayerWin();
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            DebugStartGame();
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            DebugVoteRematch(true);
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            DebugVoteRematch(false);
-        }
+        //if (PhotonNetwork.OfflineMode) return;
+        //
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    DebugLeftPlayerWin();
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    DebugRightPlayerWin();
+        //}
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    DebugStartGame();
+        //}
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    DebugVoteRematch(true);
+        //}
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    DebugVoteRematch(false);
+        //}
     }
 
     /// <summary>
@@ -813,5 +896,29 @@ public class InGameManager : MonoBehaviourPunCallbacks, IPunObservable
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(winnerProp);
         // Debug.Log($"[GameEndManager] ���� {(isWinner ? "����" : "����")}�Դϴ�.");
+    }
+
+    public void SetPlayerSelects(int actorNumber, bool isSelect)
+    {
+        // Debug.Log($"SetPlayerSelect - {actorNumber} {isSelect}");
+        photonView.RPC(nameof(SetPlayerSelectsRPC), RpcTarget.All, actorNumber, isSelect);
+    }
+
+    [PunRPC]
+    public void SetPlayerSelectsRPC(int actorNumber, bool isSelect)
+    {
+        _playerSelection[actorNumber] = isSelect;
+
+        if (isSelect)
+            OnCardSelected?.Invoke();
+    }
+
+    public override void OnLeftRoom()
+    {
+        Cursor.visible = true;
+        Debug.Log("씬 전환 - OnLeftRoom");
+        CardManager.Instance.ClearLists();
+        SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
     }
 }

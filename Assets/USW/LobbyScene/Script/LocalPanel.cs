@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LocalPanel : MonoBehaviour
 {
-     
     [SerializeField] private GameObject localPanel;
     [SerializeField] private Button backButton;
     [SerializeField] private Animator localAnimator;
@@ -17,7 +17,7 @@ public class LocalPanel : MonoBehaviour
         Init();
     }
 
-    void Init()
+    private void Init()
     {
         if (backButton)
         {
@@ -37,8 +37,8 @@ public class LocalPanel : MonoBehaviour
             mainMenuAnimator.SetTrigger("PlayWelcomeAgain");
         }
     }
-    
-    void OnBackButtonClicked()
+
+    private void OnBackButtonClicked()
     {
         if (localPanel)
         {
@@ -46,8 +46,6 @@ public class LocalPanel : MonoBehaviour
         }
     }
 
-   
-    
     /// <summary>
     /// 퍼블릭 메서드
     /// </summary>

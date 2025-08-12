@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TestWeaponSystem : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class TestWeaponSystem : MonoBehaviour
     {
         _curWeapon = _weapons[_curWeaponIndex];
         SetUI();
+        InGameManager.Instance.SetStartedOffline(true);
     }
 
     private void Update()
@@ -26,7 +28,6 @@ public class TestWeaponSystem : MonoBehaviour
         SelectWeapon();
         UseWeapon();
     }
-
 
     private void SelectWeapon()
     {
@@ -60,6 +61,12 @@ public class TestWeaponSystem : MonoBehaviour
             (_curWeapon as TestBullet)?.SetBulletType(_isBigBullet, _isExplosiveBullet);
             (_curWeapon as TestBarrage)?.SetBulletType(_isBigBullet, _isExplosiveBullet);
             SetUI();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("LobbyScene");
+            SoundManager.Instance.PlayMainMenuBGM();
         }
     }
 
@@ -96,6 +103,7 @@ public class TestWeaponSystem : MonoBehaviour
         {
             if (_curWeapon != null)
             {
+                SoundManager.Instance.PlaySFX("ShotSound");
                 _curWeapon.Attack();
             }
         }

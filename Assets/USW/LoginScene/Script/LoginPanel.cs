@@ -36,6 +36,11 @@ public class LoginPanel : MonoBehaviourPun
     private bool isPeriodicCheckRunning = false;
     #endregion
 
+    #region 로딩 애니메이션 관리
+    private Coroutine loadingAnimationCoroutine;
+    private bool isShowingLoadingPopup = false;
+    #endregion
+
     #region Unity 라이프사이클
     private void Awake()
     {
@@ -66,6 +71,8 @@ public class LoginPanel : MonoBehaviourPun
         {
             StopCoroutine(connectionTimeoutCoroutine);
         }
+
+        StopLoadingAnimation();
     }
 
     private void OnEnable()
@@ -119,6 +126,8 @@ public class LoginPanel : MonoBehaviourPun
             StopCoroutine(connectionTimeoutCoroutine);
             connectionTimeoutCoroutine = null;
         }
+
+        StopLoadingAnimation();
     }
     #endregion
 
@@ -140,17 +149,22 @@ public class LoginPanel : MonoBehaviourPun
         loginButton.interactable = false;
         ResetLoginStates();
 
+        // 로딩 애니메이션 시작
+        StartLoadingAnimation();
+
         FirebaseAuth.DefaultInstance.SignInWithEmailAndPasswordAsync(emailInput.text, passInput.text)
             .ContinueWithOnMainThread(task =>
             {
                 if (task.IsCanceled)
                 {
+                    StopLoadingAnimation();
                     ShowPopup("로그인이 취소되었습니다.");
                     ResetLoginUI();
                     return;
                 }
                 if (task.IsFaulted)
                 {
+                    StopLoadingAnimation();
                     ShowPopup($"로그인에 실패했습니다: {task.Exception?.GetBaseException()?.Message}");
                     ResetLoginUI();
                     return;
@@ -192,6 +206,75 @@ public class LoginPanel : MonoBehaviourPun
     }
     #endregion
 
+    #region 로딩 애니메이션
+    private void StartLoadingAnimation()
+    {
+        if (!isShowingLoadingPopup)
+        {
+            isShowingLoadingPopup = true;
+            loadingAnimationCoroutine = StartCoroutine(LoadingAnimationCoroutine());
+        }
+    }
+
+    private void StopLoadingAnimation()
+    {
+        if (isShowingLoadingPopup)
+        {
+            isShowingLoadingPopup = false;
+            
+            if (loadingAnimationCoroutine != null)
+            {
+                StopCoroutine(loadingAnimationCoroutine);
+                loadingAnimationCoroutine = null;
+            }
+            
+            if (PopupManager.Instance)
+            {
+                PopupManager.Instance.ClosePopup();
+            }
+        }
+    }
+
+    private IEnumerator LoadingAnimationCoroutine()
+    {
+        string baseMessage = "로그인중입니다";
+        int dotCount = 1;
+        bool increasing = true;
+
+        while (isShowingLoadingPopup)
+        {
+            string dots = new string('.', dotCount);
+            string message = baseMessage + dots;
+
+            if (PopupManager.Instance != null)
+            {
+                PopupManager.Instance.ShowPopup(message);
+            }
+            
+            if (increasing)
+            {
+                dotCount++;
+                if (dotCount > 3)
+                {
+                    dotCount = 3;
+                    increasing = false;
+                }
+            }
+            else
+            {
+                dotCount--;
+                if (dotCount < 1)
+                {
+                    dotCount = 1;
+                    increasing = true;
+                }
+            }
+
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+    #endregion
+
     #region Photon 연결 처리
     private IEnumerator DelayedPhotonConnect()
     {
@@ -222,12 +305,14 @@ public class LoginPanel : MonoBehaviourPun
             }
             else
             {
+                StopLoadingAnimation();
                 ShowPopup("네트워크 연결에 실패했습니다.");
                 ResetLoginUI();
             }
         }
         else
         {
+            StopLoadingAnimation();
             ShowPopup("사용자 정보가 올바르지 않습니다.");
             ResetLoginUI();
         }
@@ -248,6 +333,7 @@ public class LoginPanel : MonoBehaviourPun
         }
         else
         {
+            StopLoadingAnimation();
             ShowPopup("기존 연결을 해제할 수 없습니다.");
             ResetLoginUI();
         }
@@ -265,6 +351,7 @@ public class LoginPanel : MonoBehaviourPun
         
         if (!PhotonNetwork.IsConnected)
         {
+            StopLoadingAnimation();
             ShowPopup("네트워크 연결에 시간이 너무 오래 걸립니다. 다시 시도해주세요.");
             ResetLoginUI();
         }
@@ -376,7 +463,7 @@ public class LoginPanel : MonoBehaviourPun
     }
     #endregion
 
-    #region 로그인 완료 처리 - 5초 재체크 방식
+    #region 로그인 완료 처리 
     private bool systemCheckResult = false;
 
     private void CheckLoginComplete()
@@ -418,6 +505,7 @@ public class LoginPanel : MonoBehaviourPun
         }
         else
         {
+            StopLoadingAnimation();
             ShowPopup("시스템 초기화에 실패했습니다. 다시 시도해주세요.");
             ResetLoginUI();
         }
@@ -460,12 +548,17 @@ public class LoginPanel : MonoBehaviourPun
     
     private IEnumerator MoveToLobby()
     {
+        // 로딩 애니메이션 중지
+        StopLoadingAnimation();
+        
         emailInput.text = "";
         passInput.text = "";
     
         yield return new WaitForSeconds(0.5f);
         
         SceneManager.LoadScene("LobbyScene");
+        
+        SoundManager.Instance.PlayBGMLoop("MainMenuLoop");
     }
     #endregion
 
@@ -507,7 +600,7 @@ public class LoginPanel : MonoBehaviourPun
             }
             
             // Firebase 로그인됐지만 너무 오래 걸리는 경우 강제 체크
-            if (isFirebaseLoggedIn && checkCount > 15) // 30초 후
+            if (isFirebaseLoggedIn && checkCount > 15) 
             {
                 CheckLoginComplete();
                 break;
@@ -518,6 +611,7 @@ public class LoginPanel : MonoBehaviourPun
         {
             if (isFirebaseLoggedIn)
             {
+                StopLoadingAnimation();
                 ShowPopup("네트워크 연결에 문제가 있습니다. 다시 시도해주세요.");
                 ResetLoginUI();
             }
@@ -565,12 +659,14 @@ public class LoginPanel : MonoBehaviourPun
 
     public void OnConnectFailed()
     {
+        StopLoadingAnimation();
         ShowPopup("네트워크 연결에 실패했습니다. 인터넷 연결을 확인해주세요.");
         ResetLoginUI();
     }
     
     public void OnCustomAuthenticationFailed(string debugMessage)
     {
+        StopLoadingAnimation();
         ShowPopup("사용자 인증에 실패했습니다.");
         ResetLoginUI();
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -40,6 +41,8 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     private Vector3 _networkPosition;
     private Quaternion _networkRotation;
 
+    protected virtual bool ApplyQuickReload => true;
+
     protected PoolManager _poolManager;
     // protected CardManager cardManager;
 
@@ -59,10 +62,10 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
         _poolManager = FindFirstObjectByType<PoolManager>();
 
-        _poolManager.InitializePool("Bullet", bulletPrefab, 1, 1);
-        _poolManager.InitializePool("Fragment", fragmentPrefab, 1, 1);
-        _poolManager.InitializePool("Laser", laserPrefab, 1, 1);
-        _poolManager.InitializePool("Explosive", explosivePrefab, 1, 1);
+        _poolManager.InitializePool("Bullet", bulletPrefab, 2, 20);
+        _poolManager.InitializePool("Fragment", fragmentPrefab, 2, 40);
+        _poolManager.InitializePool("Laser", laserPrefab, 2, 40);
+        _poolManager.InitializePool("Explosive", explosivePrefab, 2, 40);
 
 
         gunController = GetComponentInParent<GunControll>();
@@ -86,7 +89,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // StartCoroutine(DelayedReloadSpeed());
         DelayedReloadSpeed();
     }
-    
+
     public override void OnDisable()
     {
         base.OnDisable();
@@ -107,13 +110,33 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
     /// </summary>
     protected void ReloadSpeedFromAnimator()
     {
-        // float speed = 2f / reloadTime / 2; // 애니메이션 속도 계산
-        // Debug.Log($"CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed : {CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed}");
         float speed = 2f / CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed / 2; // 애니메이션 속도 계산
-        
-        Debug.Log($"PhotonNetwork.OfflineMode: {PhotonNetwork.OfflineMode}");
 
-        if (PhotonNetwork.OfflineMode){
+        // 무기 타입으로 레이저 예외 처리
+        if (GetWeaponType() == WeaponType.Laser)
+        {
+            // 레이저는 퀵리로드 영향 없음 (필요시 상수 조절)
+            SetAnimatorSingleSpeed(0.333f);
+            return;
+        }
+
+        // 레이저 외 무기만 퀵리로드 적용
+        if (ApplyQuickReload)
+        {
+            int count = CardManager.Instance.GetLists().Count;
+            var cardList = CardManager.Instance.GetLists();
+            for (int i = 0; i < count; i++)
+            {
+                if (cardList[i].CardName == "QUICK RELOAD")
+                {
+                    speed *= 1.7f;
+                }
+            }
+        }
+
+
+        if (PhotonNetwork.OfflineMode)
+        {
             SetAnimatorSingleSpeed(speed);
         }
         else
@@ -131,7 +154,7 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
             // Debug.Log($"[RPC_SetAnimatorSpeed] 애니메이터 속도 설정: {speed}");
         }
     }
-    
+
     protected void SetAnimatorSingleSpeed(float speed)
     {
         if (animator != null)
@@ -160,17 +183,6 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
 
     protected void StartAutoReload()
     {
-        photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.All);
-    }
-
-    protected void FinishReload()
-    {
-        photonView.RPC(nameof(RPC_FinishReload), RpcTarget.All);
-    }
-
-    [PunRPC]
-    protected void RPC_StartAutoReload()
-    {
         isReloading = true;
         ammoDisplay?.SetReloading(true);
 
@@ -183,6 +195,29 @@ public abstract class BaseWeapon : MonoBehaviourPunCallbacks, IWeapon, IPunObser
         // 리로드 시간 후 자동 완료 호출
         // Invoke(nameof(FinishReload), reloadTime);
         Invoke(nameof(FinishReload), CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
+        photonView.RPC(nameof(RPC_StartAutoReload), RpcTarget.Others);
+    }
+
+    protected void FinishReload()
+    {
+        photonView.RPC(nameof(RPC_FinishReload), RpcTarget.All);
+    }
+
+    [PunRPC]
+    protected void RPC_StartAutoReload()
+    {
+        // isReloading = true;
+        ammoDisplay?.SetReloading(true);
+
+        // if (animator != null)
+        // {
+        animator.SetTrigger("Reload");
+        // ReloadSpeedFromAnimator();
+        // }
+
+        // 리로드 시간 후 자동 완료 호출
+        // Invoke(nameof(FinishReload), reloadTime);
+        // Invoke(nameof(FinishReload), CardManager.Instance.GetCaculateCardStats().DefaultReloadSpeed);
     }
 
     [PunRPC]

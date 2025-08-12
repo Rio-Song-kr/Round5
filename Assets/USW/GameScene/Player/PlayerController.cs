@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [Header("참조")]
     [SerializeField] private PlayerStatusDataSO playerData;
 
-    [Header("이동 관련 변수")] [SerializeField]
+    [Header("이동 관련 변수")]
+    [SerializeField]
     private float acceleration = 50f;
 
     [SerializeField] private float deceleration = 50f;
@@ -17,14 +18,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [SerializeField] private float jumpForce = 12f;
     [SerializeField] private float jumpCutMultiplier = 0.5f;
 
-    [Header("땅 체크")] [SerializeField]
+    [Header("땅 체크")]
+    [SerializeField]
     private Transform groundCheck;
     [SerializeField] private float groundCheckOffset = -0.15f;
 
     [SerializeField] private Vector2 groundCheckSize = new Vector2(0.8f, 0.1f);
     [SerializeField] private LayerMask groundLayerMask;
 
-    [Header("이동 네트워크 ")] [SerializeField]
+    [Header("이동 네트워크 ")]
+    [SerializeField]
     private float positionLerpRate = 10f;
 
     [SerializeField] private float rotationLerpRate = 15f;
@@ -92,8 +95,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     // ----------- 250807 추가사항 -----------
     [SerializeField] private GameObject LandEffect;
-    
-    
+    // ----------- 250808 추가사항 -----------
+    [SerializeField] private GameObject JumpEffectWrap;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -136,11 +140,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private void Update()
     {
+        if (InGameManager.Instance == null || InGameManager.Instance.IsGameOver) return;
+
         if (!InGameManager.Instance.IsStarted)
         {
             // rb.gravityScale = 0f;
             photonView.RPC(nameof(SetGravity), RpcTarget.All, 0f);
-            transform.position = new Vector3(0f, 50f);
+
+            if (PhotonNetwork.IsMasterClient)
+                transform.position = new Vector3(-10f, 50f);
+            else
+                transform.position = new Vector3(10f, 50f);
+
             _isFirstStarted = true;
             return;
         }
@@ -159,7 +170,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 // SetPosition(new Vector3(10, 6, 0));
                 StartCoroutine(DelayedPlayerSetup(new Vector3(10, 6, 0)));
             }
-            photonView.RPC(nameof(SetGravity), RpcTarget.All, 1f);
+
+            if (PhotonNetwork.OfflineMode)
+            {
+                SetSingleGravity(0.5f);
+            }
+            else
+            {
+                photonView.RPC(nameof(SetGravity), RpcTarget.All, 1f);
+            }
 
             _isFirstStarted = false;
         }
@@ -183,14 +202,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private IEnumerator DelayedPlayerSetup(Vector3 position)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         SetPosition(position);
     }
 
     private void FixedUpdate()
     {
-        if (PhotonNetwork.OfflineMode){
+        if (PhotonNetwork.OfflineMode)
+        {
             HandleMovement();
         }
         else
@@ -294,6 +314,31 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         PlayJumpEffect(Quaternion.identity, new Vector3(0, _jumpEffectOffset, 0));
 
         ResetVelocityForJump(true);
+
+        // Debug.Log($"Normal Jump Power : {Vector2.up * jumpPower}");
+        rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
+        if (canSecondJump)
+        {
+            canSecondJump = false;
+        }
+        else
+            canJump = false;
+
+        if (!isGrounded)
+        {
+            hasJumpedInAir = true;
+        }
+    }
+
+    private void OffNormalJump(float jumpPower)
+    {
+        if (!photonView.IsMine) return;
+
+        // 플레이어 시각적 피드백
+        PlayJumpEffect(Quaternion.identity, new Vector3(0, _jumpEffectOffset, 0));
+
+        ResetVelocityForJump(true);
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
 
         if (canSecondJump)
@@ -311,7 +356,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     private IEnumerator ReturnToPool(GameObject effectObj, ParticleSystem particle)
     {
-        if (PhotonNetwork.OfflineMode){
+        if (PhotonNetwork.OfflineMode)
+        {
             yield return new WaitForSeconds(particle.main.duration);
             Destroy(effectObj);
         }
@@ -349,7 +395,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     [PunRPC]
     private void OnSetPosition(Vector3 newPosition)
     {
-        Debug.Log($"Set Position : {newPosition}, {photonView.ViewID} - {PhotonNetwork.IsMasterClient}");
         if (!photonView.IsMine)
         {
             // 위치 업데이트
@@ -398,17 +443,31 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
-        var landEffectObj = PhotonNetwork.Instantiate(
-            "LandEffect",
-            transform.position + new Vector3(0, _jumpEffectOffset, 0),
-            Quaternion.Euler(-90, 0, 0)
-        );
+        if (PhotonNetwork.IsMasterClient)
+        {
+            // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
+            var landEffectObj = PhotonNetwork.Instantiate(
+                "LandEffect1",
+                transform.position + new Vector3(0, _jumpEffectOffset, 0),
+                Quaternion.Euler(-90, 0, 0)
+            );
 
+            var landEffect = landEffectObj.GetComponentInChildren<ParticleSystem>();
+            landEffect.Play();
+            StartCoroutine(ReturnToPool(landEffectObj, landEffect));
+        }
+        else
+        {
+            var landEffectObj = PhotonNetwork.Instantiate(
+                "LandEffect2",
+                transform.position + new Vector3(0, _jumpEffectOffset, 0),
+                Quaternion.Euler(-90, 0, 0)
+            );
 
-        var landEffect = landEffectObj.GetComponentInChildren<ParticleSystem>();
-        landEffect.Play();
-        StartCoroutine(ReturnToPool(landEffectObj, landEffect));
+            var landEffect = landEffectObj.GetComponentInChildren<ParticleSystem>();
+            landEffect.Play();
+            StartCoroutine(ReturnToPool(landEffectObj, landEffect));
+        }
     }
 
     private void OnJumpSingleStateChanged(bool newCanJump, bool newHasJumpedInAir)
@@ -416,13 +475,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 점프 상태 시각적 동기화 (추후 추가할 이펙트, 애니메이션 등)
         // if (!photonView.IsMine)
         // {
-            // canJump = newCanJump;
-            // hasJumpedInAir = newHasJumpedInAir;
-            // return;
+        // canJump = newCanJump;
+        // hasJumpedInAir = newHasJumpedInAir;
+        // return;
         // }
 
         // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
-        var landEffectObj = Instantiate( LandEffect,
+        var landEffectObj = Instantiate(LandEffect,
             transform.position + new Vector3(0, _jumpEffectOffset, 0),
             Quaternion.Euler(-90, 0, 0)
         );
@@ -439,15 +498,44 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void PlayJumpEffect(Quaternion rotation, Vector3 jumpEffectOffset)
     {
         // 점프 파티클 이펙트, 사운드 이펙트, 애니메이션 등을 여기에 추가할 예정
-        var jumpEffectObj = PhotonNetwork.Instantiate(
-            "JumpEffectWrap",
-            transform.position + jumpEffectOffset,
-            rotation
-        );
+        if (PhotonNetwork.OfflineMode)
+        {
+            var offJumpEffectObj = Instantiate(
+                JumpEffectWrap,
+                transform.position + jumpEffectOffset,
+                rotation
+            );
 
-        var jumpEffect = jumpEffectObj.GetComponentInChildren<ParticleSystem>();
-        jumpEffect.Play();
-        StartCoroutine(ReturnToPool(jumpEffectObj, jumpEffect));
+            var offJumpEffect = offJumpEffectObj.GetComponentInChildren<ParticleSystem>();
+            offJumpEffect.Play();
+            StartCoroutine(ReturnToPool(offJumpEffectObj, offJumpEffect));
+            return;
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            var jumpEffectObj = PhotonNetwork.Instantiate(
+                "JumpEffectWrap1",
+                transform.position + jumpEffectOffset,
+                rotation
+            );
+
+            var jumpEffect = jumpEffectObj.GetComponentInChildren<ParticleSystem>();
+            jumpEffect.Play();
+            StartCoroutine(ReturnToPool(jumpEffectObj, jumpEffect));
+        }
+        else
+        {
+            var jumpEffectObj = PhotonNetwork.Instantiate(
+                "JumpEffectWrap2",
+                transform.position + jumpEffectOffset,
+                rotation
+            );
+
+            var jumpEffect = jumpEffectObj.GetComponentInChildren<ParticleSystem>();
+            jumpEffect.Play();
+            StartCoroutine(ReturnToPool(jumpEffectObj, jumpEffect));
+        }
     }
 
     #endregion
@@ -527,7 +615,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             hasJumpedInAir = false;
             // rb.velocity = new Vector2(rb.velocity.x, 0f);
 
-            if (PhotonNetwork.OfflineMode){
+            if (PhotonNetwork.OfflineMode)
+            {
                 OnJumpSingleStateChanged(canJump, hasJumpedInAir);
             }
             else
@@ -538,6 +627,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
         else if (isGrounded && wasGrounded)
         {
+            canJump = true;
+            canSecondJump = true;
+            hasJumpedInAir = false;
         }
     }
 
@@ -731,7 +823,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void ExecuteNormalJump()
     {
         // 네트워크 RPC로 일반 점프 실행
-        photonView.RPC("OnNormalJump", RpcTarget.All, jumpForce);
+        if (!PhotonNetwork.OfflineMode)
+            photonView.RPC("OnNormalJump", RpcTarget.All, jumpForce);
+        else
+            OffNormalJump(jumpForce);
     }
 
     /// <summary>
@@ -771,7 +866,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         // 상태가 변경되었으면 네트워크 동기화
         if (prevCanJump != canJump || prevHasJumpedInAir != hasJumpedInAir)
         {
-            if (PhotonNetwork.OfflineMode){
+            if (PhotonNetwork.OfflineMode)
+            {
                 OnJumpSingleStateChanged(canJump, hasJumpedInAir);
             }
             else
@@ -843,6 +939,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine) return;
 
+        if (photonView == null) return;
+
         photonView.RPC("OnSetPosition", RpcTarget.All, newPosition);
     }
 
@@ -851,6 +949,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (!photonView.IsMine) return;
 
+        rb.gravityScale = value;
+    }
+
+    private void SetSingleGravity(float value)
+    {
         rb.gravityScale = value;
     }
 

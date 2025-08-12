@@ -109,10 +109,12 @@ public class RandomMapPresetCreator : MonoBehaviourPun
             var MapView = mapListTransform[i].GetComponent<PhotonView>();
             if (match == i)
             {
+                Debug.Log($"{match} - Activate");
                 MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, true);
             }
             else
             {
+                Debug.Log($"{match} - Deactivate");
                 MapView.RPC(nameof(RoundActivation.RoundActivate), RpcTarget.All, false);
             }
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -38,16 +39,35 @@ public class PlayerDisconnectedPopup : MonoBehaviourPunCallbacks
     void OnConfirmClick()
     {
         Time.timeScale = 1;
-        PhotonNetwork.LeaveRoom();
+
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        else
+        {
+            ItsFreakinHardToCreateNewVoidName();
+        }
+    }
+
+    void ItsFreakinHardToCreateNewVoidName()
+    {
+        CardManager.Instance.ClearLists();
+
+        SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
     }
 
     public override void OnLeftRoom()
     {
-        base.OnLeftRoom();
-                
-        //카드 상태 초기화.
-        CardManager.Instance.ClearLists();
+        ItsFreakinHardToCreateNewVoidName();
+    }
 
-        SceneManager.LoadScene("USW/LobbyScene/LobbyScene");
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        if (popupPanel.activeSelf)
+        {
+            Time.timeScale = 1;
+            ItsFreakinHardToCreateNewVoidName();
+        }
     }
 }

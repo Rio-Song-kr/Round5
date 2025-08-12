@@ -60,8 +60,6 @@ public class Laser : MonoBehaviourPun
         }
 
         if (!photonView.IsMine) return;
-        // photonView.RPC(nameof(Shoot), RpcTarget.All);
-
 
         if (CanShoot) // 레이저 코루틴이 실행 중이지 않으면 시작합니다.
         {
@@ -116,8 +114,6 @@ public class Laser : MonoBehaviourPun
         float Timer = 0f;
         float particleTimer = 0f;
         float laserTick = 0f;
-        int laserTickCount = 0;
-
 
         while (Timer <= Duration)
         {
@@ -168,11 +164,13 @@ public class Laser : MonoBehaviourPun
                 }
             }
 
+            // 데미지 처리 :: S
             if (_hits[0].collider.gameObject.layer == 8)
             {
                 laserTick += Time.deltaTime;
-
-                if (laserTick >= 0.495f) // 0.5초마다 틱 데미지 적용
+                
+                 // 0.5초마다 틱 데미지 적용
+                if (laserTick >= 0.495f)
                 {
                     var damagable = _hits[0].collider.GetComponent<IDamagable>();
                     if (damagable != null)
@@ -183,8 +181,13 @@ public class Laser : MonoBehaviourPun
                     laserTick = 0f;
                 }
             }
+            // 플레이어 레이어가 아닐경우
+            else
+            {
+                laserTick = 0f; 
+            }
+            // 데미지 처리 :: E
 
-            else laserTick = 0f; // IDamagable이 아닌 경우 틱 데미지 초기화
 
             yield return null;
         }

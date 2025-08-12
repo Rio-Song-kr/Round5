@@ -37,6 +37,13 @@ public class ArcController : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
 
+        if (!InGameManager.Instance.IsStarted)
+        {
+            if (_isReleased) return;
+
+            PhotonNetwork.Destroy(gameObject);
+        }
+
         //# 속도 결정 로직
         float distanceFromCenter = Vector3.Distance(transform.position, _centerPoint);
 

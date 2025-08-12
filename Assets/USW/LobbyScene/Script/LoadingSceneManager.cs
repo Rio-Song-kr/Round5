@@ -90,13 +90,6 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
         player1NameText.transform.position = player1StartPos.position;
         player2NameText.transform.position = player2StartPos.position;
 
-        Debug.Log("loadingtextAnimation 시작");
-        var gradation1 = player1NameText.GetComponent<LoadingTextAnimation>();
-        var gradation2 = player2NameText.GetComponent<LoadingTextAnimation>();
-        if (gradation1 != null) gradation1.BeginGradation();
-        if (gradation2 != null) gradation2.BeginGradation();
-
-
         var animSeq = DOTween.Sequence();
         animSeq.Append(player1NameText.DOFade(1f, nameAnimationDuration));
         animSeq.Join(player2NameText.DOFade(1f, nameAnimationDuration * 0.8f + 0.2f));
@@ -109,13 +102,10 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(2f);
 
-        var exitSeq = DOTween.Sequence();
         animSeq.Append(player1NameText.transform.DOMove(player1RealEndPos.position, nameAnimationDuration)
             .SetEase(Ease.InQuad));
         animSeq.Join(player2NameText.transform.DOMove(player2RealEndPos.position, nameAnimationDuration)
             .SetEase(Ease.InQuad));
-
-        yield return exitSeq.Play().WaitForCompletion();
     }
     /// <summary>
     /// 게임 씬 로딩
@@ -128,14 +118,17 @@ public class LoadingSceneManager : MonoBehaviourPunCallbacks
         {
             isLoadingComplete = true;
             PhotonNetwork.LoadLevel(gameSceneName);
+            SoundManager.Instance.PlayBGMLoop("IngameBGM", 1);
         }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel("LobbyScene");
-        }
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        PhotonNetwork.LoadLevel("LobbyScene");
+
+        PhotonNetwork.LeaveRoom();
+        // }
     }
 }

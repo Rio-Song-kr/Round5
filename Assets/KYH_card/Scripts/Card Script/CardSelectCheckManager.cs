@@ -19,9 +19,12 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
 
     public void CardSelectPanelSpawn(Player player)
     {
+        bool isSelected;
         if (cardSelectPanels.TryGetValue(player.ActorNumber, out var panel))
         {
-            panel.Init(player);
+            isSelected = panel.Init(player);
+
+            InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, isSelected);
             return;
         }
 
@@ -30,7 +33,10 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
         obj.transform.SetParent(cardSelectPanelContent1);
         var Panel = obj.GetComponent<CardSelectPanelItem>();
         // �ʱ�ȭ
-        Panel.Init(player);
+
+        isSelected = panel.Init(player);
+
+        InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, isSelected);
         cardSelectPanels.Add(player.ActorNumber, Panel);
     }
 
@@ -43,10 +49,14 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
         {
             var obj = Instantiate(cardSelectPanelPrefabs);
             obj.transform.SetParent(cardSelectPanelContent1);
-            var Panel = obj.GetComponent<CardSelectPanelItem>();
+            var panel = obj.GetComponent<CardSelectPanelItem>();
             // �ʱ�ȭ
-            Panel.Init(player);
-            cardSelectPanels.Add(player.ActorNumber, Panel);
+            panel.Init(player);
+
+            bool isSelected = panel.Init(player);
+
+            InGameManager.Instance.SetPlayerSelects(PhotonNetwork.LocalPlayer.ActorNumber, isSelected);
+            cardSelectPanels.Add(player.ActorNumber, panel);
         }
     }
 
@@ -54,17 +64,10 @@ public class CardSelectCheckManager : MonoBehaviourPunCallbacks
     {
         foreach (var player in PhotonNetwork.PlayerList)
         {
-            // �������� ���� �÷��̾� �߰�
-            if (!player.CustomProperties.TryGetValue("Select", out object value) || !(bool)value)
-            {
-                var other = PhotonNetwork.PlayerList
-                    .FirstOrDefault(p => p != PhotonNetwork.LocalPlayer);
+            // Debug.Log($"{player.ActorNumber} - {InGameManager.Instance.PlayerSelection[player.ActorNumber]}");
 
-                // Debug.Log($"���� ���� �� �� �÷��̾�: {other.NickName}");
-
-
+            if (!InGameManager.Instance.PlayerSelection[player.ActorNumber])
                 return false;
-            }
         }
 
         return true;

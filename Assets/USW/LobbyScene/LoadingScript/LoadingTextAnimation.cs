@@ -99,4 +99,18 @@ public class LoadingTextAnimation : MonoBehaviour
         animationCoroutine = StartCoroutine(AnimateGradientColors());
     }
     
+    public void StopGradation()
+    {
+        if (animationCoroutine != null)
+        {
+            StopCoroutine(animationCoroutine);
+            animationCoroutine = null;
+        }
+        // 텍스트를 원래 색상으로 되돌리기
+        if (tmp != null)
+        {
+            tmp.color = Color.white; 
+        }
+    }
+    
 }

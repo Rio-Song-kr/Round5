@@ -20,12 +20,14 @@ public class MapController : MonoBehaviourPunCallbacks
 
     private void OnEnable()
     {
-        InGameManager.OnRoundEnd += GoToNextStage;
+        InGameManager.OnRoundEnd += OnRoundEndHandler;
+        InGameManager.OnCardSelectStart += OnCardSelectEndHandler;
     }
 
     private void OnDisable()
     {
-        InGameManager.OnRoundEnd -= GoToNextStage;
+        InGameManager.OnRoundEnd -= OnRoundEndHandler;
+        InGameManager.OnCardSelectStart -= OnCardSelectEndHandler;
     }
 
     public void GoToNextStage()
@@ -34,12 +36,44 @@ public class MapController : MonoBehaviourPunCallbacks
         MapMove();
     }
 
+    private void OnRoundEndHandler()
+    {
+        var roundScores = InGameManager.Instance.GetRoundScores();
+        bool matchEnded = false;
+
+        // 매치 끝나는지 확인한후
+        foreach (int score in roundScores.Values)
+        {
+            if (score >= 2)
+            {
+                matchEnded = true;
+                break;
+            }
+        }
+
+        // 매치가 끝나지 않은 일반 라운드에서는 맵이동하고 
+        if (!matchEnded)
+        {
+            GoToNextStage();
+        }
+    }
+
+    private void OnCardSelectEndHandler()
+    {
+        GoToNextStage();
+    }
+
     /// <summary>
     /// ���� ���� �� ���� �� �� ��鸲
     /// </summary>
     private void MapShake()
     {
-        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90);
+        gameObject.transform.DOShakePosition(0.5f, 1, 10, 90).OnComplete(ReturnToOriginalPosition);
+    }
+
+    private void ReturnToOriginalPosition()
+    {
+        gameObject.transform.position = Vector3.zero;
     }
 
     /// <summary>
@@ -82,7 +116,6 @@ public class MapController : MonoBehaviourPunCallbacks
     [PunRPC]
     private void InitPlayers()
     {
-        Debug.Log($"InitPlayers - {PhotonNetwork.IsMasterClient}");
         var allPlayers = FindObjectsOfType<PlayerController>();
 
         foreach (var player in allPlayers)
@@ -96,12 +129,12 @@ public class MapController : MonoBehaviourPunCallbacks
                 //중력 활성화
                 // SetPlayerGravity(player, true);
 
-                Debug.Log("Map Controller에서 Player Active 호출(true)");
-
                 //todo 어떻게 처리할지 고민
                 //모든 시스템 활성화
                 InGameManager.Instance.IsMapLoaded = true;
-                InGameManager.Instance.SetStarted(true);
+
+                if (!InGameManager.Instance.IsRematch)
+                    InGameManager.Instance.SetStarted(true);
             }
         }
     }

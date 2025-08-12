@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: kr
     Server: 
     Port: 0
     ProxyServer: 
@@ -36,6 +36,7 @@ MonoBehaviour:
   RpcList:
   - ActivateFrostSlamEffect
   - ActivateMapCreator
+  - AddDefenceSkills
   - AddPlayer
   - ApplyFrostSlamEffect
   - ApplyReduceEffect
@@ -43,7 +44,9 @@ MonoBehaviour:
   - BigBulletShot
   - CardSelectUIActivate
   - ChangeScene
+  - CheckPlayerHealthRPC
   - ClickRpc
+  - DeactivatePassiveSkills
   - DefaultShot
   - DestroyRpc
   - DestroySpaceship
@@ -60,6 +63,7 @@ MonoBehaviour:
   - InitializeArcEffect
   - InitializeComponent
   - InitializeShieldsUpEffect
+  - InitPlayers
   - OnEmergencyReset
   - OnForceJump
   - OnHookAttached
@@ -93,14 +97,17 @@ MonoBehaviour:
   - RPC_Flip
   - RPC_FlipCardByIndex
   - RPC_HighlightCardByIndex
+  - RPC_MeshChange
+  - RPC_PlayBGMLoop
+  - RPC_PlayBGMOnce
   - RPC_PlayCardSelectionAnimation
   - RPC_PlayerDefeated
+  - RPC_PlaySFX
   - RPC_PlayShrinkAnimation
   - RPC_RematchAccepted
   - RPC_RematchDeclined
   - RPC_SelectCardArm
   - RPC_SetAnimatorSpeed
-  - RPC_SetBulletType
   - RPC_SetWeapon
   - RPC_StartAutoReload
   - RPC_StartCardSelect
@@ -113,31 +120,30 @@ MonoBehaviour:
   - RPC_TextInit
   - RPC_UnhighlightCardByIndex
   - RPC_VoteRematch
+  - SetCurrentHP
   - SetDisplayHookLineRenderer
   - SetFillAmount
+  - SetFirstSelectorActorNumber
+  - SetGravity
   - SetIsWinner
   - SetParentToPanel
   - SetParentToRound
+  - SetPlayerColorRPC
+  - SetPlayerSelectsRPC
   - SetPoolRPC
-  - Shoot
+  - SetStartedRPC
   - StartEffect
   - SyncTargetPosition
   - TakeDamage
+  - TryStartCardSelection
   - UpdateFirstLine
+  - UseActiveSkills
   - UseShieldEffect
   - UseShieldsUpEffect
   - WinImgUIActivate
   - WinnerImageInit
   - WinnerImageMove
   - WinnerImageScaleChange
-  - SetFirstSelectorActorNumber
-  - InitPlayers
-  - AddDefenceSkills
-  - CheckPlayerHealthRPC
-  - DeactivatePassiveSkills
-  - SetCurrentHP
-  - SetStartedRPC
-  - UseActiveSkills
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 1

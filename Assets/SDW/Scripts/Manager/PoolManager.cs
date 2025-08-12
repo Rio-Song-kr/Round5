@@ -79,6 +79,12 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
             return;
         }
 
+        // if (!obj.activeSelf)
+        // {
+        //     Debug.LogWarning($"{obj.name}은 이미 반환되었습니다.");
+        //     return;
+        // }
+
         //# (Clone) 접미사 제거
         string prefabId = obj.name.Replace("(Clone)", "").Trim();
 
@@ -86,7 +92,7 @@ public class PoolManager : MonoBehaviour, IPunPrefabPool
             _pools[prefabId].Release(obj);
         else
         {
-            Debug.LogWarning($"{prefabId}을 찾지 못했습니다.");
+            // Debug.LogWarning($"{prefabId}을 찾지 못했습니다.");
 
             GameObject.Destroy(obj);
         }
